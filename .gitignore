@@ -1,0 +1,19 @@
+/vendor
+/node_modules
+.env
+composer.phar
+composer.lock
+/nbproject
+
+# Generated css
+/public/css/bootstrap.css
+/public/css/bootstrap-theme.css
+/public/css/weinstein.css
+
+# Generated js
+/public/js/weinstein.js
+/public/js/weinstein.js.map
+/app/storage/logs/laravel.log
+/app/storage/sessions/
+/app/storage/views/
+/app/storage/meta/

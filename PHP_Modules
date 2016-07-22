@@ -1,0 +1,6 @@
+The following PHP modules are required to run Weinstein:
+- phar (composer)
+- openssl (composer)
+- zip (PHPExcel)
+- php5-zlib (PHPExcel)
+- mcrypt (Laravel Crpyto)
