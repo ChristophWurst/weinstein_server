@@ -46,8 +46,8 @@ class CreateCompetitionstateTable extends Migration {
 		 * INSERT INTO `weinstein`.`competitionstate` (`id`, `description`) VALUES (9, 'CHOOSE');
 		 * INSERT INTO `weinstein`.`competitionstate` (`id`, `description`) VALUES (8, 'SOSI');
 		 * INSERT INTO `weinstein`.`competitionstate` (`id`, `description`) VALUES (10, 'FINISHED');
-
-		  COMMIT;
+		 *
+		 * COMMIT;
 		 */
 		DB::table('competition_state')->insert([
 			[
