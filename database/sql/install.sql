@@ -26,18 +26,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `weinstein`.`competitionstate`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `weinstein`.`competitionstate` ;
-
-CREATE TABLE IF NOT EXISTS `weinstein`.`competitionstate` (
-  `id` INT NOT NULL,
-  `description` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `weinstein`.`competition`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `weinstein`.`competition` ;
@@ -629,24 +617,6 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE `weinstein`.* TO 'weinstein';
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
--- -----------------------------------------------------
--- Data for table `weinstein`.`competitionstate`
--- -----------------------------------------------------
-START TRANSACTION;
-USE `weinstein`;
-INSERT INTO `weinstein`.`competitionstate` (`id`, `description`) VALUES (1, 'ENROLLMENT');
-INSERT INTO `weinstein`.`competitionstate` (`id`, `description`) VALUES (2, 'TASTINGNUMBERS1');
-INSERT INTO `weinstein`.`competitionstate` (`id`, `description`) VALUES (3, 'TASTING1');
-INSERT INTO `weinstein`.`competitionstate` (`id`, `description`) VALUES (6, 'TASTINGNUMBERS2');
-INSERT INTO `weinstein`.`competitionstate` (`id`, `description`) VALUES (7, 'TASTING2');
-INSERT INTO `weinstein`.`competitionstate` (`id`, `description`) VALUES (9, 'CHOOSE');
-INSERT INTO `weinstein`.`competitionstate` (`id`, `description`) VALUES (4, 'KDB');
-INSERT INTO `weinstein`.`competitionstate` (`id`, `description`) VALUES (8, 'SOSI');
-INSERT INTO `weinstein`.`competitionstate` (`id`, `description`) VALUES (10, 'FINISHED');
-INSERT INTO `weinstein`.`competitionstate` (`id`, `description`) VALUES (5, 'EXCLUDE');
-
-COMMIT;
 
 
 -- -----------------------------------------------------
