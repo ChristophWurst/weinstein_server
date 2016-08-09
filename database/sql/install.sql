@@ -31,29 +31,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `weinstein`.`taster`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `weinstein`.`taster` ;
-
-CREATE TABLE IF NOT EXISTS `weinstein`.`taster` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `commission_id` INT NOT NULL,
-  `nr` INT NOT NULL,
-  `name` VARCHAR(70) NULL,
-  `active` TINYINT(1) NOT NULL,
-  `created_at` TIMESTAMP NULL,
-  `updated_at` TIMESTAMP NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_taster_commission1_idx` (`commission_id` ASC),
-  CONSTRAINT `fk_taster_Commission1`
-    FOREIGN KEY (`commission_id`)
-    REFERENCES `weinstein`.`commission` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `weinstein`.`tasting`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `weinstein`.`tasting` ;
