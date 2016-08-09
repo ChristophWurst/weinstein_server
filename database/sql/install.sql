@@ -31,19 +31,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `weinstein`.`winequality`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `weinstein`.`winequality` ;
-
-CREATE TABLE IF NOT EXISTS `weinstein`.`winequality` (
-  `id` INT NOT NULL,
-  `label` VARCHAR(45) NOT NULL,
-  `abbr` VARCHAR(3) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `weinstein`.`wine`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `weinstein`.`wine` ;
@@ -573,25 +560,6 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE `weinstein`.* TO 'weinstein';
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
-
--- -----------------------------------------------------
--- Data for table `weinstein`.`winequality`
--- -----------------------------------------------------
-START TRANSACTION;
-USE `weinstein`;
-INSERT INTO `weinstein`.`winequality` (`id`, `label`, `abbr`) VALUES (1, 'DAC', 'DAC');
-INSERT INTO `weinstein`.`winequality` (`id`, `label`, `abbr`) VALUES (2, 'Qualitätswein', 'QW');
-INSERT INTO `weinstein`.`winequality` (`id`, `label`, `abbr`) VALUES (3, 'Kabinett', 'KAB');
-INSERT INTO `weinstein`.`winequality` (`id`, `label`, `abbr`) VALUES (4, 'Spätlese', 'SPL');
-INSERT INTO `weinstein`.`winequality` (`id`, `label`, `abbr`) VALUES (5, 'Auslese', 'ALW');
-INSERT INTO `weinstein`.`winequality` (`id`, `label`, `abbr`) VALUES (6, 'Eiswein', 'EIW');
-INSERT INTO `weinstein`.`winequality` (`id`, `label`, `abbr`) VALUES (7, 'Beerenauslese', 'BAL');
-INSERT INTO `weinstein`.`winequality` (`id`, `label`, `abbr`) VALUES (8, 'Ausbruch', 'AUB');
-INSERT INTO `weinstein`.`winequality` (`id`, `label`, `abbr`) VALUES (9, 'Trockenbeerenauslese', 'TBA');
-INSERT INTO `weinstein`.`winequality` (`id`, `label`, `abbr`) VALUES (10, 'Strohwein', 'STW');
-
-COMMIT;
 
 
 -- -----------------------------------------------------
