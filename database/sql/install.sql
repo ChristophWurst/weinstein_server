@@ -31,17 +31,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `weinstein`.`tastingstage`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `weinstein`.`tastingstage` ;
-
-CREATE TABLE IF NOT EXISTS `weinstein`.`tastingstage` (
-  `id` INT NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `weinstein`.`tastingnumber`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `weinstein`.`tastingnumber` ;
@@ -508,16 +497,6 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
-
--- -----------------------------------------------------
--- Data for table `weinstein`.`tastingstage`
--- -----------------------------------------------------
-START TRANSACTION;
-USE `weinstein`;
-INSERT INTO `weinstein`.`tastingstage` (`id`) VALUES (1);
-INSERT INTO `weinstein`.`tastingstage` (`id`) VALUES (2);
-
-COMMIT;
 
 USE `weinstein`;
 
