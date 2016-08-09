@@ -10,22 +10,6 @@ CREATE SCHEMA IF NOT EXISTS `weinstein` DEFAULT CHARACTER SET utf8 COLLATE utf8_
 USE `weinstein` ;
 
 -- -----------------------------------------------------
--- Table `weinstein`.`wuser`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `weinstein`.`wuser` ;
-
-CREATE TABLE IF NOT EXISTS `weinstein`.`wuser` (
-  `username` VARCHAR(80) NOT NULL,
-  `password` VARCHAR(80) NULL,
-  `admin` TINYINT(1) NULL DEFAULT 0,
-  `remember_token` VARCHAR(100) NULL,
-  `created_at` TIMESTAMP NULL,
-  `updated_at` TIMESTAMP NULL,
-  PRIMARY KEY (`username`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `weinstein`.`winesort`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `weinstein`.`winesort` ;
