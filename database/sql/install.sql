@@ -30,26 +30,6 @@ CREATE TABLE IF NOT EXISTS `weinstein`.`rating` (
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `weinstein`.`activitylog`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `weinstein`.`activitylog` ;
-
-CREATE TABLE IF NOT EXISTS `weinstein`.`activitylog` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `message` VARCHAR(255) NOT NULL,
-  `wuser_username` VARCHAR(80) NULL,
-  `created_at` TIMESTAMP NULL,
-  `updated_at` TIMESTAMP NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_activitylog_wuser1_idx` (`wuser_username` ASC),
-  CONSTRAINT `fk_activitylog_wuser1`
-    FOREIGN KEY (`wuser_username`)
-    REFERENCES `weinstein`.`wuser` (`username`)
-    ON DELETE SET NULL
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
-
 USE `weinstein` ;
 
 -- -----------------------------------------------------
