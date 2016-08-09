@@ -9,21 +9,6 @@ DROP SCHEMA IF EXISTS `weinstein` ;
 CREATE SCHEMA IF NOT EXISTS `weinstein` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
 USE `weinstein` ;
 
--- -----------------------------------------------------
--- Table `weinstein`.`winesort`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `weinstein`.`winesort` ;
-
-CREATE TABLE IF NOT EXISTS `weinstein`.`winesort` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `order` INT NOT NULL,
-  `name` VARCHAR(45) NOT NULL,
-  `created_at` TIMESTAMP NULL,
-  `updated_at` TIMESTAMP NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `order_UNIQUE` (`order` ASC))
-ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `weinstein`.`competition`
