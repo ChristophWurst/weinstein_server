@@ -46,6 +46,8 @@ class CreateUsersTable extends Migration {
 	 */
 	public function up() {
 		Schema::create('wuser', function (Blueprint $table) {
+			$table->engine = 'InnoDB';
+
 			$table->string('username');
 			$table->string('password');
 			$table->boolean('admin');

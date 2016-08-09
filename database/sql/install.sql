@@ -26,27 +26,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `weinstein`.`association`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `weinstein`.`association` ;
-
-CREATE TABLE IF NOT EXISTS `weinstein`.`association` (
-  `id` INT NOT NULL,
-  `name` VARCHAR(80) NULL,
-  `wuser_username` VARCHAR(80) NULL,
-  `updated_at` TIMESTAMP NULL,
-  `created_at` TIMESTAMP NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_association_wuser1_idx` (`wuser_username` ASC),
-  CONSTRAINT `fk_association_wuser1`
-    FOREIGN KEY (`wuser_username`)
-    REFERENCES `weinstein`.`wuser` (`username`)
-    ON DELETE SET NULL
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `weinstein`.`applicant`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `weinstein`.`applicant` ;

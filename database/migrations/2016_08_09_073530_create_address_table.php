@@ -28,6 +28,8 @@ class CreateAddressTable extends Migration {
 	 */
 	public function up() {
 		Schema::create('address', function(Blueprint $table) {
+			$table->engine = 'InnoDB';
+
 			$table->increments('id');
 			$table->integer('zipcode', false, true);
 			$table->string('city', 100);
