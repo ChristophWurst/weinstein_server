@@ -183,35 +183,3 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE `weinstein`.* TO 'weinstein';
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
-
-USE `weinstein`;
-
-DELIMITER $$
-
-USE `weinstein`$$
-DROP TRIGGER IF EXISTS `weinstein`.`tastingnumber_AFTER_INSERT` $$
-USE `weinstein`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `weinstein`.`tastingnumber_AFTER_INSERT`
-AFTER INSERT
-ON `tastingnumber` FOR EACH ROW
-BEGIN
-	-- trigger to automatically get from 'ENROLLMENT' state to 'TASTINGNUMBERS1'
-	DECLARE comp INT;
-	
-	SET comp = (SELECT w.competition_id
-					FROM wine w
-					WHERE w.id = NEW.wine_id);			
-	
-	IF ((SELECT DISTINCT cs.description
-			FROM competitionstate cs
-			JOIN competition c ON cs.id = c.competitionstate_id
-			WHERE c.id = comp) = 'ENROLLMENT') THEN
-		UPDATE competition
-			SET competitionstate_id = competitionstate_id + 1
-			WHERE id = comp;
-	END IF;
-END$$
-
-
-DELIMITER ;
