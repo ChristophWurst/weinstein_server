@@ -31,34 +31,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `weinstein`.`tastingnumber`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `weinstein`.`tastingnumber` ;
-
-CREATE TABLE IF NOT EXISTS `weinstein`.`tastingnumber` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `tastingstage_id` INT NOT NULL,
-  `wine_id` INT NOT NULL,
-  `nr` INT NOT NULL,
-  `updated_at` TIMESTAMP NULL,
-  `created_at` TIMESTAMP NULL,
-  INDEX `fk_tastingnumber_tastingstage1_idx` (`tastingstage_id` ASC),
-  INDEX `fk_tastingnumber_wine1_idx` (`wine_id` ASC),
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_tastingnumber_tastingstage1`
-    FOREIGN KEY (`tastingstage_id`)
-    REFERENCES `weinstein`.`tastingstage` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_tastingnumber_wine1`
-    FOREIGN KEY (`wine_id`)
-    REFERENCES `weinstein`.`wine` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `weinstein`.`tastingsession`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `weinstein`.`tastingsession` ;
