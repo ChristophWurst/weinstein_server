@@ -26,23 +26,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `weinstein`.`address`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `weinstein`.`address` ;
-
-CREATE TABLE IF NOT EXISTS `weinstein`.`address` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `zipcode` INT(11) NULL,
-  `city` VARCHAR(70) NULL,
-  `street` VARCHAR(100) NULL,
-  `nr` VARCHAR(20) NULL,
-  `created_at` TIMESTAMP NULL,
-  `updated_at` TIMESTAMP NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `weinstein`.`association`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `weinstein`.`association` ;
