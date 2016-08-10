@@ -84,331 +84,294 @@ Route::group(array('prefix' => 'competition/{competition}', 'before' => 'auth'),
 	));
 
 	/*
-	  |--------------------------------------------------------------------------
-	  | Enrollment
-	  |--------------------------------------------------------------------------
+	 * Wines
 	 */
-	Route::group(array('prefix' => 'enrollment'), function() {
-		/*
-		 * Wines
-		 */
-		Route::group(array('prefix' => 'wines'), function() {
-			Route::get('', array(
-			    'as' => 'enrollment.wines',
-			    'uses' => 'WineController@index'
-			));
-			Route::get('redirect/{nr}', array(
-			    'as' => 'enrollment.wines/redirect',
-			    'uses' => 'WineController@redirect'
-			));
-			Route::get('kdb', array(
-			    'as' => 'enrollment.wines/kdb',
-			    'uses' => 'WineController@kdb'
-			));
-			Route::get('import-kdb', array(
-			    'as' => 'enrollment.wines/import-kdb',
-			    'uses' => 'WineController@importKdb'
-			));
-			Route::post('import-kdb', array(
-			    'uses' => 'WineController@importKdbStore'
-			));
-			Route::get('excluded', array(
-			    'as' => 'enrollment.wines/excluded',
-			    'uses' => 'WineController@excluded'
-			));
-			Route::get('import-excluded', array(
-			    'as' => 'enrollment.wines/import-excluded',
-			    'uses' => 'WineController@importExcluded'
-			));
-			Route::post('import-excluded', array(
-			    'uses' => 'WineController@importExcludedStore'
-			));
-			Route::get('sosi', array(
-			    'as' => 'enrollment.wines/sosi',
-			    'uses' => 'WineController@sosi'
-			));
-			Route::get('import-sosi', array(
-			    'as' => 'enrollment.wines/import-sosi',
-			    'uses' => 'WineController@importSosi'
-			));
-			Route::post('import-sosi', array(
-			    'uses' => 'WineController@importSosiStore'
-			));
-			Route::get('chosen', array(
-			    'as' => 'enrollment.wines/chosen',
-			    'uses' => 'WineController@chosen'
-			));
-			Route::get('import-chosen', array(
-			    'as' => 'enrollment.wines/import-chosen',
-			    'uses' => 'WineController@importChosen'
-			));
-			Route::post('import-chosen', array(
-			    'uses' => 'WineController@importChosenStore'
-			));
-
-			Route::get('create', array(
-			    'as' => 'enrollment.wines/create',
-			    'uses' => 'WineController@create'
-			));
-			Route::post('create', array(
-			    'uses' => 'WineController@store'
-			));
-			Route::get('export', array(
-			    'as' => 'enrollment.wines/export',
-			    'uses' => 'WineController@exportAll'
-			));
-			Route::get('export-kdb', array(
-			    'as' => 'enrollment.wines/export-kdb',
-			    'uses' => 'WineController@exportKdb'
-			));
-			Route::get('export-sosi', array(
-			    'as' => 'enrollment.wines/export-sosi',
-			    'uses' => 'WineController@exportSosi'
-			));
-			Route::get('export-chosen', array(
-			    'as' => 'enrollment.wines/export-chosen',
-			    'uses' => 'WineController@exportChosen'
-			));
-			Route::get('export-flaws', array(
-			    'as' => 'enrollment.wines/export-flaws',
-			    'uses' => 'WineController@exportFlaws'
-			));
-		});
-	});
-
-	/*
-	  |--------------------------------------------------------------------------
-	  | Tasting
-	  |--------------------------------------------------------------------------
-	 */
-
-	Route::group(array('prefix' => 'tasting'), function() {
-		/*
-		 * Tasting Numbers
-		 */
-		Route::group(array('prefix' => 'numbers'), function() {
-			Route::get('', array(
-			    'as' => 'tasting.numbers',
-			    'uses' => 'TastingNumberController@index'
-			));
-			Route::get('assign', array(
-			    'as' => 'tasting.numbers/assign',
-			    'uses' => 'TastingNumberController@assign'
-			));
-			Route::post('assign', array(
-			    'uses' => 'TastingNumberController@store'
-			));
-			Route::get('import', array(
-			    'as' => 'tasting.numbers/import',
-			    'uses' => 'TastingNumberController@import'
-			));
-			Route::post('import', array(
-			    'uses' => 'TastingNumberController@importStore'
-			));
-			Route::get('translate/{id}', array(
-			    'as' => 'tasting.numbers/translate',
-			    'uses' => 'TastingNumberController@translate'
-			));
-		});
-		/*
-		 * Tasting sessions
-		 */
-		Route::group(array('prefix' => 'sessions'), function() {
-			Route::get('', array(
-			    'as' => 'tasting.sessions',
-			    'uses' => 'TastingSessionController@index'
-			));
-			Route::get('add', array(
-			    'as' => 'tasting.sessions/add',
-			    'uses' => 'TastingSessionController@add'
-			));
-			Route::post('add', array(
-			    'uses' => 'TastingSessionController@store'
-			));
-		});
-	});
-
-	/*
-	  |--------------------------------------------------------------------------
-	  | Evaluation
-	  |--------------------------------------------------------------------------
-	 */
-
-	Route::group(array('prefix' => 'evaluation'), function() {
+	Route::group(array('prefix' => 'wines'), function() {
 		Route::get('', array(
-		    'as' => 'evaluation',
-		    'uses' => 'EvaluationController@index'
+		    'as' => 'enrollment.wines',
+		    'uses' => 'WineController@index'
+		));
+		Route::get('redirect/{nr}', array(
+		    'as' => 'enrollment.wines/redirect',
+		    'uses' => 'WineController@redirect'
+		));
+		Route::get('kdb', array(
+		    'as' => 'enrollment.wines/kdb',
+		    'uses' => 'WineController@kdb'
+		));
+		Route::get('import-kdb', array(
+		    'as' => 'enrollment.wines/import-kdb',
+		    'uses' => 'WineController@importKdb'
+		));
+		Route::post('import-kdb', array(
+		    'uses' => 'WineController@importKdbStore'
+		));
+		Route::get('excluded', array(
+		    'as' => 'enrollment.wines/excluded',
+		    'uses' => 'WineController@excluded'
+		));
+		Route::get('import-excluded', array(
+		    'as' => 'enrollment.wines/import-excluded',
+		    'uses' => 'WineController@importExcluded'
+		));
+		Route::post('import-excluded', array(
+		    'uses' => 'WineController@importExcludedStore'
+		));
+		Route::get('sosi', array(
+		    'as' => 'enrollment.wines/sosi',
+		    'uses' => 'WineController@sosi'
+		));
+		Route::get('import-sosi', array(
+		    'as' => 'enrollment.wines/import-sosi',
+		    'uses' => 'WineController@importSosi'
+		));
+		Route::post('import-sosi', array(
+		    'uses' => 'WineController@importSosiStore'
+		));
+		Route::get('chosen', array(
+		    'as' => 'enrollment.wines/chosen',
+		    'uses' => 'WineController@chosen'
+		));
+		Route::get('import-chosen', array(
+		    'as' => 'enrollment.wines/import-chosen',
+		    'uses' => 'WineController@importChosen'
+		));
+		Route::post('import-chosen', array(
+		    'uses' => 'WineController@importChosenStore'
 		));
 
-		/*
-		 * Tasting protocols
-		 */
-		Route::group(array('prefix' => 'protocols'), function() {
-			Route::get('', array(
-			    'as' => 'evaluation.protocols',
-			    'uses' => 'EvaluationController@protocols'
-			));
-		});
-		/*
-		 * Catalogues
-		 */
-		Route::group(array('prefix' => 'catalogues'), function() {
-			Route::get('tasting', array(
-			    'as' => 'evaluation.catalogues/tasting',
-			    'uses' => 'CatalogueController@tastingCatalogue',
-			));
-			Route::get('web', array(
-			    'as' => 'evaluation.catalogues/web',
-			    'uses' => 'CatalogueController@webCatalogue',
-			));
-			Route::get('address', array(
-			    'as' => 'evaluation.catalogues/address',
-			    'uses' => 'CatalogueController@addressCatalogue',
-			));
-		});
+		Route::get('create', array(
+		    'as' => 'enrollment.wines/create',
+		    'uses' => 'WineController@create'
+		));
+		Route::post('create', array(
+		    'uses' => 'WineController@store'
+		));
+		Route::get('export', array(
+		    'as' => 'enrollment.wines/export',
+		    'uses' => 'WineController@exportAll'
+		));
+		Route::get('export-kdb', array(
+		    'as' => 'enrollment.wines/export-kdb',
+		    'uses' => 'WineController@exportKdb'
+		));
+		Route::get('export-sosi', array(
+		    'as' => 'enrollment.wines/export-sosi',
+		    'uses' => 'WineController@exportSosi'
+		));
+		Route::get('export-chosen', array(
+		    'as' => 'enrollment.wines/export-chosen',
+		    'uses' => 'WineController@exportChosen'
+		));
+		Route::get('export-flaws', array(
+		    'as' => 'enrollment.wines/export-flaws',
+		    'uses' => 'WineController@exportFlaws'
+		));
+	});
+
+	/*
+	 * Tasting Numbers
+	 */
+	Route::group(array('prefix' => 'numbers'), function() {
+		Route::get('', array(
+		    'as' => 'tasting.numbers',
+		    'uses' => 'TastingNumberController@index'
+		));
+		Route::get('assign', array(
+		    'as' => 'tasting.numbers/assign',
+		    'uses' => 'TastingNumberController@assign'
+		));
+		Route::post('assign', array(
+		    'uses' => 'TastingNumberController@store'
+		));
+		Route::get('import', array(
+		    'as' => 'tasting.numbers/import',
+		    'uses' => 'TastingNumberController@import'
+		));
+		Route::post('import', array(
+		    'uses' => 'TastingNumberController@importStore'
+		));
+		Route::get('translate/{id}', array(
+		    'as' => 'tasting.numbers/translate',
+		    'uses' => 'TastingNumberController@translate'
+		));
+	});
+	/*
+	 * Tasting sessions
+	 */
+	Route::group(array('prefix' => 'sessions'), function() {
+		Route::get('', array(
+		    'as' => 'tasting.sessions',
+		    'uses' => 'TastingSessionController@index'
+		));
+		Route::get('add', array(
+		    'as' => 'tasting.sessions/add',
+		    'uses' => 'TastingSessionController@add'
+		));
+		Route::post('add', array(
+		    'uses' => 'TastingSessionController@store'
+		));
+	});
+
+	Route::get('', array(
+	    'as' => 'evaluation',
+	    'uses' => 'EvaluationController@index'
+	));
+
+	/*
+	 * Tasting protocols
+	 */
+	Route::group(array('prefix' => 'protocols'), function() {
+		Route::get('', array(
+		    'as' => 'evaluation.protocols',
+		    'uses' => 'EvaluationController@protocols'
+		));
+	});
+	/*
+	 * Catalogues
+	 */
+	Route::group(array('prefix' => 'catalogues'), function() {
+		Route::get('tasting', array(
+		    'as' => 'evaluation.catalogues/tasting',
+		    'uses' => 'CatalogueController@tastingCatalogue',
+		));
+		Route::get('web', array(
+		    'as' => 'evaluation.catalogues/web',
+		    'uses' => 'CatalogueController@webCatalogue',
+		));
+		Route::get('address', array(
+		    'as' => 'evaluation.catalogues/address',
+		    'uses' => 'CatalogueController@addressCatalogue',
+		));
 	});
 });
 
-Route::group(array('prefix' => 'competition', 'before' => 'auth'), function() {
+Route::group(array('before' => 'auth'), function() {
 
 	/*
-	  |--------------------------------------------------------------------------
-	  | Enrollment
-	  |--------------------------------------------------------------------------
+	 * Wines
 	 */
-	Route::group(array('prefix' => 'enrollment'), function() {
-		/*
-		 * Wines
-		 */
-		Route::group(array('prefix' => 'wines/{wine}'), function() {
-			Route::get('', array(
-			    'as' => 'enrollment.wines/show',
-			    'uses' => 'WineController@show'
-			));
-			Route::get('enrollment-pdf', array(
-			    'as' => 'enrollment.wines/enrollment-pdf',
-			    'uses' => 'WineController@enrollmentPdf'
-			));
-			Route::get('edit', array(
-			    'as' => 'enrollment.wines/edit',
-			    'uses' => 'WineController@edit'
-			));
-			Route::post('edit', array(
-			    'uses' => 'WineController@update'
-			));
-			Route::get('delete', array(
-			    'as' => 'enrollment.wines/delete',
-			    'uses' => 'WineController@delete'
-			));
-			Route::post('delete', array(
-			    'uses' => 'WineController@destroy'
-			));
-			Route::post('update-kdb', array(
-			    'as' => 'enrollment.wines/update-kdb',
-			    'uses' => 'WineController@updateKdb',
-			));
-			Route::post('update-excluded', array(
-			    'as' => 'enrollment.wines/update-excluded',
-			    'uses' => 'WineController@updateExcluded',
-			));
-			Route::post('update-sosi', array(
-			    'as' => 'enrollment.wines/update-sosi',
-			    'uses' => 'WineController@updateSosi',
-			));
-			Route::post('update-chosen', array(
-			    'as' => 'enrollment.wines/update-chosen',
-			    'uses' => 'WineController@updateChosen',
-			));
-		});
+	Route::group(array('prefix' => 'wines/{wine}'), function() {
+		Route::get('', array(
+		    'as' => 'enrollment.wines/show',
+		    'uses' => 'WineController@show'
+		));
+		Route::get('enrollment-pdf', array(
+		    'as' => 'enrollment.wines/enrollment-pdf',
+		    'uses' => 'WineController@enrollmentPdf'
+		));
+		Route::get('edit', array(
+		    'as' => 'enrollment.wines/edit',
+		    'uses' => 'WineController@edit'
+		));
+		Route::post('edit', array(
+		    'uses' => 'WineController@update'
+		));
+		Route::get('delete', array(
+		    'as' => 'enrollment.wines/delete',
+		    'uses' => 'WineController@delete'
+		));
+		Route::post('delete', array(
+		    'uses' => 'WineController@destroy'
+		));
+		Route::post('update-kdb', array(
+		    'as' => 'enrollment.wines/update-kdb',
+		    'uses' => 'WineController@updateKdb',
+		));
+		Route::post('update-excluded', array(
+		    'as' => 'enrollment.wines/update-excluded',
+		    'uses' => 'WineController@updateExcluded',
+		));
+		Route::post('update-sosi', array(
+		    'as' => 'enrollment.wines/update-sosi',
+		    'uses' => 'WineController@updateSosi',
+		));
+		Route::post('update-chosen', array(
+		    'as' => 'enrollment.wines/update-chosen',
+		    'uses' => 'WineController@updateChosen',
+		));
 	});
 
 	/*
-	  |--------------------------------------------------------------------------
-	  | Tasting
-	  |--------------------------------------------------------------------------
+	 * Tasting Numbers
 	 */
-	Route::group(array('prefix' => 'tasting'), function() {
-		/*
-		 * Tasting Numbers
-		 */
-		Route::group(array('prefix' => 'number/{tastingnumber}'), function() {
-			Route::get('deallocate', array(
-			    'as' => 'tasting.numbers/deallocate',
-			    'uses' => 'TastingNumberController@deallocate'
+	Route::group(array('prefix' => 'number/{tastingnumber}'), function() {
+		Route::get('deallocate', array(
+		    'as' => 'tasting.numbers/deallocate',
+		    'uses' => 'TastingNumberController@deallocate'
+		));
+		Route::post('deallocate', array(
+		    'uses' => 'TastingNumberController@delete'
+		));
+	});
+	/*
+	 * Tasting sessions
+	 */
+	Route::group(array('prefix' => 'session/{tastingsession}'), function() {
+		Route::get('', array(
+		    'as' => 'tasting.session/show',
+		    'uses' => 'TastingSessionController@show'
+		));
+		Route::get('edit', array(
+		    'as' => 'tasting.sessions/edit',
+		    'uses' => 'TastingSessionController@edit'
+		));
+		Route::post('edit', array(
+		    'uses' => 'TastingSessionController@update'
+		));
+		Route::get('commission/{commission}/tasters', array(
+		    'uses' => 'TastingSessionController@tasters',
+		    'before' => 'ajax',
+		    'as' => 'tasting.session/tasters',
+		));
+		Route::post('addtaster', array(
+		    'uses' => 'TastingSessionController@addTaster',
+		    'before' => 'ajax',
+		    'as' => 'tasting.session/addtaster',
+		));
+		Route::get('complete', array(
+		    'as' => 'tasting.sessions/complete',
+		    'uses' => 'TastingSessionController@complete'
+		));
+		Route::post('complete', array(
+		    'uses' => 'TastingSessionController@lock'
+		));
+		Route::get('delete', array(
+		    'as' => 'tasting.sessions/delete',
+		    'uses' => 'TastingSessionController@delete'
+		));
+		Route::post('delete', array(
+		    'uses' => 'TastingSessionController@destroy'
+		));
+		Route::get('export-result/{commission}', array(
+		    'as' => 'tasting.sessions/export-result',
+		    'uses' => 'TastingSessionController@exportResult'
+		));
+		Route::get('export-protocol', array(
+		    'as' => 'tasting.sessions/protocol',
+		    'uses' => 'TastingSessionController@exportProtocol'
+		));
+		Route::get('statistics', array(
+		    'as' => 'tasting.sessions/statistics',
+		    'uses' => 'TastingSessionController@statistics',
+		));
+		Route::group(array('prefix' => 'taste'), function() {
+			Route::get('', array(
+			    'as' => 'tasting.session/taste',
+			    'uses' => 'TastingController@add'
 			));
-			Route::post('deallocate', array(
-			    'uses' => 'TastingNumberController@delete'
+			Route::post('', array(
+			    'uses' => 'TastingController@store'
 			));
 		});
-		/*
-		 * Tasting sessions
-		 */
-		Route::group(array('prefix' => 'session/{tastingsession}'), function() {
+		Route::group(array('prefix' => 'retaste/{tastingnumber}/commission/{commission}'), function() {
 			Route::get('', array(
-			    'as' => 'tasting.session/show',
-			    'uses' => 'TastingSessionController@show'
+			    'as' => 'tasting.session/retaste',
+			    'uses' => 'TastingController@edit'
 			));
-			Route::get('edit', array(
-			    'as' => 'tasting.sessions/edit',
-			    'uses' => 'TastingSessionController@edit'
+			Route::post('', array(
+			    'uses' => 'TastingController@update'
 			));
-			Route::post('edit', array(
-			    'uses' => 'TastingSessionController@update'
-			));
-			Route::get('commission/{commission}/tasters', array(
-			    'uses' => 'TastingSessionController@tasters',
-			    'before' => 'ajax',
-			    'as' => 'tasting.session/tasters',
-			));
-			Route::post('addtaster', array(
-			    'uses' => 'TastingSessionController@addTaster',
-			    'before' => 'ajax',
-			    'as' => 'tasting.session/addtaster',
-			));
-			Route::get('complete', array(
-			    'as' => 'tasting.sessions/complete',
-			    'uses' => 'TastingSessionController@complete'
-			));
-			Route::post('complete', array(
-			    'uses' => 'TastingSessionController@lock'
-			));
-			Route::get('delete', array(
-			    'as' => 'tasting.sessions/delete',
-			    'uses' => 'TastingSessionController@delete'
-			));
-			Route::post('delete', array(
-			    'uses' => 'TastingSessionController@destroy'
-			));
-			Route::get('export-result/{commission}', array(
-			    'as' => 'tasting.sessions/export-result',
-			    'uses' => 'TastingSessionController@exportResult'
-			));
-			Route::get('export-protocol', array(
-			    'as' => 'tasting.sessions/protocol',
-			    'uses' => 'TastingSessionController@exportProtocol'
-			));
-			Route::get('statistics', array(
-			    'as' => 'tasting.sessions/statistics',
-			    'uses' => 'TastingSessionController@statistics',
-			));
-			Route::group(array('prefix' => 'taste'), function() {
-				Route::get('', array(
-				    'as' => 'tasting.session/taste',
-				    'uses' => 'TastingController@add'
-				));
-				Route::post('', array(
-				    'uses' => 'TastingController@store'
-				));
-			});
-			Route::group(array('prefix' => 'retaste/{tastingnumber}/commission/{commission}'), function() {
-				Route::get('', array(
-				    'as' => 'tasting.session/retaste',
-				    'uses' => 'TastingController@edit'
-				));
-				Route::post('', array(
-				    'uses' => 'TastingController@update'
-				));
-			});
 		});
 	});
 });
@@ -418,8 +381,7 @@ Route::group(array('prefix' => 'competition', 'before' => 'auth'), function() {
   | Settings
   |--------------------------------------------------------------------------
  */
-
-Route::group(array('prefix' => 'settings', 'before' => 'auth'), function() {
+Route::group(array('before' => 'auth'), function() {
 	Route::get('', array(
 	    'as' => 'settings',
 	    'uses' => 'SettingsController@index')
