@@ -22,7 +22,17 @@
 namespace App\Enrollment;
 
 use App\Contracts\EnrollmentHandler;
+use App\Wines\Repository as WineRepository;
 
 class Handler implements EnrollmentHandler {
+
+	/**
+	 * @var WineRepository
+	 */
+	private $wineRepository;
+
+	public function __construct(WineRepository $wineRepository) {
+		$this->wineRepository = $wineRepository;
+	}
 
 }
