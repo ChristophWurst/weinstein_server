@@ -21,7 +21,10 @@
 
 namespace App;
 
+use App\AdministrateModel;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class Applicant extends Model implements AdministrateModel {
 
@@ -38,19 +41,19 @@ class Applicant extends Model implements AdministrateModel {
 	 * @var array of string
 	 */
 	protected $fillable = [
-	    'id',
-	    'association_id',
-	    'wuser_username',
-	    'label',
-	    'title',
-	    'firstname',
-	    'lastname',
-	    'address_id',
-	    'phone',
-	    'fax',
-	    'mobile',
-	    'email',
-	    'web'
+		'id',
+		'association_id',
+		'wuser_username',
+		'label',
+		'title',
+		'firstname',
+		'lastname',
+		'address_id',
+		'phone',
+		'fax',
+		'mobile',
+		'email',
+		'web'
 	];
 
 	/**

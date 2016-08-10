@@ -1,5 +1,11 @@
 <?php
 
+use App\User;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Hash;
+
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -21,18 +27,11 @@
 
 namespace App;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Illuminate\Support\Facades\Hash;
-
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
 	use Authenticatable;
 
-use CanResetPassword;
+use CanResetPasswordContract;
 
 	/**
 	 * table name
@@ -197,7 +196,7 @@ use CanResetPassword;
 	}
 
 	public function getEmailForPasswordReset() {
-		throw new \Exception("method not implemented");
+		throw new Exception("method not implemented");
 	}
 
 }

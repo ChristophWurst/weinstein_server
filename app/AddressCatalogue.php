@@ -21,15 +21,15 @@
 
 namespace App;
 
-use App\User;
+use Illuminate\Database\Eloquent\Model;
 
-interface AdministrateModel {
+class AddressCatalogue extends Model {
 
 	/**
-	 * Check if the given user is authorized to administrate the model instance
-	 * 
-	 * @param User $user
-	 * @return bool
+	 * DB table name
+	 *
+	 * @var string
 	 */
-	public function administrates(User $user);
+	protected $table = 'cat_address';
+
 }

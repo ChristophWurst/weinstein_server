@@ -24,54 +24,63 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-class WineSort extends Model {
+class Taster extends Model {
 
 	/**
 	 * Table name
 	 * 
 	 * @var string 
 	 */
-	protected $table = 'winesort';
+	protected $table = 'taster';
 
 	/**
-	 * Mass assignment attributes
+	 * Attributes for mass assignment
 	 * 
-	 * @var array of string
+	 * @var array 
 	 */
 	protected $fillable = [
-	    'order',
+	    'nr',
+	    'tasterside_id',
+	    'commission_id',
+	    'active',
 	    'name',
-	    'competition_id'
 	];
 
 	/**
-	 * 
-	 * @return string
-	 */
-	public function getSelectLabelAttribute() {
-		return $this->order . ' - ' . $this->name;
-	}
-
-	/**
-	 * Duplicate this sort into another competition
-	 * 
-	 * @param Competition $competition
-	 */
-	public function duplicate(Competition $competition) {
-		$sort = new WineSort([
-		    'order' => $this->order,
-		    'name' => $this->name,
-		]);
-		$competition->winesorts()->save($sort);
-	}
-
-	/**
-	 * 1 sort : n wines
+	 * n tasters : 1 commision
 	 * 
 	 * @return Relation
 	 */
-	public function wines() {
-		return $this->hasMany('Wine', 'winesort_id');
+	public function commission() {
+		return $this->belongsTo('Commission');
+	}
+
+	/**
+	 * Scope only active tasters
+	 * 
+	 * @param Query $query
+	 * @return Query
+	 */
+	public function scopeActive($query) {
+		return $query->where('active', '=', true);
+	}
+
+	/**
+	 * 1 taster : 1 statistic
+	 * 
+	 * @return Relation
+	 */
+	public function statistic() {
+		return $this->hasOne('App\Competition\Tasting\TasterStatistic');
+	}
+
+	/**
+	 * 1 taster : n tastings
+	 * 
+	 * @return Relation
+	 */
+	public function tastings() {
+		return $this->hasMany('Tasting');
 	}
 
 }

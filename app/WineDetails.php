@@ -21,15 +21,33 @@
 
 namespace App;
 
-use App\User;
-
-interface AdministrateModel {
+class WineDetails extends Wine {
 
 	/**
-	 * Check if the given user is authorized to administrate the model instance
+	 * Tabel name
 	 * 
-	 * @param User $user
-	 * @return bool
+	 * @var string
 	 */
-	public function administrates(User $user);
+	protected $table = 'wine_details';
+
+	/**
+	 * round db value because of rounding noise
+	 * floor decimal values
+	 * 
+	 * @return float
+	 */
+	public function getRating1Attribute() {
+		return floor(round($this->attributes['rating1'], 6) * 1000) / 1000;
+	}
+
+	/**
+	 * round db value because of rounding noise
+	 * floor decimal values
+	 * 
+	 * @return float
+	 */
+	public function getRating2Attribute() {
+		return floor(round($this->attributes['rating2'], 6) * 1000) / 1000;
+	}
+
 }

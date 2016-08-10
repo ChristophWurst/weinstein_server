@@ -24,54 +24,22 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-class WineSort extends Model {
+class TasterStatistic extends Model {
 
 	/**
-	 * Table name
+	 * DB table name
 	 * 
-	 * @var string 
+	 * @var string
 	 */
-	protected $table = 'winesort';
+	protected $table = 'stat_taster';
 
 	/**
-	 * Mass assignment attributes
-	 * 
-	 * @var array of string
-	 */
-	protected $fillable = [
-	    'order',
-	    'name',
-	    'competition_id'
-	];
-
-	/**
-	 * 
-	 * @return string
-	 */
-	public function getSelectLabelAttribute() {
-		return $this->order . ' - ' . $this->name;
-	}
-
-	/**
-	 * Duplicate this sort into another competition
-	 * 
-	 * @param Competition $competition
-	 */
-	public function duplicate(Competition $competition) {
-		$sort = new WineSort([
-		    'order' => $this->order,
-		    'name' => $this->name,
-		]);
-		$competition->winesorts()->save($sort);
-	}
-
-	/**
-	 * 1 sort : n wines
+	 * 1 statistic : 1 taster
 	 * 
 	 * @return Relation
 	 */
-	public function wines() {
-		return $this->hasMany('Wine', 'winesort_id');
+	public function taster() {
+		return $this->belongsTo('Taster');
 	}
 
 }

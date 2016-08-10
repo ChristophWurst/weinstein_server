@@ -19,17 +19,31 @@
  *
  */
 
-namespace App;
+namespace App\Http\Controllers;
 
-use App\User;
+use Illuminate\Support\Facades\View;
+use App\Http\Controllers\BaseController;
+use App\Support\ActivityLog;
 
-interface AdministrateModel {
+class ActivityLogController extends BaseController {
 
 	/**
-	 * Check if the given user is authorized to administrate the model instance
-	 * 
-	 * @param User $user
-	 * @return bool
+	 * Constructor
 	 */
-	public function administrates(User $user);
+	public function __construct() {
+		parent::__construct();
+
+		//register filters
+		$this->beforeFilter('@filterAdmin');
+	}
+
+	/**
+	 * Show all logs
+	 * 
+	 * @return Response
+	 */
+	public function index() {
+		return View::make('settings/activitylog/index')->with('logs', ActivityLog::orderBy('created_at', 'desc')->get());
+	}
+
 }
