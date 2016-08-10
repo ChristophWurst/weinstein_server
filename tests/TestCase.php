@@ -1,25 +1,7 @@
 <?php
 
-class TestCase extends Illuminate\Foundation\Testing\TestCase {
-	
-	/**
-     * Try to log user in
-     * 
-     * @param string $username
-     * @return User
-     */
-    protected function login($username) {
-        $user = User::find($username);
-        $this->assertFalse(is_null($user));
-        
-        $this->assertFalse(Auth::check());
-        $this->be($user);
-        $this->assertTrue(Auth::check());
-        $this->assertEquals($user, Auth::user());
-        
-        return $user;
-    }
-
+abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
+{
     /**
      * The base URL to use while testing the application.
      *

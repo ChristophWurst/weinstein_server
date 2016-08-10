@@ -4,6 +4,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Environment
+    |--------------------------------------------------------------------------
+    |
+    | This value determines the "environment" your application is currently
+    | running in. This may determine how you prefer to configure various
+    | services your application utilizes. Set this in your ".env" file.
+    |
+    */
+
+    'env' => env('APP_ENV', 'production'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Debug Mode
     |--------------------------------------------------------------------------
     |
@@ -13,7 +26,7 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG'),
+    'debug' => env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -26,7 +39,7 @@ return [
     |
     */
 
-    'url' => 'http://weinstein.ml',
+    'url' => env('APP_URL', 'http://localhost'),
 
     /*
     |--------------------------------------------------------------------------
@@ -78,7 +91,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY', 'iHdseR93gUvssH9YnWG0D7n0GRqTOii2'),
+    'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
 
@@ -95,7 +108,9 @@ return [
     |
     */
 
-    'log' => 'single',
+    'log' => env('APP_LOG', 'single'),
+
+    'log_level' => env('APP_LOG_LEVEL', 'debug'),
 
     /*
     |--------------------------------------------------------------------------
@@ -113,13 +128,11 @@ return [
         /*
          * Laravel Framework Service Providers...
          */
-        Illuminate\Foundation\Providers\ArtisanServiceProvider::class,
         Illuminate\Auth\AuthServiceProvider::class,
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
         Illuminate\Bus\BusServiceProvider::class,
         Illuminate\Cache\CacheServiceProvider::class,
         Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
-        Illuminate\Routing\ControllerServiceProvider::class,
         Illuminate\Cookie\CookieServiceProvider::class,
         Illuminate\Database\DatabaseServiceProvider::class,
         Illuminate\Encryption\EncryptionServiceProvider::class,
@@ -136,20 +149,23 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+
         /*
-         * Forms
+         * Package Service Providers...
          */
-        Collective\Html\HtmlServiceProvider::class,
+	Collective\Html\HtmlServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
         App\Providers\AppServiceProvider::class,
+        App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        
-         /*
-          * Weinstein service providers
-          */
+
+	/*
+         * Weinstein service providers
+         */
         Weinstein\Applicant\ApplicantServiceProvider::class,
         Weinstein\Association\AssociationServiceProvider::class,
         Weinstein\Competition\CompetitionServiceProvider::class,
@@ -161,7 +177,6 @@ return [
         Weinstein\WineSort\WineSortServiceProvider::class,
         Weinstein\Support\ActivityLog\ActivityLoggerServiceProvider::class,
         Weinstein\User\UserServiceProvider::class,
-
     ],
 
     /*
@@ -177,40 +192,38 @@ return [
 
     'aliases' => [
 
-        'App'       => Illuminate\Support\Facades\App::class,
-        'Artisan'   => Illuminate\Support\Facades\Artisan::class,
-        'Auth'      => Illuminate\Support\Facades\Auth::class,
-        'Blade'     => Illuminate\Support\Facades\Blade::class,
-        'Bus'       => Illuminate\Support\Facades\Bus::class,
-        'Cache'     => Illuminate\Support\Facades\Cache::class,
-        'Config'    => Illuminate\Support\Facades\Config::class,
-        'Cookie'    => Illuminate\Support\Facades\Cookie::class,
-        'Crypt'     => Illuminate\Support\Facades\Crypt::class,
-        'DB'        => Illuminate\Support\Facades\DB::class,
-        'Eloquent'  => Illuminate\Database\Eloquent\Model::class,
-        'Event'     => Illuminate\Support\Facades\Event::class,
-        'File'      => Illuminate\Support\Facades\File::class,
-        'Hash'      => Illuminate\Support\Facades\Hash::class,
-        'Input'     => Illuminate\Support\Facades\Input::class,
-        'Inspiring' => Illuminate\Foundation\Inspiring::class,
-        'Lang'      => Illuminate\Support\Facades\Lang::class,
-        'Log'       => Illuminate\Support\Facades\Log::class,
-        'Mail'      => Illuminate\Support\Facades\Mail::class,
-        'Password'  => Illuminate\Support\Facades\Password::class,
-        'Queue'     => Illuminate\Support\Facades\Queue::class,
-        'Redirect'  => Illuminate\Support\Facades\Redirect::class,
-        'Redis'     => Illuminate\Support\Facades\Redis::class,
-        'Request'   => Illuminate\Support\Facades\Request::class,
-        'Response'  => Illuminate\Support\Facades\Response::class,
-        'Route'     => Illuminate\Support\Facades\Route::class,
-        'Schema'    => Illuminate\Support\Facades\Schema::class,
-        'Session'   => Illuminate\Support\Facades\Session::class,
-        'Storage'   => Illuminate\Support\Facades\Storage::class,
-        'URL'       => Illuminate\Support\Facades\URL::class,
+        'App' => Illuminate\Support\Facades\App::class,
+        'Artisan' => Illuminate\Support\Facades\Artisan::class,
+        'Auth' => Illuminate\Support\Facades\Auth::class,
+        'Blade' => Illuminate\Support\Facades\Blade::class,
+        'Cache' => Illuminate\Support\Facades\Cache::class,
+        'Config' => Illuminate\Support\Facades\Config::class,
+        'Cookie' => Illuminate\Support\Facades\Cookie::class,
+        'Crypt' => Illuminate\Support\Facades\Crypt::class,
+        'DB' => Illuminate\Support\Facades\DB::class,
+        'Eloquent' => Illuminate\Database\Eloquent\Model::class,
+        'Event' => Illuminate\Support\Facades\Event::class,
+        'File' => Illuminate\Support\Facades\File::class,
+        'Gate' => Illuminate\Support\Facades\Gate::class,
+        'Hash' => Illuminate\Support\Facades\Hash::class,
+        'Lang' => Illuminate\Support\Facades\Lang::class,
+        'Log' => Illuminate\Support\Facades\Log::class,
+        'Mail' => Illuminate\Support\Facades\Mail::class,
+        'Password' => Illuminate\Support\Facades\Password::class,
+        'Queue' => Illuminate\Support\Facades\Queue::class,
+        'Redirect' => Illuminate\Support\Facades\Redirect::class,
+        'Redis' => Illuminate\Support\Facades\Redis::class,
+        'Request' => Illuminate\Support\Facades\Request::class,
+        'Response' => Illuminate\Support\Facades\Response::class,
+        'Route' => Illuminate\Support\Facades\Route::class,
+        'Schema' => Illuminate\Support\Facades\Schema::class,
+        'Session' => Illuminate\Support\Facades\Session::class,
+        'Storage' => Illuminate\Support\Facades\Storage::class,
+        'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
-        'View'      => Illuminate\Support\Facades\View::class,
-        
-        /**
+        'View' => Illuminate\Support\Facades\View::class,
+
+	/**
          * Forms
          */
         'Form' => 'Collective\Html\FormFacade',
@@ -235,23 +248,23 @@ return [
          */
         'ActivityLog'           => App\Support\ActivityLog::class,
         'Address'               => App\Address::class,
-        'AddressCatalogue'      => App\Competition\Evaluation\Catalogue\AddressCatalogue::class,
+        'AddressCatalogue'      => App\AddressCatalogue::class,
         'Association'           => App\Association::class,
         'Applicant'             => App\Applicant::class,
-        'Commission'            => App\Competition\Tasting\Commission::class,
-        'Competition'           => App\Competition\Competition::class,
-        'CompetitionState'      => App\Competition\CompetitionState::class,
-        'Taster'                => App\Competition\Tasting\Taster::class,
-        'TastedWine'            => App\Competition\Tasting\TastedWine::class,
-        'Tasting'               => App\Competition\Tasting\Tasting::class,
-        'TastingNumber'         => App\Competition\Tasting\TastingNumber::class,
-        'TastingSession'        => App\Competition\Tasting\TastingSession::class,
-        'TastingStage'          => App\Competition\Tasting\TastingStage::class,
+        'Commission'            => App\Commission::class,
+        'Competition'           => App\Competition::class,
+        'CompetitionState'      => App\CompetitionState::class,
+        'Taster'                => App\Taster::class,
+        'TastedWine'            => App\TastedWine::class,
+        'Tasting'               => App\Tasting::class,
+        'TastingNumber'         => App\TastingNumber::class,
+        'TastingSession'        => App\TastingSession::class,
+        'TastingStage'          => App\TastingStage::class,
         'User'                  => App\User::class,
-        'Wine'                  => App\Competition\Wine\Wine::class,
-        'WineDetails'           => App\Competition\Wine\WineDetails::class,
+        'Wine'                  => App\Wine::class,
+        'WineDetails'           => App\WineDetails::class,
         'WineSort'              => App\WineSort::class,
-        'WineQuality'           => App\Competition\Wine\WineQuality::class,
+        'WineQuality'           => App\WineQuality::class,
     ],
 
 ];

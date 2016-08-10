@@ -1,11 +1,5 @@
 <?php
 
-use App\User;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Support\Facades\Hash;
-
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -27,11 +21,23 @@ use Illuminate\Support\Facades\Hash;
 
 namespace App;
 
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
+use App\User;
+use Exception;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Support\Facades\Hash;
 
-	use Authenticatable;
+class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract {
 
-use CanResetPasswordContract;
+	use Authenticatable,
+     Authorizable,
+     CanResetPassword;
 
 	/**
 	 * table name
@@ -53,9 +59,9 @@ use CanResetPasswordContract;
 	 * @var array of string
 	 */
 	protected $fillable = array(
-	    'username',
-	    'password',
-	    'admin'
+		'username',
+		'password',
+		'admin'
 	);
 
 	/**
@@ -64,7 +70,7 @@ use CanResetPasswordContract;
 	 * @var array
 	 */
 	protected $hidden = array(
-	    'password'
+		'password'
 	);
 
 	public function administrates(User $user) {

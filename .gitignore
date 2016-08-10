@@ -17,3 +17,7 @@ nbproject/private
 /app/storage/sessions/
 /app/storage/views/
 /app/storage/meta/
+
+/public/storage
+Homestead.yaml
+Homestead.json
