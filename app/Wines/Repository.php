@@ -19,8 +19,8 @@
  *
  */
 
-namespace App\Contracts;
+namespace App\Wines;
 
-interface WineRepository {
+class Repository {
 
 }
