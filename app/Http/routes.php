@@ -381,7 +381,7 @@ Route::group(array('before' => 'auth'), function() {
   | Settings
   |--------------------------------------------------------------------------
  */
-Route::group(array('before' => 'auth'), function() {
+Route::group(array('prefix' => 'settings', 'before' => 'auth'), function() {
 	Route::get('', array(
 	    'as' => 'settings',
 	    'uses' => 'SettingsController@index')
