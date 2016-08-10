@@ -3,7 +3,7 @@
 .env
 composer.phar
 composer.lock
-/nbproject
+nbproject/private
 
 # Generated css
 /public/css/bootstrap.css
