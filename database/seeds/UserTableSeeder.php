@@ -1,5 +1,9 @@
 <?php
 
+use App\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *

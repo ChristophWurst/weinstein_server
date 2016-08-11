@@ -21,13 +21,23 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Auth\AuthManager;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 
 class AuthenticationController extends BaseController {
+
+	/** @var AuthManager */
+	private $auth;
+
+	public function __construct(AuthManager $auth) {
+		parent::__construct();
+		$this->auth = $auth;
+	}
 
 	/**
 	 * Display account information
@@ -50,10 +60,17 @@ class AuthenticationController extends BaseController {
 	/**
 	 * Try to log user in
 	 *
+	 * @param Request $request
 	 * @return Response
 	 */
-	public function auth() {
-		if (Auth::attempt(['username' => Input::get('username'), 'password' => Input::get('password')], true)) {
+	public function auth(Request $request) {
+		$username = $request->input('username');
+		$password = $request->input('password');
+
+		if ($this->auth->guard('web')->attempt([
+				'username' => $username,
+				'password' => $password
+				], true)) {
 			return Redirect::route('account');
 		}
 
