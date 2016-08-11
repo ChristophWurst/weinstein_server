@@ -2,8 +2,18 @@
 
 namespace App\Providers;
 
-use Illuminate\Routing\Router;
+use App\Applicant;
+use App\Association;
+use App\Commission;
+use App\Competition;
+use App\TastingNumber;
+use App\TastingSession;
+use App\User;
+use App\Wine;
+use App\WineSort;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Routing\Router;
+use function app_path;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -19,7 +29,7 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * Define your route model bindings, pattern filters, etc.
      *
-     * @param  \Illuminate\Routing\Router  $router
+     * @param  Router  $router
      * @return void
      */
     public function boot(Router $router)
@@ -27,12 +37,23 @@ class RouteServiceProvider extends ServiceProvider
         //
 
         parent::boot($router);
+	
+	$router->model('applicant', Applicant::class);
+	$router->model('competition', Competition::class);
+	$router->model('commission', Commission::class);
+	$router->model('association', Association::class);
+	$router->model('competition', Competition::class);
+	$router->model('tastingnumber', TastingNumber::class);
+	$router->model('tastingsession', TastingSession::class);
+	$router->model('user', User::class);
+	$router->model('wine', Wine::class);
+	$router->model('winesort', WineSort::class);
     }
 
     /**
      * Define the routes for the application.
      *
-     * @param  \Illuminate\Routing\Router  $router
+     * @param  Router  $router
      * @return void
      */
     public function map(Router $router)
@@ -47,7 +68,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * These routes all receive session state, CSRF protection, etc.
      *
-     * @param  \Illuminate\Routing\Router  $router
+     * @param  Router  $router
      * @return void
      */
     protected function mapWebRoutes(Router $router)

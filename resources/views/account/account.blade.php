@@ -2,7 +2,7 @@
 
 @section('content')
 <h1>Account</h1>
-<p>Sie sind angemledet als <strong>{{ Auth::user()->username }}.</strong></p>
+<p>Sie sind angemeldet als <strong>{{ Auth::user()->username }}.</strong></p>
 <a class="btn btn-default"
    role="button"
    href="{!! route('settings.users/edit', array('username' => Auth::user()->username)) !!}">

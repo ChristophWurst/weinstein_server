@@ -67,10 +67,10 @@ class AuthenticationController extends BaseController {
 		$username = $request->input('username');
 		$password = $request->input('password');
 
-		if ($this->auth->guard('web')->attempt([
+		if ($this->auth->attempt([
 				'username' => $username,
 				'password' => $password
-				], true)) {
+				])) {
 			return Redirect::route('account');
 		}
 
