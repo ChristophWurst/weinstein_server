@@ -67,7 +67,6 @@ class ResultExport {
 		//data
 		$row = 2;
 		foreach ($this->wines as $w) {
-			error_log($w->nr);
 			$sheet->setCellValue("A$row", $w->tastingnumber_nr);
 			$sheet->setCellValue("B$row", $w->result);
 			$row++;

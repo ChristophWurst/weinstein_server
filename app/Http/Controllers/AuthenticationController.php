@@ -70,7 +70,7 @@ class AuthenticationController extends BaseController {
 		if ($this->auth->attempt([
 				'username' => $username,
 				'password' => $password
-				])) {
+				], true)) {
 			return Redirect::route('account');
 		}
 

@@ -82,7 +82,6 @@ class TastingSession extends Model implements AdministrateModel {
 	}
 
 	public function deletable() {
-		error_log($this->tasters()->count());
 		return $this->tasters()->count() === 0;
 	}
 
