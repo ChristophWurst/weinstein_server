@@ -110,7 +110,7 @@ class AuthServiceProvider extends ServiceProvider {
 		$gate->define('delete-tastingsession', TastingSessionAbilities::class . '@delete');
 		
 		/**
-		 * WineSort
+		 * User
 		 */
 		$gate->define('list-users', UserAbilities::class . '@index');
 		$gate->define('create-user', UserAbilities::class . '@create');
