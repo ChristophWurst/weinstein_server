@@ -21,49 +21,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BaseController;
 use App\Competition\Competition;
-use App\Competition\CompetitionState;
+use App\Http\Controllers\BaseController;
+use Illuminate\Support\Facades\Response;
 
 class CatalogueController extends BaseController {
-
-	/**
-	 * Filter user administrates competition
-	 * 
-	 * @param Route $route
-	 * @param Request $request
-	 */
-	public function filterAdministrates($route, $request) {
-		$competition = Route::input('competition');
-
-		if (!$competition->administrates(Auth::user())) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 */
-	public function filterCompetitionState($route, $request) {
-		$competition = Route::input('competition');
-
-		if ($competition->competitionstate_id !== CompetitionState::STATE_FINISHED) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * 
-	 */
-	public function __construct() {
-		$this->middleware('@filterAdministrates');
-		$this->middleware('@filterCompetitionState');
-	}
 
 	/**
 	 * Download address catalogue
@@ -72,6 +34,8 @@ class CatalogueController extends BaseController {
 	 * @return type
 	 */
 	public function addressCatalogue(Competition $competition) {
+		$this->authorize('create-catalogue');
+		
 		$we = new AddressCatalogueExport($competition->addressCatalogue);
 		$filename = 'Adresskatalog.xls';
 		$headers = [
@@ -88,6 +52,8 @@ class CatalogueController extends BaseController {
 	 * @return type
 	 */
 	public function webCatalogue(Competition $competition) {
+		$this->authorize('create-catalogue');
+
 		$wines = $competition
 			->wine_details()
 			->where('chosen', '=', true)
@@ -110,6 +76,8 @@ class CatalogueController extends BaseController {
 	 * @return type
 	 */
 	public function tastingCatalogue(Competition $competition) {
+		$this->authorize('create-catalogue');
+
 		$wines = $competition
 			->wine_details()
 			->Chosen()

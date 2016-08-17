@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Auth\Abilities\ActivityLogAbilities;
 use App\Auth\Abilities\ApplicantAbilities;
+use App\Auth\Abilities\CatalogueAbilities;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -44,6 +45,11 @@ class AuthServiceProvider extends ServiceProvider {
 		$gate->define('show-association', ApplicantAbilities::class . '@show');
 		$gate->define('create-association', ApplicantAbilities::class . '@create');
 		$gate->define('edit-association', ApplicantAbilities::class . '@edit');
+
+		/**
+		 * Catalogue
+		 */
+		$gate->define('create-catalogue', CatalogueAbilities::class . '@create');
 	}
 
 }
