@@ -7,6 +7,7 @@ use App\Auth\Abilities\ApplicantAbilities;
 use App\Auth\Abilities\CatalogueAbilities;
 use App\Auth\Abilities\CompetitionAbilities;
 use App\Auth\Abilities\EvaluationAbilities;
+use App\Auth\Abilities\TastingAbilities;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -69,6 +70,12 @@ class AuthServiceProvider extends ServiceProvider {
 		 * Evaluation
 		 */
 		$gate->define('show-evaluations', EvaluationAbilities::class . '@show');
+
+		/**
+		 * Tasting
+		 */
+		$gate->define('create-tasting', TastingAbilities::class . '@create');
+		$gate->define('edit-tasting', TastingAbilities::class . '@edit');
 	}
 
 }
