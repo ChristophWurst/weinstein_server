@@ -21,60 +21,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Applicant;
+use App\Http\Controllers\BaseController;
+use ApplicantHandler;
+use Association;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
-use ApplicantHandler;
-use App\Applicant;
-use Association;
-use Route;
 use User;
-use App\Http\Controllers\BaseController;
 use Weinstein\Exception\ValidationException;
 
 class ApplicantController extends BaseController {
-
-	/**
-	 * Filter user administrates applicant
-	 * 
-	 * @param Route $route
-	 * @param Request $request
-	 */
-	public function filterAdministrates($route, $request) {
-		$user = Auth::user();
-		$applicant = Route::input('applicant');
-
-		if (!$user->admin && !ApplicantHandler::isAdmin($user, $applicant)) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-		parent::__construct();
-
-		//register filters
-		$this->middleware('auth');
-		$this->middleware('@filterAdmin', [
-		    'only' => [
-			'create',
-			'store',
-			'getImport',
-			'postImport',
-		    ],
-		]);
-		$this->middleware('@filterAdministrates', [
-		    'only' => [
-			'edit',
-			'update',
-			'show',
-		    ],
-		]);
-	}
 
 	/**
 	 * Display a listing of all applicants the user is permitted to see
@@ -92,6 +52,8 @@ class ApplicantController extends BaseController {
 	 * @return Response
 	 */
 	public function create() {
+		$this->authorize('create-applicant');
+
 		return View::make('settings/applicant/form')
 				->withAssociations(Association::all()->lists('select_label', 'id')->all())
 				->withUsers($this->selectNone + User::all()->lists('username', 'username')->all());
@@ -103,6 +65,8 @@ class ApplicantController extends BaseController {
 	 * @return Response
 	 */
 	public function store() {
+		$this->authorize('create-applicant');
+
 		$data = Input::all();
 		//remove default user of form's select
 		if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
@@ -125,8 +89,10 @@ class ApplicantController extends BaseController {
 	 * @return Response
 	 */
 	public function show(Applicant $applicant) {
+		$this->authorize('show-applicant', $applicant);
+
 		return View::make('settings/applicant/show')->with([
-			    'data' => $applicant
+				'data' => $applicant
 		]);
 	}
 
@@ -136,6 +102,8 @@ class ApplicantController extends BaseController {
 	 * @return Response
 	 */
 	public function getImport() {
+		$this->authorize('import-applicant');
+
 		return View::make('settings/applicant/import');
 	}
 
@@ -145,6 +113,8 @@ class ApplicantController extends BaseController {
 	 * @return Response
 	 */
 	public function postImport() {
+		$this->authorize('import-applicant');
+
 		//check for file existense
 		if (!Input::hasFile('xlsfile')) {
 			return Redirect::route('settings.applicants/import');
@@ -166,6 +136,8 @@ class ApplicantController extends BaseController {
 	 * @return Response
 	 */
 	public function edit(Applicant $applicant) {
+		$this->authorize('edit-applicant', $applicant);
+
 		$editId = $applicant->association->administrates(Auth::user());
 		return View::make('settings/applicant/form')
 				->withApplicant($applicant)
@@ -181,6 +153,8 @@ class ApplicantController extends BaseController {
 	 * @return Response
 	 */
 	public function update(Applicant $applicant) {
+		$this->authorize('edit-applicant', $applicant);
+
 		$data = Input::all();
 		//remove default user of form's select
 		if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {

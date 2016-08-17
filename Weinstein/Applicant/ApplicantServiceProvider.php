@@ -33,8 +33,7 @@ class ApplicantServiceProvider extends ServiceProvider {
 		//ApplicantHandler
 		$this->app->bind('ApplicantHandler', function() {
 			$dataProvider = App::make('Weinstein\Applicant\ApplicantDataProvider');
-			$accessController = App::make('Weinstein\Applicant\ApplicantAccessController');
-			return new ApplicantHandler($dataProvider, $accessController);
+			return new ApplicantHandler($dataProvider);
 		});
 	}
 

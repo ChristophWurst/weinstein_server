@@ -18,8 +18,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+use App\Applicant;
+use App\User;
+use Illuminate\Foundation\Testing\TestCase;
 use Illuminate\Support\Collection;
-use Weinstein\Applicant\ApplicantAccessController;
 use Weinstein\Applicant\ApplicantDataProvider;
 use Weinstein\Applicant\ApplicantHandler;
 
@@ -30,7 +32,7 @@ class ApplicantHandlerTest extends TestCase {
 	}
 
 	public function testGetUsersApplicantsNoAdmin() {
-		$user = new App\User();
+		$user = new User();
 		$user->admin = false;
 
 		$dataProvider = Mockery::mock('Weinstein\Applicant\ApplicantDataProvider');
@@ -40,13 +42,13 @@ class ApplicantHandlerTest extends TestCase {
 			->once()
 			->andReturn($data);
 
-		$service = new ApplicantHandler($dataProvider, new ApplicantAccessController);
+		$service = new ApplicantHandler($dataProvider);
 
 		$this->assertSame($data, $service->getUsersApplicants($user));
 	}
 
 	public function testGetUsersApplicantsAsAdmin() {
-		$user = new App\User();
+		$user = new User();
 		$user->admin = true;
 
 		$dataProvider = Mockery::mock('Weinstein\Applicant\ApplicantDataProvider');
@@ -55,21 +57,16 @@ class ApplicantHandlerTest extends TestCase {
 			->once()
 			->andReturn($data);
 
-		$service = new ApplicantHandler($dataProvider, new ApplicantAccessController);
+		$service = new ApplicantHandler($dataProvider);
 
 		$this->assertSame($data, $service->getUsersApplicants($user));
 	}
 
 	public function testIsAdmin() {
-		$user = new App\User;
+		$user = new User;
 		$applicant = new Applicant();
 
-		$accessController = Mockery::mock('Weinstein\Applicant\ApplicantAccessController');
-		$accessController->shouldReceive('isAdmin')
-			->with($user, $applicant)
-			->andReturn(false);
-
-		$service = new ApplicantHandler(new ApplicantDataProvider(), $accessController);
+		$service = new ApplicantHandler(new ApplicantDataProvider());
 
 		$this->assertFalse($service->isAdmin($user, $applicant));
 	}

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Auth\Abilities\ActivityLogAbilities;
+use App\Auth\Abilities\ApplicantAbilities;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -24,7 +25,18 @@ class AuthServiceProvider extends ServiceProvider {
 	public function boot(Gate $gate) {
 		$this->registerPolicies($gate);
 
+		/**
+		 * ActivityLog
+		 */
 		$gate->define('view-activitylog', ActivityLogAbilities::class . '@view');
+
+		/**
+		 * Applicant
+		 */
+		$gate->define('show-applicant', ApplicantAbilities::class . '@show');
+		$gate->define('create-applicant', ApplicantAbilities::class . '@create');
+		$gate->define('import', ApplicantAbilities::class . '@import');
+		$gate->define('edit-applicant', ApplicantAbilities::class . '@edit');
 	}
 
 }

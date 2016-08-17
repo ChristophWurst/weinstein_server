@@ -27,7 +27,7 @@
             $options = [
                 'class' => 'form-control'
             ];
-            if (!$edit_id) {
+            if (!$edit) {
                 $options['disabled'] = 'disabled';
             }
             ?>

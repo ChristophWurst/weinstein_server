@@ -19,30 +19,14 @@
  *
  */
 
-namespace Weinstein\Applicant;
+namespace App\Auth\Abilities;
 
-use App\Applicant;
 use App\User;
 
-class ApplicantAccessController {
+abstract class CommonAbilities {
 
-	/**
-	 * Check if given user administrates given applicant
-	 * - directly: user is applicants admin
-	 * - indirectly: user is applicants association admin
-	 * 
-	 * @param App\User $user
-	 * @param Applicant $applicant
-	 * @return boolean
-	 */
-	public function isAdmin(User $user, Applicant $applicant) {
-		if ($applicant->wuser_username === $user->username) {
-			return true;
-		}
-		if (!is_null($applicant->association) && $applicant->association->wuser_username === $user->username) {
-			return true;
-		}
-		return false;
+	public function isAdmin(User $user) {
+		return $user->admin;
 	}
 
 }

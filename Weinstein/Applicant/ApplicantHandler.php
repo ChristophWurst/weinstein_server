@@ -42,13 +42,6 @@ class ApplicantHandler {
 	private $dataProvider;
 
 	/**
-	 * Access controller
-	 * 
-	 * @var \Weinstein\Applicant\AccessController
-	 */
-	private $accessController;
-
-	/**
 	 * Create user for applicant it it does not exist
 	 * 
 	 * @param Applicant $applicant
@@ -71,14 +64,10 @@ class ApplicantHandler {
 	}
 
 	/**
-	 * Constructor
-	 * 
 	 * @param ApplicantDataProvider $dataProvider
-	 * @param ApplicantAccessController $accessController
 	 */
-	public function __construct(ApplicantDataProvider $dataProvider, ApplicantAccessController $accessController) {
+	public function __construct(ApplicantDataProvider $dataProvider) {
 		$this->dataProvider = $dataProvider;
-		$this->accessController = $accessController;
 	}
 
 	/**
@@ -268,17 +257,6 @@ class ApplicantHandler {
 		} else {
 			return $this->dataProvider->getApplicantsForUser($user);
 		}
-	}
-
-	/**
-	 * Check if given user administrates given applicant
-	 * 
-	 * @param User $user
-	 * @param Applicant $applicant
-	 * @return boolean
-	 */
-	public function isAdmin(User $user, Applicant $applicant) {
-		return $this->accessController->isAdmin($user, $applicant);
 	}
 
 }
