@@ -35,8 +35,15 @@ class AuthServiceProvider extends ServiceProvider {
 		 */
 		$gate->define('show-applicant', ApplicantAbilities::class . '@show');
 		$gate->define('create-applicant', ApplicantAbilities::class . '@create');
-		$gate->define('import', ApplicantAbilities::class . '@import');
+		$gate->define('import-applicant', ApplicantAbilities::class . '@import');
 		$gate->define('edit-applicant', ApplicantAbilities::class . '@edit');
+
+		/**
+		 * Association
+		 */
+		$gate->define('show-association', ApplicantAbilities::class . '@show');
+		$gate->define('create-association', ApplicantAbilities::class . '@create');
+		$gate->define('edit-association', ApplicantAbilities::class . '@edit');
 	}
 
 }

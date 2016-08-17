@@ -24,9 +24,11 @@ namespace App\Auth\Abilities;
 use App\Applicant;
 use App\User;
 
-class ApplicantAbilities extends CommonAbilities {
+class ApplicantAbilities {
 
-	public function show(User $user, Applicant $applicant) {
+	use CommonAbilities;
+
+	private function administrates(User $user, Applicant $applicant) {
 		if ($applicant->wuser_username === $user->username) {
 			return true;
 		}
@@ -34,6 +36,10 @@ class ApplicantAbilities extends CommonAbilities {
 			return true;
 		}
 		return false;
+	}
+
+	public function show(User $user, Applicant $applicant) {
+		return $this->administrates($user, $applicant);
 	}
 
 	public function create(User $user) {
@@ -45,13 +51,7 @@ class ApplicantAbilities extends CommonAbilities {
 	}
 
 	public function edit(User $user, Applicant $applicant) {
-		if ($applicant->wuser_username === $user->username) {
-			return true;
-		}
-		if (!is_null($applicant->association) && $applicant->association->wuser_username === $user->username) {
-			return true;
-		}
-		return false;
+		return $this->administrates($user, $applicant);
 	}
 
 }

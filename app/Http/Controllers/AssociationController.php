@@ -21,33 +21,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Association;
+use App\Http\Controllers\BaseController;
+use App\User;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 use Route;
-use App\Association;
-use App\Http\Controllers\BaseController;
-use App\User;
 use Weinstein\Exception\ValidationException as ValidationException;
 use Weinstein\Support\Facades\AssociationHandlerFacade as AssociationHandler;
 
 class AssociationController extends BaseController {
-
-	/**
-	 * Filter user administrates association
-	 * 
-	 * @param Route $route
-	 * @param Request $request
-	 */
-	public function filterAdministrates($route, $request) {
-		$user = Auth::user();
-		$association = Route::input('association');
-
-		if (!$user->admin && (!$association->user || $association->user->username != Auth::user()->username)) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
 
 	/**
 	 * Constructor
@@ -57,19 +43,6 @@ class AssociationController extends BaseController {
 
 		//register filters
 		$this->middleware('auth');
-		$this->middleware('@filterAdmin', [
-		    'only' => [
-			'create',
-			'store',
-		    ],
-		]);
-		$this->middleware('@filterAdministrates', [
-		    'only' => [
-			'edit',
-			'update',
-			'show',
-		    ],
-		]);
 	}
 
 	/**
@@ -90,6 +63,8 @@ class AssociationController extends BaseController {
 	 * @return Response
 	 */
 	public function create() {
+		$this->authorize('create-association');
+
 		return View::make('settings/association/form')
 				->withUsers($this->selectNone + User::all()->lists('username', 'username')->all());
 	}
@@ -100,6 +75,8 @@ class AssociationController extends BaseController {
 	 * @return Response
 	 */
 	public function store() {
+		$this->authorize('create-association');
+
 		$data = Input::all();
 		//remove default user of form's select
 		if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
@@ -122,6 +99,8 @@ class AssociationController extends BaseController {
 	 * @return Responce
 	 */
 	public function show(Association $association) {
+		$this->authorize('show-association', $association);
+
 		return View::make('settings/association/show')->with('data', $association);
 	}
 
@@ -134,6 +113,8 @@ class AssociationController extends BaseController {
 	 * @return Response
 	 */
 	public function edit(Association $association) {
+		$this->authorize('create-association', $association);
+
 		return View::make('settings/association/form')
 				->withData($association)
 				->withUsers(Auth::user()->admin ? $this->selectNone + User::all()->lists('username', 'username')->all() : Auth::user()->lists('username', 'username')->all());
@@ -146,6 +127,8 @@ class AssociationController extends BaseController {
 	 * @return Response
 	 */
 	public function update(Association $association) {
+		$this->authorize('create-association', $association);
+
 		$data = Input::all();
 		//remove default user of form's select
 		if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {

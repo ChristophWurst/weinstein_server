@@ -22,26 +22,21 @@
 namespace App\Http\Controllers;
 
 use App\Competition;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
 class BaseController extends Controller {
 
-	use \Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+	use AuthorizesRequests;
 	
-	/**
-	 * Competition
-	 * 
-	 * @var Competition
-	 */
+	/** @var Competition */
 	protected $competition;
 
-	/**
-	 *
-	 * @var array
-	 */
+	/** @var array */
 	protected $selectNone = [
 	    'none' => 'kein',
 	];

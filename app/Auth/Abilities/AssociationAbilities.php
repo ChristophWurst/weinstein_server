@@ -21,12 +21,27 @@
 
 namespace App\Auth\Abilities;
 
+use App\Association;
 use App\User;
 
-trait CommonAbilities {
+class AssociationAbilities {
 
-	public function isAdmin(User $user) {
-		return $user->admin;
+	use CommonAbilities;
+
+	private function administrates(User $user, Association $association) {
+		return $association->user && $association->user->username !== $user->username;
+	}
+
+	public function show(User $user, Association $association) {
+		return $this->administrates($user, $association);
+	}
+
+	public function create(User $user) {
+		return $this->isAdmin($user);
+	}
+
+	public function edit(User $user, Association $association) {
+		return $this->administrates($user, $association);
 	}
 
 }
