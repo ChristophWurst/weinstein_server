@@ -80,16 +80,4 @@ class BaseController extends Controller {
 		}
 	}
 
-	/**
-	 * Filter admin only
-	 * 
-	 * @param Route $route
-	 * @param Request $request
-	 */
-	public function filterAdmin($route, $request) {
-		if (!Auth::user()->admin) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
 }
