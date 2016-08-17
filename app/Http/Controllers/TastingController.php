@@ -137,21 +137,21 @@ class TastingController extends BaseController {
 		parent::__construct();
 
 		//register filters
-		$this->beforeFilter('auth');
-		$this->beforeFilter('@filterTastingSessionAdmin', [
+		$this->middleware('auth');
+		$this->middleware('@filterTastingSessionAdmin', [
 		    'except' => [
 			'index',
 		    ],
 		]);
-		$this->beforeFilter('@filterTastingSessionLocked');
-		$this->beforeFilter('@filterCommissionMatches', [
+		$this->middleware('@filterTastingSessionLocked');
+		$this->middleware('@filterCommissionMatches', [
 		    'only' => [
 			'edit',
 			'update',
 		    ],
 		]);
-		$this->beforeFilter('@filterCompetitionState');
-		$this->beforeFilter('@filterTastingNumber', [
+		$this->middleware('@filterCompetitionState');
+		$this->middleware('@filterTastingNumber', [
 		    'only' => [
 			'edit',
 			'update',

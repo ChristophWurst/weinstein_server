@@ -21,6 +21,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Competition;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,8 @@ use Illuminate\Support\Facades\View;
 
 class BaseController extends Controller {
 
+	use \Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+	
 	/**
 	 * Competition
 	 * 

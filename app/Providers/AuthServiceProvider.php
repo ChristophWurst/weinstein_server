@@ -2,30 +2,29 @@
 
 namespace App\Providers;
 
-use Illuminate\Contracts\Auth\Access\Gate as GateContract;
+use App\Auth\Abilities\ActivityLogAbilities;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
-class AuthServiceProvider extends ServiceProvider
-{
-    /**
-     * The policy mappings for the application.
-     *
-     * @var array
-     */
-    protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
-    ];
+class AuthServiceProvider extends ServiceProvider {
 
-    /**
-     * Register any application authentication / authorization services.
-     *
-     * @param  \Illuminate\Contracts\Auth\Access\Gate  $gate
-     * @return void
-     */
-    public function boot(GateContract $gate)
-    {
-        $this->registerPolicies($gate);
+	/**
+	 * The policy mappings for the application.
+	 *
+	 * @var array
+	 */
+	protected $policies = [];
 
-        //
-    }
+	/**
+	 * Register any application authentication / authorization services.
+	 *
+	 * @param  Gate  $gate
+	 * @return void
+	 */
+	public function boot(Gate $gate) {
+		$this->registerPolicies($gate);
+
+		$gate->define('view-activitylog', ActivityLogAbilities::class . '@view');
+	}
+
 }

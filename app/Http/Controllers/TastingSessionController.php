@@ -104,8 +104,8 @@ class TastingSessionController extends BaseController {
 		parent::__construct();
 
 		//register filters
-		$this->beforeFilter('auth');
-		$this->beforeFilter('@filterTastingSessionAdmin', [
+		$this->middleware('auth');
+		$this->middleware('@filterTastingSessionAdmin', [
 		    'except' => [
 			'index',
 			'add',
@@ -114,12 +114,12 @@ class TastingSessionController extends BaseController {
 			'statistic',
 		    ],
 		]);
-		$this->beforeFilter('@filterTastingStage', [
+		$this->middleware('@filterTastingStage', [
 		    'except' => [
 			'exportProtocol',
 		    ],
 		]);
-		$this->beforeFilter('@filterTastingSessionLocked', [
+		$this->middleware('@filterTastingSessionLocked', [
 		    'except' => [
 			'index',
 			'add',
@@ -129,7 +129,7 @@ class TastingSessionController extends BaseController {
 			'exportProtocol',
 		    ],
 		]);
-		$this->beforeFilter('@filterTastingSessionDeletable', [
+		$this->middleware('@filterTastingSessionDeletable', [
 		    'only' => [
 			'delete',
 			'destroy',

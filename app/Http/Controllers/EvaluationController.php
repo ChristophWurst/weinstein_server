@@ -50,7 +50,7 @@ class EvaluationController extends BaseController {
 	public function __construct() {
 		parent::__construct();
 
-		$this->beforeFilter('@filterAdministrates');
+		$this->middleware('@filterAdministrates');
 	}
 
 	/**

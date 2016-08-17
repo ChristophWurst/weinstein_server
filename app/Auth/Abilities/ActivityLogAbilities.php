@@ -19,23 +19,14 @@
  *
  */
 
-namespace App\Http\Controllers;
+namespace App\Auth\Abilities;
 
-use Illuminate\Support\Facades\View;
-use App\Http\Controllers\BaseController;
-use App\Support\ActivityLog;
+use App\User;
 
-class ActivityLogController extends BaseController {
+class ActivityLogAbilities {
 
-	/**
-	 * Show all logs
-	 * 
-	 * @return Response
-	 */
-	public function index() {
-		$this->authorize('view-activitylog');
-
-		return View::make('settings/activitylog/index')->with('logs', ActivityLog::orderBy('created_at', 'desc')->get());
+	public function view(User $user) {
+		return $user->admin;
 	}
 
 }

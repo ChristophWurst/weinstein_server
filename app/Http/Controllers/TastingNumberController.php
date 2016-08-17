@@ -92,19 +92,19 @@ class TastingNumberController extends BaseController {
 		parent::__construct();
 
 		//register filters
-		$this->beforeFilter('auth');
-		$this->beforeFilter('@filterCompetitionAdmin', [
+		$this->middleware('auth');
+		$this->middleware('@filterCompetitionAdmin', [
 		    'except' => [
 			'translate',
 		    ],
 		]);
-		$this->beforeFilter('@filterCompetitionState');
-		$this->beforeFilter('@filterTranslate', [
+		$this->middleware('@filterCompetitionState');
+		$this->middleware('@filterTranslate', [
 		    'only' => [
 			'translate',
 		    ],
 		]);
-		$this->beforeFilter('@filterEnrollmentFinished');
+		$this->middleware('@filterEnrollmentFinished');
 	}
 
 	/**

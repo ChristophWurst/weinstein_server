@@ -55,8 +55,8 @@ class UserController extends BaseController {
 		parent::__construct();
 
 		//register filters
-		$this->beforeFilter('auth');
-		$this->beforeFilter('@filterAdmin', [
+		$this->middleware('auth');
+		$this->middleware('@filterAdmin', [
 		    'only' => [
 			'create',
 			'store',
@@ -64,7 +64,7 @@ class UserController extends BaseController {
 			'destroy',
 		    ],
 		]);
-		$this->beforeFilter('@filterAdministrates', [
+		$this->middleware('@filterAdministrates', [
 		    'only' => [
 			'edit',
 			'update',

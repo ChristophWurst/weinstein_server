@@ -256,8 +256,8 @@ class WineController extends BaseController {
 		parent::__construct();
 
 		//register filters
-		$this->beforeFilter('auth');
-		$this->beforeFilter('@filterCompetitionAdmin', [
+		$this->middleware('auth');
+		$this->middleware('@filterCompetitionAdmin', [
 		    'except' => [
 			'index',
 			'create',
@@ -273,13 +273,13 @@ class WineController extends BaseController {
 			'exportFlaws',
 		    ],
 		]);
-		$this->beforeFilter('@filterAllowAdding', [
+		$this->middleware('@filterAllowAdding', [
 		    'only' => [
 			'create',
 			'store',
 		    ],
 		]);
-		$this->beforeFilter('@filterAllowEditing', [
+		$this->middleware('@filterAllowEditing', [
 		    'only' => [
 			'edit',
 			'update',
@@ -287,51 +287,51 @@ class WineController extends BaseController {
 			'destroy',
 		    ],
 		]);
-		$this->beforeFilter('@filterKdb', [
+		$this->middleware('@filterKdb', [
 		    'only' => [
 			'updateKdb',
 		    ],
 		]);
-		$this->beforeFilter('@filterKdbImport', [
+		$this->middleware('@filterKdbImport', [
 		    'only' => [
 			'importKdb',
 			'importKdbStore',
 		    ],
 		]);
-		$this->beforeFilter('@filterExcluded', [
+		$this->middleware('@filterExcluded', [
 		    'only' => [
 			'updateExcluded',
 		    ],
 		]);
-		$this->beforeFilter('@filterExcludedImport', [
+		$this->middleware('@filterExcludedImport', [
 		    'only' => [
 			'importExcluded',
 			'importExcludedStore',
 		    ],
 		]);
-		$this->beforeFilter('@filterSosi', [
+		$this->middleware('@filterSosi', [
 		    'only' => [
 			'updateSosi',
 		    ],
 		]);
-		$this->beforeFilter('@filterSosiImport', [
+		$this->middleware('@filterSosiImport', [
 		    'only' => [
 			'importSosi',
 			'importSosiStore',
 		    ],
 		]);
-		$this->beforeFilter('@filterChosen', [
+		$this->middleware('@filterChosen', [
 		    'only' => [
 			'updateChosen',
 		    ],
 		]);
-		$this->beforeFilter('@filterChosenImport', [
+		$this->middleware('@filterChosenImport', [
 		    'only' => [
 			'importChosen',
 			'importChosenStore',
 		    ],
 		]);
-		$this->beforeFilter('@filterWineAdmin', [
+		$this->middleware('@filterWineAdmin', [
 		    'only' => [
 			'show',
 			'edit',
@@ -340,7 +340,7 @@ class WineController extends BaseController {
 			'destroy',
 		    ],
 		]);
-		$this->beforeFilter('@filterExportFlaws', [
+		$this->middleware('@filterExportFlaws', [
 		    'only' => [
 			'exportFlaws',
 		    ],

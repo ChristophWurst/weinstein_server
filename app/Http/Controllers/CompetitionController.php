@@ -150,8 +150,8 @@ class CompetitionController extends BaseController {
 	public function __construct() {
 		parent::__construct();
 
-		$this->beforeFilter('auth');
-		$this->beforeFilter('@filterAdmin', [
+		$this->middleware('auth');
+		$this->middleware('@filterAdmin', [
 		    'only' => [
 			'create',
 			'store',
@@ -159,7 +159,7 @@ class CompetitionController extends BaseController {
 			'postReset',
 		    ],
 		]);
-		$this->beforeFilter('@filterAdministrates', [
+		$this->middleware('@filterAdministrates', [
 		    'only' => [
 			'edit',
 			'update',
@@ -173,37 +173,37 @@ class CompetitionController extends BaseController {
 			'lockChoosing',
 		    ],
 		]);
-		$this->beforeFilter('@filterCompleteTastingNumbers', [
+		$this->middleware('@filterCompleteTastingNumbers', [
 		    'only' => [
 			'completeTastingNumbers',
 			'lockTastingNumbers',
 		    ],
 		]);
-		$this->beforeFilter('@filterCompleteTasting', [
+		$this->middleware('@filterCompleteTasting', [
 		    'only' => [
 			'completeTasting',
 			'lockTasting',
 		    ],
 		]);
-		$this->beforeFilter('@filterCompleteKdb', [
+		$this->middleware('@filterCompleteKdb', [
 		    'only' => [
 			'completeKdb',
 			'lockKdb',
 		    ],
 		]);
-		$this->beforeFilter('@filterCompleteExcluded', [
+		$this->middleware('@filterCompleteExcluded', [
 		    'only' => [
 			'completeExcluded',
 			'lockExcluded',
 		    ],
 		]);
-		$this->beforeFilter('@filterCompleteSosi', [
+		$this->middleware('@filterCompleteSosi', [
 		    'only' => [
 			'completeSosi',
 			'lockSosi',
 		    ],
 		]);
-		$this->beforeFilter('@filterCompleteChoosing', [
+		$this->middleware('@filterCompleteChoosing', [
 		    'only' => [
 			'completeChoosing',
 			'lockChoosing',

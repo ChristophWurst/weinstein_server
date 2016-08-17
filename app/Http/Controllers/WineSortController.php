@@ -37,8 +37,8 @@ class WineSortController extends BaseController {
 		parent::__construct();
 
 		//register filters
-		$this->beforeFilter('auth');
-		$this->beforeFilter('@filterAdmin');
+		$this->middleware('auth');
+		$this->middleware('@filterAdmin');
 	}
 
 	/**

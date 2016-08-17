@@ -61,8 +61,8 @@ class CatalogueController extends BaseController {
 	 * 
 	 */
 	public function __construct() {
-		$this->beforeFilter('@filterAdministrates');
-		$this->beforeFilter('@filterCompetitionState');
+		$this->middleware('@filterAdministrates');
+		$this->middleware('@filterCompetitionState');
 	}
 
 	/**
