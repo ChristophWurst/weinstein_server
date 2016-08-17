@@ -10,6 +10,8 @@ use App\Auth\Abilities\EvaluationAbilities;
 use App\Auth\Abilities\TastingAbilities;
 use App\Auth\Abilities\TastingNumberAbilities;
 use App\Auth\Abilities\TastingSessionAbilities;
+use App\Auth\Abilities\UserAbilities;
+use App\User;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -30,6 +32,10 @@ class AuthServiceProvider extends ServiceProvider {
 	 */
 	public function boot(Gate $gate) {
 		$this->registerPolicies($gate);
+
+		$gate->before(function (User $user) {
+			return $user->admin;
+		});
 
 		/**
 		 * ActivityLog
@@ -102,6 +108,15 @@ class AuthServiceProvider extends ServiceProvider {
 		$gate->define('show-tastingsession-statistics', TastingSessionAbilities::class . '@showStatistics');
 		$gate->define('lock-tastingsession', TastingSessionAbilities::class . '@lock');
 		$gate->define('delete-tastingsession', TastingSessionAbilities::class . '@delete');
+		
+		/**
+		 * WineSort
+		 */
+		$gate->define('list-users', UserAbilities::class . '@index');
+		$gate->define('create-user', UserAbilities::class . '@create');
+		$gate->define('show-user', UserAbilities::class . '@show');
+		$gate->define('edit-user', UserAbilities::class . '@edit');
+		$gate->define('delete-user', UserAbilities::class . '@delete');
 	}
 
 }

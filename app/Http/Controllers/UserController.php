@@ -35,45 +35,6 @@ use Weinstein\Exception\ValidationException;
 class UserController extends BaseController {
 
 	/**
-	 * Filter user administrates user
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 */
-	public function filterAdministrates($route, $request) {
-		$user = Route::input('user');
-
-		if (!$user->administrates(Auth::user())) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-		parent::__construct();
-
-		//register filters
-		$this->middleware('auth');
-		$this->middleware('@filterAdmin', [
-		    'only' => [
-			'create',
-			'store',
-			'delete',
-			'destroy',
-		    ],
-		]);
-		$this->middleware('@filterAdministrates', [
-		    'only' => [
-			'edit',
-			'update',
-			'show',
-		    ],
-		]);
-	}
-
-	/**
 	 * Display a list of (all) users.
 	 * - Admin sees all
 	 * - Standard user sees only himself
@@ -83,6 +44,8 @@ class UserController extends BaseController {
 	 * TODO: list linked applicant/associations
 	 */
 	public function index() {
+		$this->authorize('list-users');
+
 		return View::make('settings/user/index')->with('users', UserHandler::getUsersUsers(Auth::user()));
 	}
 
@@ -91,6 +54,8 @@ class UserController extends BaseController {
 	 * @return Response
 	 */
 	public function create() {
+		$this->authorize('create-user');
+
 		return View::make('settings/user/form');
 	}
 
@@ -100,6 +65,8 @@ class UserController extends BaseController {
 	 * @return Response
 	 */
 	public function store() {
+		$this->authorize('create-user');
+
 		$data = Input::all();
 
 		//convert admin value to boolean
@@ -123,10 +90,12 @@ class UserController extends BaseController {
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param int $id        	
+	 * @param User $user        	
 	 * @return Response
 	 */
 	public function show(User $user) {
+		$this->authorize('show-user', $user);
+
 		return View::make('settings/user/show')->with('data', $user);
 	}
 
@@ -140,8 +109,10 @@ class UserController extends BaseController {
 	 * @return Response
 	 */
 	public function edit(User $user) {
+		$this->authorize('edit-user', $user);
+
 		return View::make('settings/user/form')->with([
-			    'data' => $user
+				'data' => $user
 		]);
 	}
 
@@ -156,6 +127,8 @@ class UserController extends BaseController {
 	 * @return Response
 	 */
 	public function update(User $user) {
+		$this->authorize('edit-user', $user);
+
 		$data = Input::all();
 
 		//convert admin value to boolean
@@ -186,6 +159,8 @@ class UserController extends BaseController {
 	 * @return Response
 	 */
 	public function delete(User $user) {
+		$this->authorize('delete-user', $user);
+
 		return View::make('settings/user/delete')->with('user', $user);
 	}
 
@@ -196,6 +171,8 @@ class UserController extends BaseController {
 	 * @return Response
 	 */
 	public function destroy(User $user) {
+		$this->authorize('delete-user', $user);
+
 		if (Input::get('del') == 'Ja') {
 			UserHandler::delete($user);
 		}
