@@ -24,6 +24,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
+/**
+ * @property Wine $wine
+ */
 class TastingNumber extends Model {
 
 	/**

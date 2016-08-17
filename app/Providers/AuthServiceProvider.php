@@ -8,6 +8,7 @@ use App\Auth\Abilities\CatalogueAbilities;
 use App\Auth\Abilities\CompetitionAbilities;
 use App\Auth\Abilities\EvaluationAbilities;
 use App\Auth\Abilities\TastingAbilities;
+use App\Auth\Abilities\TastingNumberAbilities;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -76,6 +77,15 @@ class AuthServiceProvider extends ServiceProvider {
 		 */
 		$gate->define('create-tasting', TastingAbilities::class . '@create');
 		$gate->define('edit-tasting', TastingAbilities::class . '@edit');
+
+		/**
+		 * TastingNumber
+		 */
+		$gate->define('show-tastingnumbers', TastingNumberAbilities::class . '@show');
+		$gate->define('assign-tastingnumber', TastingNumberAbilities::class . '@assign');
+		$gate->define('unassign-tastingnumber', TastingNumberAbilities::class . '@unassign');
+		$gate->define('import-tastingnumbers', TastingNumberAbilities::class . '@unsign');
+		$gate->define('translate-tastingnumber', TastingNumberAbilities::class . '@assign');
 	}
 
 }

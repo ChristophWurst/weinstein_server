@@ -21,91 +21,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
+use App\Competition\Competition;
+use App\Competition\CompetitionState;
+use App\Competition\Tasting\TastingNumber;
+use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use TastingNumberHandler;
 use Weinstein\Exception\ValidationException;
-use App\Http\Controllers\BaseController;
-use App\Competition\Competition;
-use App\Competition\CompetitionState;
-use App\Competition\Tasting\TastingNumber;
 
 class TastingNumberController extends BaseController {
-
-	/**
-	 * Filter user administrates competition
-	 * 
-	 * @param Route $route
-	 * @param Request $request
-	 */
-	public function filterCompetitionAdmin($route, $request) {
-		$tastingNumber = Route::input('tastingnumber');
-		$competition = is_null($tastingNumber) ? Route::input('competition') : $tastingNumber->wine->competition;
-
-		if (!$competition->administrates(Auth::user())) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	public function filterCompetitionState($route, $request) {
-		$tastingNumber = Route::input('tastingnumber');
-		$competition = is_null($tastingNumber) ? Route::input('competition') : $tastingNumber->wine->competition;
-
-		if (!in_array($competition->competitionstate->id, [
-			    CompetitionState::STATE_ENROLLMENT,
-			    CompetitionState::STATE_TASTINGNUMBERS1,
-			    CompetitionState::STATE_TASTINGNUMBERS2
-			])) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	public function filterEnrollmentFinished($route, $request) {
-		$competition = Route::input('competition');
-		if (!$competition->enrollmentFinished()) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 */
-	public function filterTranslate($route, $request) {
-		$competition = Route::input('competition');
-
-		if (!in_array($competition->competitionstate->id, [CompetitionState::STATE_TASTING1, CompetitionState::STATE_TASTING2])) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * Construct
-	 */
-	public function __construct() {
-		parent::__construct();
-
-		//register filters
-		$this->middleware('auth');
-		$this->middleware('@filterCompetitionAdmin', [
-		    'except' => [
-			'translate',
-		    ],
-		]);
-		$this->middleware('@filterCompetitionState');
-		$this->middleware('@filterTranslate', [
-		    'only' => [
-			'translate',
-		    ],
-		]);
-		$this->middleware('@filterEnrollmentFinished');
-	}
 
 	/**
 	 * Show list of all assigned tasting numbers
@@ -114,8 +42,9 @@ class TastingNumberController extends BaseController {
 	 * @return Response
 	 */
 	public function index(Competition $competition) {
+		$this->authorize('show-tastingnumbers', $competition);
+
 		$showAdd = false;
-		;
 		$showComplete = false;
 		$left = -1;
 		if ($competition->competitionstate->id === CompetitionState::STATE_ENROLLMENT) {
@@ -147,6 +76,8 @@ class TastingNumberController extends BaseController {
 	 * @return Response
 	 */
 	public function assign(Competition $competition) {
+		$this->authorize('assign-tastingnumber');
+
 		return View::make('competition/tasting/tasting-number/form');
 	}
 
@@ -157,6 +88,8 @@ class TastingNumberController extends BaseController {
 	 * @return Response
 	 */
 	public function store(Competition $competition) {
+		$this->authorize('assign-tastingnumber');
+
 		try {
 			TastingNumberHandler::create(Input::all(), $competition);
 		} catch (ValidationException $ve) {
@@ -185,6 +118,8 @@ class TastingNumberController extends BaseController {
 	 * @return Response
 	 */
 	public function deallocate(TastingNumber $tastingNumber) {
+		$this->authorize('unassign-tastingnumber');
+
 		return View::make('competition/tasting/tasting-number/deallocate')->with('data', $tastingNumber);
 	}
 
@@ -195,6 +130,8 @@ class TastingNumberController extends BaseController {
 	 * @return Response
 	 */
 	public function delete(TastingNumber $tastingNumber) {
+		$this->authorize('unassign-tastingnumber');
+
 		if (Input::get('del') == 'Ja') {
 			TastingNumberHandler::delete($tastingNumber);
 		}
@@ -208,6 +145,8 @@ class TastingNumberController extends BaseController {
 	 * @return Response
 	 */
 	public function import(Competition $competition) {
+		$this->authorize('import-tastingnumbers');
+
 		return View::make('competition/tasting/tasting-number/import');
 	}
 
@@ -218,6 +157,8 @@ class TastingNumberController extends BaseController {
 	 * @return type
 	 */
 	public function importStore(Competition $competition) {
+		$this->authorize('import-tastingnumbers');
+
 		try {
 			$file = Input::file('xlsfile');
 			if ($file === null) {
@@ -240,6 +181,8 @@ class TastingNumberController extends BaseController {
 	 * @return Response
 	 */
 	public function translate(Competition $competition, $id) {
+		$this->authorize('translate-tastingnumber', $competition);
+
 		$tastingNumber = $competition
 			->tastingnumbers()
 			->where('tastingnumber.nr', '=', $id)
@@ -249,11 +192,11 @@ class TastingNumberController extends BaseController {
 
 		if ($tastingNumber) {
 			return Response::json([
-				    'tnr' => $tastingNumber->id,
+					'tnr' => $tastingNumber->id,
 			]);
 		}
 		return Response::json([
-			    'error' => 'Kostnummer konnte nicht geladen werden',
+				'error' => 'Kostnummer konnte nicht geladen werden',
 		]);
 	}
 

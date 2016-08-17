@@ -29,6 +29,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @property Competition $competition
+ */
 class Wine extends Model implements AdministrateModel {
 
 	/**
