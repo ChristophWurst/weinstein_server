@@ -54,6 +54,19 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 	protected $primaryKey = 'username';
 
 	/**
+	 * The primary key is a VARCHAR, hence it does not need auto-incrementing
+	 *
+	 * This fix the bug where the primary key was casted to int, which caused
+	 * login errors.
+	 *
+	 * @see https://github.com/laravel/framework/pull/12067/files
+	 * @see https://github.com/laravel/framework/issues/11484
+	 *
+	 * @var bool
+	 */
+	public $incrementing = false;
+
+	/**
 	 * attributes allowed for mass assignment
 	 * 
 	 * @var array of string
