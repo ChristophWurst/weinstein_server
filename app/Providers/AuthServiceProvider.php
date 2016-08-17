@@ -9,6 +9,7 @@ use App\Auth\Abilities\CompetitionAbilities;
 use App\Auth\Abilities\EvaluationAbilities;
 use App\Auth\Abilities\TastingAbilities;
 use App\Auth\Abilities\TastingNumberAbilities;
+use App\Auth\Abilities\TastingSessionAbilities;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -86,6 +87,21 @@ class AuthServiceProvider extends ServiceProvider {
 		$gate->define('unassign-tastingnumber', TastingNumberAbilities::class . '@unassign');
 		$gate->define('import-tastingnumbers', TastingNumberAbilities::class . '@unsign');
 		$gate->define('translate-tastingnumber', TastingNumberAbilities::class . '@assign');
+
+		/**
+		 * TastingSession
+		 */
+		$gate->define('show-tastingsessions', TastingSessionAbilities::class . '@showAll');
+		$gate->define('create-tastingsession', TastingSessionAbilities::class . '@create');
+		$gate->define('show-tastingsession', TastingSessionAbilities::class . '@show');
+		$gate->define('export-tastingsession-result', TastingSessionAbilities::class . '@exportResult');
+		$gate->define('export-tastingsession-result', TastingSessionAbilities::class . '@exportProtocol');
+		$gate->define('edit-tastingsession', TastingSessionAbilities::class . '@edit');
+		$gate->define('list-tastingsession-tasters', TastingSessionAbilities::class . '@tasters');
+		$gate->define('add-tastingsession-taster', TastingSessionAbilities::class . '@addTaster');
+		$gate->define('show-tastingsession-statistics', TastingSessionAbilities::class . '@showStatistics');
+		$gate->define('lock-tastingsession', TastingSessionAbilities::class . '@lock');
+		$gate->define('delete-tastingsession', TastingSessionAbilities::class . '@delete');
 	}
 
 }

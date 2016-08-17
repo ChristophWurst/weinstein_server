@@ -18,13 +18,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Weinstein\Support\Facades\TastingSessionHandlerFacade as TastingSessionHandler;
 use Weinstein\Exception\ValidationException;
@@ -40,100 +40,38 @@ use App\User;
 class TastingSessionController extends BaseController {
 
 	/**
-	 * Filter user administrates tasting session
-	 * 
-	 * @param Route $route
-	 * @param Request $request
-	 */
-	public function filterTastingSessionAdmin($route, $request) {
-		$tastingSession = Route::input('tastingsession');
-
-		if (!$tastingSession->administrates(Auth::user())) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 */
-	public function filterTastingStage($route, $request) {
-		$competition = Route::input('competition');
-		if (is_null($competition)) {
-			$ts = Route::input('tastingsession');
-			$competition = $ts->competition;
-		}
-
-		if (!in_array($competition->competitionstate->id, [CompetitionState::STATE_TASTING1, CompetitionState::STATE_TASTING2])) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * Filter session is not locked
-	 * 
-	 * @param Route $route
-	 * @param Request $request
-	 */
-	public function filterTastingSessionLocked($route, $request) {
-		$ts = Route::input('tastingsession');
-
-		if ($ts->locked) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 */
-	public function filterTastingSessionDeletable($route, $request) {
-		$ts = Route::input('tastingsession');
-
-		if (($ts->tasters()->count() > 0)) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
 	 * Constructor
 	 */
 	public function __construct() {
-		parent::__construct();
-
-		//register filters
-		$this->middleware('auth');
 		$this->middleware('@filterTastingSessionAdmin', [
-		    'except' => [
-			'index',
-			'add',
-			'store',
-			'exportResult',
-			'statistic',
-		    ],
+			'except' => [
+				'index',
+				'add',
+				'store',
+				'exportResult',
+				'statistic',
+			],
 		]);
 		$this->middleware('@filterTastingStage', [
-		    'except' => [
-			'exportProtocol',
-		    ],
+			'except' => [
+				'exportProtocol',
+			],
 		]);
 		$this->middleware('@filterTastingSessionLocked', [
-		    'except' => [
-			'index',
-			'add',
-			'store',
-			'show',
-			'tasters',
-			'exportProtocol',
-		    ],
+			'except' => [
+				'index',
+				'add',
+				'store',
+				'show',
+				'tasters',
+				'exportProtocol',
+			],
 		]);
 		$this->middleware('@filterTastingSessionDeletable', [
-		    'only' => [
-			'delete',
-			'destroy',
-		    ],
+			'only' => [
+				'delete',
+				'destroy',
+			],
 		]);
 	}
 
@@ -159,6 +97,8 @@ class TastingSessionController extends BaseController {
 	 * @return Response
 	 */
 	public function index(Competition $competition) {
+		$this->authorize('show-tastingsessions', $competition);
+
 		$this->shareCommonViewData($competition);
 		return View::make('competition/tasting/tasting-session/index');
 	}
@@ -170,6 +110,8 @@ class TastingSessionController extends BaseController {
 	 * @return Response
 	 */
 	public function add(Competition $competition) {
+		$this->authorize('create-tastingsession', $competition);
+
 		$this->shareCommonViewData($competition);
 		return View::make('competition/tasting/tasting-session/form')
 				->withUsers($this->selectNone + User::all()->lists('username', 'username')->all());
@@ -182,6 +124,8 @@ class TastingSessionController extends BaseController {
 	 * @return Response
 	 */
 	public function store(Competition $competition) {
+		$this->authorize('create-tastingsession', $competition);
+
 		$data = Input::all();
 		//unset user if set to 'none'
 		if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
@@ -204,6 +148,8 @@ class TastingSessionController extends BaseController {
 	 * @return Response
 	 */
 	public function show(TastingSession $tastingSession) {
+		$this->authorize('show-tastingsession', $tastingSession);
+
 		$this->shareCommonViewData($tastingSession->competition);
 		return View::make('competition/tasting/tasting-session/show')
 				->withData($tastingSession)
@@ -218,6 +164,8 @@ class TastingSessionController extends BaseController {
 	 * @return type
 	 */
 	public function exportResult(TastingSession $tastingSession, Commission $commission) {
+		$this->authorize('export-tastingsession-result', $tastingSession);
+
 		$wines = $tastingSession
 			->tastedwines()
 			->where('commission_id', '=', $commission->id)
@@ -231,8 +179,8 @@ class TastingSessionController extends BaseController {
 			. $commission->side
 			. '.xls';
 		$headers = [
-		    'Content-Type' => 'application/vnd.ms-excel',
-		    'Content-Disposition' => 'attachment; filename="' . $filename . '"'
+			'Content-Type' => 'application/vnd.ms-excel',
+			'Content-Disposition' => 'attachment; filename="' . $filename . '"'
 		];
 		return Response::download($we->asExcel(), $filename, $headers);
 	}
@@ -243,11 +191,13 @@ class TastingSessionController extends BaseController {
 	 * @return Response
 	 */
 	public function exportProtocol(TastingSession $tastingSession) {
+		$this->authorize('export-tastingsession-protocol', $tastingSession);
+
 		$tp = new TastingProtocol($tastingSession);
 		$filename = 'Kostprotokoll ' . $tastingSession->tastingstage->id . '-' . $tastingSession->nr . '.xls';
 		$headers = [
-		    'Content-Type' => 'application/vnd.ms-excel',
-		    'Content-Disposition' => 'attachment; filename="' . $filename . '"'
+			'Content-Type' => 'application/vnd.ms-excel',
+			'Content-Disposition' => 'attachment; filename="' . $filename . '"'
 		];
 		return Response::download($tp->asExcel(), $filename, $headers);
 	}
@@ -259,6 +209,8 @@ class TastingSessionController extends BaseController {
 	 * @return Response
 	 */
 	public function edit(TastingSession $tastingSession) {
+		$this->authorize('edit-tastingsession', $tastingSession);
+
 		$this->shareCommonViewData($tastingSession->competition);
 		return View::make('competition/tasting/tasting-session/form')
 				->withData($tastingSession)
@@ -272,6 +224,8 @@ class TastingSessionController extends BaseController {
 	 * @return Response
 	 */
 	public function update(TastingSession $tastingSession) {
+		$this->authorize('edit-tastingsession');
+		
 		$data = Input::all();
 		//unset user if set to 'none'
 		if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
@@ -294,6 +248,8 @@ class TastingSessionController extends BaseController {
 	 * @return json
 	 */
 	public function tasters(TastingSession $tastingSession, Commission $commission) {
+		$this->authorize('list-tastingsession-tasters');
+
 		return Response::json($commission->tasters->toArray());
 	}
 
@@ -303,24 +259,28 @@ class TastingSessionController extends BaseController {
 	 * @param TastingSession $tastingSession
 	 */
 	public function addTaster(TastingSession $tastingSession) {
+		$this->authorize('add-tastingsession-taster', $tastingSession);
+
 		$data = Input::all();
 		try {
 			TastingSessionHandler::addTaster($data, $tastingSession);
 		} catch (ValidationException $ve) {
 			return Response::json([
-				    'valid' => false,
-				    'errors' => $ve->getErrors()->getMessages(),
+					'valid' => false,
+					'errors' => $ve->getErrors()->getMessages(),
 			]);
 		}
 		$commission = Commission::find($data['commission_id']);
 		$tasters = $commission->tasters()->orderBy('nr')->get()->toArray();
 		return Response::json([
-			    'valid' => true,
-			    'tasters' => $tasters,
+				'valid' => true,
+				'tasters' => $tasters,
 		]);
 	}
 
 	public function statistics(TastingSession $tastingSession) {
+		$this->authorize('show-tastingsession-statistics', $tastingSession);
+
 		$this->shareCommonViewData($tastingSession->competition);
 		return View::make('competition/tasting/tasting-session/statistics')
 				->withTastingSession($tastingSession);
@@ -333,9 +293,11 @@ class TastingSessionController extends BaseController {
 	 * @return Response
 	 */
 	public function complete(TastingSession $tastingSession) {
+		$this->authorize('lock-tastingsession', $tastingSession);
+
 		$this->shareCommonViewData($tastingSession->competition);
 		return View::make('competition/tasting/tasting-session/complete')->with([
-			    'data' => $tastingSession,
+				'data' => $tastingSession,
 		]);
 	}
 
@@ -346,6 +308,8 @@ class TastingSessionController extends BaseController {
 	 * @return Response
 	 */
 	public function lock(TastingSession $tastingSession) {
+		$this->authorize('lock-tastingsession', $tastingSession);
+
 		if (Input::has('del') && Input::get('del') == 'Ja') {
 			TastingSessionHandler::lock($tastingSession);
 		}
@@ -359,9 +323,11 @@ class TastingSessionController extends BaseController {
 	 * @return Response
 	 */
 	public function delete(TastingSession $tastingSession) {
+		$this->authorize('delete-tastingsession', $tastingSession);
+
 		$this->shareCommonViewData($tastingSession->competition);
 		return View::make('competition/tasting/tasting-session/delete')->with([
-			    'data' => $tastingSession,
+				'data' => $tastingSession,
 		]);
 	}
 
@@ -372,6 +338,8 @@ class TastingSessionController extends BaseController {
 	 * @return Response
 	 */
 	public function destroy(TastingSession $tastingSession) {
+		$this->authorize('delete-tastingsession', $tastingSession);
+
 		$competition = $tastingSession->competition;
 		if (Input::get('del') == 'Ja') {
 			TastingSessionHandler::delete($tastingSession);

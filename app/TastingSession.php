@@ -23,9 +23,14 @@ namespace App;
 
 use App\AdministrateModel;
 use App\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
+/**
+ * @property Competition $competition
+ * @property Collection $tasters
+ */
 class TastingSession extends Model implements AdministrateModel {
 
 	/**
@@ -38,7 +43,7 @@ class TastingSession extends Model implements AdministrateModel {
 	/**
 	 * Attributes for mass assignment
 	 * 
-	 * @var type 
+	 * @var array 
 	 */
 	protected $fillable = [
 	    'date',
