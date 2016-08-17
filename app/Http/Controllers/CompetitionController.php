@@ -21,195 +21,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\View;
-use CompetitionHandler;
-use App\Http\Controllers\BaseController;
 use App\Competition\Competition;
 use App\Competition\CompetitionState;
 use App\Competition\Tasting\TastingStage;
+use App\Http\Controllers\BaseController;
+use CompetitionHandler;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\View;
+use Symfony\Component\Process\Exception\InvalidArgumentException;
 
 class CompetitionController extends BaseController {
-
-	/**
-	 * Filter user administrates competition
-	 * 
-	 * @param Route $route
-	 * @param Request $request
-	 */
-	public function filterAdministrates($route, $request) {
-		$competition = Route::input('competition');
-
-		if (!$competition->administrates(Auth::user())) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 */
-	public function filterCompleteTastingNumbers($route, $request) {
-		$competition = Route::input('competition');
-
-		if ($competition->competitionstate->id === CompetitionState::STATE_TASTINGNUMBERS1) {
-			$withNumber = $competition->wines()->withTastingNumber(TastingStage::find(1))->count();
-			$total = $competition->wine_details()->count();
-			if ($withNumber < $total) {
-				$this->abortNoAccess($route, $request);
-			}
-		} else if ($competition->competitionstate->id === CompetitionState::STATE_TASTINGNUMBERS2) {
-			// just allow it - there are no restrictions (for now)
-		} else {
-			Log::error('invalid competition state in complete-tastingnumbers-filter');
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 */
-	public function filterCompleteTasting($route, $request) {
-		$competition = Route::input('competition');
-
-		if ($competition->competitionstate->id === CompetitionState::STATE_TASTING1) {
-			$tasted = $competition->wine_details()->whereNotNull('rating1')->count();
-			$total = $competition->wine_details()->count();
-			if ($tasted < $total) {
-				$this->abortNoAccess($route, $request);
-			}
-		} else if ($competition->competitionstate->id === CompetitionState::STATE_TASTING2) {
-			// just allow it - there are no restrictions (for now)
-		} else {
-			Log::error('invalid competition state in complete-tasting-filter');
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 */
-	public function filterCompleteKdb($route, $request) {
-		$competition = Route::input('competition');
-
-		if ($competition->competitionstate->id !== CompetitionState::STATE_KDB) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 */
-	public function filterCompleteExcluded($route, $request) {
-		$competition = Route::input('competition');
-
-		if ($competition->competitionstate->id !== CompetitionState::STATE_EXCLUDE) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 */
-	public function filterCompleteSosi($route, $request) {
-		$competition = Route::input('competition');
-
-		if ($competition->competitionstate->id !== CompetitionState::STATE_SOSI) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 */
-	public function filterCompleteChoosing($route, $request) {
-		$competition = Route::input('competition');
-
-		if ($competition->competitionstate->id !== CompetitionState::STATE_CHOOSE) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-		parent::__construct();
-
-		$this->middleware('auth');
-		$this->middleware('@filterAdmin', [
-		    'only' => [
-			'create',
-			'store',
-			'getReset',
-			'postReset',
-		    ],
-		]);
-		$this->middleware('@filterAdministrates', [
-		    'only' => [
-			'edit',
-			'update',
-			'completeTasting',
-			'lockTasting',
-			'completeKdb',
-			'lockKdb',
-			'completeSosi',
-			'lockSosi',
-			'completeChoosing',
-			'lockChoosing',
-		    ],
-		]);
-		$this->middleware('@filterCompleteTastingNumbers', [
-		    'only' => [
-			'completeTastingNumbers',
-			'lockTastingNumbers',
-		    ],
-		]);
-		$this->middleware('@filterCompleteTasting', [
-		    'only' => [
-			'completeTasting',
-			'lockTasting',
-		    ],
-		]);
-		$this->middleware('@filterCompleteKdb', [
-		    'only' => [
-			'completeKdb',
-			'lockKdb',
-		    ],
-		]);
-		$this->middleware('@filterCompleteExcluded', [
-		    'only' => [
-			'completeExcluded',
-			'lockExcluded',
-		    ],
-		]);
-		$this->middleware('@filterCompleteSosi', [
-		    'only' => [
-			'completeSosi',
-			'lockSosi',
-		    ],
-		]);
-		$this->middleware('@filterCompleteChoosing', [
-		    'only' => [
-			'completeChoosing',
-			'lockChoosing',
-		    ],
-		]);
-	}
 
 	/**
 	 * Show list of all competitions
@@ -218,14 +41,14 @@ class CompetitionController extends BaseController {
 	 */
 	public function index() {
 		return View::make('settings/competition/index')->with([
-			    'competitions' => CompetitionHandler::getAll(),
+				'competitions' => CompetitionHandler::getAll(),
 		]);
 	}
 
 	/**
 	 * Show specified competitions
 	 * 
-	 * @param Competitoin $competition
+	 * @param Competition $competition
 	 * @return Response
 	 */
 	public function show(Competition $competition) {
@@ -253,6 +76,8 @@ class CompetitionController extends BaseController {
 	 * @throws InvalidArgumentException
 	 */
 	public function completeTasting(Competition $competition, $tasting) {
+		$this->authorize('complete-competition-tasting-numbers');
+
 		if (!in_array($tasting, [1, 2])) {
 			throw new InvalidArgumentException();
 		}
@@ -262,13 +87,14 @@ class CompetitionController extends BaseController {
 	}
 
 	/**
-	 * 
 	 * @param Competition $competition
 	 * @param int $tasting
 	 * @return Response
 	 * @throws InvalidArgumentException
 	 */
 	public function lockTasting(Competition $competition, $tasting) {
+		$this->authorize('complete-competition-tasting');
+
 		if (Input::has('del') && Input::get('del') == 'Ja') {
 			CompetitionHandler::lockTasting($competition, $tasting);
 		}
@@ -276,21 +102,23 @@ class CompetitionController extends BaseController {
 	}
 
 	/**
-	 * 
 	 * @param Competition $competition
 	 * @return Response
 	 */
 	public function completeKdb(Competition $competition) {
+		$this->authorize('complete-competition-kdb');
+
 		return View::make('competition/complete-kdb')
 				->withData($competition);
 	}
 
 	/**
-	 * 
 	 * @param Competition $competition
 	 * @return Response
 	 */
 	public function lockKdb(Competition $competition) {
+		$this->authorize('complete-competition-kdb');
+
 		if (Input::has('del') && Input::get('del') == 'Ja') {
 			CompetitionHandler::lockKdb($competition);
 		}
@@ -298,21 +126,23 @@ class CompetitionController extends BaseController {
 	}
 
 	/**
-	 * 
 	 * @param Competition $competition
 	 * @return Response
 	 */
 	public function completeExcluded(Competition $competition) {
+		$this->authorize('complete-competition-excluded');
+
 		return View::make('competition/complete-excluded')
 				->withData($competition);
 	}
 
 	/**
-	 * 
 	 * @param Competition $competition
 	 * @return Response
 	 */
 	public function lockExcluded(Competition $competition) {
+		$this->authorize('complete-competition-excluded');
+
 		if (Input::has('del') && Input::get('del') == 'Ja') {
 			CompetitionHandler::lockExcluded($competition);
 		}
@@ -320,21 +150,23 @@ class CompetitionController extends BaseController {
 	}
 
 	/**
-	 * 
 	 * @param Competition $competition
 	 * @return Response
 	 */
 	public function completeSosi(Competition $competition) {
+		$this->authorize('complete-competition-sosi');
+
 		return View::make('competition/complete-sosi')
 				->withData($competition);
 	}
 
 	/**
-	 * 
 	 * @param Competition $competition
 	 * @return Response
 	 */
 	public function lockSosi(Competition $competition) {
+		$this->authorize('complete-competition-sosi');
+
 		if (Input::has('del') && Input::get('del') == 'Ja') {
 			CompetitionHandler::lockSosi($competition);
 		}
@@ -342,21 +174,23 @@ class CompetitionController extends BaseController {
 	}
 
 	/**
-	 * 
 	 * @param Competition $competition
 	 * @return Response
 	 */
 	public function completeChoosing(Competition $competition) {
+		$this->authorize('complete-competition-choosing');
+
 		return View::make('competition/complete-choosing')
 				->withData($competition);
 	}
 
 	/**
-	 * 
 	 * @param Competition $competition
 	 * @return Response
 	 */
 	public function lockChoosing(Competition $competition) {
+		$this->authorize('complete-competition-tasting-numbers');
+
 		if (Input::has('del') && Input::get('del') == 'Ja') {
 			CompetitionHandler::lockChoosing($competition);
 		}
@@ -372,24 +206,27 @@ class CompetitionController extends BaseController {
 	 * @throws InvalidArgumentException
 	 */
 	public function completeTastingNumbers(Competition $competition, $tasting) {
+		$this->authorize('complete-competition-tasting-numbers');
+
 		if (!in_array($tasting, [1, 2])) {
 			throw new InvalidArgumentException();
 		}
 
 		return View::make('competition/complete-tastingnumbers')->with([
-			    'data' => $competition,
-			    'tasting' => $tasting,
+				'data' => $competition,
+				'tasting' => $tasting,
 		]);
 	}
 
 	/**
-	 * 
 	 * @param Competition $competition
 	 * @param int $tasting
 	 * @return Response
 	 * @throws InvalidArgumentException
 	 */
 	public function lockTastingNumbers(Competition $competition, $tasting) {
+		$this->authorize('complete-competition-tasting-numbers');
+
 		if (Input::has('del') && Input::get('del') == 'Ja') {
 			CompetitionHandler::lockTastingNumbers($competition, $tasting);
 			return Redirect::route('competition/show', ['competition' => $competition->id]);
@@ -398,20 +235,22 @@ class CompetitionController extends BaseController {
 	}
 
 	/**
-	 * 
 	 * @param Competition $competition
 	 * @return type
 	 */
 	public function getReset(Competition $competition) {
+		$this->authorize('reset-competition', $competition);
+
 		return View::make('settings/competition/reset');
 	}
 
 	/**
-	 * 
 	 * @param Competition $competition
 	 * @return type
 	 */
 	public function postReset(Competition $competition) {
+		$this->authorize('reset-competition', $competition);
+
 		if (Input::has('reset') && Input::get('reset') == 'Ja') {
 			CompetitionHandler::reset($competition);
 		}

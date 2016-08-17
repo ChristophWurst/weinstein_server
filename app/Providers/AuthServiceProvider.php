@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Auth\Abilities\ActivityLogAbilities;
 use App\Auth\Abilities\ApplicantAbilities;
 use App\Auth\Abilities\CatalogueAbilities;
+use App\Auth\Abilities\CompetitionAbilities;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -50,6 +51,18 @@ class AuthServiceProvider extends ServiceProvider {
 		 * Catalogue
 		 */
 		$gate->define('create-catalogue', CatalogueAbilities::class . '@create');
+
+		/**
+		 * Competition
+		 */
+		$gate->define('show-competition', CompetitionAbilities::class . '@show');
+		$gate->define('reset-competition', CompetitionAbilities::class . '@reset');
+		$gate->define('complete-competition-tasting-numbers', CompetitionAbilities::class . '@completeTastingNumbers');
+		$gate->define('complete-competition-tasting', CompetitionAbilities::class . '@completeTasting');
+		$gate->define('complete-competition-tasting-kdb', CompetitionAbilities::class . '@completeTastingKdb');
+		$gate->define('complete-competition-tasting-excluded', CompetitionAbilities::class . '@completeTastingExcluded');
+		$gate->define('complete-competition-tasting-sosi', CompetitionAbilities::class . '@completeTastingSosi');
+		$gate->define('complete-competition-tasting-choosing', CompetitionAbilities::class . '@completeTastingChoosing');
 	}
 
 }
