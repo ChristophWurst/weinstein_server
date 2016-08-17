@@ -21,12 +21,17 @@
 
 namespace App\Auth\Abilities;
 
+use App\Competition;
 use App\User;
 
 trait CommonAbilities {
 
 	public function isAdmin(User $user) {
 		return $user->admin;
+	}
+
+	public function administratesCompetition(User $user, Competition $competition) {
+		return $user->admin || $competition->user()->username === $user->username;
 	}
 
 }

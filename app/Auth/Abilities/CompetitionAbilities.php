@@ -31,10 +31,6 @@ class CompetitionAbilities {
 
 	use CommonAbilities;
 
-	private function administratesCompetition(User $user, Competition $competition) {
-		return $competition->administrates($user);
-	}
-
 	public function show(User $user, Competition $competition) {
 		return true; // TODO: ?
 	}

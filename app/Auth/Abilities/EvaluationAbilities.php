@@ -19,26 +19,17 @@
  *
  */
 
-namespace App\Http\Controllers;
+namespace App\Auth\Abilities;
 
-use App\Competition\Competition;
-use App\Http\Controllers\BaseController;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\View;
+use App\Competition;
+use App\User;
 
-class EvaluationController extends BaseController {
+class EvaluationAbilities {
 
-	/**
-	 * @param Competition $competition
-	 * @return Response
-	 */
-	public function protocols(Competition $competition) {
-		$this->authorize('show-evaluations');
+	use CommonAbilities;
 
-		return View::make('competition/evaluation/index')
-				->withCompetition($competition)
-				->withTastingSessions1($competition->tastingsessions()->whereTastingstage_id(1)->get())
-				->withTastingSessions2($competition->tastingsessions()->whereTastingstage_id(2)->get());
+	public function show(User $user, Competition $competition) {
+		return $this->administratesCompetition($user, $competition);
 	}
 
 }

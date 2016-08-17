@@ -6,6 +6,7 @@ use App\Auth\Abilities\ActivityLogAbilities;
 use App\Auth\Abilities\ApplicantAbilities;
 use App\Auth\Abilities\CatalogueAbilities;
 use App\Auth\Abilities\CompetitionAbilities;
+use App\Auth\Abilities\EvaluationAbilities;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -63,6 +64,11 @@ class AuthServiceProvider extends ServiceProvider {
 		$gate->define('complete-competition-tasting-excluded', CompetitionAbilities::class . '@completeTastingExcluded');
 		$gate->define('complete-competition-tasting-sosi', CompetitionAbilities::class . '@completeTastingSosi');
 		$gate->define('complete-competition-tasting-choosing', CompetitionAbilities::class . '@completeTastingChoosing');
+
+		/**
+		 * Evaluation
+		 */
+		$gate->define('show-evaluations', EvaluationAbilities::class . '@show');
 	}
 
 }
