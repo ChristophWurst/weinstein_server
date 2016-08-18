@@ -47,6 +47,8 @@ class WineSortController extends BaseController {
 	 * @return Response
 	 */
 	public function index() {
+		$this->authorize('list-winesorts');
+
 		return View::make('settings/winesorts/index')->with('sorts', WineSort::all());
 	}
 
@@ -56,6 +58,8 @@ class WineSortController extends BaseController {
 	 * @return Response
 	 */
 	public function create() {
+		$this->authorize('create-winesort');
+
 		return View::make('settings/winesorts/form');
 	}
 
@@ -65,6 +69,8 @@ class WineSortController extends BaseController {
 	 * @return Response
 	 */
 	public function store() {
+		$this->authorize('create-winesort');
+
 		try {
 			WineSortHandler::create(Input::all());
 		} catch (ValidationException $ve) {
@@ -82,6 +88,8 @@ class WineSortController extends BaseController {
 	 * @return Response
 	 */
 	public function edit(WineSort $wineSort) {
+		$this->authorize('update-winesort', $wineSort);
+
 		return View::make('settings/winesorts/form')->with([
 			    'data' => $wineSort,
 		]);
@@ -94,6 +102,8 @@ class WineSortController extends BaseController {
 	 * @return Response
 	 */
 	public function update(WineSort $wineSort) {
+		$this->authorize('update-winesort', $wineSort);
+
 		try {
 			WineSortHandler::update($wineSort, Input::all());
 		} catch (ValidationException $ve) {
