@@ -19,18 +19,8 @@
  *
  */
 
-namespace App\Enrollment;
+namespace App\Database\Repositories;
 
-use App\Contracts\EnrollmentHandler;
-use App\Database\Repositories\WineRepository;
-
-class Handler implements EnrollmentHandler {
-
-	/** @var WineRepository */
-	private $wineRepository;
-
-	public function __construct(WineRepository $wineRepository) {
-		$this->wineRepository = $wineRepository;
-	}
+class WineRepository {
 
 }

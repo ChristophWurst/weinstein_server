@@ -19,18 +19,14 @@
  *
  */
 
-namespace App\Enrollment;
+namespace App\Exceptions;
 
-use App\Contracts\EnrollmentHandler;
-use App\Database\Repositories\WineRepository;
+use Exception;
 
-class Handler implements EnrollmentHandler {
+class NotImplementedException extends Exception {
 
-	/** @var WineRepository */
-	private $wineRepository;
-
-	public function __construct(WineRepository $wineRepository) {
-		$this->wineRepository = $wineRepository;
+	public function __construct($message = "not implemented yet", $code = 0, Exception $previous = null) {
+		parent::__construct($message, $code, $previous);
 	}
 
 }

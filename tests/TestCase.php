@@ -1,25 +1,35 @@
 <?php
 
-abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
-{
-    /**
-     * The base URL to use while testing the application.
-     *
-     * @var string
-     */
-    protected $baseUrl = 'http://localhost';
+use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
-    /**
-     * Creates the application.
-     *
-     * @return \Illuminate\Foundation\Application
-     */
-    public function createApplication()
-    {
-        $app = require __DIR__.'/../bootstrap/app.php';
+abstract class TestCase extends BaseTestCase {
 
-        $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+	/**
+	 * The base URL to use while testing the application.
+	 *
+	 * @var string
+	 */
+	protected $baseUrl = 'http://localhost';
 
-        return $app;
-    }
+	/**
+	 * Creates the application.
+	 *
+	 * @return Application
+	 */
+	public function createApplication() {
+		$app = require __DIR__ . '/../bootstrap/app.php';
+
+		$app->make(Kernel::class)->bootstrap();
+
+		return $app;
+	}
+
+	public function getSimpleClassMock($class) {
+		return $this->getMockBuilder($class)
+				->disableOriginalConstructor()
+				->getMock();
+	}
+
 }

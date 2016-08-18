@@ -19,18 +19,14 @@
  *
  */
 
-namespace App\Enrollment;
+namespace App\Database\Repositories;
 
-use App\Contracts\EnrollmentHandler;
-use App\Database\Repositories\WineRepository;
+use App\User;
 
-class Handler implements EnrollmentHandler {
+class UserRepository {
 
-	/** @var WineRepository */
-	private $wineRepository;
-
-	public function __construct(WineRepository $wineRepository) {
-		$this->wineRepository = $wineRepository;
+	public function findAll() {
+		return User::all();
 	}
 
 }

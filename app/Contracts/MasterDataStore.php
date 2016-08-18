@@ -19,8 +19,24 @@
  *
  */
 
-namespace App\Wines;
+namespace App\Contracts;
 
-class Repository {
+use Illuminate\Support\Collection;
 
+interface MasterDataStore {
+	
+	/**
+	 * @return Collection
+	 */
+	public function getUsers();
+
+	/**
+	 * @return Collection
+	 */
+	public function getAssociations();
+
+	/**
+	 * @return Collection
+	 */
+	public function getApplicants();
 }

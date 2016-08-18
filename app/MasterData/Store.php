@@ -19,18 +19,31 @@
  *
  */
 
-namespace App\Enrollment;
+namespace App\MasterData;
 
-use App\Contracts\EnrollmentHandler;
-use App\Database\Repositories\WineRepository;
+use App\Contracts\MasterDataStore;
+use App\Database\Repositories\UserRepository;
+use App\Exceptions\NotImplementedException;
 
-class Handler implements EnrollmentHandler {
+class Store implements MasterDataStore {
 
-	/** @var WineRepository */
-	private $wineRepository;
+	/** @var UserRepository */
+	private $userRepository;
 
-	public function __construct(WineRepository $wineRepository) {
-		$this->wineRepository = $wineRepository;
+	public function __construct(UserRepository $userRepository) {
+		$this->userRepository = $userRepository;
+	}
+
+	public function getApplicants() {
+		throw new NotImplementedException();
+	}
+
+	public function getAssociations() {
+		throw new NotImplementedException();
+	}
+
+	public function getUsers() {
+		return $this->userRepository->findAll();
 	}
 
 }
