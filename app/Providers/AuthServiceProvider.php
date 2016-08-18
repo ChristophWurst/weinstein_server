@@ -117,6 +117,11 @@ class AuthServiceProvider extends ServiceProvider {
 		$gate->define('show-user', UserAbilities::class . '@show');
 		$gate->define('edit-user', UserAbilities::class . '@edit');
 		$gate->define('delete-user', UserAbilities::class . '@delete');
+		
+		/**
+		 * Wine
+		 */
+		// TODO: define/fix/test rules
 	}
 
 }

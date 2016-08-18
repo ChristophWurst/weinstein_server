@@ -58,296 +58,6 @@ class WineController extends BaseController {
 	}
 
 	/**
-	 * Filter user administrates association order
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 */
-	public function filterCompetitionAdmin($route, $request) {
-		$wine = Route::input('wine');
-		$competition = is_null($wine) ? Route::input('competition') : $wine->competition;
-
-		if (!$competition->administrates(Auth::user())) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * Allow wine adding only when competition state === ENROLLMENT
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 */
-	public function filterAllowAdding($route, $request) {
-		$competition = Route::input('competition');
-
-		if ($competition->competitionstate->id !== CompetitionState::where('description', '=', 'ENROLLMENT')->first()->id) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 */
-	public function filterAllowEditing($route, $request) {
-		$wine = Route::input('wine');
-		$competition = $wine->competition;
-		$user = Auth::user();
-
-		if (!$user->admin && !is_null($wine->nr)) {
-			// Once ID is set, only admin may edit the wine
-			$this->abortNoAccess($route, $request);
-		}
-
-		if ($competition->competitionstate->id !== CompetitionState::where('description', '=', 'ENROLLMENT')->first()->id) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 * @return type
-	 */
-	public function filterKdb($route, $request) {
-		$competition = Route::input('wine')->competition;
-
-		if ($competition->competitionstate->id !== CompetitionState::STATE_KDB) {
-			return Response::json([
-				    'error' => 'KdB darf nicht (mehr) verändert werden!'
-			]);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 * @return type
-	 */
-	public function filterKdbImport($route, $request) {
-		$competition = Route::input('competition');
-
-		if ($competition->competitionstate->id !== CompetitionState::STATE_KDB) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 * @return type
-	 */
-	public function filterExcluded($route, $request) {
-		$competition = Route::input('wine')->competition;
-
-		if ($competition->competitionstate->id !== CompetitionState::STATE_EXCLUDE) {
-			return Response::json([
-				    'error' => 'KdB darf nicht (mehr) verändert werden!'
-			]);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 * @return type
-	 */
-	public function filterExcludedImport($route, $request) {
-		$competition = Route::input('competition');
-
-		if ($competition->competitionstate->id !== CompetitionState::STATE_EXCLUDE) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 * @return type
-	 */
-	public function filterSosi($route, $request) {
-		$competition = Route::input('wine')->competition;
-
-		if ($competition->competitionstate->id !== CompetitionState::STATE_SOSI) {
-			return Response::json([
-				    'error' => 'SoSi darf nicht (mehr) verändert werden!'
-			]);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 * @return type
-	 */
-	public function filterSosiImport($route, $request) {
-		$competition = Route::input('competition');
-
-		if ($competition->competitionstate->id !== CompetitionState::STATE_SOSI) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 * @return type
-	 */
-	public function filterChosen($route, $request) {
-		$wine = Route::input('wine');
-		$competition = $wine->competition;
-
-		if (!$wine->applicant->association->administrates(Auth::user()) || $competition->competitionstate->id !== CompetitionState::STATE_CHOOSE) {
-			// Only association admin is allowed to change the value
-			return Response::json([
-				    'error' => 'Auswahl darf nicht (mehr) verändert werden!'
-			]);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 * @return type
-	 */
-	public function filterChosenImport($route, $request) {
-		$competition = Route::input('competition');
-
-		if ($competition->competitionstate->id !== CompetitionState::STATE_CHOOSE) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	public function filterExportFlaws($route, $request) {
-		$competition = Route::input('competition');
-
-		if ($competition->competitionstate->id < CompetitionState::STATE_KDB) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * 
-	 * @param type $route
-	 * @param type $request
-	 */
-	public function filterWineAdmin($route, $request) {
-		$wine = Route::input('wine');
-
-		if (!$wine->administrates(Auth::user())) {
-			$this->abortNoAccess($route, $request);
-		}
-	}
-
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-		parent::__construct();
-
-		//register filters
-		$this->middleware('auth');
-		$this->middleware('@filterCompetitionAdmin', [
-		    'except' => [
-			'index',
-			'create',
-			'store',
-			'show',
-			'redirect',
-			'edit',
-			'update',
-			'delete',
-			'destroy',
-			'chosen',
-			'updateChosen',
-			'exportFlaws',
-		    ],
-		]);
-		$this->middleware('@filterAllowAdding', [
-		    'only' => [
-			'create',
-			'store',
-		    ],
-		]);
-		$this->middleware('@filterAllowEditing', [
-		    'only' => [
-			'edit',
-			'update',
-			'delete',
-			'destroy',
-		    ],
-		]);
-		$this->middleware('@filterKdb', [
-		    'only' => [
-			'updateKdb',
-		    ],
-		]);
-		$this->middleware('@filterKdbImport', [
-		    'only' => [
-			'importKdb',
-			'importKdbStore',
-		    ],
-		]);
-		$this->middleware('@filterExcluded', [
-		    'only' => [
-			'updateExcluded',
-		    ],
-		]);
-		$this->middleware('@filterExcludedImport', [
-		    'only' => [
-			'importExcluded',
-			'importExcludedStore',
-		    ],
-		]);
-		$this->middleware('@filterSosi', [
-		    'only' => [
-			'updateSosi',
-		    ],
-		]);
-		$this->middleware('@filterSosiImport', [
-		    'only' => [
-			'importSosi',
-			'importSosiStore',
-		    ],
-		]);
-		$this->middleware('@filterChosen', [
-		    'only' => [
-			'updateChosen',
-		    ],
-		]);
-		$this->middleware('@filterChosenImport', [
-		    'only' => [
-			'importChosen',
-			'importChosenStore',
-		    ],
-		]);
-		$this->middleware('@filterWineAdmin', [
-		    'only' => [
-			'show',
-			'edit',
-			'update',
-			'delete',
-			'destroy',
-		    ],
-		]);
-		$this->middleware('@filterExportFlaws', [
-		    'only' => [
-			'exportFlaws',
-		    ],
-		]);
-	}
-
-	/**
 	 * List all wines
 	 * 
 	 * admin sees all
@@ -357,6 +67,8 @@ class WineController extends BaseController {
 	 * @return Response
 	 */
 	public function index(Competition $competition) {
+		$this->authorize('list-wines', $competition);
+
 		$competitionAdmin = $competition->administrates(Auth::user());
 
 		$wines = WineHandler::getUsersWines(Auth::user(), $competition, true)->orderBy('id')->paginate(50);
@@ -390,6 +102,8 @@ class WineController extends BaseController {
 	 * @return View
 	 */
 	public function show(Wine $wine) {
+		$this->authorize('show-wine', $wine);
+
 		$competition = $wine->competition;
 		$user = Auth::user();
 
@@ -408,6 +122,8 @@ class WineController extends BaseController {
 	}
 
 	public function redirect(Competition $competition, $nr) {
+		$this->authorize('redirect-wine', $competition);
+
 		$wine = $competition->wines()->where('nr', '=', $nr)->first();
 		if (!$wine) {
 			App::abort(404);
@@ -421,6 +137,8 @@ class WineController extends BaseController {
 	 * @param Competition $competition
 	 */
 	public function kdb(Competition $competition) {
+		$this->authorize('kdb-wines', $competition);
+
 		return Response::json([
 			    'wines' => Wine::kdb()->lists('id')->all(),
 		]);
@@ -432,6 +150,8 @@ class WineController extends BaseController {
 	 * @param Competition $competition
 	 */
 	public function excluded(Competition $competition) {
+		$this->authorize('excluded-wines', $competition);
+
 		return Response::json([
 			    'wines' => Wine::excluded()->lists('id')->all(),
 		]);
@@ -443,6 +163,8 @@ class WineController extends BaseController {
 	 * @param Competition $competition
 	 */
 	public function sosi(Competition $competition) {
+		$this->authorize('sosi-wines', $competition);
+
 		return Response::json([
 			    'wines' => Wine::sosi()->lists('id')->all(),
 		]);
@@ -454,6 +176,8 @@ class WineController extends BaseController {
 	 * @param Competition $competition
 	 */
 	public function chosen(Competition $competition) {
+		$this->authorize('chosen-wines', $competition);
+
 		return Response::json([
 			    'wines' => Wine::chosen()->lists('id')->all(),
 		]);
@@ -466,6 +190,8 @@ class WineController extends BaseController {
 	 * @return Response
 	 */
 	public function create(Competition $competition) {
+		$this->authorize('create-wine', $competition);
+
 		$user = Auth::user();
 		$applicants = $competition->administrates($user) ? Applicant::all() : $user->applicants;
 		return View::make('competition/wines/form')
@@ -484,6 +210,8 @@ class WineController extends BaseController {
 	 * @return Response
 	 */
 	public function store(Competition $competition) {
+		$this->authorize('create-wine', $competition);
+
 		try {
 			$data = Input::all();
 			if (isset($data['alcohol'])) {
@@ -531,6 +259,8 @@ class WineController extends BaseController {
 	}
 
 	public function enrollmentPdf(Wine $wine) {
+		$this->authorize('print-wine-enrollment-pdf', $wine);
+
 		$form = new EnrollmentForm($wine);
 		$path = $form->save();
 		$filename = 'Wines';
@@ -548,6 +278,8 @@ class WineController extends BaseController {
 	 * @return Response
 	 */
 	public function edit(Wine $wine) {
+		$this->authorize('update-wine', $wine);
+
 		$user = Auth::user();
 		$applicants = $wine->competition->administrates($user) ? Applicant::all() : $user->applicants;
 		return View::make('competition/wines/form')
@@ -569,6 +301,8 @@ class WineController extends BaseController {
 	 * @return Response
 	 */
 	public function update(Wine $wine) {
+		$this->authorize('update-wine', $wine);
+
 		try {
 			$data = Input::all();
 			if (isset($data['alcohol'])) {
@@ -617,6 +351,8 @@ class WineController extends BaseController {
 	 * @return View
 	 */
 	public function delete(Wine $wine) {
+		$this->authorize('delete-wine', $wine);
+
 		return View::make('competition/wines/delete')->withWine($wine);
 	}
 
@@ -627,6 +363,8 @@ class WineController extends BaseController {
 	 * @return type
 	 */
 	public function destroy(Wine $wine) {
+		$this->authorize('delete-wine', $wine);
+
 		if (Input::get('del') == 'Ja') {
 			WineHandler::delete($wine);
 		}
@@ -638,6 +376,8 @@ class WineController extends BaseController {
 	 * @param Wine $wine
 	 */
 	public function updateKdb(Wine $wine) {
+		$this->authorize('update-wine', $wine);
+
 		try {
 			WineHandler::updateKdb($wine, Input::only('value'));
 		} catch (ValidationException $ve) {
@@ -658,6 +398,8 @@ class WineController extends BaseController {
 	 * @return Response
 	 */
 	public function importKdb(Competition $competition) {
+		$this->authorize('import-kdb-wines', $competition);
+
 		return View::make('competition/wines/import-kdb');
 	}
 
@@ -668,6 +410,8 @@ class WineController extends BaseController {
 	 * @return type
 	 */
 	public function importKdbStore(Competition $competition) {
+		$this->authorize('import-kdb-wines', $competition);
+
 		try {
 			$file = Input::file('xlsfile');
 			if ($file === null) {
@@ -688,6 +432,8 @@ class WineController extends BaseController {
 	 * @param Wine $wine
 	 */
 	public function updateExcluded(Wine $wine) {
+		$this->authorize('update-wine', $wine);
+
 		try {
 			WineHandler::updateExcluded($wine, Input::only('value'));
 		} catch (ValidationException $ve) {
@@ -708,6 +454,8 @@ class WineController extends BaseController {
 	 * @return Response
 	 */
 	public function importExcluded(Competition $competition) {
+		$this->authorize('import-excluded-wines', $competition);
+
 		return View::make('competition/wines/import-excluded');
 	}
 
@@ -718,6 +466,8 @@ class WineController extends BaseController {
 	 * @return type
 	 */
 	public function importExcludedStore(Competition $competition) {
+		$this->authorize('import-excluded-wines', $competition);
+
 		try {
 			$file = Input::file('xlsfile');
 			if ($file === null) {
@@ -738,6 +488,8 @@ class WineController extends BaseController {
 	 * @param Wine $wine
 	 */
 	public function updateSosi(Wine $wine) {
+		$this->authorize('update-wine', $wine);
+
 		if (!$wine->kdb) {
 			return Response::json([
 				    'error' => 'Fehler: Dieser Wein ist nicht im KdB',
@@ -764,6 +516,8 @@ class WineController extends BaseController {
 	 * @return Response
 	 */
 	public function importSosi(Competition $competition) {
+		$this->authorize('import-sosi-wines', $competition);
+
 		return View::make('competition/wines/import-sosi');
 	}
 
@@ -774,6 +528,8 @@ class WineController extends BaseController {
 	 * @return type
 	 */
 	public function importSosiStore(Competition $competition) {
+		$this->authorize('import-sosi-wines', $competition);
+
 		try {
 			$file = Input::file('xlsfile');
 			if ($file === null) {
@@ -794,6 +550,8 @@ class WineController extends BaseController {
 	 * @param Wine $wine
 	 */
 	public function updateChosen(Wine $wine) {
+		$this->authorize('update-wine', $wine);
+
 		try {
 			WineHandler::updateChosen($wine, Input::only('value'));
 		} catch (ValidationException $ve) {
@@ -814,6 +572,8 @@ class WineController extends BaseController {
 	 * @return Response
 	 */
 	public function importChosen(Competition $competition) {
+		$this->authorize('import-chosen-wines', $competition);
+
 		return View::make('competition/wines/import-chosen');
 	}
 
@@ -824,6 +584,8 @@ class WineController extends BaseController {
 	 * @return type
 	 */
 	public function importChosenStore(Competition $competition) {
+		$this->authorize('import-chosen-wines', $competition);
+
 		try {
 			$file = Input::file('xlsfile');
 			if ($file === null) {
@@ -846,6 +608,8 @@ class WineController extends BaseController {
 	 * @return Response
 	 */
 	public function exportAll(Competition $competition) {
+		$this->authorize('export-wines', $competition);
+
 		$wines = $competition
 			->wine_details()
 			->orderBy('nr')
@@ -866,6 +630,8 @@ class WineController extends BaseController {
 	 * @return Response
 	 */
 	public function exportKdb(Competition $competition) {
+		$this->authorize('export-wines-kdb', $competition);
+
 		$wines = $competition
 			->wine_details()
 			->Kdb()
@@ -887,6 +653,8 @@ class WineController extends BaseController {
 	 * @return Response
 	 */
 	public function exportSosi(Competition $competition) {
+		$this->authorize('export-wines-sosi', $competition);
+
 		$wines = $competition
 			->wine_details()
 			->Sosi()
@@ -908,6 +676,8 @@ class WineController extends BaseController {
 	 * @return Response
 	 */
 	public function exportChosen(Competition $competition) {
+		$this->authorize('export-wines-chosen', $competition);
+
 		$wines = $competition
 			->wine_details()
 			->Chosen()
@@ -923,6 +693,8 @@ class WineController extends BaseController {
 	}
 
 	public function exportFlaws(Competition $competition) {
+		$this->authorize('export-wines-flaws', $competition);
+
 		$user = Auth::user();
 		$wines = $competition
 			->wine_details()
