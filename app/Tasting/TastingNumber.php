@@ -19,59 +19,71 @@
  *
  */
 
-namespace App;
+namespace App\Tasting;
 
+use App\Tasting\TastingStage;
+use App\Wine;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-class WineSort extends Model {
+/**
+ * @property Wine $wine
+ */
+class TastingNumber extends Model {
 
 	/**
 	 * Table name
 	 * 
 	 * @var string 
 	 */
-	protected $table = 'winesort';
+	protected $table = 'tastingnumber';
 
 	/**
-	 * Mass assignment attributes
+	 * Attributes for mass assignment
 	 * 
-	 * @var array of string
+	 * @var type 
 	 */
 	protected $fillable = [
-	    'order',
-	    'name',
-	    'competition_id'
+		'wine_id',
+		'nr',
+		'tastingstage_id'
 	];
 
 	/**
-	 * 
-	 * @return string
-	 */
-	public function getSelectLabelAttribute() {
-		return $this->order . ' - ' . $this->name;
-	}
-
-	/**
-	 * Duplicate this sort into another competition
-	 * 
-	 * @param Competition $competition
-	 */
-	public function duplicate(Competition $competition) {
-		$sort = new WineSort([
-		    'order' => $this->order,
-		    'name' => $this->name,
-		]);
-		$competition->winesorts()->save($sort);
-	}
-
-	/**
-	 * 1 sort : n wines
+	 * 1 tasting number : n tasting
 	 * 
 	 * @return Relation
 	 */
-	public function wines() {
-		return $this->hasMany('Wine', 'winesort_id');
+	public function tastings() {
+		return $this->hasMany('Tasting', 'tastingnumber_id', 'id');
+	}
+
+	/**
+	 * n tasting number : 1 tasting stage
+	 * @return Relation
+	 */
+	public function tastingstage() {
+		return $this->belongsTo('TastingStage');
+	}
+
+	/**
+	 * n tasting numbers : 1 wine
+	 * 
+	 * @return Relation
+	 */
+	public function wine() {
+		return $this->belongsTo('Wine');
+	}
+
+	/**
+	 * Scope tasting numbers to given tasting stage
+	 * 
+	 * @param \Illuminate\Database\Query $query
+	 * @param TastingStage $tastingStage
+	 * @return \Illuminate\Database\Query
+	 */
+	public function scopeTastingStage($query, TastingStage $tastingStage) {
+		return $query->where('tastingstage_id', '=', $tastingStage->id);
 	}
 
 }

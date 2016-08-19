@@ -19,13 +19,15 @@
  *
  */
 
-namespace App;
+namespace App\Tasting;
 
 use App\AdministrateModel;
-use App\User;
-use Illuminate\Database\Eloquent\Collection;
+use App\Competition;
+use App\Tasting\TastingStage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Collection;
 
 /**
  * @property Competition $competition
@@ -46,11 +48,11 @@ class TastingSession extends Model implements AdministrateModel {
 	 * @var array 
 	 */
 	protected $fillable = [
-	    'date',
-	    'competition_id',
-	    'wuser_username',
-	    'tastingstage_id',
-	    'locked',
+		'date',
+		'competition_id',
+		'wuser_username',
+		'tastingstage_id',
+		'locked',
 	];
 
 	/**

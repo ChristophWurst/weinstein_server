@@ -21,7 +21,7 @@
 
 namespace Weinstein\WineSort;
 
-use App\WineSort;
+use App\MasterData\WineSort;
 
 class WineSortHandler {
 

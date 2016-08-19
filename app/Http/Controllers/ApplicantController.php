@@ -21,7 +21,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Applicant;
+use App\MasterData\Applicant;
 use App\Http\Controllers\BaseController;
 use ApplicantHandler;
 use Association;

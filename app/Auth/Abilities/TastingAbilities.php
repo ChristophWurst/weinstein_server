@@ -25,7 +25,7 @@ use App\Commission;
 use App\CompetitionState;
 use App\TastingNumber;
 use App\TastingSession;
-use App\User;
+use App\MasterData\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 

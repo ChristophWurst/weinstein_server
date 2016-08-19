@@ -19,68 +19,70 @@
  *
  */
 
-namespace App;
+namespace App\MasterData;
 
+use App\AdministrateModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Foundation\Auth\User;
 
-class Taster extends Model {
+class Association extends Model implements AdministrateModel {
 
 	/**
-	 * Table name
+	 * table name
 	 * 
-	 * @var string 
+	 * @var string
 	 */
-	protected $table = 'taster';
+	protected $table = 'association';
 
 	/**
-	 * Attributes for mass assignment
+	 * attributs for mass assigment
 	 * 
-	 * @var array 
+	 * @var array of string
 	 */
 	protected $fillable = [
-	    'nr',
-	    'tasterside_id',
-	    'commission_id',
-	    'active',
-	    'name',
+		'id',
+		'name',
+		'wuser_username'
 	];
 
 	/**
-	 * n tasters : 1 commision
+	 * Check if the given user is authorized to administrate
 	 * 
-	 * @return Relation
+	 * @param User $user
+	 * @return bool
 	 */
-	public function commission() {
-		return $this->belongsTo('Commission');
+	public function administrates(User $user) {
+		if ($user->admin) {
+			return true;
+		}
+		return $this->wuser_username === $user->username;
 	}
 
 	/**
-	 * Scope only active tasters
 	 * 
-	 * @param Query $query
-	 * @return Query
+	 * @return string
 	 */
-	public function scopeActive($query) {
-		return $query->where('active', '=', true);
+	public function getSelectLabelAttribute() {
+		return $this->id . ' - ' . $this->name;
 	}
 
 	/**
-	 * 1 taster : 1 statistic
+	 * 1 association : n applicants
 	 * 
 	 * @return Relation
 	 */
-	public function statistic() {
-		return $this->hasOne('App\Competition\Tasting\TasterStatistic');
+	public function applicants() {
+		return $this->hasMany('Applicant');
 	}
 
 	/**
-	 * 1 taster : n tastings
+	 * n associations : 1 user
 	 * 
 	 * @return Relation
 	 */
-	public function tastings() {
-		return $this->hasMany('Tasting');
+	public function user() {
+		return $this->belongsTo('User', 'wuser_username', 'username');
 	}
 
 }

@@ -31,7 +31,7 @@ class ApplicantValidator extends Validator {
 	 *
 	 * @var string
 	 */
-	protected $modelClass = 'App\Applicant';
+	protected $modelClass = 'App\MasterData\Applicant';
 
 	/**
 	 * Get attribute names

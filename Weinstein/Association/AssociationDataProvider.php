@@ -21,8 +21,8 @@
 
 namespace Weinstein\Association;
 
-use App\Association;
-use App\User;
+use App\MasterData\Association;
+use App\MasterData\User;
 
 class AssociationDataProvider {
 

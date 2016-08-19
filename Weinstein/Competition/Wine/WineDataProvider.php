@@ -21,7 +21,7 @@
 
 namespace Weinstein\Competition\Wine;
 
-use App\User;
+use App\MasterData\User;
 use Applicant;
 use Association;
 use Competition;

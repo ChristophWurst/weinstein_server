@@ -21,7 +21,7 @@
 
 namespace App\Auth\Abilities;
 
-use App\User;
+use App\MasterData\User;
 
 class UserAbilities {
 

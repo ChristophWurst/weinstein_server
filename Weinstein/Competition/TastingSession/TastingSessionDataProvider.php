@@ -23,8 +23,8 @@ namespace Weinstein\Competition\TastingSession;
 
 use App\Competition\Competition;
 use App\Competition\Tasting\TastingSession;
-use App\Competition\Tasting\TastingStage;
-use App\User;
+use App\Tasting\TastingStage;
+use App\MasterData\User;
 use Illuminate\Database\Eloquent\Collection;
 
 class TastingSessionDataProvider {

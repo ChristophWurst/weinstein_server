@@ -22,7 +22,7 @@
 class UserHandlerTest extends TestCase {
     
     public function testGetUsersNoAdmin() {
-        $user = new App\User;
+        $user = new App\MasterData\User;
         $user->admin = false;
         
         $dataProvider = Mockery::mock('\Weinstein\User\UserDataProvider');
@@ -37,7 +37,7 @@ class UserHandlerTest extends TestCase {
     }
     
     public function testGetUsersIsAdmin() {
-        $user = new App\User;
+        $user = new App\MasterData\User;
         $user->admin = true;
         
         $dataProvider = Mockery::mock('\Weinstein\User\UserDataProvider');
@@ -45,27 +45,27 @@ class UserHandlerTest extends TestCase {
                 ->once()
                 ->andReturn('test');
         
-        $service = new App\UserHandler($dataProvider);
+        $service = new App\MasterData\UserHandler($dataProvider);
         
         $this->assertSame('test', $service->getUsersUsers($user));
     }
     
     public function testNoAdmin() {
-        $admin = new App\User;
+        $admin = new App\MasterData\User;
         $admin->username = 'userxx';
-        $user = new App\User;
+        $user = new App\MasterData\User;
         $user->username = 'useryy';
-        $service = new App\UserHandler(new App\UserDataProvider());
+        $service = new App\MasterData\UserHandler(new App\MasterData\UserDataProvider());
         
         $this->assertFalse($service->isAdmin($admin, $user));
     }
     
     public function testIsAdmin() {
-        $admin = new App\User;
+        $admin = new App\MasterData\User;
         $admin->username = 'userxx';
-        $user = new App\User;
+        $user = new App\MasterData\User;
         $user->username = 'userxx';
-        $service = new App\UserHandler(new App\UserDataProvider());
+        $service = new App\MasterData\UserHandler(new App\MasterData\UserDataProvider());
         
         $this->assertTrue($service->isAdmin($admin, $user));
     }

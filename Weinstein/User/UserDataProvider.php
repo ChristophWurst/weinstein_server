@@ -21,7 +21,7 @@
 
 namespace Weinstein\User;
 
-use App\User;
+use App\MasterData\User;
 use Illuminate\Database\Eloquent\Collection;
 
 class UserDataProvider {
@@ -40,7 +40,7 @@ class UserDataProvider {
     /**
      * Get users for given user
      * 
-     * @param App\User $user
+     * @param App\MasterData\User $user
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getUsersForUser(User $user) {

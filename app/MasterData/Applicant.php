@@ -19,12 +19,12 @@
  *
  */
 
-namespace App;
+namespace App\MasterData;
 
 use App\AdministrateModel;
-use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Foundation\Auth\User;
 
 class Applicant extends Model implements AdministrateModel {
 

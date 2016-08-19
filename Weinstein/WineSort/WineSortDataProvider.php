@@ -22,7 +22,7 @@
 namespace Weinstein\WineSort;
 
 use App\Competition\Competition;
-use App\WineSort;
+use App\MasterData\WineSort;
 
 class WineSortDataProvider {
 

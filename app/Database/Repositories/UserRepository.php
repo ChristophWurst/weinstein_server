@@ -21,7 +21,7 @@
 
 namespace App\Database\Repositories;
 
-use App\User;
+use App\MasterData\User;
 
 class UserRepository {
 

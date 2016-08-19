@@ -23,7 +23,7 @@ namespace Weinstein\Competition\TastingNumber;
 
 use App\Competition\Competition;
 use App\Competition\Tasting\TastingNumber;
-use App\Competition\Tasting\TastingStage;
+use App\Tasting\TastingStage;
 use App\Competition\Wine\Wine;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;

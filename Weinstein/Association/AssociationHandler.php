@@ -21,9 +21,9 @@
 
 namespace Weinstein\Association;
 
-use App\Applicant;
-use App\Association;
-use App\User;
+use App\MasterData\Applicant;
+use App\MasterData\Association;
+use App\MasterData\User;
 use Weinstein\Support\ActivityLog\ActivityLogger;
 
 class AssociationHandler {

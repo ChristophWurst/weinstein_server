@@ -19,47 +19,36 @@
  *
  */
 
-namespace App;
+namespace App\Tasting;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-class Tasting extends Model {
+class TastingStage extends Model {
 
 	/**
 	 * Table name
 	 * 
 	 * @var string 
 	 */
-	protected $table = 'tasting';
+	protected $table = 'tastingstage';
 
 	/**
-	 * Attributes for mass assignment
-	 * 
-	 * @var type 
-	 */
-	protected $fillable = [
-	    'tastingnumber_id',
-	    'taster_id',
-	    'rating'
-	];
-
-	/**
-	 * 1 tasting : 1 taster
+	 * 1 tasting stage : n tasting numbers
 	 * 
 	 * @return Relation
 	 */
-	public function taster() {
-		return $this->belongsTo('Taster');
+	public function tastingnumbers() {
+		return $this->hasMany('TastingNumber');
 	}
 
 	/**
-	 * 1 tasting : 1 tasting number
+	 * 1 tasting stage : n tasting sessions
 	 * 
 	 * @return Relation
 	 */
-	public function tastingnumber() {
-		return $this->belongsTo('TastingNumber');
+	public function tastingsessions() {
+		return $this->hasMany('TastingSession');
 	}
 
 }

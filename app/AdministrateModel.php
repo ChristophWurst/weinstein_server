@@ -21,7 +21,7 @@
 
 namespace App;
 
-use App\User;
+use App\MasterData\User;
 
 interface AdministrateModel {
 

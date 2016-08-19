@@ -22,7 +22,7 @@
 namespace Weinstein\Competition\Wine;
 
 use App\Competition\Competition;
-use App\User;
+use App\MasterData\User;
 use Illuminate\Database\Eloquent\Model;
 use Weinstein\Support\Validation\Validator;
 

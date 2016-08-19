@@ -21,8 +21,8 @@
 
 namespace Weinstein\Applicant;
 
-use App\Applicant;
-use App\User;
+use App\MasterData\Applicant;
+use App\MasterData\User;
 
 class ApplicantDataProvider {
 
@@ -38,7 +38,7 @@ class ApplicantDataProvider {
 	/**
 	 * Get given users administrated applicants
 	 * 
-	 * @param App\User $user
+	 * @param App\MasterData\User $user
 	 * @return \Illuminate\Database\Eloquent\Collection
 	 */
 	public function getApplicantsForUser(User $user) {

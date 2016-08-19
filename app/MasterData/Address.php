@@ -19,7 +19,7 @@
  *
  */
 
-namespace App;
+namespace App\MasterData;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -38,10 +38,10 @@ class Address extends Model {
 	 * @var array of string
 	 */
 	protected $fillable = [
-	    'street',
-	    'nr',
-	    'zipcode',
-	    'city'
+		'street',
+		'nr',
+		'zipcode',
+		'city'
 	];
 
 	/**

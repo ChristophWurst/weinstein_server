@@ -19,69 +19,61 @@
  *
  */
 
-namespace App;
+namespace App\MasterData;
 
+use App\Competition;
+use App\MasterData\WineSort;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-/**
- * @property Wine $wine
- */
-class TastingNumber extends Model {
+class WineSort extends Model {
 
 	/**
 	 * Table name
 	 * 
 	 * @var string 
 	 */
-	protected $table = 'tastingnumber';
+	protected $table = 'winesort';
 
 	/**
-	 * Attributes for mass assignment
+	 * Mass assignment attributes
 	 * 
-	 * @var type 
+	 * @var array of string
 	 */
 	protected $fillable = [
-	    'wine_id',
-	    'nr',
-	    'tastingstage_id'
+		'order',
+		'name',
+		'competition_id'
 	];
 
 	/**
-	 * 1 tasting number : n tasting
 	 * 
-	 * @return Relation
+	 * @return string
 	 */
-	public function tastings() {
-		return $this->hasMany('Tasting', 'tastingnumber_id', 'id');
+	public function getSelectLabelAttribute() {
+		return $this->order . ' - ' . $this->name;
 	}
 
 	/**
-	 * n tasting number : 1 tasting stage
-	 * @return Relation
+	 * Duplicate this sort into another competition
+	 * 
+	 * @param Competition $competition
 	 */
-	public function tastingstage() {
-		return $this->belongsTo('TastingStage');
+	public function duplicate(Competition $competition) {
+		$sort = new WineSort([
+			'order' => $this->order,
+			'name' => $this->name,
+		]);
+		$competition->winesorts()->save($sort);
 	}
 
 	/**
-	 * n tasting numbers : 1 wine
+	 * 1 sort : n wines
 	 * 
 	 * @return Relation
 	 */
-	public function wine() {
-		return $this->belongsTo('Wine');
-	}
-
-	/**
-	 * Scope tasting numbers to given tasting stage
-	 * 
-	 * @param \Illuminate\Database\Query $query
-	 * @param TastingStage $tastingStage
-	 * @return \Illuminate\Database\Query
-	 */
-	public function scopeTastingStage($query, TastingStage $tastingStage) {
-		return $query->where('tastingstage_id', '=', $tastingStage->id);
+	public function wines() {
+		return $this->hasMany('Wine', 'winesort_id');
 	}
 
 }

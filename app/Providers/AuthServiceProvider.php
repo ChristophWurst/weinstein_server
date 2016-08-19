@@ -11,7 +11,7 @@ use App\Auth\Abilities\TastingAbilities;
 use App\Auth\Abilities\TastingNumberAbilities;
 use App\Auth\Abilities\TastingSessionAbilities;
 use App\Auth\Abilities\UserAbilities;
-use App\User;
+use App\MasterData\User;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 

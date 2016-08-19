@@ -21,9 +21,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Association;
+use App\MasterData\Association;
 use App\Http\Controllers\BaseController;
-use App\User;
+use App\MasterData\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;

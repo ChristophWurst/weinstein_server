@@ -1,6 +1,6 @@
 <?php
 
-use App\User;
+use App\MasterData\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 

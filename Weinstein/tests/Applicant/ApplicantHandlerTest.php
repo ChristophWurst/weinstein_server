@@ -18,8 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-use App\Applicant;
-use App\User;
+use App\MasterData\Applicant;
+use App\MasterData\User;
 use Illuminate\Foundation\Testing\TestCase;
 use Illuminate\Support\Collection;
 use Weinstein\Applicant\ApplicantDataProvider;

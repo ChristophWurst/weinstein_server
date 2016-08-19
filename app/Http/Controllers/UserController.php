@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use UserHandler;
-use App\User;
+use App\MasterData\User;
 use App\Http\Controllers\BaseController;
 use Weinstein\Exception\ValidationException;
 

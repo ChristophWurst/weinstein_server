@@ -24,7 +24,7 @@ namespace App\Auth\Abilities;
 use App\Competition;
 use App\CompetitionState;
 use App\TastingSession;
-use App\User;
+use App\MasterData\User;
 
 /**
  * @todo review permissions, they are probably wrong

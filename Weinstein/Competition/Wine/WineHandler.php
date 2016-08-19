@@ -24,7 +24,7 @@ namespace Weinstein\Competition\Wine;
 use ActivityLogger;
 use App\Competition\Competition;
 use App\Competition\Wine\Wine;
-use App\User;
+use App\MasterData\User;
 use Illuminate\Database\Eloquent\Collection as Collection2;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -381,7 +381,7 @@ class WineHandler {
 	/**
 	 * Delete the wine
 	 * 
-	 * @param App\User $user
+	 * @param App\MasterData\User $user
 	 * @param Competition $competition
 	 * @return Wine
 	 */
@@ -405,7 +405,7 @@ class WineHandler {
 	/**
 	 * Get all wines of given competition for given user
 	 * 
-	 * @param App\User $user
+	 * @param App\MasterData\User $user
 	 * @param Competition $competition
 	 * @param boolean $query
 	 * @return Collection

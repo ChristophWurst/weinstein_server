@@ -2,15 +2,15 @@
 
 namespace App\Providers;
 
-use App\Applicant;
-use App\Association;
+use App\MasterData\Applicant;
+use App\MasterData\Association;
 use App\Commission;
 use App\Competition;
 use App\TastingNumber;
 use App\TastingSession;
-use App\User;
+use App\MasterData\User;
 use App\Wine;
-use App\WineSort;
+use App\MasterData\WineSort;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Routing\Router;
 use function app_path;

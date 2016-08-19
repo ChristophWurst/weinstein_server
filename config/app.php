@@ -228,43 +228,6 @@ return [
          */
         'Form' => 'Collective\Html\FormFacade',
         'Html' => 'Collective\Html\HtmlFacade',
-        
-        /**
-         * Application
-         */
-        'ActivityLogger'        => Weinstein\Support\Facades\ActivityLoggerFacade::class,
-        'ApplicantHandler'      => Weinstein\Support\Facades\ApplicantHandlerFacade::class, 
-        'AssociationHandler'    => Weinstein\Support\Facades\AssociationHandlerFacade::class, 
-        'CompetitionHandler'    => Weinstein\Support\Facades\CompetitionHandlerFacade::class, 
-        'TasterHandler'         => Weinstein\Support\Facades\TasterHandlerFacade::class, 
-        'TastingHandler'        => Weinstein\Support\Facades\TastingHandlerFacade::class, 
-        'TastingNumberHandler'  => Weinstein\Support\Facades\TastingNumberHandlerFacade::class, 
-        'TastingSessionHandler' => Weinstein\Support\Facades\TastingSessionHandlerFacade::class, 
-        'UserHandler'           => Weinstein\Support\Facades\UserHandlerFacade::class, 
-        'WineHandler'           => Weinstein\Support\Facades\WineHandlerFacade::class, 
-        'WineSortHandler'       => Weinstein\Support\Facades\WineSortHandlerFacade::class,
-        /**
-         * Models
-         */
-        'ActivityLog'           => App\Support\ActivityLog::class,
-        'Address'               => App\Address::class,
-        'AddressCatalogue'      => App\AddressCatalogue::class,
-        'Association'           => App\Association::class,
-        'Applicant'             => App\Applicant::class,
-        'Commission'            => App\Commission::class,
-        'Competition'           => App\Competition::class,
-        'CompetitionState'      => App\CompetitionState::class,
-        'Taster'                => App\Taster::class,
-        'TastedWine'            => App\TastedWine::class,
-        'Tasting'               => App\Tasting::class,
-        'TastingNumber'         => App\TastingNumber::class,
-        'TastingSession'        => App\TastingSession::class,
-        'TastingStage'          => App\TastingStage::class,
-        'User'                  => App\User::class,
-        'Wine'                  => App\Wine::class,
-        'WineDetails'           => App\WineDetails::class,
-        'WineSort'              => App\WineSort::class,
-        'WineQuality'           => App\WineQuality::class,
     ],
 
 ];

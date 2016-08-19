@@ -25,7 +25,7 @@ use ActivityLogger;
 use App\Competition\Competition;
 use App\Competition\CompetitionState;
 use App\Competition\Tasting\TastingSession;
-use App\Competition\Tasting\TastingStage;
+use App\Tasting\TastingStage;
 use App\Competition\Wine\Wine;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;

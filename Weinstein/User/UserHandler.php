@@ -26,12 +26,12 @@ use Weinstein\User\UserValidator;
 use ActivityLogger;
 use App;
 use Auth;
-use App\User;
+use App\MasterData\User;
 
 class UserHandler {
 
     /**
-     * App\User data provider
+     * App\MasterData\User data provider
      * 
      * @var \Weinstein\User\UserDataProvider
      */
@@ -45,12 +45,12 @@ class UserHandler {
      * Create a new user
      * 
      * @param array $data
-     * @return App\User
+     * @return App\MasterData\User
      */
     public function create(array $data) {
         $userValidator = new UserValidator($data);
         $userValidator->validateCreate();
-        $user = new App\User($data);
+        $user = new App\MasterData\User($data);
         $user->save();
         ActivityLogger::log('Benutzer [' . $data['username'] . '] erstellt');
         return $user;
@@ -59,9 +59,9 @@ class UserHandler {
     /**
      * Update an exising user
      * 
-     * @param App\User $user
+     * @param App\MasterData\User $user
      * @param array $data
-     * @return App\User
+     * @return App\MasterData\User
      */
     public function update(User $user, array $data) {
         //do not change password if it was left blank
@@ -83,7 +83,7 @@ class UserHandler {
     /**
      * Delete an user
      * 
-     * @param App\User $user
+     * @param App\MasterData\User $user
      */
     public function delete(User $user) {
         //prevent user from deleting his own account
@@ -98,7 +98,7 @@ class UserHandler {
     /**
      * Get given users users
      * 
-     * @param App\User $user
+     * @param App\MasterData\User $user
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getUsersUsers(User $user) {
@@ -112,11 +112,11 @@ class UserHandler {
     /**
      * Check if given loginUser administrates user
      * 
-     * @param App\User $admin
-     * @param App\User $user
+     * @param App\MasterData\User $admin
+     * @param App\MasterData\User $user
      * @return boolean
      */
-    public function isAdmin(User $admin, App\User $user) {
+    public function isAdmin(User $admin, App\MasterData\User $user) {
         if ($admin->username === $user->username) {
             return true;
         } elseif ($admin->admin) {

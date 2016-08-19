@@ -23,8 +23,8 @@ namespace Weinstein\Applicant;
 
 use ActivityLogger;
 use Address;
-use App\Applicant;
-use App\User;
+use App\MasterData\Applicant;
+use App\MasterData\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;

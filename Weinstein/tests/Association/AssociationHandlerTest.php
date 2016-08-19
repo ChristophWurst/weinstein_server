@@ -43,7 +43,7 @@ class AssociationHandlerTest extends TestCase {
     public function testGetAllAssociationsAdmin() {
         $dataProvider = Mockery::mock('Weinstein\Association\AssociationDataProvider');
         $ah = new AssociationHandler($dataProvider);
-        $user = new App\User;
+        $user = new App\MasterData\User;
         $user->admin = true;
         
         $dataProvider->shouldReceive('getAll')
@@ -56,7 +56,7 @@ class AssociationHandlerTest extends TestCase {
     public function testGetAllAssociationsNoAdmin() {
         $dataProvider = Mockery::mock('Weinstein\Association\AssociationDataProvider');
         $ah = new AssociationHandler($dataProvider);
-        $user = new App\User;
+        $user = new App\MasterData\User;
         $user->admin = false;
         
         $dataProvider->shouldReceive('getAll')

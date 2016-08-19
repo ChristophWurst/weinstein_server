@@ -2,7 +2,7 @@
 
 use App\Competition\Competition;
 use App\Competition\Tasting\TastingNumber;
-use App\Competition\Tasting\TastingStage;
+use App\Tasting\TastingStage;
 use Illuminate\Database\Eloquent\Collection;
 
 /**

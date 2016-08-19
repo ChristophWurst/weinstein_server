@@ -34,8 +34,8 @@ use App\Competition\Competition;
 use App\Competition\CompetitionState;
 use App\Competition\Tasting\Commission;
 use App\Competition\Tasting\TastingSession;
-use App\Competition\Tasting\TastingStage;
-use App\User;
+use App\Tasting\TastingStage;
+use App\MasterData\User;
 
 class TastingSessionController extends BaseController {
 

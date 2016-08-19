@@ -22,9 +22,8 @@
 namespace App;
 
 use App\AdministrateModel;
-use App\Competition\Competition;
-use App\Competition\Tasting\TastingStage;
-use App\User;
+use App\Tasting\TastingStage;
+use App\MasterData\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
