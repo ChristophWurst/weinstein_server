@@ -19,7 +19,7 @@
  *
  */
 
-namespace App;
+namespace App\Tasting;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;

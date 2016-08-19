@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\MasterData\Applicant;
 use App\MasterData\Association;
-use App\Commission;
+use App\Tasting\Commission;
 use App\MasterData\Competition;
 use App\TastingNumber;
 use App\TastingSession;

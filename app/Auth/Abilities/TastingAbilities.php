@@ -21,7 +21,7 @@
 
 namespace App\Auth\Abilities;
 
-use App\Commission;
+use App\Tasting\Commission;
 use App\MasterData\CompetitionState;
 use App\TastingNumber;
 use App\TastingSession;
