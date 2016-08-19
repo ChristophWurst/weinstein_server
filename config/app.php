@@ -166,6 +166,7 @@ return [
 	/*
          * Weinstein service providers
          */
+	App\Providers\MasterDataServiceProvider::class,
         Weinstein\Applicant\ApplicantServiceProvider::class,
         Weinstein\Association\AssociationServiceProvider::class,
         Weinstein\Competition\CompetitionServiceProvider::class,
@@ -176,7 +177,6 @@ return [
         Weinstein\Competition\Wine\WineServiceProvider::class,
         Weinstein\WineSort\WineSortServiceProvider::class,
         Weinstein\Support\ActivityLog\ActivityLoggerServiceProvider::class,
-        Weinstein\User\UserServiceProvider::class,
     ],
 
     /*

@@ -26,7 +26,7 @@ use App\MasterData\Competition;
 use App\Tasting\TastingStage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Foundation\Auth\User;
+use App\MasterData\User;
 use Illuminate\Support\Collection;
 
 /**

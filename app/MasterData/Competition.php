@@ -22,10 +22,10 @@
 namespace App\MasterData;
 
 use App\AdministrateModel;
+use App\MasterData\User;
 use App\Tasting\TastingStage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Foundation\Auth\User;
 
 class Competition extends Model implements AdministrateModel {
 

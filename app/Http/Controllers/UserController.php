@@ -21,32 +21,45 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
+use App\Contracts\MasterDataStore;
+use App\Http\Controllers\BaseController;
+use App\MasterData\User;
+use Illuminate\Auth\AuthManager;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Route;
-use UserHandler;
-use App\MasterData\User;
-use App\Http\Controllers\BaseController;
 use Weinstein\Exception\ValidationException;
 
 class UserController extends BaseController {
 
+	/** @var MasterDataStore */
+	private $masterDataStore;
+
+	/** @var AuthManager */
+	private $auth;
+
+	public function __construct(MasterDataStore $masterDataStore, AuthManager $auth) {
+		parent::__construct();
+		$this->masterDataStore = $masterDataStore;
+		$this->auth = $auth;
+	}
+
 	/**
 	 * Display a list of (all) users.
 	 * - Admin sees all
-	 * - Standard user sees only himself
+	 * - Standard user sees only him/herself
 	 * 
+	 * @todo list linked applicant/associations
 	 * @return Response
-	 * 
-	 * TODO: list linked applicant/associations
 	 */
 	public function index() {
 		$this->authorize('list-users');
 
-		return View::make('settings/user/index')->with('users', UserHandler::getUsersUsers(Auth::user()));
+		$user = $this->auth->user();
+		$users = $this->masterDataStore->getUsers($user);
+		return View::make('settings/user/index')->with('users', $users);
 	}
 
 	/**
@@ -77,13 +90,13 @@ class UserController extends BaseController {
 		}
 
 		try {
-			UserHandler::create($data);
+			$this->masterDataStore->createUser($data);
 		} catch (ValidationException $ve) {
 			return Redirect::route('settings.users/create')
 					->withErrors($ve->getErrors())
 					->withInput();
 		}
-		Log::info('user <' . $data['username'] . '> created by ' . Auth::user()->username);
+		Log::info('user <' . $data['username'] . '> created by ' . $this->auth->user()->username);
 		return Redirect::route('settings.users');
 	}
 
@@ -130,18 +143,26 @@ class UserController extends BaseController {
 		$this->authorize('edit-user', $user);
 
 		$data = Input::all();
+		// convert admin value to boolean
+		$data['admin'] = (isset($data['admin']) && $data['admin'] === 'true');
 
-		//convert admin value to boolean
-		if (isset($data['admin']) && $data['admin'] === 'true') {
-			$data['admin'] = true;
-		} else {
-			$data['admin'] = false;
+
+		// prevent admin from removing her/his own admin privileges
+		if ($this->auth->user()->username === $user->username) {
+			unset($data['admin']);
+		}
+
+		// do not change password if it was left blank
+		if (isset($data['password']) && $data['password'] === '') {
+			unset($data['password']);
 		}
 
 		try {
-			UserHandler::update($user, $data);
+			$this->masterDataStore->updateUser($user, $data);
 		} catch (ValidationException $ve) {
-			return Redirect::route('settings.users/edit', ['user' => $user->username])
+			return Redirect::route('settings.users/edit', [
+						'user' => $user->username
+					])
 					->withErrors($ve->getErrors())
 					->withInput();
 		}
@@ -173,10 +194,15 @@ class UserController extends BaseController {
 	public function destroy(User $user) {
 		$this->authorize('delete-user', $user);
 
-		if (Input::get('del') == 'Ja') {
-			UserHandler::delete($user);
+		//prevent user from deleting her/his own account
+		if ($user->username === $this->auth->user()->username) {
+			App::abort(500);
 		}
-		Log::info('user <' . $user->username . '> deleted by ' . Auth::user()->username);
+
+		if (Input::get('del') == 'Ja') {
+			$this->masterDataStore->deleteUser($user);
+		}
+		Log::info('user <' . $user->username . '> deleted by ' . $this->auth->user()->username);
 		return Redirect::route('settings.users');
 	}
 

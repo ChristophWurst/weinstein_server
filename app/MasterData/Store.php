@@ -24,6 +24,7 @@ namespace App\MasterData;
 use App\Contracts\MasterDataStore;
 use App\Database\Repositories\UserRepository;
 use App\Exceptions\NotImplementedException;
+use Illuminate\Support\Collection;
 
 class Store implements MasterDataStore {
 
@@ -42,8 +43,34 @@ class Store implements MasterDataStore {
 		throw new NotImplementedException();
 	}
 
-	public function getUsers() {
-		return $this->userRepository->findAll();
+	public function getUsers(User $user = null) {
+		if (is_null($user) || $user->admin) {
+			return $this->userRepository->findAll();
+		}
+		// Non-admin users see only their own user
+		return new Collection([
+			$user
+		]);
+	}
+
+	public function createUser($data) {
+		$userValidator = new UserValidator($data);
+		$userValidator->validateCreate();
+		$user = $this->userRepository->create($data);
+		//ActivityLogger::log('Benutzer [' . $data['username'] . '] erstellt');
+		return $user;
+	}
+
+	public function updateUser(User $user, $data) {
+		$userValidator = new UserValidator($data, $user);
+		$userValidator->validateUpdate();
+		$this->userRepository->update($user, $data);
+		//ActivityLogger::log('Benutzer [' . $user->username . '] bearbeitet');
+	}
+
+	public function deleteUser(User $user) {
+		$this->userRepository->delete($user);
+		//ActivityLogger::log('Benutzer [' . $username . '] gel&ouml;scht');
 	}
 
 }

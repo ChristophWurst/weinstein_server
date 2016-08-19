@@ -21,17 +21,12 @@
 
 namespace App\MasterData;
 
-use Illuminate\Contracts\Auth\Access\Authorizable;
-use Illuminate\Database\Eloquent\Model;
+use Exception;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Foundation\Auth\User;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract {
-
-	use AuthenticatableContract,
-     Authorizable,
-     CanResetPasswordContract;
+class User extends Authenticatable {
 
 	/**
 	 * table name

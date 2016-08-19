@@ -29,4 +29,19 @@ class UserRepository {
 		return User::all();
 	}
 
+	public function create($data) {
+		$user = new User($data);
+		$user->save();
+		return $user;
+	}
+
+	public function update(User $user, $data) {
+		$user->update($data);
+		return $user;
+	}
+
+	public function delete(User $user) {
+		$user->delete();
+	}
+
 }

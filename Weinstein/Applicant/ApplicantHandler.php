@@ -23,16 +23,24 @@ namespace Weinstein\Applicant;
 
 use ActivityLogger;
 use Address;
+use App\Database\Repositories\UserRepository;
 use App\MasterData\Applicant;
 use App\MasterData\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
+use PHPExcel_IOFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use UserHandler;
 use Weinstein\Exception\ValidationException;
+use function str_random;
 
 class ApplicantHandler {
+
+	/**
+	 * @var UserRepository
+	 */
+	private $userRepository;
 
 	/**
 	 * Data provider
@@ -50,12 +58,11 @@ class ApplicantHandler {
 	private function createUser(Applicant $applicant) {
 		//for better security, existing users are not associated with the new applicant
 		if (!User::find($applicant->id)) {
-			UserHandler::create(array(
-			    'username' => $applicant->id,
-			    'password' => str_random(15), //random password for better security
-			    'admin' => false,
-			));
-			$user = User::find($applicant->id);
+			$user = $this->userRepository->create([
+				'username' => $applicant->id,
+				'password' => str_random(15), //random password for better security
+				'admin' => false,
+			]);
 			$applicant->user()->associate($user);
 			$applicant->save();
 		}
@@ -66,8 +73,9 @@ class ApplicantHandler {
 	/**
 	 * @param ApplicantDataProvider $dataProvider
 	 */
-	public function __construct(ApplicantDataProvider $dataProvider) {
+	public function __construct(ApplicantDataProvider $dataProvider, UserRepository $userRepository) {
 		$this->dataProvider = $dataProvider;
+		$this->userRepository = $userRepository;
 	}
 
 	/**
@@ -189,7 +197,7 @@ class ApplicantHandler {
 		//
         //if exceptions occur, all db actions are rolled back to prevent data 
 		//inconsistency
-		$doc = \PHPExcel_IOFactory::load($file->getRealPath());
+		$doc = PHPExcel_IOFactory::load($file->getRealPath());
 		$sheet = $doc->getActiveSheet();
 
 		$rowCount = 0;
@@ -209,20 +217,20 @@ class ApplicantHandler {
 
 				$rowCount++;
 				$data = array(
-				    'id' => $row[0],
-				    'label' => $row[1],
-				    'title' => $row[2],
-				    'firstname' => $row[3],
-				    'lastname' => $row[4],
-				    'street' => $row[5],
-				    'zipcode' => $row[6],
-				    'city' => $row[7],
-				    'phone' => $row[8],
-				    'fax' => $row[9],
-				    'mobile' => $row[10],
-				    'email' => $row[11],
-				    'web' => $row[12],
-				    'association_id' => $row[13],
+					'id' => $row[0],
+					'label' => $row[1],
+					'title' => $row[2],
+					'firstname' => $row[3],
+					'lastname' => $row[4],
+					'street' => $row[5],
+					'zipcode' => $row[6],
+					'city' => $row[7],
+					'phone' => $row[8],
+					'fax' => $row[9],
+					'mobile' => $row[10],
+					'email' => $row[11],
+					'web' => $row[12],
+					'association_id' => $row[13],
 				);
 
 				//unset email if empty string
@@ -234,7 +242,7 @@ class ApplicantHandler {
 		} catch (ValidationException $ve) {
 			DB::rollback();
 			$messages = new MessageBag(array(
-			    'row' => 'Fehler in Zeile ' . $rowCount,
+				'row' => 'Fehler in Zeile ' . $rowCount,
 			));
 			$messages->merge($ve->getErrors());
 			throw new ValidationException($messages);

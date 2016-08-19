@@ -21,14 +21,32 @@
 
 namespace App\Contracts;
 
+use App\MasterData\User;
 use Illuminate\Support\Collection;
 
 interface MasterDataStore {
-	
+
+	/**
+	 * @param array $data
+	 * @return User
+	 */
+	public function createUser($data);
+
+	/**
+	 * @param User $user
+	 * @param array $data
+	 */
+	public function updateUser(User $user, $data);
+
+	/**
+	 * @param User $user
+	 */
+	public function deleteUser(User $user);
+
 	/**
 	 * @return Collection
 	 */
-	public function getUsers();
+	public function getUsers(User $user = null);
 
 	/**
 	 * @return Collection

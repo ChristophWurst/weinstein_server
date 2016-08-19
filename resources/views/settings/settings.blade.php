@@ -1,3 +1,10 @@
+<?php
+use App\MasterData\Applicant;
+use App\MasterData\Association;
+use App\MasterData\User;
+use App\MasterData\WineSort;
+?>
+
 @extends('default')
 
 @section('content')
