@@ -23,7 +23,7 @@ namespace Weinstein\Competition\TastingNumber;
 
 use App\MasterData\Competition;
 use Illuminate\Database\Eloquent\Model;
-use Weinstein\Support\Validation\Validator;
+use App\Validation\Validator;
 
 class TastingNumberValidator extends Validator {
 

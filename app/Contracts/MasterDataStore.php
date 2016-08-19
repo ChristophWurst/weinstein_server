@@ -21,10 +21,38 @@
 
 namespace App\Contracts;
 
+use App\MasterData\Association;
 use App\MasterData\User;
 use Illuminate\Support\Collection;
 
 interface MasterDataStore {
+
+	/**
+	 * @return Collection
+	 */
+	public function getAssociations(User $user = null);
+
+	/**
+	 * @param array $data
+	 * @return Association
+	 */
+	public function createAssociation(array $data);
+
+	/**
+	 * @param Association $association
+	 * @param array $data
+	 */
+	public function updateAssociation(Association $association, array $data);
+
+	/**
+	 * @param Association $association
+	 */
+	public function deleteAssociation(Association $association);
+
+	/**
+	 * @return Collection
+	 */
+	public function getUsers(User $user = null);
 
 	/**
 	 * @param array $data
@@ -42,16 +70,6 @@ interface MasterDataStore {
 	 * @param User $user
 	 */
 	public function deleteUser(User $user);
-
-	/**
-	 * @return Collection
-	 */
-	public function getUsers(User $user = null);
-
-	/**
-	 * @return Collection
-	 */
-	public function getAssociations();
 
 	/**
 	 * @return Collection

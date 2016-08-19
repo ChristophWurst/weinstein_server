@@ -22,7 +22,7 @@
 namespace App\MasterData;
 
 use Illuminate\Database\Eloquent\Model;
-use Weinstein\Support\Validation\Validator;
+use App\Validation\Validator;
 
 class UserValidator extends Validator {
 

@@ -22,7 +22,7 @@
 namespace Weinstein\WineSort;
 
 use Illuminate\Database\Eloquent\Model;
-use Weinstein\Support\Validation\Validator;
+use App\Validation\Validator;
 
 class WineSortValidator extends Validator {
 

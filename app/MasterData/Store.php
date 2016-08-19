@@ -22,16 +22,21 @@
 namespace App\MasterData;
 
 use App\Contracts\MasterDataStore;
+use App\Database\Repositories\AssociationRepository;
 use App\Database\Repositories\UserRepository;
 use App\Exceptions\NotImplementedException;
 use Illuminate\Support\Collection;
 
 class Store implements MasterDataStore {
 
+	/** @var AssociationRepository */
+	private $associationRepository;
+
 	/** @var UserRepository */
 	private $userRepository;
 
-	public function __construct(UserRepository $userRepository) {
+	public function __construct(AssociationRepository $associationRepository, UserRepository $userRepository) {
+		$this->associationRepository = $associationRepository;
 		$this->userRepository = $userRepository;
 	}
 
@@ -39,8 +44,32 @@ class Store implements MasterDataStore {
 		throw new NotImplementedException();
 	}
 
-	public function getAssociations() {
-		throw new NotImplementedException();
+	public function getAssociations(User $user = null) {
+		if (is_null($user) || $user->admin) {
+			return $this->associationRepository->findAll();
+		}
+		return $this->associationRepository->findForUser($user);
+	}
+
+	public function createAssociation(array $data) {
+		$associationValidator = new AssociationValidator($data);
+		$associationValidator->validateCreate();
+		$association = $this->associationRepository->create($data);
+		//ActivityLogger::log('Verein [' . $data['name'] . '] erstellt');
+		return $association;
+	}
+
+	public function updateAssociation(Association $association, array $data) {
+		$associationValidator = new AssociationValidator($data, $association);
+		$associationValidator->validateUpdate();
+
+		$this->associationRepository->update($association, $data);
+		//ActivityLogger::log('Verein [' . $association->name . '] bearbeitet');
+		return $association;
+	}
+
+	public function deleteAssociation(Association $association) {
+		
 	}
 
 	public function getUsers(User $user = null) {

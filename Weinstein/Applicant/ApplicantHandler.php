@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 use PHPExcel_IOFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Weinstein\Exception\ValidationException;
+use App\Exceptions\ValidationException;
 use function str_random;
 
 class ApplicantHandler {

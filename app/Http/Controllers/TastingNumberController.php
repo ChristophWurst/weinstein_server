@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use TastingNumberHandler;
-use Weinstein\Exception\ValidationException;
+use App\Exceptions\ValidationException;
 
 class TastingNumberController extends BaseController {
 

@@ -168,7 +168,6 @@ return [
          */
 	App\Providers\MasterDataServiceProvider::class,
         Weinstein\Applicant\ApplicantServiceProvider::class,
-        Weinstein\Association\AssociationServiceProvider::class,
         Weinstein\Competition\CompetitionServiceProvider::class,
         Weinstein\Competition\TastingNumber\TastingNumberServiceProvider::class,
         Weinstein\Competition\TastingSession\TastingSessionServiceProvider::class,

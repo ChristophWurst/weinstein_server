@@ -19,8 +19,8 @@
  *
  */
 
-namespace Weinstein;
+namespace App\Exception;
 
-class Weinstein {
+class ValidationModelMissingException extends Exception {
 
 }

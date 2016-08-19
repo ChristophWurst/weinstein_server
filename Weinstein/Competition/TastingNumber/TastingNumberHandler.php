@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
 use PHPExcel_IOFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Weinstein\Exception\ValidationException;
+use App\Exceptions\ValidationException;
 
 class TastingNumberHandler {
 

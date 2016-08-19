@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
-use Weinstein\Exception\ValidationException;
+use App\Exceptions\ValidationException;
 
 class UserController extends BaseController {
 

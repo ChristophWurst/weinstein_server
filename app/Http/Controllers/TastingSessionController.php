@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 use Weinstein\Support\Facades\TastingSessionHandlerFacade as TastingSessionHandler;
-use Weinstein\Exception\ValidationException;
+use App\Exceptions\ValidationException;
 use Weinstein\Competition\TastingSession\TastingProtocol as TastingProtocol;
 use App\Http\Controllers\BaseController;
 use App\MasterData\Competition;

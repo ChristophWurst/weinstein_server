@@ -35,7 +35,7 @@ use phpDocumentor\Reflection\DocBlock\Type\Collection;
 use PHPExcel_IOFactory;
 use SebastianBergmann\RecursionContext\Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Weinstein\Exception\ValidationException as ValidationException;
+use App\Exceptions\ValidationException as ValidationException;
 
 class WineHandler {
 

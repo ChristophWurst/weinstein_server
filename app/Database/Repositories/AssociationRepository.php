@@ -19,28 +19,32 @@
  *
  */
 
-namespace Weinstein\Association;
+namespace App\Database\Repositories;
 
 use App\MasterData\Association;
 use App\MasterData\User;
 
-class AssociationDataProvider {
+class AssociationRepository {
 
-	/**
-	 * Get all associations
-	 * 
-	 * if a valid $user is given, only its administrated associations are returned
-	 * 
-	 * @param User $user
-	 * @return type
-	 */
-	public function getAll(User $user = null) {
-		if (is_null($user)) {
-			$query = Association::query();
-		} else {
-			$query = $user->associations();
-		}
-		return $query->orderBy('id')->get();
+	public function findAll() {
+		return Association::orderBy('id')->get();
+	}
+
+	public function findForUser(User $user) {
+		return $user->associations()->orderBy('id')->get();
+	}
+
+	public function create(array $data) {
+		return Association::create($data);
+	}
+
+	public function update(Association $association, array $data) {
+		$association->update($data);
+		$association->save();
+	}
+
+	public function delete(Association $association) {
+		$association->delete();
 	}
 
 }

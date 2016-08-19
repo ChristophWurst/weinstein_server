@@ -32,7 +32,7 @@ use App\Tasting\Commission;
 use App\Tasting\TastingSession;
 use App\Tasting\TastingNumber;
 use Weinstein\Support\Facades\TastingHandlerFacade as TastingHandler;
-use Weinstein\Exception\ValidationException;
+use App\Exceptions\ValidationException;
 
 class TastingController extends BaseController {
 

@@ -41,7 +41,7 @@ use App\MasterData\CompetitionWine\WineExport;
 use App\MasterData\WineSort;
 use App\MasterData\CompetitionEnrollmentForm;
 use App\MasterData\CompetitionWine\WineQuality;
-use Weinstein\Exception\ValidationException;
+use App\Exceptions\ValidationException;
 
 class WineController extends BaseController {
 

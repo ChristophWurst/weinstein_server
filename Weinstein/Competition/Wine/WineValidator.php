@@ -24,7 +24,7 @@ namespace Weinstein\Competition\Wine;
 use App\MasterData\Competition;
 use App\MasterData\User;
 use Illuminate\Database\Eloquent\Model;
-use Weinstein\Support\Validation\Validator;
+use App\Validation\Validator;
 
 class WineValidator extends Validator {
 

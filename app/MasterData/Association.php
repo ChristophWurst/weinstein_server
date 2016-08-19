@@ -73,7 +73,7 @@ class Association extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function applicants() {
-		return $this->hasMany('Applicant');
+		return $this->hasMany(Applicant::class);
 	}
 
 	/**
@@ -82,7 +82,7 @@ class Association extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function user() {
-		return $this->belongsTo('User', 'wuser_username', 'username');
+		return $this->belongsTo(User::class, 'wuser_username', 'username');
 	}
 
 }

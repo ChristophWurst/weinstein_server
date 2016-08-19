@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use User;
-use Weinstein\Exception\ValidationException;
+use App\Exceptions\ValidationException;
 
 class ApplicantController extends BaseController {
 

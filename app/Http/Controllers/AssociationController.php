@@ -21,25 +21,32 @@
 
 namespace App\Http\Controllers;
 
-use App\MasterData\Association;
+use App\Contracts\MasterDataStore;
+use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
+use App\MasterData\Association;
 use App\MasterData\User;
+use Illuminate\Auth\AuthManager;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
-use Route;
-use Weinstein\Exception\ValidationException as ValidationException;
-use Weinstein\Support\Facades\AssociationHandlerFacade as AssociationHandler;
 
 class AssociationController extends BaseController {
+
+	/** @var MasterDataStore */
+	private $masterDataStore;
+
+	/** @var AuthManager */
+	private $auth;
 
 	/**
 	 * Constructor
 	 */
-	public function __construct() {
+	public function __construct(MasterDataStore $masterDataStore, AuthManager $auth) {
 		parent::__construct();
+		$this->masterDataStore = $masterDataStore;
+		$this->auth = $auth;
 
 		//register filters
 		$this->middleware('auth');
@@ -54,7 +61,9 @@ class AssociationController extends BaseController {
 	 * @return Response
 	 */
 	public function index() {
-		return View::make('settings/association/index')->with('associations', AssociationHandler::getUsersAssociations(Auth::user()));
+		$user = $this->auth->user();
+		$associations = $this->masterDataStore->getAssociations($user);
+		return View::make('settings/association/index')->with('associations', $associations);
 	}
 
 	/**
@@ -65,8 +74,8 @@ class AssociationController extends BaseController {
 	public function create() {
 		$this->authorize('create-association');
 
-		return View::make('settings/association/form')
-				->withUsers($this->selectNone + User::all()->lists('username', 'username')->all());
+		$users = $this->masterDataStore->getUsers()->lists('username', 'username')->all();
+		return View::make('settings/association/form')->withUsers($this->selectNone + $users);
 	}
 
 	/**
@@ -83,7 +92,7 @@ class AssociationController extends BaseController {
 			unset($data['wuser_username']);
 		}
 		try {
-			AssociationHandler::create($data);
+			$this->masterDataStore->createAssociation($data);
 		} catch (ValidationException $ve) {
 			return Redirect::route('settings.associations/create')
 					->withErrors($ve->getErrors())
@@ -117,7 +126,7 @@ class AssociationController extends BaseController {
 
 		return View::make('settings/association/form')
 				->withData($association)
-				->withUsers(Auth::user()->admin ? $this->selectNone + User::all()->lists('username', 'username')->all() : Auth::user()->lists('username', 'username')->all());
+				->withUsers($this->auth->user()->admin ? $this->selectNone + User::all()->lists('username', 'username')->all() : $this->auth->user()->lists('username', 'username')->all());
 	}
 
 	/**
@@ -130,12 +139,17 @@ class AssociationController extends BaseController {
 		$this->authorize('create-association', $association);
 
 		$data = Input::all();
-		//remove default user of form's select
+		// remove default user of form's select
 		if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
+			$data['wuser_username'] = null;
+		}
+		// only admin can change user
+		if (!$this->auth->user()->admin) {
 			unset($data['wuser_username']);
 		}
+
 		try {
-			AssociationHandler::update($association, $data);
+			$this->masterDataStore->updateAssociation($association, $data);
 		} catch (ValidationException $ve) {
 			return Redirect::route('settings.associations/edit', ['association' => $association->id])
 					->withErrors($ve->getErrors())

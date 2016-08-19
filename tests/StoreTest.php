@@ -1,11 +1,16 @@
 <?php
 
+use App\Database\Repositories\AssociationRepository;
 use App\Database\Repositories\UserRepository;
+use App\MasterData\Association;
 use App\MasterData\Store;
 use App\MasterData\User;
 use Illuminate\Support\Collection;
 
 class StoreTest extends TestCase {
+
+	/** @var AssociationRepository|PHPUnit_Framework_MockObject_MockObject */
+	private $associationRepository;
 
 	/** @var UserRepository|PHPUnit_Framework_MockObject_MockObject */
 	private $userRepository;
@@ -16,8 +21,105 @@ class StoreTest extends TestCase {
 	protected function setUp() {
 		parent::setUp();
 
+		$this->associationRepository = $this->getSimpleClassMock(AssociationRepository::class);
 		$this->userRepository = $this->getSimpleClassMock(UserRepository::class);
-		$this->store = new Store($this->userRepository);
+		$this->store = new Store($this->associationRepository, $this->userRepository);
+	}
+
+	public function testGetAllAssociations() {
+		$collection = new Collection();
+
+		$this->associationRepository->expects($this->once())
+			->method('findAll')
+			->will($this->returnValue($collection));
+
+		$this->assertEquals($collection, $this->store->getAssociations());
+	}
+
+	public function testGetAllAssociationsAsAdmin() {
+		$collection = new Collection();
+		$user = new User([
+			'admin' => true,
+		]);
+
+		$this->associationRepository->expects($this->once())
+			->method('findAll')
+			->will($this->returnValue($collection));
+
+		$this->assertEquals($collection, $this->store->getAssociations());
+	}
+
+	public function testGetAssociationsAsNonAdmin() {
+		$collection = new Collection();
+		$user = new User();
+
+		$this->associationRepository->expects($this->once())
+			->method('findForUser')
+			->with($user)
+			->will($this->returnValue($collection));
+
+		$this->assertEquals($collection, $this->store->getAssociations($user));
+	}
+
+	public function testCreateAssociation() {
+		$data = [
+			'id' => 40,
+			'name' => 'Pulkau',
+		];
+
+		$association = new Association($data);
+		$this->associationRepository->expects($this->once())
+			->method('create')
+			->with($data)
+			->will($this->returnValue($association));
+
+		$this->assertEquals($association, $this->store->createAssociation($data));
+	}
+
+	/**
+	 * @expectedException Weinstein\Exception\ValidationException
+	 */
+	public function testCreateAssociationValidationFails() {
+		$data = [
+			'id' => -1,
+			'name' => 'Pulkau',
+		];
+
+		$association = new Association($data);
+		$this->associationRepository->expects($this->never())
+			->method('create');
+
+		$this->store->createAssociation($data);
+	}
+
+	public function testUpdateAssociation() {
+		$association = new Association();
+		$data = [
+			'id' => 33,
+			'name' => 'Pillersdorf',
+		];
+
+		$this->associationRepository->expects($this->once())
+			->method('update')
+			->with($association, $data);
+
+		$this->store->updateAssociation($association, $data);
+	}
+
+	/**
+	 * @expectedException Weinstein\Exception\ValidationException
+	 */
+	public function testUpdateAssociationValidationFails() {
+		$association = new Association();
+		$data = [
+			'id' => -5,
+			'name' => 'Pillersdorf',
+		];
+
+		$this->associationRepository->expects($this->never())
+			->method('update');
+
+		$this->store->updateAssociation($association, $data);
 	}
 
 	public function testGetAllUsers() {

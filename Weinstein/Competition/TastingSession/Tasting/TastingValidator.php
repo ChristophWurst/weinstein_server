@@ -24,7 +24,7 @@ namespace Weinstein\Competition\TastingSession\Tasting;
 use App\Tasting\Commission;
 use App\Tasting\TastingSession;
 use Illuminate\Database\Eloquent\Model;
-use Weinstein\Support\Validation\Validator;
+use App\Validation\Validator;
 
 class TastingValidator extends Validator {
 

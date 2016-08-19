@@ -23,7 +23,7 @@ namespace Weinstein\Competition\TastingSession\Taster;
 
 use App\Tasting\TastingSession;
 use Exception;
-use Weinstein\Support\Validation\Validator;
+use App\Validation\Validator;
 
 class TasterValidator extends Validator {
 

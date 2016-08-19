@@ -29,13 +29,13 @@ class UserRepository {
 		return User::all();
 	}
 
-	public function create($data) {
+	public function create(array $data) {
 		$user = new User($data);
 		$user->save();
 		return $user;
 	}
 
-	public function update(User $user, $data) {
+	public function update(User $user, array $data) {
 		$user->update($data);
 		return $user;
 	}

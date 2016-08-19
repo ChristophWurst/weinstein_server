@@ -22,7 +22,7 @@
 namespace Weinstein\Applicant;
 
 use Illuminate\Database\Eloquent\Model;
-use Weinstein\Support\Validation\Validator;
+use App\Validation\Validator;
 
 class ApplicantValidator extends Validator {
 

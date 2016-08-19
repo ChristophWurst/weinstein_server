@@ -19,10 +19,10 @@
  *
  */
 
-namespace Weinstein\Association;
+namespace App\MasterData;
 
-use Illuminate\Database\Eloquent\Model as Model;
-use Weinstein\Support\Validation\Validator;
+use App\Validation\Validator;
+use Illuminate\Database\Eloquent\Model;
 
 class AssociationValidator extends Validator {
 
@@ -31,7 +31,7 @@ class AssociationValidator extends Validator {
 	 * 
 	 * @var string 
 	 */
-	protected $modelClass = 'Association';
+	protected $modelClass = Association::class;
 
 	/**
 	 * Get attribute names
