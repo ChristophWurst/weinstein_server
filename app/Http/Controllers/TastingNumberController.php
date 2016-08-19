@@ -21,9 +21,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Competition\Competition;
-use App\Competition\CompetitionState;
-use App\Competition\Tasting\TastingNumber;
+use App\MasterData\Competition;
+use App\MasterData\CompetitionState;
+use App\Tasting\TastingNumber;
 use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;

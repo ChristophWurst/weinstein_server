@@ -71,7 +71,7 @@ class Taster extends Model {
 	 * @return Relation
 	 */
 	public function statistic() {
-		return $this->hasOne('App\Competition\Tasting\TasterStatistic');
+		return $this->hasOne('App\Tasting\TasterStatistic');
 	}
 
 	/**

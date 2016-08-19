@@ -22,8 +22,8 @@
 namespace Weinstein\Competition\Wine;
 
 use ActivityLogger;
-use App\Competition\Competition;
-use App\Competition\Wine\Wine;
+use App\MasterData\Competition;
+use App\Wine;
 use App\MasterData\User;
 use Illuminate\Database\Eloquent\Collection as Collection2;
 use Illuminate\Support\Facades\App;

@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
-use App\Competition\Competition;
+use App\MasterData\Competition;
 
 class AppServiceProvider extends ServiceProvider {
 

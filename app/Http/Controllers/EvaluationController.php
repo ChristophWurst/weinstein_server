@@ -21,7 +21,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Competition\Competition;
+use App\MasterData\Competition;
 use App\Http\Controllers\BaseController;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\View;

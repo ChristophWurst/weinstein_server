@@ -49,7 +49,7 @@ class Commission extends Model {
 	 * @return Relation
 	 */
 	public function statistic() {
-		return $this->hasOne('App\Competition\Tasting\CommissionStatistic');
+		return $this->hasOne('App\Tasting\CommissionStatistic');
 	}
 
 	/**

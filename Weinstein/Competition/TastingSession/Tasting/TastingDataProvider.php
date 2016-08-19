@@ -21,9 +21,9 @@
 
 namespace Weinstein\Competition\TastingSession\Tasting;
 
-use App\Competition\Competition;
-use App\Competition\Tasting\Tasting;
-use App\Competition\Tasting\TastingSession;
+use App\MasterData\Competition;
+use App\Tasting\Tasting;
+use App\Tasting\TastingSession;
 use Illuminate\Database\Eloquent\Collection;
 
 class TastingDataProvider {

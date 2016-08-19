@@ -5,7 +5,7 @@ namespace App\Providers;
 use App\MasterData\Applicant;
 use App\MasterData\Association;
 use App\Commission;
-use App\Competition;
+use App\MasterData\Competition;
 use App\TastingNumber;
 use App\TastingSession;
 use App\MasterData\User;

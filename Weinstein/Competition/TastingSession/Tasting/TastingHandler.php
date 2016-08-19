@@ -22,12 +22,12 @@
 namespace Weinstein\Competition\TastingSession\Tasting;
 
 use App;
-use App\Competition\Competition;
-use App\Competition\Tasting\Commission;
-use App\Competition\Tasting\TastedWine;
-use App\Competition\Tasting\Tasting;
-use App\Competition\Tasting\TastingNumber;
-use App\Competition\Tasting\TastingSession;
+use App\MasterData\Competition;
+use App\Tasting\Commission;
+use App\Tasting\TastedWine;
+use App\Tasting\Tasting;
+use App\Tasting\TastingNumber;
+use App\Tasting\TastingSession;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;

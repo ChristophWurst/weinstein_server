@@ -22,11 +22,11 @@
 namespace Weinstein\Competition;
 
 use ActivityLogger;
-use App\Competition\Competition;
-use App\Competition\CompetitionState;
-use App\Competition\Tasting\TastingSession;
+use App\MasterData\Competition;
+use App\MasterData\CompetitionState;
+use App\Tasting\TastingSession;
 use App\Tasting\TastingStage;
-use App\Competition\Wine\Wine;
+use App\Wine;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;

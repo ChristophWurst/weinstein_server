@@ -1,10 +1,5 @@
 <?php
 
-use App\Competition\Competition;
-use App\Competition\Tasting\TastingNumber;
-use App\Tasting\TastingStage;
-use Illuminate\Database\Eloquent\Collection;
-
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -25,6 +20,11 @@ use Illuminate\Database\Eloquent\Collection;
  */
 
 namespace Weinstein\Competition\TastingNumber;
+
+use App\MasterData\Competition;
+use App\Tasting\TastingNumber;
+use App\Tasting\TastingStage;
+use Illuminate\Database\Eloquent\Collection;
 
 class TastingNumberDataProvider {
 

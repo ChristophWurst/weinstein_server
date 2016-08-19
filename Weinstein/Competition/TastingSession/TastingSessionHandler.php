@@ -21,10 +21,10 @@
 
 namespace Weinstein\Competition\TastingSession;
 
-use App\Competition\Competition;
-use App\Competition\Tasting\Commission;
-use App\Competition\Tasting\Taster;
-use App\Competition\Tasting\TastingSession;
+use App\MasterData\Competition;
+use App\Tasting\Commission;
+use App\Tasting\Taster;
+use App\Tasting\TastingSession;
 use App\Tasting\TastingStage;
 use App\MasterData\User;
 use Illuminate\Database\Eloquent\Collection;

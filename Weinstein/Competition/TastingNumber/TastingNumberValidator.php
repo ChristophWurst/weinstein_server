@@ -21,7 +21,7 @@
 
 namespace Weinstein\Competition\TastingNumber;
 
-use App\Competition\Competition;
+use App\MasterData\Competition;
 use Illuminate\Database\Eloquent\Model;
 use Weinstein\Support\Validation\Validator;
 

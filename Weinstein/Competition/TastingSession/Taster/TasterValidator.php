@@ -21,7 +21,7 @@
 
 namespace Weinstein\Competition\TastingSession\Taster;
 
-use App\Competition\Tasting\TastingSession;
+use App\Tasting\TastingSession;
 use Exception;
 use Weinstein\Support\Validation\Validator;
 

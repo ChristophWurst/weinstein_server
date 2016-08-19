@@ -21,8 +21,8 @@
 
 namespace Weinstein\Competition\TastingSession\Taster;
 
-use App\Competition\Tasting\Taster;
-use App\Competition\Tasting\TastingSession;
+use App\Tasting\Taster;
+use App\Tasting\TastingSession;
 use Illuminate\Database\Eloquent\Collection;
 
 class TasterDataProvider {

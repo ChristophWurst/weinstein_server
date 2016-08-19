@@ -21,8 +21,8 @@
 
 namespace App\Auth\Abilities;
 
-use App\Competition;
-use App\CompetitionState;
+use App\MasterData\Competition;
+use App\MasterData\CompetitionState;
 use App\TastingStage;
 use App\MasterData\User;
 use Illuminate\Support\Facades\Log;

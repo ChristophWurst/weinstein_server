@@ -19,13 +19,13 @@
  *
  */
 
-namespace App;
+namespace App\MasterData;
 
 use App\AdministrateModel;
 use App\Tasting\TastingStage;
-use App\MasterData\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Foundation\Auth\User;
 
 class Competition extends Model implements AdministrateModel {
 
@@ -42,9 +42,9 @@ class Competition extends Model implements AdministrateModel {
 	 * @var array of string
 	 */
 	protected $fillable = [
-	    'label',
-	    'wuser_username',
-	    'tastingstage_id',
+		'label',
+		'wuser_username',
+		'tastingstage_id',
 	];
 
 	/**

@@ -22,7 +22,7 @@
 namespace App\Auth\Abilities;
 
 use App\Commission;
-use App\CompetitionState;
+use App\MasterData\CompetitionState;
 use App\TastingNumber;
 use App\TastingSession;
 use App\MasterData\User;

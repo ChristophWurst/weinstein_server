@@ -21,7 +21,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Competition;
+use App\MasterData\Competition;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\App;

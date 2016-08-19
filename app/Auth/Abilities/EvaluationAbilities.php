@@ -21,7 +21,7 @@
 
 namespace App\Auth\Abilities;
 
-use App\Competition;
+use App\MasterData\Competition;
 use App\MasterData\User;
 
 class EvaluationAbilities {

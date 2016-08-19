@@ -21,10 +21,10 @@
 
 namespace Weinstein\Competition\TastingNumber;
 
-use App\Competition\Competition;
-use App\Competition\Tasting\TastingNumber;
+use App\MasterData\Competition;
+use App\Tasting\TastingNumber;
 use App\Tasting\TastingStage;
-use App\Competition\Wine\Wine;
+use App\Wine;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

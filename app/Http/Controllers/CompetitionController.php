@@ -21,8 +21,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Competition\Competition;
-use App\Competition\CompetitionState;
+use App\MasterData\Competition;
+use App\MasterData\CompetitionState;
 use App\Tasting\TastingStage;
 use App\Http\Controllers\BaseController;
 use CompetitionHandler;

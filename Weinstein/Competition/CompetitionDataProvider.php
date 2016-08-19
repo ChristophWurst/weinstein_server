@@ -21,7 +21,7 @@
 
 namespace Weinstein\Competition;
 
-use App\Competition\Competition;
+use App\MasterData\Competition;
 use Illuminate\Database\Eloquent\Collection;
 
 class CompetitionDataProvider {

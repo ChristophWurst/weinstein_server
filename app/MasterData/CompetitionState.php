@@ -19,7 +19,7 @@
  *
  */
 
-namespace App;
+namespace App\MasterData;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;

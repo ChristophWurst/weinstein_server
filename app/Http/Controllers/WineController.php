@@ -33,14 +33,14 @@ use WineHandler;
 use App\Http\Controllers\BaseController;
 use App\MasterData\Applicant;
 use App\MasterData\Association;
-use App\Competition\Competition;
-use App\Competition\CompetitionState;
-use App\Competition\Wine\FlawExport;
-use App\Competition\Wine\Wine;
-use App\Competition\Wine\WineExport;
+use App\MasterData\Competition;
+use App\MasterData\CompetitionState;
+use App\MasterData\CompetitionWine\FlawExport;
+use App\Wine;
+use App\MasterData\CompetitionWine\WineExport;
 use App\MasterData\WineSort;
-use App\Competition\EnrollmentForm;
-use App\Competition\Wine\WineQuality;
+use App\MasterData\CompetitionEnrollmentForm;
+use App\MasterData\CompetitionWine\WineQuality;
 use Weinstein\Exception\ValidationException;
 
 class WineController extends BaseController {

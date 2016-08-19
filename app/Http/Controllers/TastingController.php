@@ -27,10 +27,10 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use App\Http\Controllers\BaseController;
-use App\Competition\CompetitionState;
-use App\Competition\Tasting\Commission;
-use App\Competition\Tasting\TastingSession;
-use App\Competition\Tasting\TastingNumber;
+use App\MasterData\CompetitionState;
+use App\Tasting\Commission;
+use App\Tasting\TastingSession;
+use App\Tasting\TastingNumber;
 use Weinstein\Support\Facades\TastingHandlerFacade as TastingHandler;
 use Weinstein\Exception\ValidationException;
 

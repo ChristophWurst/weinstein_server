@@ -21,8 +21,8 @@
 
 namespace Weinstein\Competition\TastingSession\Tasting;
 
-use App\Competition\Tasting\Commission;
-use App\Competition\Tasting\TastingSession;
+use App\Tasting\Commission;
+use App\Tasting\TastingSession;
 use Illuminate\Database\Eloquent\Model;
 use Weinstein\Support\Validation\Validator;
 

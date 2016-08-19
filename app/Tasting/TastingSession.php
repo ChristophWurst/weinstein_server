@@ -22,7 +22,7 @@
 namespace App\Tasting;
 
 use App\AdministrateModel;
-use App\Competition;
+use App\MasterData\Competition;
 use App\Tasting\TastingStage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;

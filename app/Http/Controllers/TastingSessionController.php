@@ -30,10 +30,10 @@ use Weinstein\Support\Facades\TastingSessionHandlerFacade as TastingSessionHandl
 use Weinstein\Exception\ValidationException;
 use Weinstein\Competition\TastingSession\TastingProtocol as TastingProtocol;
 use App\Http\Controllers\BaseController;
-use App\Competition\Competition;
-use App\Competition\CompetitionState;
-use App\Competition\Tasting\Commission;
-use App\Competition\Tasting\TastingSession;
+use App\MasterData\Competition;
+use App\MasterData\CompetitionState;
+use App\Tasting\Commission;
+use App\Tasting\TastingSession;
 use App\Tasting\TastingStage;
 use App\MasterData\User;
 
