@@ -21,6 +21,7 @@
 
 namespace Weinstein\Competition\TastingNumber;
 
+use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
 use App\Tasting\TastingNumber;
 use App\Tasting\TastingStage;
@@ -31,7 +32,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
 use PHPExcel_IOFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use App\Exceptions\ValidationException;
 
 class TastingNumberHandler {
 

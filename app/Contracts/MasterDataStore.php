@@ -24,6 +24,7 @@ namespace App\Contracts;
 use App\MasterData\Association;
 use App\MasterData\Competition;
 use App\MasterData\User;
+use App\MasterData\WineSort;
 use Illuminate\Support\Collection;
 
 interface MasterDataStore {
@@ -59,7 +60,7 @@ interface MasterDataStore {
 	 * @param Competition $competition
 	 */
 	public function resetCompetition(Competition $competition);
-	
+
 	/**
 	 * @return Collection
 	 */
@@ -69,7 +70,7 @@ interface MasterDataStore {
 	 * @param array $data
 	 * @return User
 	 */
-	public function createUser($data);
+	public function createUser(array $data);
 
 	/**
 	 * @param User $user
@@ -86,4 +87,21 @@ interface MasterDataStore {
 	 * @return Collection
 	 */
 	public function getApplicants();
+
+	/**
+	 * @return Collection
+	 */
+	public function getWineSorts();
+
+	/**
+	 * @param array $data
+	 * @return WineSort
+	 */
+	public function createWineSort(array $data);
+
+	/**
+	 * @param WineSort $wineSort
+	 * @param array $data
+	 */
+	public function updateWineSort(WineSort $wineSort, array $data);
 }

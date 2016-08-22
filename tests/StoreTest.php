@@ -3,9 +3,12 @@
 use App\Database\Repositories\AssociationRepository;
 use App\Database\Repositories\CompetitionRepository;
 use App\Database\Repositories\UserRepository;
+use App\Database\Repositories\WineSortRepository;
+use App\Exceptions\ValidationException;
 use App\MasterData\Association;
 use App\MasterData\Store;
 use App\MasterData\User;
+use App\MasterData\WineSort;
 use Illuminate\Support\Collection;
 
 class StoreTest extends TestCase {
@@ -19,6 +22,9 @@ class StoreTest extends TestCase {
 	/** @var UserRepository|PHPUnit_Framework_MockObject_MockObject */
 	private $userRepository;
 
+	/** @var WineSortRepository|PHPUnit_Framework_MockObject_MockObject */
+	private $wineSortRepository;
+
 	/** @var Store */
 	private $store;
 
@@ -28,7 +34,9 @@ class StoreTest extends TestCase {
 		$this->associationRepository = $this->getSimpleClassMock(AssociationRepository::class);
 		$this->competitionRepository = $this->getSimpleClassMock(CompetitionRepository::class);
 		$this->userRepository = $this->getSimpleClassMock(UserRepository::class);
-		$this->store = new Store($this->associationRepository, $this->userRepository);
+		$this->wineSortRepository = $this->getSimpleClassMock(WineSortRepository::class);
+		$this->store = new Store($this->associationRepository, $this->competitionRepository, $this->userRepository,
+			$this->wineSortRepository);
 	}
 
 	public function testGetAllAssociations() {
@@ -81,9 +89,6 @@ class StoreTest extends TestCase {
 		$this->assertEquals($association, $this->store->createAssociation($data));
 	}
 
-	/**
-	 * @expectedException Weinstein\Exception\ValidationException
-	 */
 	public function testCreateAssociationValidationFails() {
 		$data = [
 			'id' => -1,
@@ -94,6 +99,7 @@ class StoreTest extends TestCase {
 		$this->associationRepository->expects($this->never())
 			->method('create');
 
+		$this->setExpectedException(ValidationException::class);
 		$this->store->createAssociation($data);
 	}
 
@@ -111,9 +117,6 @@ class StoreTest extends TestCase {
 		$this->store->updateAssociation($association, $data);
 	}
 
-	/**
-	 * @expectedException Weinstein\Exception\ValidationException
-	 */
 	public function testUpdateAssociationValidationFails() {
 		$association = new Association();
 		$data = [
@@ -124,6 +127,7 @@ class StoreTest extends TestCase {
 		$this->associationRepository->expects($this->never())
 			->method('update');
 
+		$this->setExpectedException(ValidationException::class);
 		$this->store->updateAssociation($association, $data);
 	}
 
@@ -215,6 +219,49 @@ class StoreTest extends TestCase {
 			->with($user);
 
 		$this->store->deleteUser($user);
+	}
+
+	public function testGetWineSorts() {
+		$collection = new Collection();
+
+		$this->wineSortRepository->expects($this->once())
+			->method('findAll')
+			->will($this->returnValue($collection));
+
+		$this->assertEquals($collection, $this->store->getWineSorts());
+	}
+
+	public function testCreateWineSort() {
+		$data = [
+			'order' => 13,
+			'name' => 'Grüner Veltliner',
+		];
+
+		$result = new WineSort($data);
+		$this->wineSortRepository->expects($this->once())
+			->method('create')
+			->with($data)
+			->will($this->returnValue($result));
+
+		$this->assertEquals($result, $this->store->createWineSort($data));
+	}
+
+	public function testUpdateWineSort() {
+		$old = new WineSort([
+			'order' => 21,
+			'name' => 'Blauburger',
+		]);
+
+		$data = [
+			'order' => 13,
+			'name' => 'Grüner Veltliner',
+		];
+
+		$this->wineSortRepository->expects($this->once())
+			->method('update')
+			->with($old, $data);
+
+		$this->store->updateWineSort($old, $data);
 	}
 
 }

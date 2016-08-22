@@ -26,13 +26,13 @@ use Weinstein\Support\ActivityLog\ActivityLogger;
 
 class ActivityLoggerServiceProvider extends ServiceProvider {
 
-    /**
-     * Register activity log services
-     */
-    public function register() {
-        $this->app->singleton('ActivityLogger', function() {
-            return new ActivityLogger();
-        });
-    }
-    
+	/**
+	 * Register activity log services
+	 */
+	public function register() {
+		$this->app->singleton('ActivityLogger', function() {
+			return new ActivityLogger();
+		});
+	}
+
 }

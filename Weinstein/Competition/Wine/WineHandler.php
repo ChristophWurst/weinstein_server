@@ -22,9 +22,10 @@
 namespace Weinstein\Competition\Wine;
 
 use ActivityLogger;
+use App\Exceptions\ValidationException as ValidationException;
 use App\MasterData\Competition;
-use App\Wine;
 use App\MasterData\User;
+use App\Wine;
 use Illuminate\Database\Eloquent\Collection as Collection2;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +36,6 @@ use phpDocumentor\Reflection\DocBlock\Type\Collection;
 use PHPExcel_IOFactory;
 use SebastianBergmann\RecursionContext\Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use App\Exceptions\ValidationException as ValidationException;
 
 class WineHandler {
 

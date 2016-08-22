@@ -24,6 +24,7 @@ namespace Weinstein\Applicant;
 use ActivityLogger;
 use Address;
 use App\Database\Repositories\UserRepository;
+use App\Exceptions\ValidationException;
 use App\MasterData\Applicant;
 use App\MasterData\User;
 use Illuminate\Support\Collection;
@@ -32,7 +33,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 use PHPExcel_IOFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use App\Exceptions\ValidationException;
 use function str_random;
 
 class ApplicantHandler {

@@ -153,7 +153,6 @@ return [
 		Weinstein\Competition\TastingSession\Taster\TasterServiceProvider::class,
 		Weinstein\Competition\TastingSession\Tasting\TastingServiceProvider::class,
 		Weinstein\Competition\Wine\WineServiceProvider::class,
-		Weinstein\WineSort\WineSortServiceProvider::class,
 		Weinstein\Support\ActivityLog\ActivityLoggerServiceProvider::class,
 	],
 	/*

@@ -19,19 +19,22 @@
  *
  */
 
-namespace Weinstein\Support\Facades;
+namespace App\Database\Repositories;
 
-use Illuminate\Support\Facades\Facade;
+use App\MasterData\WineSort;
 
-class AssociationHandlerFacade extends Facade {
+class WineSortRepository {
 
-    /**
-     * Get IoC binding name
-     * 
-     * @return string
-     */
-    protected static function getFacadeAccessor() {
-        return 'AssociationHandler';
-    }
+	public function findAll() {
+		return WineSort::all();
+	}
+
+	public function create(array $data) {
+		return WineSort::create($data);
+	}
+
+	public function update(WineSort $wineSort, array $data) {
+		$wineSort->update($data);
+	}
 
 }

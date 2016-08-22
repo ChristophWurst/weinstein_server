@@ -25,8 +25,10 @@ use App\Contracts\MasterDataStore;
 use App\Database\Repositories\AssociationRepository;
 use App\Database\Repositories\CompetitionRepository;
 use App\Database\Repositories\UserRepository;
+use App\Database\Repositories\WineSortRepository;
 use App\Exceptions\NotImplementedException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class Store implements MasterDataStore {
 
@@ -39,11 +41,15 @@ class Store implements MasterDataStore {
 	/** @var UserRepository */
 	private $userRepository;
 
-	public function __construct(AssociationRepository $associationRepository,
-		CompetitionRepository $competitionRepository, UserRepository $userRepository) {
+	/** @var WineSortRepository */
+	private $wineSortRepository;
+
+	public function __construct(AssociationRepository $associationRepository, CompetitionRepository $competitionRepository,
+		UserRepository $userRepository, WineSortRepository $wineSortRepository) {
 		$this->associationRepository = $associationRepository;
 		$this->competitionRepository = $competitionRepository;
 		$this->userRepository = $userRepository;
+		$this->wineSortRepository = $wineSortRepository;
 	}
 
 	public function getApplicants() {
@@ -124,7 +130,7 @@ class Store implements MasterDataStore {
 		]);
 	}
 
-	public function createUser($data) {
+	public function createUser(array $data) {
 		$userValidator = new UserValidator($data);
 		$userValidator->validateCreate();
 		$user = $this->userRepository->create($data);
@@ -142,6 +148,24 @@ class Store implements MasterDataStore {
 	public function deleteUser(User $user) {
 		$this->userRepository->delete($user);
 		//ActivityLogger::log('Benutzer [' . $username . '] gel&ouml;scht');
+	}
+
+	public function getWineSorts() {
+		return $this->wineSortRepository->findAll();
+	}
+
+	public function createWineSort(array $data) {
+		$validator = new WineSortValidator($data);
+		$validator->validateCreate();
+
+		return $this->wineSortRepository->create($data);
+	}
+
+	public function updateWineSort(WineSort $wineSort, array $data) {
+		$validator = new WineSortValidator($data, $wineSort);
+		$validator->validateUpdate();
+
+		$this->wineSortRepository->update($wineSort, $data);
 	}
 
 }
