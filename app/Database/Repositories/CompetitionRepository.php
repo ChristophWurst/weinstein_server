@@ -29,4 +29,8 @@ class CompetitionRepository {
 		return Competition::all();
 	}
 
+	public function update(Competition $competition) {
+		$competition->save();
+	}
+
 }

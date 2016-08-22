@@ -22,11 +22,11 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\MasterDataStore;
+use App\Contracts\TastingHandler;
 use App\Http\Controllers\BaseController;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\Tasting\TastingStage;
-use CompetitionHandler;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
@@ -40,12 +40,16 @@ class CompetitionController extends BaseController {
 	/** @var MasterDataStore */
 	private $masterDataStore;
 
+	/** @var TastingHandler */
+	private $tastingHandler;
+
 	/** @var AuthManager */
 	private $auth;
 
-	public function __construct(MasterDataStore $masterDataStore, AuthManager $auth) {
+	public function __construct(MasterDataStore $masterDataStore, TastingHandler $tastingHandler, AuthManager $auth) {
 		parent::__construct();
 		$this->masterDataStore = $masterDataStore;
+		$this->tastingHandler = $tastingHandler;
 		$this->auth = $auth;
 	}
 
@@ -59,7 +63,7 @@ class CompetitionController extends BaseController {
 		$competitions = $this->masterDataStore->getCompetitions($user);
 
 		return view('settings/competition/index')->with([
-			'competitions' => $competitions,
+				'competitions' => $competitions,
 		]);
 	}
 
@@ -114,7 +118,7 @@ class CompetitionController extends BaseController {
 		$this->authorize('complete-competition-tasting');
 
 		if (Input::has('del') && Input::get('del') == 'Ja') {
-			CompetitionHandler::lockTasting($competition, $tasting);
+			$this->tastingHandler->lockTasting($competition, $tasting);
 		}
 		return Redirect::route('competition/show', ['competiion' => $competition->id]);
 	}
@@ -138,7 +142,7 @@ class CompetitionController extends BaseController {
 		$this->authorize('complete-competition-kdb');
 
 		if (Input::has('del') && Input::get('del') == 'Ja') {
-			CompetitionHandler::lockKdb($competition);
+			$this->tastingHandler->lockKdb($competition);
 		}
 		return Redirect::route('competition/show', ['competiion' => $competition->id]);
 	}
@@ -162,7 +166,7 @@ class CompetitionController extends BaseController {
 		$this->authorize('complete-competition-excluded');
 
 		if (Input::has('del') && Input::get('del') == 'Ja') {
-			CompetitionHandler::lockExcluded($competition);
+			$this->tastingHandler->lockExcluded($competition);
 		}
 		return Redirect::route('competition/show', ['competiion' => $competition->id]);
 	}
@@ -186,7 +190,7 @@ class CompetitionController extends BaseController {
 		$this->authorize('complete-competition-sosi');
 
 		if (Input::has('del') && Input::get('del') == 'Ja') {
-			CompetitionHandler::lockSosi($competition);
+			$this->tastingHandler->lockSosi($competition);
 		}
 		return Redirect::route('competition/show', ['competiion' => $competition->id]);
 	}
@@ -210,7 +214,7 @@ class CompetitionController extends BaseController {
 		$this->authorize('complete-competition-tasting-numbers');
 
 		if (Input::has('del') && Input::get('del') == 'Ja') {
-			CompetitionHandler::lockChoosing($competition);
+			$this->tastingHandler->lockChoosing($competition);
 		}
 		return Redirect::route('competition/show', ['competiion' => $competition->id]);
 	}
@@ -246,8 +250,10 @@ class CompetitionController extends BaseController {
 		$this->authorize('complete-competition-tasting-numbers');
 
 		if (Input::has('del') && Input::get('del') == 'Ja') {
-			CompetitionHandler::lockTastingNumbers($competition, $tasting);
-			return Redirect::route('competition/show', ['competition' => $competition->id]);
+			$this->tastingHandler->lockTastingNumbers($competition, $tasting);
+			return Redirect::route('competition/show', [
+					'competition' => $competition->id
+			]);
 		}
 		return Redirect::route('tasting.numbers', ['competition' => $competition->id]);
 	}
@@ -269,8 +275,8 @@ class CompetitionController extends BaseController {
 	public function postReset(Competition $competition) {
 		$this->authorize('reset-competition', $competition);
 
-		if (Input::has('reset') && Input::get('reset') == 'Ja') {
-			CompetitionHandler::reset($competition);
+		if (Input::has('reset') && Input::get('reset') === 'Ja') {
+			$this->masterDataStore->resetCompetition($competition);
 		}
 		return Redirect::route('settings.competitions');
 	}

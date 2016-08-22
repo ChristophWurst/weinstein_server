@@ -123,8 +123,8 @@ class TastingNumberHandler {
 					throw new ValidationException(new MessageBag(array('Fehler beim Lesen der Datei')));
 				}
 				$data = array(
-				    'nr' => $row[0],
-				    'wine_nr' => $row[1],
+					'nr' => $row[0],
+					'wine_nr' => $row[1],
 				);
 				$this->create($data, $competition);
 				$rowCount++;
@@ -132,7 +132,7 @@ class TastingNumberHandler {
 		} catch (ValidationException $ve) {
 			DB::rollback();
 			$messages = new MessageBag(array(
-			    'row' => 'Fehler in Zeile ' . $rowCount,
+				'row' => 'Fehler in Zeile ' . $rowCount,
 			));
 			$messages->merge($ve->getErrors());
 			throw new ValidationException($messages);

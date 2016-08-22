@@ -22,6 +22,7 @@
 namespace App\Contracts;
 
 use App\MasterData\Association;
+use App\MasterData\Competition;
 use App\MasterData\User;
 use Illuminate\Support\Collection;
 
@@ -54,6 +55,11 @@ interface MasterDataStore {
 	 */
 	public function getCompetitions(User $user = null);
 
+	/**
+	 * @param Competition $competition
+	 */
+	public function resetCompetition(Competition $competition);
+	
 	/**
 	 * @return Collection
 	 */

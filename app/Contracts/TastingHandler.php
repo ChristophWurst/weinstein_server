@@ -21,6 +21,45 @@
 
 namespace App\Contracts;
 
+use App\MasterData\Competition;
+
 interface TastingHandler {
 
+	/**
+	 * @param Competition $competition
+	 * @param int $tasting
+	 */
+	public function lockTastingNumbers(Competition $competition, $tasting);
+
+	/**
+	 * @param Competition $competition
+	 * @param int $tasting
+	 */
+	public function lockTasting(Competition $competition, $tasting);
+
+	/**
+	 * @param Competition $competition
+	 */
+	public function lockKdb(Competition $competition);
+
+	/**
+	 * @param Competition $competition
+	 */
+	public function lockExcluded(Competition $competition);
+
+	/**
+	 * @param Competition $competition
+	 */
+	public function lockSosi(Competition $competition);
+
+	/**
+	 * @param Competition $competition
+	 */
+	public function lockChoosing(Competition $competition);
+
+	/**
+	 * @param Competition $competition
+	 * @return boolean
+	 */
+	public function isTastingFinished(Competition $competition);
 }

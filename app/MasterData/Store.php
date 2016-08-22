@@ -82,6 +82,38 @@ class Store implements MasterDataStore {
 		return $this->competitionRepository->findAll();
 	}
 
+	public function resetCompetition(Competition $competition) {
+		// TODO: refactor to non-static
+		DB::transaction(function() use ($competition) {
+			$competition->tastingsessions()->chunk(100,
+				function($sessions) {
+				foreach ($sessions as $session) {
+					foreach ($session->commissions as $commission) {
+						foreach ($commission->tasters as $taster) {
+							$taster->tastings()->delete();
+							$taster->delete();
+						}
+						$commission->delete();
+					}
+					$session->delete();
+				}
+			});
+			$competition->wines()->chunk(100,
+				function($wines) {
+				foreach ($wines as $wine) {
+					$wine->tastingnumbers()->delete();
+					$wine->delete();
+				}
+			});
+
+			//$competition->user()->associate(null);
+			$competition->competitionstate()->associate(CompetitionState::find(CompetitionState::STATE_ENROLLMENT));
+			$competition->save();
+		});
+		//ActivityLogger::log('Bewerb [' . $competition->label . '] zur&uuml;ckgesetzt');
+		//return $this->competitionRepository->reset($competition);
+	}
+
 	public function getUsers(User $user = null) {
 		if (is_null($user) || $user->admin) {
 			return $this->userRepository->findAll();

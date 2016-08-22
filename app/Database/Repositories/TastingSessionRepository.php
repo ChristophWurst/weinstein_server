@@ -19,20 +19,14 @@
  *
  */
 
-namespace Weinstein\Competition;
+namespace App\Database\Repositories;
 
-use App\MasterData\Competition;
-use Illuminate\Database\Eloquent\Collection;
+use App\Tasting\TastingSession;
 
-class CompetitionDataProvider {
+class TastingSessionRepository {
 
-	/**
-	 * Get all competitions
-	 * 
-	 * @return Collection
-	 */
-	public function getAll() {
-		return Competition::orderBy('created_at', 'desc')->get();
+	public function update(TastingSession $tastingSession) {
+		$tastingSession->save();
 	}
 
 }

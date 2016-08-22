@@ -25,7 +25,7 @@ use App\Contracts\TastingHandler;
 use App\Tasting\Handler;
 use Illuminate\Support\ServiceProvider;
 
-class EnrollmentServiceProvider extends ServiceProvider {
+class TastingServiceProvider extends ServiceProvider {
 
 	protected $defer = true;
 

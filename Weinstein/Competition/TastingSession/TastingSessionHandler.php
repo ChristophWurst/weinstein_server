@@ -178,15 +178,4 @@ class TastingSessionHandler {
 		return \TasterHandler::getAll($tastingSession);
 	}
 
-	/**
-	 * Check if tasting has finished or if there are remaining tasting numbers
-	 * 
-	 * @param Competition $competition
-	 * @param TastingStage $tastingStage
-	 * @return boolean
-	 */
-	public function tastingFinished(Competition $competition) {
-		return \TastingNumberHandler::getUntasted($competition, $competition->getTastingStage())->count() === 0;
-	}
-
 }
