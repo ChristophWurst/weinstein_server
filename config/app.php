@@ -147,7 +147,6 @@ return [
 		 */
 		App\Providers\MasterDataServiceProvider::class,
 		App\Providers\TastingServiceProvider::class,
-		Weinstein\Applicant\ApplicantServiceProvider::class,
 		Weinstein\Competition\TastingNumber\TastingNumberServiceProvider::class,
 		Weinstein\Competition\TastingSession\TastingSessionServiceProvider::class,
 		Weinstein\Competition\TastingSession\Taster\TasterServiceProvider::class,
