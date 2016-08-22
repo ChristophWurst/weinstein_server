@@ -19,10 +19,10 @@
  *
  */
 
-namespace Weinstein\Applicant;
+namespace App\MasterData;
 
+use App\Validation\Validator;
 use Illuminate\Database\Eloquent\Model;
-use Weinstein\Support\Validation\Validator as Validator;
 
 class AddressValidator extends Validator {
 
@@ -31,7 +31,7 @@ class AddressValidator extends Validator {
 	 * 
 	 * @var string
 	 */
-	protected $modelClass = 'Address';
+	protected $modelClass = Address::class;
 
 	/**
 	 * Get attribute names
@@ -40,10 +40,10 @@ class AddressValidator extends Validator {
 	 */
 	protected function getAttributeNames() {
 		return array(
-		    'street' => 'Straße',
-		    'nr' => 'Nr',
-		    'zipcode' => 'PLZ',
-		    'city' => 'Ort'
+			'street' => 'Straße',
+			'nr' => 'Nr',
+			'zipcode' => 'PLZ',
+			'city' => 'Ort'
 		);
 	}
 
@@ -55,10 +55,10 @@ class AddressValidator extends Validator {
 	 */
 	protected function getCreateRules(array $data) {
 		return array(
-		    'street' => 'max:100',
-		    'nr' => 'max:20',
-		    'zipcode' => 'required|integer|between:1000,9999',
-		    'city' => 'max:70'
+			'street' => 'max:100',
+			'nr' => 'max:20',
+			'zipcode' => 'required|integer|between:1000,9999',
+			'city' => 'max:70'
 		);
 	}
 

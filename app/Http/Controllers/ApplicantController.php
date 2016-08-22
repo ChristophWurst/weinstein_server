@@ -21,20 +21,31 @@
 
 namespace App\Http\Controllers;
 
-use App\MasterData\Applicant;
+use App\Contracts\MasterDataStore;
+use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use ApplicantHandler;
-use Association;
+use App\MasterData\Applicant;
+use Illuminate\Auth\AuthManager;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
-use User;
-use App\Exceptions\ValidationException;
+use function view;
 
 class ApplicantController extends BaseController {
+
+	/** @var MasterDataStore */
+	private $masterDataStore;
+
+	/** @var AuthManager */
+	private $auth;
+
+	public function __construct(MasterDataStore $masterDataStore, AuthManager $auth) {
+		parent::__construct();
+		$this->masterDataStore = $masterDataStore;
+		$this->auth = $auth;
+	}
 
 	/**
 	 * Display a listing of all applicants the user is permitted to see
@@ -42,8 +53,9 @@ class ApplicantController extends BaseController {
 	 * @return Response
 	 */
 	public function index() {
-		return View::make('settings/applicant/index')
-				->withApplicants(ApplicantHandler::getUsersApplicants(Auth::user()));
+		$user = $this->auth->user();
+		$applicants = $this->masterDataStore->getApplicants($user);
+		return view('settings/applicant/index')->withApplicants($applicants);
 	}
 
 	/**
@@ -54,9 +66,9 @@ class ApplicantController extends BaseController {
 	public function create() {
 		$this->authorize('create-applicant');
 
-		return View::make('settings/applicant/form')
-				->withAssociations(Association::all()->lists('select_label', 'id')->all())
-				->withUsers($this->selectNone + User::all()->lists('username', 'username')->all());
+		return view('settings/applicant/form')
+				->withAssociations($this->masterDataStore->getAssociations()->lists('select_label', 'id')->all())
+				->withUsers($this->selectNone + $this->masterDataStore->getUsers()->lists('username', 'username')->all());
 	}
 
 	/**
@@ -73,7 +85,7 @@ class ApplicantController extends BaseController {
 			unset($data['wuser_username']);
 		}
 		try {
-			ApplicantHandler::create($data);
+			$this->masterDataStore->createApplicant($data);
 		} catch (ValidationException $ve) {
 			return Redirect::route('settings.applicants/create')
 					->withErrors($ve->getErrors())
@@ -121,7 +133,8 @@ class ApplicantController extends BaseController {
 		}
 
 		try {
-			$rowsImported = ApplicantHandler::import(Input::file('xlsfile'));
+			$file = Input::file('xlsfile');
+			$this->masterDataStore->importApplicants($file);
 		} catch (ValidationException $ve) {
 			return Redirect::route('settings.applicants/import')->withErrors($ve->getErrors());
 		}
@@ -138,12 +151,12 @@ class ApplicantController extends BaseController {
 	public function edit(Applicant $applicant) {
 		$this->authorize('edit-applicant', $applicant);
 
-		$editId = $applicant->association->administrates(Auth::user());
+		$editId = $applicant->association->administrates($this->auth->user());
 		return View::make('settings/applicant/form')
 				->withApplicant($applicant)
 				->withEditId($editId)
-				->withAssociations(Association::all()->lists('select_label', 'id')->all())
-				->withUsers($this->selectNone + User::all()->lists('username', 'username')->all());
+				->withAssociations($this->masterDataStore->getAssociations()->lists('select_label', 'id')->all())
+				->withUsers($this->selectNone + $this->masterDataStore->getUsers()->lists('username', 'username')->all());
 	}
 
 	/**
@@ -162,12 +175,18 @@ class ApplicantController extends BaseController {
 		}
 
 		// Ignore id if user isn't the association admin
-		if (!$applicant->association->administrates(Auth::user())) {
+		if (!$applicant->association->administrates($this->auth->user())) {
 			$data['id'] = $applicant->id;
 		}
+		if (!$this->auth->user()->isAdmin()) {
+			unset($data['wuser_username']);
+		} else if (isset($data['wuser_username']) && $data['wuser_username'] === '') {
+			$data['wuser_username'] = null;
+		}
+
 
 		try {
-			ApplicantHandler::update($applicant, $data);
+			$this->masterDataStore->updateApplicant($applicant, $data);
 		} catch (ValidationException $ve) {
 			return Redirect::route('settings.applicants/edit', ['applicant' => $applicant->id])
 					->withErrors($ve->getErrors())

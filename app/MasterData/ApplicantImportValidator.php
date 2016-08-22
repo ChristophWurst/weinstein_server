@@ -19,39 +19,24 @@
  *
  */
 
-namespace Weinstein\Applicant;
+namespace App\MasterData;
 
-use App\MasterData\Applicant;
-use App\MasterData\User;
+use App\Validation\FileValidator;
 
-class ApplicantDataProvider {
-
-	/**
-	 * Get all applicants
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Collection
-	 */
-	public function getAllApplicants() {
-		return Applicant::all();
-	}
+class ApplicantImportValidator extends FileValidator {
 
 	/**
-	 * Get given users administrated applicants
+	 * Files title for validation error messages
 	 * 
-	 * @param App\MasterData\User $user
-	 * @return \Illuminate\Database\Eloquent\Collection
+	 * @var string 
 	 */
-	public function getApplicantsForUser(User $user) {
-		//direct
-		$applicants = $user->applicants()->get();
+	protected $fileTitle = 'Excel Datei';
 
-		//indirect
-		foreach ($user->associations()->get() as $association) {
-			$applicants = $applicants->merge($association->applicants()->get());
-		}
-
-		$applicants->sortBy('id');
-		return $applicants;
-	}
+	/**
+	 * Allowed mime types
+	 * 
+	 * @var string
+	 */
+	protected $mimeTypes = 'xls,xlsx';
 
 }

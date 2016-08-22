@@ -23,6 +23,7 @@ namespace App\MasterData;
 
 use App\AdministrateModel;
 use App\MasterData\User;
+use App\Wine;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
@@ -103,7 +104,7 @@ class Applicant extends Model implements AdministrateModel {
 	 * @return type
 	 */
 	public function address() {
-		return $this->belongsTo('Address');
+		return $this->belongsTo(Address::class);
 	}
 
 	/**
@@ -112,7 +113,7 @@ class Applicant extends Model implements AdministrateModel {
 	 * @return type
 	 */
 	public function association() {
-		return $this->belongsTo('Association');
+		return $this->belongsTo(Association::class);
 	}
 
 	/**
@@ -121,7 +122,7 @@ class Applicant extends Model implements AdministrateModel {
 	 * @return type
 	 */
 	public function user() {
-		return $this->belongsTo('User', 'wuser_username', 'username');
+		return $this->belongsTo(User::class, 'wuser_username', 'username');
 	}
 
 	/**
@@ -130,7 +131,7 @@ class Applicant extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function wines() {
-		return $this->hasMany('Wine');
+		return $this->hasMany(Wine::class);
 	}
 
 }

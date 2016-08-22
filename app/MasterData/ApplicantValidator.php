@@ -19,10 +19,10 @@
  *
  */
 
-namespace Weinstein\Applicant;
+namespace App\MasterData;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Validation\Validator;
+use Illuminate\Database\Eloquent\Model;
 
 class ApplicantValidator extends Validator {
 
@@ -31,7 +31,7 @@ class ApplicantValidator extends Validator {
 	 *
 	 * @var string
 	 */
-	protected $modelClass = 'App\MasterData\Applicant';
+	protected $modelClass = Applicant::class;
 
 	/**
 	 * Get attribute names
@@ -40,18 +40,18 @@ class ApplicantValidator extends Validator {
 	 */
 	protected function getAttributeNames() {
 		return array(
-		    'id' => 'Betriebsnummer',
-		    'association_id.' => 'Vereinsnummer',
-		    'label' => 'Bezeichnung',
-		    'title' => 'Titel',
-		    'firstname' => 'Vorname',
-		    'lastname' => 'Nachname',
-		    'phone' => 'Telefonnummer',
-		    'fax' => 'Faxnummer',
-		    'mobile' => 'Mobilnummer',
-		    'email' => 'Emailadresse',
-		    'web' => 'Webseite',
-		    'wuser_username' => 'Benutzer',
+			'id' => 'Betriebsnummer',
+			'association_id.' => 'Vereinsnummer',
+			'label' => 'Bezeichnung',
+			'title' => 'Titel',
+			'firstname' => 'Vorname',
+			'lastname' => 'Nachname',
+			'phone' => 'Telefonnummer',
+			'fax' => 'Faxnummer',
+			'mobile' => 'Mobilnummer',
+			'email' => 'Emailadresse',
+			'web' => 'Webseite',
+			'wuser_username' => 'Benutzer',
 		);
 	}
 
@@ -62,17 +62,17 @@ class ApplicantValidator extends Validator {
 	 */
 	protected function getCreateRules(array $data) {
 		return array(
-		    'id' => 'Required|Integer|Min:10000|Unique:applicant',
-		    'label' => 'max:50',
-		    'title' => 'max:30',
-		    'firstname' => 'min:3|max:80',
-		    'lastname' => 'Required|min:3|max:80',
-		    'phone' => 'max:20',
-		    'fax' => 'max:20',
-		    'mobile' => 'max:20',
-		    'email' => 'email|max:50',
-		    'web' => 'max:50',
-		    'wuser_username' => 'Exists:wuser,username',
+			'id' => 'Required|Integer|Min:10000|Unique:applicant',
+			'label' => 'max:50',
+			'title' => 'max:30',
+			'firstname' => 'min:3|max:80',
+			'lastname' => 'Required|min:3|max:80',
+			'phone' => 'max:20',
+			'fax' => 'max:20',
+			'mobile' => 'max:20',
+			'email' => 'email|max:50',
+			'web' => 'max:50',
+			'wuser_username' => 'Exists:wuser,username',
 		);
 	}
 
@@ -90,17 +90,18 @@ class ApplicantValidator extends Validator {
 			$rules = array('id' => 'Required|Integer|Min:10000|Unique:applicant');
 		}
 
-		return array_merge($rules, array(
-		    'label' => 'max:50',
-		    'title' => 'max:30',
-		    'firstname' => 'min:3|max:80',
-		    'lastname' => 'Required|min:3|max:80',
-		    'phone' => 'max:20',
-		    'fax' => 'max:20',
-		    'mobile' => 'max:20',
-		    'email' => 'email|max:50',
-		    'web' => 'max:50',
-		    'wuser_username' => 'Exists:wuser,username',
+		return array_merge($rules,
+			array(
+			'label' => 'max:50',
+			'title' => 'max:30',
+			'firstname' => 'min:3|max:80',
+			'lastname' => 'Required|min:3|max:80',
+			'phone' => 'max:20',
+			'fax' => 'max:20',
+			'mobile' => 'max:20',
+			'email' => 'email|max:50',
+			'web' => 'max:50',
+			'wuser_username' => 'Exists:wuser,username',
 		));
 	}
 

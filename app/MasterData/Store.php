@@ -22,15 +22,24 @@
 namespace App\MasterData;
 
 use App\Contracts\MasterDataStore;
+use App\Database\Repositories\ApplicantRepository;
 use App\Database\Repositories\AssociationRepository;
 use App\Database\Repositories\CompetitionRepository;
 use App\Database\Repositories\UserRepository;
 use App\Database\Repositories\WineSortRepository;
 use App\Exceptions\NotImplementedException;
+use App\Exceptions\ValidationException;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\MessageBag;
+use PHPExcel_IOFactory;
+use function str_random;
 
 class Store implements MasterDataStore {
+
+	/** @var ApplicantRepository */
+	private $applicantRepository;
 
 	/** @var AssociationRepository */
 	private $associationRepository;
@@ -44,16 +53,147 @@ class Store implements MasterDataStore {
 	/** @var WineSortRepository */
 	private $wineSortRepository;
 
-	public function __construct(AssociationRepository $associationRepository, CompetitionRepository $competitionRepository,
-		UserRepository $userRepository, WineSortRepository $wineSortRepository) {
+	public function __construct(ApplicantRepository $applicantRepository, AssociationRepository $associationRepository,
+		CompetitionRepository $competitionRepository, UserRepository $userRepository, WineSortRepository $wineSortRepository) {
+		$this->applicantRepository = $applicantRepository;
 		$this->associationRepository = $associationRepository;
 		$this->competitionRepository = $competitionRepository;
 		$this->userRepository = $userRepository;
 		$this->wineSortRepository = $wineSortRepository;
 	}
 
-	public function getApplicants() {
-		throw new NotImplementedException();
+	public function getApplicants(User $user = null) {
+		if (is_null($user) || $user->isAdmin()) {
+			return $this->applicantRepository->findAll();
+		}
+		return $this->applicantRepository->findForUser($user);
+	}
+
+	public function createApplicant(array $data) {
+		$applicantValidationException = null;
+
+		//validate applicant
+		try {
+			$applicantValidator = new ApplicantValidator($data);
+			$applicantValidator->validateCreate();
+		} catch (ValidationException $ve) {
+			$applicantValidationException = $ve;
+		}
+		//validate address
+		try {
+			$addressValidator = new AddressValidator($data);
+			$addressValidator->validateCreate();
+		} catch (ValidationException $ve) {
+			if ($applicantValidationException) {
+				$merged = $applicantValidationException->merge($ve);
+				throw $merged;
+			}
+			throw ($ve);
+		}
+		if ($applicantValidationException) {
+			throw $applicantValidationException;
+		}
+
+		$applicant = $this->applicantRepository->create($data);
+
+		//ActivityLogger::log('Betrieb [' . $data['id'] . '] erstellt');
+		$this->createApplicantUser($applicant);
+
+		return $applicant;
+	}
+
+	public function importApplicants(UploadedFile $file) {
+		//validate file (mime types)
+		$fileValidator = new ApplicantImportValidator($file);
+		$fileValidator->validate();
+
+		//iterate over all entries and try to store them
+		//if exceptions occur, all db actions are rolled back to prevent data 
+		//inconsistency
+		$doc = PHPExcel_IOFactory::load($file->getRealPath());
+		$sheet = $doc->getActiveSheet();
+
+		$rowCount = 0;
+		DB::beginTransaction();
+		try {
+			foreach ($sheet->toArray() as $row) {
+				//ignore null rows
+				$empty = true;
+				for ($i = 0; $i <= 14; $i++) {
+					if ($row[$i] != null && $row[$i] != '') {
+						$empty = false;
+					}
+				}
+				if ($empty) {
+					continue;
+				}
+
+				$rowCount++;
+				$data = array(
+					'id' => $row[0],
+					'label' => $row[1],
+					'title' => $row[2],
+					'firstname' => $row[3],
+					'lastname' => $row[4],
+					'street' => $row[5],
+					'zipcode' => $row[6],
+					'city' => $row[7],
+					'phone' => $row[8],
+					'fax' => $row[9],
+					'mobile' => $row[10],
+					'email' => $row[11],
+					'web' => $row[12],
+					'association_id' => $row[13],
+				);
+
+				//unset email if empty string
+				if ($data['email'] === '') {
+					unset($data['email']);
+				}
+				$this->create($data);
+			}
+		} catch (ValidationException $ve) {
+			DB::rollback();
+			$messages = new MessageBag(array(
+				'row' => 'Fehler in Zeile ' . $rowCount,
+			));
+			$messages->merge($ve->getErrors());
+			throw new ValidationException($messages);
+		}
+		DB::commit();
+		//ActivityLogger::log($rowCount . ' Betriebe importiert');
+		//return number of read lines
+		return $rowCount;
+	}
+
+	public function updateApplicant(Applicant $applicant, array $data) {
+		$applicantValidationException = null;
+
+		//validate applicant
+		try {
+			$applicantValidator = new ApplicantValidator($data, $applicant);
+			$applicantValidator->validateUpdate();
+		} catch (ValidationException $ve) {
+			$applicantValidationException = $ve;
+		}
+		//validate address
+		try {
+			$addressValidator = new AddressValidator($data, $applicant->address);
+			$addressValidator->validateUpdate();
+		} catch (ValidationException $ve) {
+			if ($applicantValidationException) {
+				$merged = $applicantValidationException->merge($ve);
+				throw $merged;
+			}
+			throw ($ve);
+		}
+		if ($applicantValidationException) {
+			throw $applicantValidationException;
+		}
+
+		$this->applicantRepository->update($applicant, $data);
+		//ActivityLogger::log('Betrieb [' . $applicant->id . '] bearbeitet');
+		return $applicant;
 	}
 
 	public function getAssociations(User $user = null) {
@@ -166,6 +306,27 @@ class Store implements MasterDataStore {
 		$validator->validateUpdate();
 
 		$this->wineSortRepository->update($wineSort, $data);
+	}
+
+	/**
+	 * Create user for applicant it it does not exist
+	 * 
+	 * @param Applicant $applicant
+	 * @return Applicant
+	 */
+	private function createApplicantUser(Applicant $applicant) {
+		//for better security, existing users are not associated with the new applicant
+		if (!User::find($applicant->id)) {
+			$user = $this->userRepository->create([
+				'username' => $applicant->id,
+				'password' => str_random(15), //random password for better security
+				'admin' => false,
+			]);
+			$applicant->user()->associate($user);
+			$applicant->save();
+		}
+		//ActivityLogger::log('Benutzer [' . $user->username . '] erstellt (zum Betrieb)');
+		return $applicant;
 	}
 
 }

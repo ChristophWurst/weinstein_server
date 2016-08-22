@@ -23,6 +23,7 @@ namespace App\MasterData;
 
 use App\MasterData\Competition;
 use App\MasterData\WineSort;
+use App\Wine;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
@@ -73,7 +74,7 @@ class WineSort extends Model {
 	 * @return Relation
 	 */
 	public function wines() {
-		return $this->hasMany('Wine', 'winesort_id');
+		return $this->hasMany(Wine::class, 'winesort_id');
 	}
 
 }

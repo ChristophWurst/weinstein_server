@@ -27,8 +27,8 @@
             $options = [
                 'class' => 'form-control'
             ];
-            if (!$edit) {
-                $options['disabled'] = 'disabled';
+            if ($edit) {
+                $options['readonly'] = 'readonly';
             }
             ?>
             {!! Form::text('id', ($edit ? $applicant->id : ''), $options) !!}

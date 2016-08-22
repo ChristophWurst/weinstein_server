@@ -21,24 +21,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\MasterDataStore;
+use App\Exceptions\ValidationException;
+use App\MasterData\WineSort;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
-use App\Exceptions\ValidationException;
-use WineSortHandler;
-use WineSort;
 
 class WineSortController extends BaseController {
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-		parent::__construct();
+	/** @var MasterDataStore */
+	private $masterDataStore;
 
-		//register filters
-		$this->middleware('auth');
-		$this->middleware('@filterAdmin');
+	public function __construct(MasterDataStore $masterDataStore) {
+		parent::__construct();
+		$this->masterDataStore = $masterDataStore;
 	}
 
 	/**
@@ -49,7 +47,7 @@ class WineSortController extends BaseController {
 	public function index() {
 		$this->authorize('list-winesorts');
 
-		return View::make('settings/winesorts/index')->with('sorts', WineSort::all());
+		return View::make('settings/winesorts/index')->with('sorts', $this->masterDataStore->getWineSorts());
 	}
 
 	/**
@@ -72,7 +70,8 @@ class WineSortController extends BaseController {
 		$this->authorize('create-winesort');
 
 		try {
-			WineSortHandler::create(Input::all());
+			$data = Input::all();
+			$this->masterDataStore->createWineSort($data);
 		} catch (ValidationException $ve) {
 			return Redirect::route('settings.winesorts/create')
 					->withErrors($ve->getErrors())
@@ -91,7 +90,7 @@ class WineSortController extends BaseController {
 		$this->authorize('update-winesort', $wineSort);
 
 		return View::make('settings/winesorts/form')->with([
-			    'data' => $wineSort,
+				'data' => $wineSort,
 		]);
 	}
 
@@ -105,7 +104,8 @@ class WineSortController extends BaseController {
 		$this->authorize('update-winesort', $wineSort);
 
 		try {
-			WineSortHandler::update($wineSort, Input::all());
+			$data = Input::all();
+			$this->masterDataStore->updateWineSort($wineSort, $data);
 		} catch (ValidationException $ve) {
 			return Redirect::route('settings.winesorts/edit', ['winesort' => $wineSort->id])
 					->withErrors($ve->getErrors())

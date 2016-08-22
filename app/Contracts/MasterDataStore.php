@@ -21,10 +21,12 @@
 
 namespace App\Contracts;
 
+use App\MasterData\Applicant;
 use App\MasterData\Association;
 use App\MasterData\Competition;
 use App\MasterData\User;
 use App\MasterData\WineSort;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 
 interface MasterDataStore {
@@ -86,7 +88,24 @@ interface MasterDataStore {
 	/**
 	 * @return Collection
 	 */
-	public function getApplicants();
+	public function getApplicants(User $user = null);
+
+	/**
+	 * @param array $data
+	 * @return Applicant
+	 */
+	public function createApplicant(array $data);
+
+	/**
+	 * @param UploadedFile $file
+	 */
+	public function importApplicants(UploadedFile $file);
+
+	/**
+	 * @param Applicant $applicant
+	 * @param array $data
+	 */
+	public function updateApplicant(Applicant $applicant, array $data);
 
 	/**
 	 * @return Collection

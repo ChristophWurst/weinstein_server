@@ -21,6 +21,7 @@
 
 namespace App\MasterData;
 
+use App\Tasting\TastingSession;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -60,20 +61,27 @@ class User extends Authenticatable {
 	 * 
 	 * @var array of string
 	 */
-	protected $fillable = array(
+	protected $fillable = [
 		'username',
 		'password',
 		'admin'
-	);
+	];
 
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
 	 * @var array
 	 */
-	protected $hidden = array(
+	protected $hidden = [
 		'password'
-	);
+	];
+
+	/**
+	 * @var array
+	 */
+	protected $casts = [
+		'admin' => 'boolean',
+	];
 
 	public function administrates(User $user) {
 		if ($user->admin) {
@@ -109,7 +117,7 @@ class User extends Authenticatable {
 	 * @return Relation
 	 */
 	public function applicants() {
-		return $this->hasMany('Applicant', 'wuser_username', 'username');
+		return $this->hasMany(Applicant::class, 'wuser_username', 'username');
 	}
 
 	/**
@@ -119,7 +127,7 @@ class User extends Authenticatable {
 	 * @return Relation
 	 */
 	public function associationApplicants() {
-		return $this->hasManyThrough('Applicant', 'Association', 'wuser_username');
+		return $this->hasManyThrough(Applicant::class, Association::class, 'wuser_username');
 	}
 
 	/**
@@ -128,7 +136,7 @@ class User extends Authenticatable {
 	 * @return Relation
 	 */
 	public function associations() {
-		return $this->hasMany('Association', 'wuser_username', 'username');
+		return $this->hasMany(Association::class, 'wuser_username', 'username');
 	}
 
 	/**
@@ -137,7 +145,7 @@ class User extends Authenticatable {
 	 * @return Relation
 	 */
 	public function competitions() {
-		return $this->hasMany('Competition', 'wuser_username', 'username');
+		return $this->hasMany(Competition::class, 'wuser_username', 'username');
 	}
 
 	/**
@@ -146,7 +154,7 @@ class User extends Authenticatable {
 	 * @return Relation
 	 */
 	public function tastingsessions() {
-		return $this->hasMany('TastingSession', 'wuser_username', 'username');
+		return $this->hasMany(TastingSession::class, 'wuser_username', 'username');
 	}
 
 	/**
@@ -205,6 +213,17 @@ class User extends Authenticatable {
 
 	public function getEmailForPasswordReset() {
 		throw new Exception("method not implemented");
+	}
+
+	/**
+	 * Save way to determine if a user is admin
+	 * 
+	 * Catches null values (result in non-admin user state)
+	 * 
+	 * @return boolean
+	 */
+	public function isAdmin() {
+		return $this->admin === true;
 	}
 
 }
