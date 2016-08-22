@@ -21,18 +21,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\MasterDataStore;
+use App\Http\Controllers\BaseController;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\Tasting\TastingStage;
-use App\Http\Controllers\BaseController;
 use CompetitionHandler;
+use Illuminate\Auth\AuthManager;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 use Symfony\Component\Process\Exception\InvalidArgumentException;
+use function view;
 
 class CompetitionController extends BaseController {
+
+	/** @var MasterDataStore */
+	private $masterDataStore;
+
+	/** @var AuthManager */
+	private $auth;
+
+	public function __construct(MasterDataStore $masterDataStore, AuthManager $auth) {
+		parent::__construct();
+		$this->masterDataStore = $masterDataStore;
+		$this->auth = $auth;
+	}
 
 	/**
 	 * Show list of all competitions
@@ -40,8 +55,11 @@ class CompetitionController extends BaseController {
 	 * @return Response
 	 */
 	public function index() {
-		return View::make('settings/competition/index')->with([
-				'competitions' => CompetitionHandler::getAll(),
+		$user = $this->auth->user();
+		$competitions = $this->masterDataStore->getCompetitions($user);
+
+		return view('settings/competition/index')->with([
+			'competitions' => $competitions,
 		]);
 	}
 
@@ -52,7 +70,7 @@ class CompetitionController extends BaseController {
 	 * @return Response
 	 */
 	public function show(Competition $competition) {
-		return View::make('competition/show')
+		return view('competition/show')
 				->withCompetition($competition)
 				->withCompetitionStates(CompetitionState::all())
 				->withWines($competition->wines()->count())

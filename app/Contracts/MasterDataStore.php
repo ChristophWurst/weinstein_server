@@ -50,6 +50,11 @@ interface MasterDataStore {
 	public function deleteAssociation(Association $association);
 
 	/**
+	 * @param User $user
+	 */
+	public function getCompetitions(User $user = null);
+
+	/**
 	 * @return Collection
 	 */
 	public function getUsers(User $user = null);

@@ -23,6 +23,7 @@ namespace App\MasterData;
 
 use App\Contracts\MasterDataStore;
 use App\Database\Repositories\AssociationRepository;
+use App\Database\Repositories\CompetitionRepository;
 use App\Database\Repositories\UserRepository;
 use App\Exceptions\NotImplementedException;
 use Illuminate\Support\Collection;
@@ -32,11 +33,16 @@ class Store implements MasterDataStore {
 	/** @var AssociationRepository */
 	private $associationRepository;
 
+	/** @var CompetitionRepository */
+	private $competitionRepository;
+
 	/** @var UserRepository */
 	private $userRepository;
 
-	public function __construct(AssociationRepository $associationRepository, UserRepository $userRepository) {
+	public function __construct(AssociationRepository $associationRepository,
+		CompetitionRepository $competitionRepository, UserRepository $userRepository) {
 		$this->associationRepository = $associationRepository;
+		$this->competitionRepository = $competitionRepository;
 		$this->userRepository = $userRepository;
 	}
 
@@ -69,7 +75,11 @@ class Store implements MasterDataStore {
 	}
 
 	public function deleteAssociation(Association $association) {
-		
+		throw new NotImplementedException();
+	}
+
+	public function getCompetitions(User $user = null) {
+		return $this->competitionRepository->findAll();
 	}
 
 	public function getUsers(User $user = null) {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Database\Repositories\AssociationRepository;
+use App\Database\Repositories\CompetitionRepository;
 use App\Database\Repositories\UserRepository;
 use App\MasterData\Association;
 use App\MasterData\Store;
@@ -12,6 +13,9 @@ class StoreTest extends TestCase {
 	/** @var AssociationRepository|PHPUnit_Framework_MockObject_MockObject */
 	private $associationRepository;
 
+	/** @var CompetitionRepository|PHPUnit_Framework_MockObject_MockObject */
+	private $competitionRepository;
+
 	/** @var UserRepository|PHPUnit_Framework_MockObject_MockObject */
 	private $userRepository;
 
@@ -22,6 +26,7 @@ class StoreTest extends TestCase {
 		parent::setUp();
 
 		$this->associationRepository = $this->getSimpleClassMock(AssociationRepository::class);
+		$this->competitionRepository = $this->getSimpleClassMock(CompetitionRepository::class);
 		$this->userRepository = $this->getSimpleClassMock(UserRepository::class);
 		$this->store = new Store($this->associationRepository, $this->userRepository);
 	}
@@ -120,6 +125,16 @@ class StoreTest extends TestCase {
 			->method('update');
 
 		$this->store->updateAssociation($association, $data);
+	}
+
+	public function testGetAllCompetitions() {
+		$collection = new Collection();
+
+		$this->competitionRepository->expects($this->once())
+			->method('findAll')
+			->will($this->returnValue($collection));
+
+		$this->assertEquals($collection, $this->store->getCompetitions());
 	}
 
 	public function testGetAllUsers() {
