@@ -21,6 +21,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\ActivityLogger;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -31,12 +32,16 @@ use Illuminate\Support\Facades\View;
 
 class AuthenticationController extends BaseController {
 
+	/** @var ActivityLogger */
+	private $activityLogger;
+
 	/** @var AuthManager */
 	private $auth;
 
-	public function __construct(AuthManager $auth) {
+	public function __construct(AuthManager $auth, ActivityLogger $activityLogger) {
 		parent::__construct();
 		$this->auth = $auth;
+		$this->activityLogger = $activityLogger;
 	}
 
 	/**
@@ -71,13 +76,13 @@ class AuthenticationController extends BaseController {
 				'username' => $username,
 				'password' => $password
 				], true)) {
+			$this->activityLogger->logUserAction('hat sich am System angemeldet', $this->auth->user());
 			return Redirect::route('account');
 		}
 
 		Session::forget('successful');
 		Session::put('successful', false);
-		return Redirect::route('login')
-				->withInput();
+		return Redirect::route('login')->withInput();
 	}
 
 	/**
@@ -87,7 +92,9 @@ class AuthenticationController extends BaseController {
 	 */
 	public function logout() {
 		if (Auth::check()) {
+			$user = $this->auth->user();
 			Auth::logout();
+			$this->activityLogger->logUserAction('hat sich vom System abgemeldet', $user);
 		}
 		return Redirect::route('start');
 	}

@@ -21,6 +21,7 @@
 
 namespace App\MasterData;
 
+use App\Support\Activity\Log;
 use App\Tasting\TastingSession;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -108,7 +109,7 @@ class User extends Authenticatable {
 	 * @return Relation
 	 */
 	public function activitylogs() {
-		return $this->hasMany('ActivityLog', 'wuser_username', 'username');
+		return $this->hasMany(Log::class, 'wuser_username', 'username');
 	}
 
 	/**

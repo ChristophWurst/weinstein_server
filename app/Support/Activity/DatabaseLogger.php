@@ -19,32 +19,31 @@
  *
  */
 
-namespace App\Http\Controllers;
+namespace App\Support\Activity;
 
 use App\Contracts\ActivityLogger;
-use App\Http\Controllers\BaseController;
-use Illuminate\Http\Response;
+use App\Database\Repositories\ActivityLogRepository;
+use App\MasterData\User;
 
-class ActivityLogController extends BaseController {
+class DatabaseLogger implements ActivityLogger {
 
-	/** @var ActivityLogger */
-	private $activityLogger;
+	/** @var ActivityLogRepository */
+	private $activityLogRepository;
 
-	public function __construct(ActivityLogger $activityLogger) {
-		parent::__construct();
-
-		$this->activityLogger = $activityLogger;
+	public function __construct(ActivityLogRepository $activityLogRepository) {
+		$this->activityLogRepository = $activityLogRepository;
 	}
 
-	/**
-	 * Show all logs
-	 * 
-	 * @return Response
-	 */
-	public function index() {
-		$this->authorize('view-activitylog');
+	public function log($message) {
+		return $this->activityLogRepository->create($message);
+	}
 
-		return view('settings/activitylog/index')->with('logs', $this->activityLogger->getMostRecentLogs());
+	public function logUserAction($message, User $user) {
+		return $this->activityLogRepository->create($message, $user);
+	}
+
+	public function getMostRecentLogs($limit = 200) {
+		return $this->activityLogRepository->findMostRecent($limit);
 	}
 
 }

@@ -19,20 +19,25 @@
  *
  */
 
-namespace Weinstein\Support\ActivityLog;
+namespace App\Contracts;
 
-use Illuminate\Support\ServiceProvider;
-use Weinstein\Support\ActivityLog\ActivityLogger;
+use App\MasterData\User;
 
-class ActivityLoggerServiceProvider extends ServiceProvider {
+interface ActivityLogger {
 
 	/**
-	 * Register activity log services
+	 * @param string $message
 	 */
-	public function register() {
-		$this->app->singleton('ActivityLogger', function() {
-			return new ActivityLogger();
-		});
-	}
+	public function log($message);
 
+	/**
+	 * @param string $message
+	 * @param User $user
+	 */
+	public function logUserAction($message, User $user);
+
+	/**
+	 * @param int $limit
+	 */
+	public function getMostRecentLogs($limit = 200);
 }

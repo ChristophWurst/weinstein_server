@@ -19,32 +19,38 @@
  *
  */
 
-namespace App\Http\Controllers;
+namespace App\Support\Activity;
 
-use App\Contracts\ActivityLogger;
-use App\Http\Controllers\BaseController;
-use Illuminate\Http\Response;
+use App\MasterData\User;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
-class ActivityLogController extends BaseController {
-
-	/** @var ActivityLogger */
-	private $activityLogger;
-
-	public function __construct(ActivityLogger $activityLogger) {
-		parent::__construct();
-
-		$this->activityLogger = $activityLogger;
-	}
+class Log extends Model {
 
 	/**
-	 * Show all logs
+	 * table name
 	 * 
-	 * @return Response
+	 * @var string
 	 */
-	public function index() {
-		$this->authorize('view-activitylog');
+	protected $table = 'activitylog';
 
-		return view('settings/activitylog/index')->with('logs', $this->activityLogger->getMostRecentLogs());
+	/**
+	 * attributs for mass assignment
+	 * 
+	 * @var array of string
+	 */
+	protected $fillable = [
+		'message',
+		'wuser_username',
+	];
+
+	/**
+	 * n activity logs : 1 user
+	 * 
+	 * @return Relation
+	 */
+	public function user() {
+		return $this->belongsTo(User::class, 'wuser_username', 'username');
 	}
 
 }

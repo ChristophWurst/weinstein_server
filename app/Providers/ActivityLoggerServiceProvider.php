@@ -19,36 +19,27 @@
  *
  */
 
-namespace App\Support;
+namespace App\Providers;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Contracts\ActivityLogger;
+use App\Support\Activity\DatabaseLogger;
+use Illuminate\Support\ServiceProvider;
 
-class ActivityLog extends Model {
+class ActivityLoggerServiceProvider extends ServiceProvider {
 
-	/**
-	 * table name
-	 * 
-	 * @var string
-	 */
-	protected $table = 'activitylog';
+	protected $defer = true;
 
 	/**
-	 * attributs for mass assignment
-	 * 
-	 * @var array of string
+	 * Register activity log services
 	 */
-	protected $fillable = [
-	    'message',
-	    'wuser_username',
-	];
+	public function register() {
+		$this->app->bind(ActivityLogger::class, DatabaseLogger::class);
+	}
 
-	/**
-	 * n activity logs : 1 user
-	 * 
-	 * @return Relation
-	 */
-	public function user() {
-		return $this->belongsTo('User', 'wuser_username', 'username');
+	public function provides() {
+		return [
+			ActivityLogger::class,
+		];
 	}
 
 }

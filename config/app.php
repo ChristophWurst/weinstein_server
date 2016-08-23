@@ -138,21 +138,21 @@ return [
 		/*
 		 * Application Service Providers...
 		 */
+		App\Providers\ActivityLoggerServiceProvider::class,
 		App\Providers\AppServiceProvider::class,
 		App\Providers\AuthServiceProvider::class,
 		App\Providers\EventServiceProvider::class,
+		App\Providers\MasterDataServiceProvider::class,
 		App\Providers\RouteServiceProvider::class,
+		App\Providers\TastingServiceProvider::class,
 		/*
 		 * Weinstein service providers
 		 */
-		App\Providers\MasterDataServiceProvider::class,
-		App\Providers\TastingServiceProvider::class,
 		Weinstein\Competition\TastingNumber\TastingNumberServiceProvider::class,
 		Weinstein\Competition\TastingSession\TastingSessionServiceProvider::class,
 		Weinstein\Competition\TastingSession\Taster\TasterServiceProvider::class,
 		Weinstein\Competition\TastingSession\Tasting\TastingServiceProvider::class,
 		Weinstein\Competition\Wine\WineServiceProvider::class,
-		Weinstein\Support\ActivityLog\ActivityLoggerServiceProvider::class,
 	],
 	/*
 	  |--------------------------------------------------------------------------

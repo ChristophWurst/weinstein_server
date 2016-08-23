@@ -19,30 +19,25 @@
  *
  */
 
-namespace Weinstein\Support\ActivityLog;
+namespace App\Database\Repositories;
 
-use InvalidArgumentException;
-use Auth;
-use App\Support\ActivityLog;
+use App\MasterData\User;
+use App\Support\Activity\Log;
 
-class ActivityLogger {
+class ActivityLogRepository {
 
-    /**
-     * Log user activity
-     * 
-     * @param string $msg
-     */
-    public function log($msg) {
-        if (is_null($msg) || !is_string($msg)) {
-            throw new InvalidArgumentException();
-        }
+	public function findMostRecent($limit) {
+		return Log::orderBy('created_at', 'desc')->take(max([$limit, 500]))->get();
+	}
 
-        $entry = new ActivityLog(array(
-            'message' => $msg,
-        ));
-        //associate user
-        $entry->user()->associate(Auth::user());
-        Auth::user()->activitylogs()->save($entry);
-    }
+	public function create($message, User $user = null) {
+		$entry = new Log([
+			'message' => $message,
+		]);
+		if (!is_null($user)) {
+			$entry->user()->associate($user);
+		}
+		return $entry->save();
+	}
 
 }
