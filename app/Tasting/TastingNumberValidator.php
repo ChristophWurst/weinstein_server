@@ -19,11 +19,11 @@
  *
  */
 
-namespace Weinstein\Competition\TastingNumber;
+namespace App\Tasting;
 
 use App\MasterData\Competition;
-use Illuminate\Database\Eloquent\Model;
 use App\Validation\Validator;
+use Illuminate\Database\Eloquent\Model;
 
 class TastingNumberValidator extends Validator {
 
@@ -37,7 +37,7 @@ class TastingNumberValidator extends Validator {
 	 * 
 	 * @var string
 	 */
-	protected $modelClass = 'TastingNumber';
+	protected $modelClass = TastingNumber::class;
 
 	/**
 	 * Get attributes names
@@ -46,8 +46,8 @@ class TastingNumberValidator extends Validator {
 	 */
 	protected function getAttributeNames() {
 		return array(
-		    'wine_nr' => 'Dateinummer',
-		    'nr' => 'Kostnummer',
+			'wine_nr' => 'Dateinummer',
+			'nr' => 'Kostnummer',
 		);
 	}
 
@@ -59,11 +59,11 @@ class TastingNumberValidator extends Validator {
 	 */
 	protected function getCreateRules(array $data) {
 		return array(
-		    'wine_nr' => 'required|integer'
-		    . '|tastingnumber_wine_exists:' . $this->competition->id
-		    . '|tastingnumber_wine_unique:' . $this->competition->id,
-		    'nr' => 'required|integer|min:1'
-		    . '|tastingnumber_nr_unique:' . $this->competition->id,
+			'wine_nr' => 'required|integer'
+			. '|tastingnumber_wine_exists:' . $this->competition->id
+			. '|tastingnumber_wine_unique:' . $this->competition->id,
+			'nr' => 'required|integer|min:1'
+			. '|tastingnumber_nr_unique:' . $this->competition->id,
 		);
 	}
 
@@ -76,8 +76,8 @@ class TastingNumberValidator extends Validator {
 	 */
 	protected function getUpdateRules(array $data, Model $model = null) {
 		return array(
-		    'wine_nr' => 'required|integer',
-		    'nr' => 'required|integer|min:1',
+			'wine_nr' => 'required|integer',
+			'nr' => 'required|integer|min:1',
 		);
 	}
 

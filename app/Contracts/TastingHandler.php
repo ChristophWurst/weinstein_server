@@ -22,6 +22,9 @@
 namespace App\Contracts;
 
 use App\MasterData\Competition;
+use App\Tasting\TastingNumber;
+use App\Tasting\TastingStage;
+use Illuminate\Http\UploadedFile;
 
 interface TastingHandler {
 
@@ -62,4 +65,36 @@ interface TastingHandler {
 	 * @return boolean
 	 */
 	public function isTastingFinished(Competition $competition);
+
+	/**
+	 * @param array $data
+	 * @return TastingNumber
+	 */
+	public function createTastingNumber(array $data, Competition $competition);
+
+	/**
+	 * @param UploadedFile $file
+	 * @param Competition $competition
+	 */
+	public function importTastingNumbers(UploadedFile $file, Competition $competition);
+
+	/**
+	 * @param TastingNumber $tastingNumber
+	 */
+	public function deleteTastingNumber(TastingNumber $tastingNumber);
+
+	/**
+	 * @param Competition $competition
+	 * @param TastingStage $tastingStage
+	 */
+	public function getUntastedTastingNumbers(Competition $competition, TastingStage $tastingStage);
+
+	/**
+	 * Get competitions tasting numbers
+	 * 
+	 * @param Competition $competition
+	 * @param TastingStage $tastingStage
+	 * @return Collection
+	 */
+	public function getAllTastingNumbers(Competition $competition, TastingStage $tastingStage = null);
 }

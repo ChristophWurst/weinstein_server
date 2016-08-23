@@ -21,6 +21,15 @@
 
 namespace App\Database\Repositories;
 
+use App\MasterData\Competition;
+use App\Wine;
+
 class WineRepository {
 
+	public function findByNr(Competition $competition, $nr) {
+		Wine::where('competition_id', $competition->id)
+			->where('nr', $nr)
+			->first();
+	}
+	
 }

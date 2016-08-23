@@ -145,14 +145,6 @@ return [
 		App\Providers\MasterDataServiceProvider::class,
 		App\Providers\RouteServiceProvider::class,
 		App\Providers\TastingServiceProvider::class,
-		/*
-		 * Weinstein service providers
-		 */
-		Weinstein\Competition\TastingNumber\TastingNumberServiceProvider::class,
-		Weinstein\Competition\TastingSession\TastingSessionServiceProvider::class,
-		Weinstein\Competition\TastingSession\Taster\TasterServiceProvider::class,
-		Weinstein\Competition\TastingSession\Tasting\TastingServiceProvider::class,
-		Weinstein\Competition\Wine\WineServiceProvider::class,
 	],
 	/*
 	  |--------------------------------------------------------------------------

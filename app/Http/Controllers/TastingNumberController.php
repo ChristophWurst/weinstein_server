@@ -21,19 +21,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\TastingHandler;
+use App\Exceptions\ValidationException;
+use App\Http\Controllers\BaseController;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\Tasting\TastingNumber;
-use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
-use TastingNumberHandler;
-use App\Exceptions\ValidationException;
 
 class TastingNumberController extends BaseController {
+
+	/** @var TastingHandler */
+	private $tastingHandler;
+
+	public function __construct(TastingHandler $tastingHandler) {
+		parent::__construct();
+		$this->tastingHandler = $tastingHandler;
+	}
 
 	/**
 	 * Show list of all assigned tasting numbers
@@ -63,7 +71,7 @@ class TastingNumberController extends BaseController {
 		}
 
 		return View::make('competition/tasting/tasting-number/index')
-				->withNumbers(TastingNumberHandler::getAll($competition, $competition->getTastingStage()))
+				->withNumbers($this->tastingHandler->getAllTastingNumbers($competition, $competition->getTastingStage()))
 				->withShowAdd($showAdd)
 				->withLeft($left)
 				->withFinished($showComplete);
@@ -91,14 +99,16 @@ class TastingNumberController extends BaseController {
 		$this->authorize('assign-tastingnumber');
 
 		try {
-			TastingNumberHandler::create(Input::all(), $competition);
+			$data = Input::all();
+			$this->tastingHandler->createTastingNumber($data, $competition);
 		} catch (ValidationException $ve) {
 			return Redirect::route('tasting.numbers/assign', ['competition' => $competition->id])
 					->withErrors($ve->getErrors())
 					->withInput();
 		}
 		//if all wines are assigned, redirect to the list index page
-		if (in_array($competition->competitionstate->id, [CompetitionState::STATE_ENROLLMENT, CompetitionState::STATE_TASTINGNUMBERS1])) {
+		if (in_array($competition->competitionstate->id,
+				[CompetitionState::STATE_ENROLLMENT, CompetitionState::STATE_TASTINGNUMBERS1])) {
 			$allWines = $competition->wines()->count();
 			$assigned = $competition->wines()->withTastingNumber($competition->getTastingStage())->count();
 		} elseif ($competition->competitionstate->id === CompetitionState::STATE_TASTINGNUMBERS2) {
@@ -133,7 +143,7 @@ class TastingNumberController extends BaseController {
 		$this->authorize('unassign-tastingnumber');
 
 		if (Input::get('del') == 'Ja') {
-			TastingNumberHandler::delete($tastingNumber);
+			$this->tastingHandler->deleteTastingNumber($tastingNumber);
 		}
 		return Redirect::route('tasting.numbers', ['competition' => $tastingNumber->wine->competition->id]);
 	}
@@ -164,7 +174,7 @@ class TastingNumberController extends BaseController {
 			if ($file === null) {
 				return Redirect::route('tasting.numbers', ['competition' => $competition->id]);
 			}
-			$rowsImported = TastingNumberHandler::import($file, $competition);
+			$rowsImported = $this->tastingHandler->importTastingNumbers($file, $competition);
 		} catch (ValidationException $ve) {
 			return Redirect::route('tasting.numbers/import', ['competition' => $competition->id])
 					->withErrors($ve->getErrors())

@@ -178,7 +178,7 @@ class TastingHandler {
 	 * @return array
 	 */
 	public function getNextTastingNumbers(TastingSession $tastingSession) {
-		$tastingNumbers = \TastingNumberHandler::getUntasted($tastingSession->competition, $tastingSession->competition->getTastingStage(), 2);
+		$tastingNumbers = $this->getUntasted($tastingSession->competition, $tastingSession->competition->getTastingStage(), 2);
 		$data = array();
 		if ($tastingNumbers->count() > 0) {
 			$data['a'] = $tastingNumbers->get(0);

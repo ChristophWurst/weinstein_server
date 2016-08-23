@@ -23,24 +23,40 @@ namespace App\Tasting;
 
 use App\Contracts\TastingHandler;
 use App\Database\Repositories\CompetitionRepository;
+use App\Database\Repositories\TastingNumberRepository;
 use App\Database\Repositories\TastingSessionRepository;
+use App\Database\Repositories\WineRepository;
+use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
 use Exception;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\MessageBag;
 use InvalidArgumentException;
-use Weinstein\Competition\TastingNumber\TastingNumberHandler;
+use PHPExcel_IOFactory;
 
 class Handler implements TastingHandler {
 
 	/** @var CompetitionRepository */
 	private $competitionRepository;
 
+	/** @var TastingNumberRepository */
+	private $tastingNumberRepository;
+
 	/** @var TastingSessionRepository */
 	private $tastingSessionRepository;
 
+	/** @var WineRepository */
+	private $wineRepository;
+
 	public function __construct(CompetitionRepository $competitionRepository,
-		TastingSessionRepository $tastingSessionRepository) {
+		TastingNumberRepository $tastingNumberRepository, TastingSessionRepository $tastingSessionRepository,
+		WineRepository $wineRepository) {
 		$this->competitionRepository = $competitionRepository;
+		$this->tastingNumberRepository = $tastingNumberRepository;
 		$this->tastingSessionRepository = $tastingSessionRepository;
+		$this->wineRepository = $wineRepository;
 	}
 
 	public function lockTastingNumbers(Competition $competition, $tasting) {
@@ -114,7 +130,72 @@ class Handler implements TastingHandler {
 	}
 
 	public function isTastingFinished(Competition $competition) {
-		return TastingNumberHandler::getUntasted($competition, $competition->getTastingStage())->count() === 0;
+		return $this->getUntastedTastingNumbers($competition, $competition->getTastingStage())->count() === 0;
+	}
+
+	public function createTastingNumber(array $data, Competition $competition) {
+		$validator = new TastingNumberValidator($data);
+		$validator->setCompetition($competition);
+		$validator->validateCreate();
+
+		$wine = $this->wineRepository->findByNr($competition, $data['wine_nr']);
+		//competition's tasting stage is choosen by default
+		$tastingStage = $competition->getTastingStage;
+
+		return $this->tastingNumberRepository->create($data, $tastingStage, $wine);
+	}
+
+	public function importTastingNumbers(UploadedFile $file, Competition $competition) {
+		//iterate over all entries and try to store them
+		//if exceptions occur, all db actions are rolled back to prevent data 
+		//inconsistency
+		try {
+			$doc = PHPExcel_IOFactory::load($file->getRealPath());
+		} catch (Exception $ex) {
+			throw new ValidationException(new MessageBag(array('Ung&uuml;ltiges Dateiformat')));
+		}
+
+		$sheet = $doc->getActiveSheet();
+
+		DB::beginTransaction();
+		try {
+			$rowCount = 1;
+
+			foreach ($sheet->toArray() as $row) {
+				if (!isset($row[0]) || !isset($row[1])) {
+					Log::error('invalid tasting number import format');
+					throw new ValidationException(new MessageBag(array('Fehler beim Lesen der Datei')));
+				}
+				$data = array(
+					'nr' => $row[0],
+					'wine_nr' => $row[1],
+				);
+				$this->create($data, $competition);
+				$rowCount++;
+			}
+		} catch (ValidationException $ve) {
+			DB::rollback();
+			$messages = new MessageBag(array(
+				'row' => 'Fehler in Zeile ' . $rowCount,
+			));
+			$messages->merge($ve->getErrors());
+			throw new ValidationException($messages);
+		}
+		DB::commit();
+		//return number of read lines
+		return $rowCount - 1;
+	}
+
+	public function deleteTastingNumber(TastingNumber $tastingNumber) {
+		return $this->tastingNumberRepository->delete($tastingNumber);
+	}
+
+	public function getUntastedTastingNumbers(Competition $competition, TastingStage $tastingStage) {
+		return $this->tastingNumberRepository->findUntasted($competition, $tastingStage);
+	}
+
+	public function getAllTastingNumbers(Competition $competition, TastingStage $tastingStage = null) {
+		return $this->tastingNumberRepository->getAll($competition, $tastingStage);
 	}
 
 }
