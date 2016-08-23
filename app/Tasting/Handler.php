@@ -22,12 +22,14 @@
 namespace App\Tasting;
 
 use App\Contracts\TastingHandler;
+use App\Database\Repositories\CommissionRepository;
 use App\Database\Repositories\CompetitionRepository;
 use App\Database\Repositories\TastingNumberRepository;
 use App\Database\Repositories\TastingSessionRepository;
 use App\Database\Repositories\WineRepository;
 use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
+use App\MasterData\User;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -35,8 +37,12 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
 use InvalidArgumentException;
 use PHPExcel_IOFactory;
+use Weinstein\Competition\TastingSession\Taster\TasterHandler;
 
 class Handler implements TastingHandler {
+
+	/** @var CommissionRepository */
+	private $commissionRepository;
 
 	/** @var CompetitionRepository */
 	private $competitionRepository;
@@ -50,13 +56,14 @@ class Handler implements TastingHandler {
 	/** @var WineRepository */
 	private $wineRepository;
 
-	public function __construct(CompetitionRepository $competitionRepository,
+	public function __construct(CommissionRepository $commissionRepository, CompetitionRepository $competitionRepository,
 		TastingNumberRepository $tastingNumberRepository, TastingSessionRepository $tastingSessionRepository,
 		WineRepository $wineRepository) {
 		$this->competitionRepository = $competitionRepository;
 		$this->tastingNumberRepository = $tastingNumberRepository;
 		$this->tastingSessionRepository = $tastingSessionRepository;
 		$this->wineRepository = $wineRepository;
+		$this->commissionRepository = $commissionRepository;
 	}
 
 	public function lockTastingNumbers(Competition $competition, $tasting) {
@@ -196,6 +203,76 @@ class Handler implements TastingHandler {
 
 	public function getAllTastingNumbers(Competition $competition, TastingStage $tastingStage = null) {
 		return $this->tastingNumberRepository->getAll($competition, $tastingStage);
+	}
+
+	public function getAllTastingSessions(Competition $competition, TastingStage $tastingStage,
+		User $user = null) {
+		if (is_null($user) || $user->isAdmin()) {
+			return $this->tastingSessionRepository->findAll($competition, $tastingStage);
+		}
+		return $this->tastingSessionRepository->findForUser($competition, $tastingStage, $user);
+	}
+
+	public function createTastingSession(array $data, Competition $competition) {
+		$validator = new TastingSessionValidator($data);
+		$validator->setCompetition($competition);
+		$validator->validateCreate();
+
+		$data['nr'] = $competition->tastingsessions()->ofTastingStage($competition->getTastingStage())->max('nr') + 1;
+		$tastingSession = $this->tastingSessionRepository->create($data, $competition, $competition->getTastingStage());
+
+		$this->createCommissions($tastingSession, $data['commissions']);
+
+		return $tastingSession;
+	}
+
+	/**
+	 * Create nr commissions for the given tasting session
+	 * 
+	 * @param TastingSession $tastingSession
+	 * @param int $nr
+	 */
+	private function createCommissions(TastingSession $tastingSession, $nr) {
+		$dataA = [
+			'side' => 'a',
+		];
+		$this->commissionRepository->create($dataA, $tastingSession);
+
+
+		if ($nr == 2) {
+			$dataB = [
+				'side' => 'b',
+			];
+			$this->commissionRepository->create($dataB, $tastingSession);
+		}
+	}
+
+	public function updateTastingSession(TastingSession $tastingSession, array $data) {
+		$validator = new TastingSessionValidator($data, $tastingSession);
+		$validator->setCompetition($tastingSession->competition);
+		$validator->validateUpdate();
+
+		$this->tastingSessionRepository->update($tastingSession, $data);
+	}
+
+	public function lockTastingSession(TastingSession $tastingSession) {
+		$tastingSession->locked = true;
+		$tastingSession->save(); // TODO: move to repo
+	}
+
+	public function deleteTastingSession(TastingSession $tastingSession) {
+		$this->tastingSessionRepository->delete($tastingSession);
+	}
+
+	public function createTaster(array $data, TastingSession $tastingSession) {
+		// TODO: move to repo
+		$taster = TasterHandler::create($data, $tastingSession);
+		$taster->active = true;
+		$taster->save();
+	}
+
+	public function getTastingSessionTasters(TastingSession $tastingSession) {
+		return \TasterHandler::getAll($tastingSession);
 	}
 
 }

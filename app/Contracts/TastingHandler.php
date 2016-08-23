@@ -22,9 +22,13 @@
 namespace App\Contracts;
 
 use App\MasterData\Competition;
+use App\MasterData\User;
+use App\Tasting\Taster;
 use App\Tasting\TastingNumber;
+use App\Tasting\TastingSession;
 use App\Tasting\TastingStage;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 
 interface TastingHandler {
 
@@ -97,4 +101,53 @@ interface TastingHandler {
 	 * @return Collection
 	 */
 	public function getAllTastingNumbers(Competition $competition, TastingStage $tastingStage = null);
+
+	/**
+	 * Get all tasting sessions
+	 * 
+	 * @param Competition $competition
+	 * @param TastingStage $tastingStage
+	 * @param User $user
+	 * @return Collection
+	 */
+	public function getAllTastingSessions(Competition $competition = null, TastingStage $tastingStage = null,
+		User $user = null);
+
+	/**
+	 * @param array $data
+	 * @param Competition $competition
+	 */
+	public function createTastingSession(array $data, Competition $competition);
+
+	/**
+	 * @param TastingSession $tastingSession
+	 * @param array $data
+	 * @param Competition $competition
+	 */
+	public function updateTastingSession(TastingSession $tastingSession, array $data);
+
+	/**
+	 * @param TastingSession $tastingSession
+	 */
+	public function lockTastingSession(TastingSession $tastingSession);
+
+	/**
+	 * @param TastingSession $tastingSession
+	 */
+	public function deleteTastingSession(TastingSession $tastingSession);
+
+	/**
+	 * Add a new taster
+	 * 
+	 * @param array $data
+	 * @param TastingSession $tastingSession
+	 * @return Taster
+	 */
+	public function addTasterToTastingSession(array $data, TastingSession $tastingSession);
+
+	/**
+	 * @param TastingSession $tastingSession
+	 * @return Collection
+	 */
+	public function getTastingSessionTasters(TastingSession $tastingSession);
 }

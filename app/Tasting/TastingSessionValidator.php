@@ -19,16 +19,15 @@
  *
  */
 
-namespace Weinstein\Competition\TastingSession;
+namespace App\Tasting;
 
 use App\MasterData\Competition;
-use Illuminate\Database\Eloquent\Model;
 use App\Validation\Validator;
+use Illuminate\Database\Eloquent\Model;
 
 class TastingSessionValidator extends Validator {
 
 	/**
-	 *
 	 * @var Competition
 	 */
 	private $competition = null;
@@ -38,7 +37,7 @@ class TastingSessionValidator extends Validator {
 	 * 
 	 * @var string
 	 */
-	protected $modelClass = 'TastingSession';
+	protected $modelClass = TastingSession::class;
 
 	/**
 	 * Get attributes names
@@ -47,8 +46,8 @@ class TastingSessionValidator extends Validator {
 	 */
 	protected function getAttributeNames() {
 		return array(
-		    'wuser_username' => 'Benutzer',
-		    'commissions' => 'Kommissionen',
+			'wuser_username' => 'Benutzer',
+			'commissions' => 'Kommissionen',
 		);
 	}
 
@@ -60,8 +59,8 @@ class TastingSessionValidator extends Validator {
 	 */
 	protected function getCreateRules(array $data) {
 		return array(
-		    'wuser_username' => 'exists:wuser,username',
-		    'commissions' => 'required|integer|in:1,2',
+			'wuser_username' => 'exists:wuser,username',
+			'commissions' => 'required|integer|in:1,2',
 		);
 	}
 
@@ -74,7 +73,7 @@ class TastingSessionValidator extends Validator {
 	 */
 	protected function getUpdateRules(array $data, Model $model = null) {
 		return array(
-		    'wuser_username' => 'exists:wuser,username',
+			'wuser_username' => 'exists:wuser,username',
 		);
 	}
 

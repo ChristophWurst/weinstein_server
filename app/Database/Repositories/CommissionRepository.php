@@ -19,22 +19,18 @@
  *
  */
 
-namespace Weinstein\Competition\Wine;
+namespace App\Database\Repositories;
 
-use App;
-use Illuminate\Support\ServiceProvider;
+use App\Tasting\Commission;
+use App\Tasting\TastingSession;
 
-class WineServiceProvider extends ServiceProvider {
+class CommissionRepository {
 
-	/**
-	 * Register wine services
-	 */
-	public function register() {
-		//WineHandler
-		$this->app->bind('WineHandler', function() {
-			$dataProvider = App::make(WineDataProvider::class);
-			return new WineHandler($dataProvider);
-		});
+	public function create(array $data, TastingSession $tastingSession) {
+		$commission = new Commission($data);
+		$commission->tastingsession()->associate($tastingSession);
+		$commission->save();
+		return $commission;
 	}
 
 }

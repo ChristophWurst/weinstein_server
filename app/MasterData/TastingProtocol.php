@@ -19,17 +19,18 @@
  *
  */
 
-namespace Weinstein\Competition\TastingSession;
+namespace App\Tasting;
 
+use App\Tasting\TastingProtocol;
+use App\Tasting\TastingSession;
 use Exception;
-use Illuminate\Database\Eloquent\Collection as Collection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str as Str;
 use PHPExcel;
 use PHPExcel_Settings;
 use PHPExcel_Worksheet;
 use PHPExcel_Writer_Excel5;
-use TastingSession;
+use Illuminate\Support\Str;
 use function array_add;
 
 class TastingProtocol {
@@ -139,7 +140,6 @@ class TastingProtocol {
 	 * @return array
 	 */
 	private function getResults(\TastingNumber &$tastingnumber) {
-		error_log('tastingnumber ' . $tastingnumber->id);
 		$result = array();
 
 		//find result values
@@ -155,7 +155,6 @@ class TastingProtocol {
 			if (is_null($currTaster)) {
 				throw new Exception('could not find taster for tasting ' . $tasting->id);
 			}
-			error_log('taster ' . $taster->id . ' goes to ' . $this->getTasterColumn($taster));
 			$result[$this->getTasterColumn($taster)] = $tasting->rating;
 		}
 		return $result;

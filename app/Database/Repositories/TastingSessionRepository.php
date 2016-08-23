@@ -21,12 +21,50 @@
 
 namespace App\Database\Repositories;
 
+use App\MasterData\Competition;
+use App\MasterData\User;
 use App\Tasting\TastingSession;
+use App\Tasting\TastingStage;
 
 class TastingSessionRepository {
 
-	public function update(TastingSession $tastingSession) {
+	public function findAll($competition, $tastingStage) {
+		$query = $competition->tastingsessions();
+		$query = $query->where('tastingstage_id', '=', $tastingStage->id);
+		return $query->orderBy('nr', 'asc')->get();
+	}
+
+	public function findForUser($competition, $tastingStage, $user) {
+		$query = $competition->tastingsessions();
+		$query = $query->where('tastingstage_id', '=', $tastingStage->id);
+		$query = $query->where('wuser_username', '=', $user->username);
+		return $query->orderBy('nr', 'asc')->get();
+	}
+
+	public function create(array $data, Competition $competition, TastingStage $tastingStage) {
+		$tastingSession = new TastingSession($data);
+		$tastingSession->competition()->associate($competition);
+		$tastingSession->tastingstage()->associate($tastingStage);
 		$tastingSession->save();
+		return $tastingSession;
+	}
+
+	public function update(TastingSession $tastingSession, array $data, User $user = null) {
+		$tastingSession->update($data);
+
+		if (is_null($user)) {
+			$tastingSession->user()->dissociate();
+		} else {
+			$tastingSession->user()->associate($user);
+		}
+		$tastingSession->save();
+	}
+
+	public function delete(TastingSession $tastingSession) {
+		//first, delte commission
+		$tastingSession->commissions()->delete();
+		//second, delete tasting session itself
+		$tastingSession->delete();
 	}
 
 }
