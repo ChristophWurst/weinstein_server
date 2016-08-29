@@ -27,8 +27,7 @@
         ],
         "psr-4": {
             "App\\": "app/",
-	    "Tests\\": "tests/",
-            "Weinstein\\": "Weinstein/"
+	    "Tests\\": "tests/"
         }
     },
     "autoload-dev": {

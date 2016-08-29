@@ -37,4 +37,39 @@ class WineRepository {
 		$wine->save();
 	}
 
+	/**
+	 * Get competitions wines
+	 * 
+	 * @param Competition $competition
+	 * @return Collection
+	 */
+	public function findAll(Competition $competition, $queryOnly = false) {
+		$query = $competition->wine_details();
+		if ($queryOnly) {
+			return $query;
+		} else {
+			return $query->get();
+		}
+	}
+
+	/**
+	 * Get users wines of given competition
+	 * 
+	 * @param User $user
+	 * @param Competition $competition
+	 * @praam boolen $queryOnly
+	 * @return Collection2
+	 */
+	public function getUsersWines(User $user, Competition $competition, $queryOnly = false) {
+		$query = $competition->wine_details()
+			->where('applicant_username', $user->username)
+			->orWhere('association_username', $user->username)
+			->orderBy('nr');
+		if ($queryOnly) {
+			return $query;
+		} else {
+			return $query->get();
+		}
+	}
+
 }

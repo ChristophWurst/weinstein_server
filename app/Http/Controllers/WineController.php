@@ -21,29 +21,36 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\View;
-use WineHandler;
+use App\Contracts\WineHandler;
+use App\EnrollmentForm;
+use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\MasterData\Applicant;
 use App\MasterData\Association;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\MasterData\CompetitionWine\FlawExport;
-use App\Wine;
 use App\MasterData\CompetitionWine\WineExport;
-use App\MasterData\WineSort;
-use App\MasterData\CompetitionEnrollmentForm;
 use App\MasterData\CompetitionWine\WineQuality;
-use App\Exceptions\ValidationException;
+use App\MasterData\WineSort;
+use App\Wine;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\View;
 
 class WineController extends BaseController {
+
+	/** @var WineHandler */
+	private $wineHandler;
+
+	public function __construct(WineHandler $wineHandler) {
+		parent::__construct();
+		$this->wineHandler = $wineHandler;
+	}
 
 	/**
 	 * Convert german decimal point to international format
@@ -71,7 +78,7 @@ class WineController extends BaseController {
 
 		$competitionAdmin = $competition->administrates(Auth::user());
 
-		$wines = WineHandler::getUsersWines(Auth::user(), $competition, true)->orderBy('id')->paginate(50);
+		$wines = $this->wineHandler->getUsersWines(Auth::user(), $competition, true)->orderBy('id')->paginate(50);
 
 		return View::make('competition/wines/index')
 				->withUser(Auth::user())
@@ -140,7 +147,7 @@ class WineController extends BaseController {
 		$this->authorize('kdb-wines', $competition);
 
 		return Response::json([
-			    'wines' => Wine::kdb()->lists('id')->all(),
+				'wines' => Wine::kdb()->lists('id')->all(),
 		]);
 	}
 
@@ -153,7 +160,7 @@ class WineController extends BaseController {
 		$this->authorize('excluded-wines', $competition);
 
 		return Response::json([
-			    'wines' => Wine::excluded()->lists('id')->all(),
+				'wines' => Wine::excluded()->lists('id')->all(),
 		]);
 	}
 
@@ -166,7 +173,7 @@ class WineController extends BaseController {
 		$this->authorize('sosi-wines', $competition);
 
 		return Response::json([
-			    'wines' => Wine::sosi()->lists('id')->all(),
+				'wines' => Wine::sosi()->lists('id')->all(),
 		]);
 	}
 
@@ -179,7 +186,7 @@ class WineController extends BaseController {
 		$this->authorize('chosen-wines', $competition);
 
 		return Response::json([
-			    'wines' => Wine::chosen()->lists('id')->all(),
+				'wines' => Wine::chosen()->lists('id')->all(),
 		]);
 	}
 
@@ -246,14 +253,14 @@ class WineController extends BaseController {
 				}
 			}
 
-			WineHandler::create($data, $competition);
+			$this->wineHandler->create($data, $competition);
 		} catch (ValidationException $ve) {
 			return Redirect::route('enrollment.wines/create', ['competition' => $competition->id])
 					->withErrors($ve->getErrors())
 					->withInput();
 		}
 		Input::flashOnly([
-		    'applicant_id'
+			'applicant_id'
 		]);
 		return Redirect::route('enrollment.wines/create', ['competition' => $competition->id]);
 	}
@@ -265,8 +272,8 @@ class WineController extends BaseController {
 		$path = $form->save();
 		$filename = 'Wines';
 		$headers = [
-		    'Content-Type' => 'application/pdf',
-		    'Content-Disposition' => 'attachment; filename="' . $filename . '"'
+			'Content-Type' => 'application/pdf',
+			'Content-Disposition' => 'attachment; filename="' . $filename . '"'
 		];
 		return Response::download($path, $filename, $headers);
 	}
@@ -335,7 +342,7 @@ class WineController extends BaseController {
 				}
 			}
 
-			WineHandler::update($wine, $data, $wine->competition);
+			$this->wineHandler->update($wine, $data, $wine->competition);
 		} catch (ValidationException $ve) {
 			return Redirect::route('enrollment.wines/edit', ['wine' => $wine->id])
 					->withErrors($ve->getErrors())
@@ -366,7 +373,7 @@ class WineController extends BaseController {
 		$this->authorize('delete-wine', $wine);
 
 		if (Input::get('del') == 'Ja') {
-			WineHandler::delete($wine);
+			$this->wineHandler->delete($wine);
 		}
 		return Redirect::route('enrollment.wines', ['competition' => $wine->competition->id]);
 	}
@@ -379,15 +386,15 @@ class WineController extends BaseController {
 		$this->authorize('update-wine', $wine);
 
 		try {
-			WineHandler::updateKdb($wine, Input::only('value'));
+			$this->wineHandler->updateKdb($wine, Input::only('value'));
 		} catch (ValidationException $ve) {
 			return Response::json([
-				    'error' => 'Fehler beim setzen von KdB',
-				    'wines' => Wine::kdb()->lists('id')->all(),
+					'error' => 'Fehler beim setzen von KdB',
+					'wines' => Wine::kdb()->lists('id')->all(),
 			]);
 		}
 		return Response::json([
-			    'wines' => Wine::kdb()->lists('id')->all(),
+				'wines' => Wine::kdb()->lists('id')->all(),
 		]);
 	}
 
@@ -417,7 +424,7 @@ class WineController extends BaseController {
 			if ($file === null) {
 				return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
 			}
-			$rowsImported = WineHandler::importKdb($file, $competition);
+			$rowsImported = $this->wineHandler->importKdb($file, $competition);
 		} catch (ValidationException $ve) {
 			return Redirect::route('enrollment.wines/import-kdb', ['competition' => $competition->id])
 					->withErrors($ve->getErrors())
@@ -435,15 +442,15 @@ class WineController extends BaseController {
 		$this->authorize('update-wine', $wine);
 
 		try {
-			WineHandler::updateExcluded($wine, Input::only('value'));
+			$this->wineHandler->updateExcluded($wine, Input::only('value'));
 		} catch (ValidationException $ve) {
 			return Response::json([
-				    'error' => 'Fehler beim setzen von Ex',
-				    'wines' => Wine::excluded()->lists('id')->all(),
+					'error' => 'Fehler beim setzen von Ex',
+					'wines' => Wine::excluded()->lists('id')->all(),
 			]);
 		}
 		return Response::json([
-			    'wines' => Wine::excluded()->lists('id')->all(),
+				'wines' => Wine::excluded()->lists('id')->all(),
 		]);
 	}
 
@@ -473,7 +480,7 @@ class WineController extends BaseController {
 			if ($file === null) {
 				return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
 			}
-			$rowsImported = WineHandler::importExcluded($file, $competition);
+			$rowsImported = $this->wineHandler->importExcluded($file, $competition);
 		} catch (ValidationException $ve) {
 			return Redirect::route('enrollment.wines/import-exclude', ['competition' => $competition->id])
 					->withErrors($ve->getErrors())
@@ -492,20 +499,20 @@ class WineController extends BaseController {
 
 		if (!$wine->kdb) {
 			return Response::json([
-				    'error' => 'Fehler: Dieser Wein ist nicht im KdB',
-				    'wines' => Wine::sosi()->lists('id')->all(),
+					'error' => 'Fehler: Dieser Wein ist nicht im KdB',
+					'wines' => Wine::sosi()->lists('id')->all(),
 			]);
 		}
 		try {
-			WineHandler::updateSosi($wine, Input::only('value'));
+			$this->wineHandler->updateSosi($wine, Input::only('value'));
 		} catch (ValidationException $ve) {
 			return Response::json([
-				    'error' => 'Fehler beim setzen von SoSi',
-				    'wines' => Wine::sosi()->lists('id')->all(),
+					'error' => 'Fehler beim setzen von SoSi',
+					'wines' => Wine::sosi()->lists('id')->all(),
 			]);
 		}
 		return Response::json([
-			    'wines' => Wine::sosi()->lists('id')->all(),
+				'wines' => Wine::sosi()->lists('id')->all(),
 		]);
 	}
 
@@ -535,7 +542,7 @@ class WineController extends BaseController {
 			if ($file === null) {
 				return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
 			}
-			$rowsImported = WineHandler::importSosi($file, $competition);
+			$rowsImported = $this->wineHandler->importSosi($file, $competition);
 		} catch (ValidationException $ve) {
 			return Redirect::route('enrollment.wines/import-kdb', ['competition' => $competition->id])
 					->withErrors($ve->getErrors())
@@ -553,15 +560,15 @@ class WineController extends BaseController {
 		$this->authorize('update-wine', $wine);
 
 		try {
-			WineHandler::updateChosen($wine, Input::only('value'));
+			$this->wineHandler->updateChosen($wine, Input::only('value'));
 		} catch (ValidationException $ve) {
 			return Response::json([
-				    'error' => 'Fehler beim setzen von SoSi',
-				    'wines' => Wine::chosen()->lists('id')->all(),
+					'error' => 'Fehler beim setzen von SoSi',
+					'wines' => Wine::chosen()->lists('id')->all(),
 			]);
 		}
 		return Response::json([
-			    'wines' => Wine::chosen()->lists('id')->all(),
+				'wines' => Wine::chosen()->lists('id')->all(),
 		]);
 	}
 
@@ -591,7 +598,7 @@ class WineController extends BaseController {
 			if ($file === null) {
 				return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
 			}
-			$rowsImported = WineHandler::importChosen($file, $competition);
+			$rowsImported = $this->wineHandler->importChosen($file, $competition);
 		} catch (ValidationException $ve) {
 			return Redirect::route('enrollment.wines/import-chosen', ['competition' => $competition->id])
 					->withErrors($ve->getErrors())
@@ -617,8 +624,8 @@ class WineController extends BaseController {
 		$we = new WineExport($wines);
 		$filename = 'Weine ' . $competition->label . '.xls';
 		$headers = [
-		    'Content-Type' => 'application/vnd.ms-excel',
-		    'Content-Disposition' => 'attachment; filename="' . $filename . '"'
+			'Content-Type' => 'application/vnd.ms-excel',
+			'Content-Disposition' => 'attachment; filename="' . $filename . '"'
 		];
 		return Response::download($we->asExcel(), $filename, $headers);
 	}
@@ -640,8 +647,8 @@ class WineController extends BaseController {
 		$we = new WineExport($wines);
 		$filename = 'Weine ' . $competition->label . '.xls';
 		$headers = [
-		    'Content-Type' => 'application/vnd.ms-excel',
-		    'Content-Disposition' => 'attachment; filename="' . $filename . '"'
+			'Content-Type' => 'application/vnd.ms-excel',
+			'Content-Disposition' => 'attachment; filename="' . $filename . '"'
 		];
 		return Response::download($we->asExcel(), $filename, $headers);
 	}
@@ -663,8 +670,8 @@ class WineController extends BaseController {
 		$we = new WineExport($wines);
 		$filename = 'Weine ' . $competition->label . '.xls';
 		$headers = [
-		    'Content-Type' => 'application/vnd.ms-excel',
-		    'Content-Disposition' => 'attachment; filename="' . $filename . '"'
+			'Content-Type' => 'application/vnd.ms-excel',
+			'Content-Disposition' => 'attachment; filename="' . $filename . '"'
 		];
 		return Response::download($we->asExcel(), $filename, $headers);
 	}
@@ -686,8 +693,8 @@ class WineController extends BaseController {
 		$we = new WineExport($wines);
 		$filename = 'Weine ' . $competition->label . '.xls';
 		$headers = [
-		    'Content-Type' => 'application/vnd.ms-excel',
-		    'Content-Disposition' => 'attachment; filename="' . $filename . '"'
+			'Content-Type' => 'application/vnd.ms-excel',
+			'Content-Disposition' => 'attachment; filename="' . $filename . '"'
 		];
 		return Response::download($we->asExcel(), $filename, $headers);
 	}
@@ -706,8 +713,8 @@ class WineController extends BaseController {
 		$export = new FlawExport($wines);
 		$filename = 'Fehlerprotokoll ' . $competition->label . '.xls';
 		$headers = [
-		    'Content-Type' => 'application/vnd.ms-excel',
-		    'Content-Disposition' => 'attachment; filename="' . $filename . '"'
+			'Content-Type' => 'application/vnd.ms-excel',
+			'Content-Disposition' => 'attachment; filename="' . $filename . '"'
 		];
 		return Response::download($export->asExcel(), $filename, $headers);
 	}

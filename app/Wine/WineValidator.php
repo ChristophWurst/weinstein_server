@@ -19,12 +19,13 @@
  *
  */
 
-namespace Weinstein\Competition\Wine;
+namespace App\Wine;
 
 use App\MasterData\Competition;
 use App\MasterData\User;
-use Illuminate\Database\Eloquent\Model;
 use App\Validation\Validator;
+use App\Wine;
+use Illuminate\Database\Eloquent\Model;
 
 class WineValidator extends Validator {
 
@@ -46,7 +47,7 @@ class WineValidator extends Validator {
 	 * 
 	 * @var string
 	 */
-	protected $modelClass = 'Wine';
+	protected $modelClass = Wine::class;
 
 	/**
 	 * Get attributes names

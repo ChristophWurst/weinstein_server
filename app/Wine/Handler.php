@@ -19,40 +19,31 @@
  *
  */
 
-namespace Weinstein\Competition\Wine;
+namespace App\Wine;
 
-use ActivityLogger;
-use App\Exceptions\ValidationException as ValidationException;
+use App\Contracts\WineHandler;
+use App\Database\Repositories\WineRepository;
+use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
 use App\MasterData\User;
 use App\Wine;
-use Illuminate\Database\Eloquent\Collection as Collection2;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
 use phpDocumentor\Reflection\DocBlock\Type\Collection;
 use PHPExcel_IOFactory;
 use SebastianBergmann\RecursionContext\Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class WineHandler {
+class Handler implements WineHandler {
 
-	/**
-	 * Wine data provider
-	 * 
-	 * @var \Weinstein\Wine\WineDataProvider
-	 */
-	private $dataProvider;
+	/** @var WineRepository */
+	private $wineRepository;
 
-	/**
-	 * Constructor
-	 * 
-	 * @param \Weinstein\Wine\WineDataProvider $accessHandler
-	 */
-	public function __construct(WineDataProvider $accessHandler) {
-		$this->dataProvider = $accessHandler;
+	public function __construct(WineRepository $wineRepository) {
+		$this->wineRepository = $wineRepository;
 	}
 
 	/**
@@ -77,7 +68,7 @@ class WineHandler {
 		//associate competition
 		$wine->competition()->associate($competition);
 		$wine->save();
-		ActivityLogger::log('Wein [' . $wine->nr . '] bei Bewerb [' . $competition->label . '] erstellt');
+		//ActivityLogger::log('Wein [' . $wine->nr . '] bei Bewerb [' . $competition->label . '] erstellt');
 		return $wine;
 	}
 
@@ -100,18 +91,17 @@ class WineHandler {
 		$validator->setUser(Auth::user());
 		$validator->validateUpdate();
 		$wine->update($data);
-		ActivityLogger::log('Wein [' . $wine->nr . '] bei Bewerb [' . $competition->label . '] bearbeitet');
+		//ActivityLogger::log('Wein [' . $wine->nr . '] bei Bewerb [' . $competition->label . '] bearbeitet');
 		return $wine;
 	}
 
 	/**
-	 * 
 	 * @param Wine $wine
-	 * @param type $data
+	 * @param array $data
 	 * @throws ValidationException
 	 */
-	public function updateKdb(Wine $wine, $data) {
-		$validator = \Validator::make($data, array('value' => 'required|boolean'));
+	public function updateKdb(Wine $wine, array $data) {
+		$validator = Validator::make($data, array('value' => 'required|boolean'));
 		if ($validator->fails()) {
 			throw new ValidationException($validator->messages());
 		}
@@ -128,8 +118,7 @@ class WineHandler {
 	 */
 	public function importKdb(UploadedFile $file, Competition $competition) {
 		//iterate over all entries and try to store them
-		//
-        //if exceptions occur, all db actions are rolled back to prevent data 
+		//if exceptions occur, all db actions are rolled back to prevent data 
 		//inconsistency
 		try {
 			$doc = PHPExcel_IOFactory::load($file->getRealPath());
@@ -154,14 +143,14 @@ class WineHandler {
 					throw new ValidationException(new MessageBag(array('Wein ' . $row[0] . ' nicht vorhanden')));
 				}
 				$this->updateKdb($wine, array(
-				    'value' => true,
+					'value' => true,
 				));
 				$rowCount++;
 			}
 		} catch (ValidationException $ve) {
 			DB::rollback();
 			$messages = new MessageBag(array(
-			    'row' => 'Fehler in Zeile ' . $rowCount,
+				'row' => 'Fehler in Zeile ' . $rowCount,
 			));
 			$messages->merge($ve->getErrors());
 			throw new ValidationException($messages);
@@ -174,10 +163,10 @@ class WineHandler {
 	/**
 	 * 
 	 * @param Wine $wine
-	 * @param type $data
+	 * @param array $data
 	 * @throws ValidationException
 	 */
-	public function updateExcluded(Wine $wine, $data) {
+	public function updateExcluded(Wine $wine, array $data) {
 		$validator = \Validator::make($data, array('value' => 'required|boolean'));
 		if ($validator->fails()) {
 			throw new ValidationException($validator->messages());
@@ -222,14 +211,14 @@ class WineHandler {
 					throw new ValidationException(new MessageBag(array('Wein ' . $row[0] . ' nicht vorhanden')));
 				}
 				$this->updateExcluded($wine, array(
-				    'value' => true,
+					'value' => true,
 				));
 				$rowCount++;
 			}
 		} catch (ValidationException $ve) {
 			DB::rollback();
 			$messages = new MessageBag(array(
-			    'row' => 'Fehler in Zeile ' . $rowCount,
+				'row' => 'Fehler in Zeile ' . $rowCount,
 			));
 			$messages->merge($ve->getErrors());
 			throw new ValidationException($messages);
@@ -240,12 +229,11 @@ class WineHandler {
 	}
 
 	/**
-	 * 
 	 * @param Wine $wine
-	 * @param type $data
+	 * @param array $data
 	 * @throws ValidationException
 	 */
-	public function updateSosi(Wine $wine, $data) {
+	public function updateSosi(Wine $wine, array $data) {
 		$validator = \Validator::make($data, array('value' => 'required|boolean'));
 		if ($validator->fails()) {
 			throw new ValidationException($validator->messages());
@@ -263,8 +251,7 @@ class WineHandler {
 	 */
 	public function importSosi(UploadedFile $file, Competition $competition) {
 		//iterate over all entries and try to store them
-		//
-        //if exceptions occur, all db actions are rolled back to prevent data 
+		//if exceptions occur, all db actions are rolled back to prevent data 
 		//inconsistency
 		try {
 			$doc = PHPExcel_IOFactory::load($file->getRealPath());
@@ -293,14 +280,14 @@ class WineHandler {
 					throw new ValidationException(new MessageBag(array('Wein ' . $row[0] . ' ist kein KdB')));
 				}
 				$this->updateSosi($wine, array(
-				    'value' => true,
+					'value' => true,
 				));
 				$rowCount++;
 			}
 		} catch (ValidationException $ve) {
 			DB::rollback();
 			$messages = new MessageBag(array(
-			    'row' => 'Fehler in Zeile ' . $rowCount,
+				'row' => 'Fehler in Zeile ' . $rowCount,
 			));
 			$messages->merge($ve->getErrors());
 			throw new ValidationException($messages);
@@ -311,12 +298,11 @@ class WineHandler {
 	}
 
 	/**
-	 * 
 	 * @param Wine $wine
-	 * @param type $data
+	 * @param array $data
 	 * @throws ValidationException
 	 */
-	public function updateChosen(Wine $wine, $data) {
+	public function updateChosen(Wine $wine, array $data) {
 		$validator = \Validator::make($data, array('value' => 'required|boolean'));
 		if ($validator->fails()) {
 			throw new ValidationException($validator->messages());
@@ -334,8 +320,7 @@ class WineHandler {
 	 */
 	public function importChosen(UploadedFile $file, Competition $competition) {
 		//iterate over all entries and try to store them
-		//
-        //if exceptions occur, all db actions are rolled back to prevent data 
+		//if exceptions occur, all db actions are rolled back to prevent data 
 		//inconsistency
 		try {
 			$doc = PHPExcel_IOFactory::load($file->getRealPath());
@@ -361,14 +346,14 @@ class WineHandler {
 					throw new ValidationException(new MessageBag(array('Wein ' . $row[0] . ' nicht vorhanden')));
 				}
 				$this->updateChosen($wine, array(
-				    'value' => true,
+					'value' => true,
 				));
 				$rowCount++;
 			}
 		} catch (ValidationException $ve) {
 			DB::rollback();
 			$messages = new MessageBag(array(
-			    'row' => 'Fehler in Zeile ' . $rowCount,
+				'row' => 'Fehler in Zeile ' . $rowCount,
 			));
 			$messages->merge($ve->getErrors());
 			throw new ValidationException($messages);
@@ -381,13 +366,13 @@ class WineHandler {
 	/**
 	 * Delete the wine
 	 * 
-	 * @param App\MasterData\User $user
+	 * @param User $user
 	 * @param Competition $competition
 	 * @return Wine
 	 */
 	public function delete(Wine $wine) {
 		$wine->delete();
-		ActivityLogger::log('Wein [' . $wine->nr . '] von Bewerb [' . $wine->competition->label . '] gel&ouml;scht');
+		//ActivityLogger::log('Wein [' . $wine->nr . '] von Bewerb [' . $wine->competition->label . '] gel&ouml;scht');
 	}
 
 	/**
@@ -395,8 +380,8 @@ class WineHandler {
 	 * 
 	 * if no valid competition is given, all wines are returned
 	 * 
-	 * @param \Weinstein\Competition\Wine\Competitoin $competition
-	 * @return Collection2
+	 * @param Competition $competition
+	 * @return Collection
 	 */
 	public function getAll(Competition $competition = null) {
 		return $this->dataProvider->getAll($competition);
@@ -405,7 +390,7 @@ class WineHandler {
 	/**
 	 * Get all wines of given competition for given user
 	 * 
-	 * @param App\MasterData\User $user
+	 * @param User $user
 	 * @param Competition $competition
 	 * @param boolean $query
 	 * @return Collection
