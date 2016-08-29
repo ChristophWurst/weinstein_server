@@ -21,29 +21,13 @@
 
 namespace App\Database\Repositories;
 
-use App\Tasting\Commission;
-use App\Tasting\Taster;
-use App\Tasting\TastingSession;
+use App\Tasting\TastingNumber;
+use App\Tastingng\TastedWine;
 
-class TasterRepository {
+class TastedWineRepository {
 
-	public function find($id) {
-		return Taster::find($id);
-	}
-
-	public function findForTastingSession(TastingSession $tastingSession) {
-		return $tastingSession->tasters;
-	}
-
-	public function create($data, $commission) {
-		$taster = new Taster($data);
-		$taster->commission()->associate($commission);
-		$taster->save();
-		return $taster;
-	}
-
-	public function getActive(Commission $commission) {
-		return $commission->tasters()->active()->get();
+	public function isTasted(TastingNumber $tastingNumber) {
+		return TastedWine::where('tastingnumber_id', $tastingNumber->id)->count() > 0;
 	}
 
 }

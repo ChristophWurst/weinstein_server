@@ -19,12 +19,12 @@
  *
  */
 
-namespace Weinstein\Competition\TastingSession\Tasting;
+namespace App\Tasting;
 
 use App\Tasting\Commission;
 use App\Tasting\TastingSession;
-use Illuminate\Database\Eloquent\Model;
 use App\Validation\Validator;
+use Illuminate\Database\Eloquent\Model;
 
 class TastingValidator extends Validator {
 
@@ -54,7 +54,7 @@ class TastingValidator extends Validator {
 	 * 
 	 * @var string
 	 */
-	protected $modelClass = 'TastingNumber';
+	protected $modelClass = TastingNumber::class;
 
 	/**
 	 * Get attributes names
@@ -63,11 +63,11 @@ class TastingValidator extends Validator {
 	 */
 	protected function getAttributeNames() {
 		$names = array(
-		    'tastingnumber_id1' => 'Kostnummer A',
-		    'tastingnumber_id2' => 'Kostnummer B',
-		    'comment' => 'Kommentar',
-		    'comment-a' => 'Kommentar 1',
-		    'comment-b' => 'Kommentar 2',
+			'tastingnumber_id1' => 'Kostnummer A',
+			'tastingnumber_id2' => 'Kostnummer B',
+			'comment' => 'Kommentar',
+			'comment-a' => 'Kommentar 1',
+			'comment-b' => 'Kommentar 2',
 		);
 
 		foreach ($this->tastingSession->commissions as $commission) {
@@ -87,8 +87,8 @@ class TastingValidator extends Validator {
 	 */
 	protected function getErrorMessages() {
 		return array(
-		    'tastingnumber_id1.unique' => 'Dateinummer 1 wurde bereits verkostet',
-		    'tastingnumber_id2.unique' => 'Dateinummer 2 wurde bereits verkostet'
+			'tastingnumber_id1.unique' => 'Dateinummer 1 wurde bereits verkostet',
+			'tastingnumber_id2.unique' => 'Dateinummer 2 wurde bereits verkostet'
 		);
 	}
 
@@ -162,7 +162,7 @@ class TastingValidator extends Validator {
 	/**
 	 * Set number of commmissions to generate rules for
 	 * 
-	 * @param array $tastingNumbers
+	 * @param int $nr
 	 */
 	public function setNrOfCommissions($nr) {
 		$this->nrOfCommissions = $nr;

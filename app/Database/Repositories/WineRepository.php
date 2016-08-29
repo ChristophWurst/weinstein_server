@@ -31,5 +31,10 @@ class WineRepository {
 			->where('nr', $nr)
 			->first();
 	}
-	
+
+	public function addComment(Wine $wine, $comment) {
+		$wine->comment = $comment;
+		$wine->save();
+	}
+
 }

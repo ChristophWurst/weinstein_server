@@ -23,7 +23,9 @@ namespace App\Contracts;
 
 use App\MasterData\Competition;
 use App\MasterData\User;
+use App\Tasting\Commission;
 use App\Tasting\Taster;
+use App\Tasting\Tasting;
 use App\Tasting\TastingNumber;
 use App\Tasting\TastingSession;
 use App\Tasting\TastingStage;
@@ -150,4 +152,30 @@ interface TastingHandler {
 	 * @return Collection
 	 */
 	public function getTastingSessionTasters(TastingSession $tastingSession);
+
+	/**
+	 * @param array $data
+	 * @param TastingSession $tastingSession
+	 * @return Tasting
+	 */
+	public function createTasting(array $data, TastingSession $tastingSession);
+
+	/**
+	 * @param array $data
+	 * @param TastingSession $tastingSession
+	 * @param Commission $commission
+	 */
+	public function updateTasting(array $data, TastingNumber $tastingNumber, TastingSession $tastingSession, Commission $commission);
+
+	/**
+	 * @param TastingSession $tastingSession
+	 * @return array
+	 */
+	public function getNextTastingNumbers(TastingSession $tastingSession);
+
+	/**
+	 * @param TastingNumber $tastingNumber
+	 * @return bool
+	 */
+	public function isTastingNumberTasted(TastingNumber $tastingNumber);
 }

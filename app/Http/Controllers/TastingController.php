@@ -21,20 +21,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\TastingHandler;
+use App\Exceptions\ValidationException;
+use App\Http\Controllers\BaseController;
+use App\Tasting\Commission;
+use App\Tasting\TastingNumber;
+use App\Tasting\TastingSession;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
-use App\Http\Controllers\BaseController;
-use App\MasterData\CompetitionState;
-use App\Tasting\Commission;
-use App\Tasting\TastingSession;
-use App\Tasting\TastingNumber;
-use Weinstein\Support\Facades\TastingHandlerFacade as TastingHandler;
-use App\Exceptions\ValidationException;
 
 class TastingController extends BaseController {
+
+	/** @var TastingHandler */
+	private $tastingHandler;
+
+	public function __construct(TastingHandler $tastingHandler) {
+		parent::__construct();
+		$this->tastingHandler = $tastingHandler;
+	}
 
 	/**
 	 * Add tasting results
@@ -48,7 +56,7 @@ class TastingController extends BaseController {
 		return View::make('competition/tasting/tasting-session/tasting/form')->with([
 				'competition' => $tastingSession->competition,
 				'tastingSession' => $tastingSession,
-				'tastingNumbers' => TastingHandler::getNextTastingNumbers($tastingSession),
+				'tastingNumbers' => $this->tastingHandler->getNextTastingNumbers($tastingSession),
 		]);
 	}
 
@@ -62,7 +70,8 @@ class TastingController extends BaseController {
 		$this->authorize('create-tasting', $tastingSession);
 
 		try {
-			TastingHandler::create(Input::all(), $tastingSession);
+			$data = Input::all();
+			$this->tastingHandler->createTasting($data, $tastingSession);
 		} catch (ValidationException $ve) {
 			return Redirect::route('tasting.session/taste', ['tastingsession' => $tastingSession->id])
 					->withErrors($ve->getErrors())
@@ -83,7 +92,7 @@ class TastingController extends BaseController {
 		$this->authorize('edit-tasting', [$tastingSession, $commission, $tastingNumber]);
 
 		//check if tastingnumber has already been tasted
-		if (!TastingHandler::isTasted($tastingNumber)) {
+		if (!$this->tastingHandler->isTastingNumberTasted($tastingNumber)) {
 			Log::error('cannot retaste' . $tastingNumber->id . ', it has not yet been tasted');
 			App::abort(500);
 		}
@@ -107,9 +116,11 @@ class TastingController extends BaseController {
 		$this->authorize('edit-tasting', [$tastingSession, $commission, $tastingNumber]);
 
 		try {
-			TastingHandler::update($tastingNumber, Input::all(), $tastingSession, $commission);
+			$data = Input::all();
+			$this->tastingHandler->updateTasting($data, $tastingNumber, $tastingSession, $commission);
 		} catch (ValidationException $ve) {
-			return Redirect::route('tasting.session/retaste', [
+			return Redirect::route('tasting.session/retaste',
+						[
 						'tastingsession' => $tastingSession->id,
 						'tastingnumber' => $tastingNumber->id,
 						'commission' => $commission->id,

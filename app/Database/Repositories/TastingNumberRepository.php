@@ -24,6 +24,7 @@ namespace App\Database\Repositories;
 use App\MasterData\Competition;
 use App\Tasting\TastingNumber;
 use App\Tasting\TastingStage;
+use App\Tastingng\TastedWine;
 use App\Wine;
 use Illuminate\Support\Collection;
 
@@ -31,6 +32,10 @@ class TastingNumberRepository {
 
 	public function findAll() {
 		return TastingNumber::all();
+	}
+
+	public function find($id) {
+		return TastingNumber::find($id);
 	}
 
 	public function findAllForCompetitionTastingStage(Competition $competition, TastingStage $tastingStage) {
@@ -69,6 +74,10 @@ class TastingNumberRepository {
 
 	public function delete(TastingNumber $tastingNumber) {
 		$tastingNumber->delete();
+	}
+
+	public function isTasted(TastingNumber $tastingNumber) {
+		return TastedWine::where('tastingnumber_id', $tastingNumber->id)->count() > 0;
 	}
 
 }

@@ -19,31 +19,27 @@
  *
  */
 
-namespace App\Database\Repositories;
+namespace App\Tastingng;
 
-use App\Tasting\Commission;
-use App\Tasting\Taster;
-use App\Tasting\TastingSession;
+use Illuminate\Database\Eloquent\Model;
 
-class TasterRepository {
+class TastedWine extends Model {
 
-	public function find($id) {
-		return Taster::find($id);
-	}
+	/**
+	 * Table (view) name
+	 * 
+	 * @var string
+	 */
+	protected $table = TastedWine::class;
 
-	public function findForTastingSession(TastingSession $tastingSession) {
-		return $tastingSession->tasters;
-	}
-
-	public function create($data, $commission) {
-		$taster = new Taster($data);
-		$taster->commission()->associate($commission);
-		$taster->save();
-		return $taster;
-	}
-
-	public function getActive(Commission $commission) {
-		return $commission->tasters()->active()->get();
+	/**
+	 * round db value because of rounding noise
+	 * floor decimal values
+	 * 
+	 * @return float
+	 */
+	public function getResultAttribute() {
+		return floor(round($this->attributes['result'], 6) * 1000) / 1000;
 	}
 
 }

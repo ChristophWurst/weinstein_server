@@ -26,6 +26,7 @@ use App\Database\Repositories\CommissionRepository;
 use App\Database\Repositories\CompetitionRepository;
 use App\Database\Repositories\TasterRepository;
 use App\Database\Repositories\TastingNumberRepository;
+use App\Database\Repositories\TastingRepository;
 use App\Database\Repositories\TastingSessionRepository;
 use App\Database\Repositories\WineRepository;
 use App\Exceptions\ValidationException;
@@ -33,6 +34,7 @@ use App\MasterData\Competition;
 use App\MasterData\User;
 use Exception;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
@@ -50,6 +52,9 @@ class Handler implements TastingHandler {
 	/** @var TasterRepository */
 	private $tasterRepository;
 
+	/** @var TastingRepository */
+	private $tastingRepository;
+
 	/** @var TastingNumberRepository */
 	private $tastingNumberRepository;
 
@@ -60,10 +65,12 @@ class Handler implements TastingHandler {
 	private $wineRepository;
 
 	public function __construct(CommissionRepository $commissionRepository, CompetitionRepository $competitionRepository,
-		TasterRepository $tasterRepository, TastingNumberRepository $tastingNumberRepository,
-		TastingSessionRepository $tastingSessionRepository, WineRepository $wineRepository) {
+		TasterRepository $tasterRepository, TastingRepository $tastingRepository,
+		TastingNumberRepository $tastingNumberRepository, TastingSessionRepository $tastingSessionRepository,
+		WineRepository $wineRepository) {
 		$this->competitionRepository = $competitionRepository;
 		$this->tasterRepository = $tasterRepository;
+		$this->tastingRepository = $tastingRepository;
 		$this->tastingNumberRepository = $tastingNumberRepository;
 		$this->tastingSessionRepository = $tastingSessionRepository;
 		$this->wineRepository = $wineRepository;
@@ -201,8 +208,8 @@ class Handler implements TastingHandler {
 		return $this->tastingNumberRepository->delete($tastingNumber);
 	}
 
-	public function getUntastedTastingNumbers(Competition $competition, TastingStage $tastingStage) {
-		return $this->tastingNumberRepository->findUntasted($competition, $tastingStage);
+	public function getUntastedTastingNumbers(Competition $competition, TastingStage $tastingStage, $limit = null) {
+		return $this->tastingNumberRepository->findUntasted($competition, $tastingStage, $limit);
 	}
 
 	public function getAllTastingNumbers(Competition $competition, TastingStage $tastingStage = null) {
@@ -290,6 +297,96 @@ class Handler implements TastingHandler {
 
 	public function getTastingSessionTasters(TastingSession $tastingSession) {
 		return $this->tasterRepository->findForTastingSession($tastingSession);
+	}
+
+	public function createTasting(array $data, TastingSession $tastingSession) {
+		$nrCommissions = count($this->getNextTastingNumbers($tastingSession));
+		$validator = new TastingValidator($data);
+		$validator->setTastingSession($tastingSession);
+		$validator->setNrOfCommissions($nrCommissions);
+		$validator->validateCreate();
+
+		foreach ($tastingSession->commissions as $commission) {
+			if (($commission->side === 'b') && ($nrCommissions == 1)) {
+				continue;
+			}
+			if ($commission->side === 'a') {
+				$tastingNumber = $data['tastingnumber_id1'];
+			} elseif ($commission->side === 'b') {
+				$tastingNumber = $data['tastingnumber_id2'];
+			} else {
+				Log::error('Invalid commission side ' . $commission->side);
+				App::abort(500);
+			}
+
+			/**
+			 * store all tasters ratings
+			 * 
+			 * ratings are divided by 10 because the input range is 10 to 50
+			 * because that is easier to enter
+			 */
+			foreach ($this->tasterRepository->getActive($commission) as $taster) {
+				$tastingData = [
+					'rating' => $data[$commission->side . $taster->nr] / 10,
+				];
+				$this->tastingRepository->create($tastingData, $taster, $tastingNumber);
+			}
+
+			/*
+			 * Store comment
+			 */
+			$tastingNumber = $this->tastingNumberRepository->find($tastingNumber);
+			$this->wineRepository->addComment($tastingNumber->wine, $data['comment-' . $commission->side]);
+		}
+	}
+
+	public function updateTasting(array $data, TastingNumber $tastingNumber, TastingSession $tastingSession, Commission $commission) {
+		$validator = new TastingValidator($data, $tastingNumber);
+		$validator->setTastingSession($tastingSession);
+		$validator->setCommission($commission);
+		$validator->validateUpdate();
+
+		DB::beginTransaction();
+		//delete existing tastings
+		$this->tastingRepository->clear($tastingNumber);
+
+		/**
+		 * store all tasters ratings
+		 * 
+		 * ratings are divided by 10 because the input range is 10 to 50
+		 * because that is easier to enter
+		 */
+		foreach ($this->tasterRepository->getActive($commission) as $taster) {
+			$tastingData = [
+				'rating' => $data[$commission->side . $taster->nr] / 10,
+			];
+			$this->tastingRepository->create($tastingData, $taster, $tastingNumber);
+		}
+
+		/*
+		 * Store comment
+		 */
+		$wine = $tastingNumber->wine;
+		$wine->comment = $data['comment'];
+		$wine->save();
+		DB::commit();
+	}
+
+	public function getNextTastingNumbers(TastingSession $tastingSession) {
+		$tastingNumbers = $this->getUntastedTastingNumbers($tastingSession->competition,
+			$tastingSession->competition->getTastingStage(), 2);
+		$data = [];
+		if ($tastingNumbers->count() > 0) {
+			$data['a'] = $tastingNumbers->get(0);
+		}
+		if ($tastingNumbers->count() > 1 && $tastingSession->commissions()->count() > 1) {
+			$data['b'] = $tastingNumbers->get(1);
+		}
+		return $data;
+	}
+	
+	public function isTastingNumberTasted(TastingNumber $tastingNumber) {
+		return $this->tastingNumberRepository->isTasted($tastingNumber);
 	}
 
 }

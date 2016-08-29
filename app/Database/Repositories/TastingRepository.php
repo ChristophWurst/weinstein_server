@@ -19,32 +19,24 @@
  *
  */
 
-namespace Weinstein\Competition\TastingSession\Tasting;
+namespace App\Database\Repositories;
 
-use App\MasterData\Competition;
+use App\Tasting\Taster;
 use App\Tasting\Tasting;
-use App\Tasting\TastingSession;
-use Illuminate\Database\Eloquent\Collection;
+use App\Tasting\TastingNumber;
 
-class TastingDataProvider {
+class TastingRepository {
 
-	/**
-	 * Get all tastings
-	 * 
-	 * @param Competition $competition
-	 * @param TastingSession $tastingSession
-	 * @return Collection
-	 */
-	public function getAll(Competition $competition = null, TastingSession $tastingSession = null) {
-		//competition
-		if (is_null($competition)) {
-			$query = Tasting::getQuery();
-		}
-		//tastingsession
-		if (!is_null($tastingSession)) {
-			$query = $query->where('tastingsession_id', '=', $tastingSession->id);
-		}
-		return $query->orderBy('id')->get();
+	public function create(array $data, Taster $taster, TastingNumber $tastingNumber) {
+		$tasting = new Tasting($data);
+		$tasting->taster()->associate($taster);
+		$tasting->tastingnumber()->associate($tastingNumber);
+		$taster->save();
+		return $tasting;
+	}
+
+	public function clear(TastingNumber $tastingNumber) {
+		$tastingNumber->tastings()->delete();
 	}
 
 }
