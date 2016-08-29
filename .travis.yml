@@ -29,13 +29,14 @@ before_script:
 
     # Copy environment file
     - cp tests/test.env .env
+    - cat .env
 
 script:
     # Generate secure key
-    - php artisan key:generate
+    - php artisan key:generate --no-interaction
 
     # Prepare DB
-    - php artisan migrate
+    - php artisan migrate --no-interaction
 
     # Test PHP
     - phpunit -c tests/phpunit.xml
