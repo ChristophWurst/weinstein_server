@@ -6,11 +6,14 @@ php:
     - 7
 
 cache:
-  directories:
-    - "$HOME/.composer/cache/files"
+    directories:
+      - "$HOME/.composer/cache/files"
 
 matrix:
-  fast_finish: true
+    fast_finish: true
+
+before_install:
+    - phpenv config-rm xdebug.ini
 
 before_script:
     - composer install --dev
