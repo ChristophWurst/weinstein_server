@@ -6,11 +6,7 @@ php:
     - 7
 
 addons:
-    apt:
-      packages:
-        - mysql-server-5.6
-        - mysql-client-core-5.6
-        - mysql-client-5.6
+    mariadb: "10.0"
 
 cache:
     directories:
@@ -30,6 +26,9 @@ before_script:
     - mysql -u root -e "CREATE USER 'weinstein_test'@'localhost' IDENTIFIED BY 'test';"
     - mysql -u root -e "GRANT SUPER on *.* to 'weinstein_test'@'localhost';"
     - mysql -u root -e "GRANT ALL PRIVILEGES ON weinstein_test.* TO 'weinstein_test'@'localhost';"
+
+    # Copy environment file
+    - cp tests/test.env .env
 
 script:
     # Generate secure key
