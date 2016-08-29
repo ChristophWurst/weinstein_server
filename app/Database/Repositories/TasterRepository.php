@@ -19,32 +19,26 @@
  *
  */
 
-namespace Weinstein\Competition\TastingSession\Taster;
+namespace App\Database\Repositories;
 
 use App\Tasting\Taster;
 use App\Tasting\TastingSession;
-use Illuminate\Database\Eloquent\Collection;
 
-class TasterDataProvider {
+class TasterRepository {
 
-	/**
-	 * Get all tasters
-	 * 
-	 * if valid tasting session is given, only its tasters are returned
-	 * 
-	 * @param TastingSession $tastingSession
-	 * @return Collection
-	 */
-	public function getAll(TastingSession $tastingSession = null) {
-		if (is_null($tastingSession)) {
-			return Taster::all();
-		} else {
-			$tasters = new Collection;
-			foreach ($tastingSession->commissions as $commission) {
-				$tasters->merge($commission->tasters);
-			}
-			return $tasters;
-		}
+	public function find($id) {
+		return Taster::find($id);
+	}
+
+	public function findForTastingSession(TastingSession $tastingSession) {
+		return $tastingSession->tasters;
+	}
+
+	public function create($data, $commission) {
+		$taster = new Taster($data);
+		$taster->commission()->associate($commission);
+		$taster->save();
+		return $taster;
 	}
 
 }

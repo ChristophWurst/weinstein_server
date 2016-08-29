@@ -24,6 +24,7 @@ namespace App\Tasting;
 use App\Contracts\TastingHandler;
 use App\Database\Repositories\CommissionRepository;
 use App\Database\Repositories\CompetitionRepository;
+use App\Database\Repositories\TasterRepository;
 use App\Database\Repositories\TastingNumberRepository;
 use App\Database\Repositories\TastingSessionRepository;
 use App\Database\Repositories\WineRepository;
@@ -37,7 +38,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
 use InvalidArgumentException;
 use PHPExcel_IOFactory;
-use Weinstein\Competition\TastingSession\Taster\TasterHandler;
 
 class Handler implements TastingHandler {
 
@@ -46,6 +46,9 @@ class Handler implements TastingHandler {
 
 	/** @var CompetitionRepository */
 	private $competitionRepository;
+
+	/** @var TasterRepository */
+	private $tasterRepository;
 
 	/** @var TastingNumberRepository */
 	private $tastingNumberRepository;
@@ -57,9 +60,10 @@ class Handler implements TastingHandler {
 	private $wineRepository;
 
 	public function __construct(CommissionRepository $commissionRepository, CompetitionRepository $competitionRepository,
-		TastingNumberRepository $tastingNumberRepository, TastingSessionRepository $tastingSessionRepository,
-		WineRepository $wineRepository) {
+		TasterRepository $tasterRepository, TastingNumberRepository $tastingNumberRepository,
+		TastingSessionRepository $tastingSessionRepository, WineRepository $wineRepository) {
 		$this->competitionRepository = $competitionRepository;
+		$this->tasterRepository = $tasterRepository;
 		$this->tastingNumberRepository = $tastingNumberRepository;
 		$this->tastingSessionRepository = $tastingSessionRepository;
 		$this->wineRepository = $wineRepository;
@@ -205,8 +209,7 @@ class Handler implements TastingHandler {
 		return $this->tastingNumberRepository->getAll($competition, $tastingStage);
 	}
 
-	public function getAllTastingSessions(Competition $competition, TastingStage $tastingStage,
-		User $user = null) {
+	public function getAllTastingSessions(Competition $competition, TastingStage $tastingStage, User $user = null) {
 		if (is_null($user) || $user->isAdmin()) {
 			return $this->tastingSessionRepository->findAll($competition, $tastingStage);
 		}
@@ -264,15 +267,29 @@ class Handler implements TastingHandler {
 		$this->tastingSessionRepository->delete($tastingSession);
 	}
 
-	public function createTaster(array $data, TastingSession $tastingSession) {
-		// TODO: move to repo
-		$taster = TasterHandler::create($data, $tastingSession);
-		$taster->active = true;
-		$taster->save();
+	public function addTasterToTastingSession(array $data, TastingSession $tastingSession) {
+		$validator = new TasterValidator($data);
+		$validator->setTastingSession($tastingSession);
+		$validator->validateCreate();
+
+		$commission = $this->commissionRepository->find($data['commission_id']);
+
+		if ($commission->tasters()->orderBy('nr', 'desc')->first()) {
+			//commission has existing tasters
+			$data['nr'] = $commission->tasters()->orderBy('nr', 'desc')->first()->nr + 1;
+		} else {
+			$data['nr'] = 1;
+		}
+
+		$data['active'] = true;
+
+		$taster = $this->tasterRepository->create($data, $commission);
+
+		return $taster;
 	}
 
 	public function getTastingSessionTasters(TastingSession $tastingSession) {
-		return \TasterHandler::getAll($tastingSession);
+		return $this->tasterRepository->findForTastingSession($tastingSession);
 	}
 
 }

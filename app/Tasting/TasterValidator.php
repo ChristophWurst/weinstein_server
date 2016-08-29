@@ -19,16 +19,14 @@
  *
  */
 
-namespace Weinstein\Competition\TastingSession\Taster;
+namespace App\Tasting;
 
-use App\Tasting\TastingSession;
-use Exception;
 use App\Validation\Validator;
+use Exception;
 
 class TasterValidator extends Validator {
 
 	/**
-	 *
 	 * @var TastingSession
 	 */
 	private $tastingSession = null;
@@ -38,7 +36,7 @@ class TasterValidator extends Validator {
 	 *
 	 * @var array
 	 */
-	protected $modelClass = 'Taster';
+	protected $modelClass = Taster::class;
 
 	/**
 	 * Get attributes names
