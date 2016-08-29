@@ -116,10 +116,10 @@ LEFT OUTER JOIN wuser uapp
 	ON uapp.username = app.wuser_username
 LEFT OUTER JOIN wuser uass
 	ON uass.username = ass.wuser_username
-LEFT OUTER JOIN weinstein.tastingnumber AS tn1
+LEFT OUTER JOIN tastingnumber AS tn1
 	ON w.id = tn1.wine_id
 AND tn1.tastingstage_id = 1
-LEFT OUTER JOIN weinstein.tastingnumber AS tn2
+LEFT OUTER JOIN tastingnumber AS tn2
 ON w.id = tn2.wine_id
 AND tn2.tastingstage_id IN (2, NULL)
 SQL;
