@@ -1,5 +1,7 @@
 <?php
 
+use App\MasterData\Applicant;
+
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -18,16 +20,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-class TastingTest extends TestCase {
-    
-    use Way\Tests\ModelHelpers;
-    
-    public function testBelongsToTaster() {
-        $this->assertBelongsTo('taster', 'Tasting');
-    }
-    
-    public function testBelongsToTastingNumber() {
-        $this->assertBelongsTo('tastingnumber', 'Tasting');
-    }
-    
+class ApplicantTest extends TestCase {
+
+	use Way\Tests\ModelHelpers;
+
+	public function testBelongsToAddress() {
+		$this->assertBelongsTo('address', Applicant::class);
+	}
+
+	public function testBelongsToAssociation() {
+		$this->assertBelongsTo('association', Applicant::class);
+	}
+
+	public function testBelognsToUser() {
+		$this->assertBelongsTo('user', Applicant::class);
+	}
+
+	public function testHasManyWines() {
+		$this->assertHasMany('wines', Applicant::class);
+	}
+
 }

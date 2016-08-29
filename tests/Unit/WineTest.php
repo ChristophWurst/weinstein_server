@@ -18,20 +18,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-class TastingNumberTest extends TestCase {
+use App\Wine;
 
-    use Way\Tests\ModelHelpers;
+class WineTest extends TestCase {
 
-    public function testBelongsToTastingStage() {
-        $this->assertBelongsTo('tastingstage', 'TastingNumber');
-    }
+	use Way\Tests\ModelHelpers;
 
-    public function testBelongsToWine() {
-        $this->assertBelongsTo('wine', 'TastingNumber');
-    }
+	public function testBelongsToApplicant() {
+		$this->assertBelongsTo('applicant', Wine::class);
+	}
 
-    public function testHasManyTastings() {
-        $this->assertHasMany('tastings', 'TastingNumber');
-    }
+	public function testBelongsToCompetition() {
+		$this->assertBelongsTo('competition', Wine::class);
+	}
+
+	public function testBelongsToWineQuality() {
+		$this->assertBelongsTo('winequality', Wine::class);
+	}
+
+	public function testBelongsToWineSort() {
+		$this->assertBelongsTo('winesort', Wine::class);
+	}
+
+	public function testHasManyTastingNubers() {
+		$this->assertHasMany('tastingnumbers', Wine::class);
+	}
 
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Tasting\Tasting;
+
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -18,16 +20,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-class TasterTest extends TestCase {
+class TastingTest extends TestCase {
 
-    use Way\Tests\ModelHelpers;
+	use Way\Tests\ModelHelpers;
 
-    public function testBelongsToCommission() {
-        $this->assertBelongsTo('commission', 'Taster');
-    }
+	public function testBelongsToTaster() {
+		$this->assertBelongsTo('taster', Tasting::class);
+	}
 
-    public function testHasManyTastings() {
-        $this->assertHasMany('tastings', 'Taster');
-    }
+	public function testBelongsToTastingNumber() {
+		$this->assertBelongsTo('tastingnumber', Tasting::class);
+	}
 
 }

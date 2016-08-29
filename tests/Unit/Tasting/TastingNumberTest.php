@@ -1,5 +1,7 @@
 <?php
 
+use App\Tasting\TastingNumber;
+
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -18,13 +20,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+class TastingNumberTest extends TestCase {
 
-class WineQualityTest extends TestCase {
+	use Way\Tests\ModelHelpers;
 
-    use Way\Tests\ModelHelpers;
+	public function testBelongsToTastingStage() {
+		$this->assertBelongsTo('tastingstage', TastingNumber::class);
+	}
 
-    public function testHasWines() {
-        $this->assertHasMany('wines', 'WineQuality');
-    }
-    
+	public function testBelongsToWine() {
+		$this->assertBelongsTo('wine', TastingNumber::class);
+	}
+
+	public function testHasManyTastings() {
+		$this->assertHasMany('tastings', TastingNumber::class);
+	}
+
 }

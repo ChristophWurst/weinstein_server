@@ -1,5 +1,6 @@
 <?php
 
+use App\Database\Repositories\ApplicantRepository;
 use App\Database\Repositories\AssociationRepository;
 use App\Database\Repositories\CompetitionRepository;
 use App\Database\Repositories\UserRepository;
@@ -12,6 +13,9 @@ use App\MasterData\WineSort;
 use Illuminate\Support\Collection;
 
 class StoreTest extends TestCase {
+
+	/** @var ApplicantRepository|PHPUnit_Framework_MockObject_MockObject */
+	private $applicantRepository;
 
 	/** @var AssociationRepository|PHPUnit_Framework_MockObject_MockObject */
 	private $associationRepository;
@@ -31,12 +35,13 @@ class StoreTest extends TestCase {
 	protected function setUp() {
 		parent::setUp();
 
+		$this->applicantRepository = $this->getSimpleClassMock(ApplicantRepository::class);
 		$this->associationRepository = $this->getSimpleClassMock(AssociationRepository::class);
 		$this->competitionRepository = $this->getSimpleClassMock(CompetitionRepository::class);
 		$this->userRepository = $this->getSimpleClassMock(UserRepository::class);
 		$this->wineSortRepository = $this->getSimpleClassMock(WineSortRepository::class);
-		$this->store = new Store($this->associationRepository, $this->competitionRepository, $this->userRepository,
-			$this->wineSortRepository);
+		$this->store = new Store($this->applicantRepository, $this->associationRepository, $this->competitionRepository,
+			$this->userRepository, $this->wineSortRepository);
 	}
 
 	public function testGetAllAssociations() {

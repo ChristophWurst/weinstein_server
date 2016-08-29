@@ -18,13 +18,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+use App\WineQuality;
 
-class ActivityLogTest extends TestCase {
-    
-    use Way\Tests\ModelHelpers;
-    
-    public function testHasUser() {
-        $this->assertBelongsTo('user', 'ActivityLog');
-    }
-    
+class WineQualityTest extends TestCase {
+
+	use Way\Tests\ModelHelpers;
+
+	public function testHasWines() {
+		$this->assertHasMany('wines', WineQuality::class);
+	}
+
 }

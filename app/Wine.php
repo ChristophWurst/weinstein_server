@@ -46,17 +46,17 @@ class Wine extends Model implements AdministrateModel {
 	 * @var array of string
 	 */
 	protected $fillable = [
-	    'nr',
-	    'competition_id',
-	    'applicant_id',
-	    'association_id',
-	    'label',
-	    'winesort_id',
-	    'winequality_id',
-	    'vintage',
-	    'alcohol',
-	    'alcoholtot',
-	    'sugar'
+		'nr',
+		'competition_id',
+		'applicant_id',
+		'association_id',
+		'label',
+		'winesort_id',
+		'winequality_id',
+		'vintage',
+		'alcohol',
+		'alcoholtot',
+		'sugar'
 	];
 
 	/**

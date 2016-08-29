@@ -1,5 +1,7 @@
 <?php
 
+use App\MasterData\WineSort;
+
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -18,16 +20,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-class CommissionTest extends TestCase {
-    
-    use Way\Tests\ModelHelpers;
-    
-    public function testHasManyTaster() {
-        $this->assertHasMany('tasters', 'Commission');
-    }
-    
-    public function testBelongsToTastingSession() {
-        $this->assertBelongsTo('tastingsession', 'Commission');
-    }
-    
+class WineSortTest extends TestCase {
+
+	use Way\Tests\ModelHelpers;
+
+	public function testHasMany() {
+		$this->assertHasMany('wines', WineSort::class);
+	}
+
 }

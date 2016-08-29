@@ -108,7 +108,7 @@ class User extends Authenticatable {
 	 * 
 	 * @return Relation
 	 */
-	public function activitylogs() {
+	public function logs() {
 		return $this->hasMany(Log::class, 'wuser_username', 'username');
 	}
 

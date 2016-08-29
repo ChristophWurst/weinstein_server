@@ -1,5 +1,7 @@
 <?php
 
+use App\MasterData\Address;
+
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -18,13 +20,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+class AddressTest extends TestCase {
 
-class WineSortTest extends TestCase {
+	use Way\Tests\ModelHelpers;
 
-    use Way\Tests\ModelHelpers;
-
-    public function testHasMany() {
-        $this->assertHasMany('wines', 'WineSort');
-    }
+	public function testHasApplicant() {
+		$this->assertHasOne('applicant', Address::class);
+	}
 
 }

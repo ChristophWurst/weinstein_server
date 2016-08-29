@@ -1,5 +1,7 @@
 <?php
 
+use App\Tasting\TastingSession;
+
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -18,16 +20,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-class TastingStageTest extends TestCase {
+class TastingSessionTest extends TestCase {
 
-    use Way\Tests\ModelHelpers;
+	use Way\Tests\ModelHelpers;
 
-    public function testHasManyTastingNumbers() {
-        $this->assertHasMany('tastingnumbers', 'TastingStage');
-    }
+	public function testHasManyCommissions() {
+		$this->assertHasMany('commissions', TastingSession::class);
+	}
 
-    public function testHasManyTastingSessions() {
-        $this->assertHasMany('tastingsessions', 'TastingStage');
-    }
+	public function testBelongsToCompetition() {
+		$this->assertBelongsTo('competition', TastingSession::class);
+	}
+
+	public function testBelongsToTastingStage() {
+		$this->assertBelongsTo('tastingstage', TastingSession::class);
+	}
+
+	public function testBelongsToUser() {
+		$this->assertBelongsTo('user', TastingSession::class);
+	}
 
 }

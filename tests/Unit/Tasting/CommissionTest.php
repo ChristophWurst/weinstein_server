@@ -18,12 +18,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-class AddressTest extends TestCase {
+use App\Tasting\Commission;
+use App\Tasting\TastingSession;
 
-    use Way\Tests\ModelHelpers;
+class CommissionTest extends TestCase {
 
-    public function testHasApplicant() {
-        $this->assertHasOne('applicant', 'Address');
-    }
+	use Way\Tests\ModelHelpers;
+
+	public function testHasManyTaster() {
+		$this->assertHasMany('tasters', Commission::class);
+	}
+
+	public function testBelongsToTastingSession() {
+		$this->assertBelongsTo('tastingsession', Commission::class);
+	}
 
 }
