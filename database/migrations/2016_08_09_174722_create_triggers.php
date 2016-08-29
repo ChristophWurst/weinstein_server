@@ -14,7 +14,7 @@ class CreateTriggers extends Migration {
 		DB::unprepared('DROP TRIGGER IF EXISTS `tastingnumber_AFTER_INSERT`');
 
 		$sql = <<<SQL
-CREATE DEFINER = CURRENT_USER TRIGGER `weinstein`.`tastingnumber_AFTER_INSERT`
+CREATE DEFINER = CURRENT_USER TRIGGER `tastingnumber_AFTER_INSERT`
 AFTER INSERT
 ON `tastingnumber` FOR EACH ROW
 BEGIN
