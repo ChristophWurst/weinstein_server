@@ -1,9 +1,9 @@
-## Weinstein Server
+# Weinstein Server
 
-# Build status
+## Build status
 
-todo
+[![Build Status](https://travis-ci.org/ChristophWurst/weinstein_server.svg?branch=master)](https://travis-ci.org/ChristophWurst/weinstein_server)
 
-# Description
+## Description
 
 Multi user wine tasting, evaluation and management tool written in PHP.
