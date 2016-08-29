@@ -5,6 +5,12 @@ php:
     - 5.6
     - 7
 
+addons:
+    apt:
+      packages:
+        - mysql-server-5.6
+        - mysql-client-5.6
+
 cache:
     directories:
       - "$HOME/.composer/cache/files"
@@ -17,5 +23,19 @@ before_install:
 
 before_script:
     - composer install --dev
+
+    # Set up DB
+    - mysql -u root -e 'create database weinstein_test;'
+    - mysql -u root -e "CREATE USER 'weinstein_test'@'localhost' IDENTIFIED BY 'test';"
+    - mysql -u root -e "GRANT SUPER on *.* to 'weinstein_test'@'localhost';"
+    - mysql -u root -e "GRANT ALL PRIVILEGES ON weinstein_test.* TO 'weinstein_test'@'localhost';"
+
 script:
+    # Generate secure key
+    - php artisan key:generate
+
+    # Prepare DB
+    - php artisan migrate
+
+    # Test PHP
     - phpunit -c tests/phpunit.xml
