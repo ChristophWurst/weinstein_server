@@ -121,8 +121,7 @@ interface TastingHandler {
 	 * @param User $user
 	 * @return Collection
 	 */
-	public function getAllTastingSessions(Competition $competition = null, TastingStage $tastingStage = null,
-		User $user = null);
+	public function getAllTastingSessions(Competition $competition, TastingStage $tastingStage, User $user = null);
 
 	/**
 	 * @param array $data

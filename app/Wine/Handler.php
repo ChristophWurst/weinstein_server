@@ -27,6 +27,7 @@ use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
 use App\MasterData\User;
 use App\Wine;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -35,7 +36,6 @@ use Illuminate\Support\MessageBag;
 use phpDocumentor\Reflection\DocBlock\Type\Collection;
 use PHPExcel_IOFactory;
 use SebastianBergmann\RecursionContext\Exception;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Handler implements WineHandler {
 

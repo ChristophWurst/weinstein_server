@@ -219,7 +219,8 @@ class Handler implements TastingHandler {
 		return $this->tastingNumberRepository->getAll($competition, $tastingStage);
 	}
 
-	public function getAllTastingSessions(Competition $competition, TastingStage $tastingStage, User $user = null) {
+	public function getAllTastingSessions(Competition $competition = null, TastingStage $tastingStage = null,
+		User $user = null) {
 		if (is_null($user) || $user->isAdmin()) {
 			return $this->tastingSessionRepository->findAll($competition, $tastingStage);
 		}

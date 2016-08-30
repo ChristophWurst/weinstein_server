@@ -82,7 +82,7 @@ interface WineHandler {
 	 * @param Wine $wine
 	 * @param array $data
 	 */
-	public function updateChosen(Wine $wine, $data);
+	public function updateChosen(Wine $wine, array $data);
 
 	/**
 	 * @param UploadedFile $file
