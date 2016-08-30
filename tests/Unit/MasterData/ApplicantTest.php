@@ -1,7 +1,5 @@
 <?php
 
-use App\MasterData\Applicant;
-
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -20,9 +18,15 @@ use App\MasterData\Applicant;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+
+namespace Test\Unit\MasterData;
+
+use App\MasterData\Applicant;
+use Test\TestCase;
+
 class ApplicantTest extends TestCase {
 
-	use Way\Tests\ModelHelpers;
+	use \Way\Tests\ModelHelpers;
 
 	public function testBelongsToAddress() {
 		$this->assertBelongsTo('address', Applicant::class);

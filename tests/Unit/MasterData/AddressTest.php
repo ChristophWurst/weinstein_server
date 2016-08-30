@@ -1,7 +1,5 @@
 <?php
 
-use App\MasterData\Address;
-
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -20,9 +18,15 @@ use App\MasterData\Address;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+
+namespace Test\Unit\MasterData;
+
+use App\MasterData\Address;
+use Test\TestCase;
+
 class AddressTest extends TestCase {
 
-	use Way\Tests\ModelHelpers;
+	use \Way\Tests\ModelHelpers;
 
 	public function testHasApplicant() {
 		$this->assertHasOne('applicant', Address::class);

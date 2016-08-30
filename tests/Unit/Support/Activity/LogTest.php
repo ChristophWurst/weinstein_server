@@ -1,7 +1,5 @@
 <?php
 
-use App\Support\Activity\Log;
-
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -20,9 +18,15 @@ use App\Support\Activity\Log;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+
+namespace Test\Unit\Support\Activity;
+
+use App\Support\Activity\Log;
+use Test\TestCase;
+
 class LogTest extends TestCase {
 
-	use Way\Tests\ModelHelpers;
+	use \Way\Tests\ModelHelpers;
 
 	public function testHasUser() {
 		$this->assertBelongsTo('user', Log::class);

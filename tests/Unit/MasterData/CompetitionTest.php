@@ -18,12 +18,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+
+namespace Test\Unit\MasterData;
+
 use App\MasterData\Competition;
 use App\MasterData\User;
+use Test\TestCase;
 
 class CompetitionTest extends TestCase {
 
-	use Way\Tests\ModelHelpers;
+	use \Way\Tests\ModelHelpers;
 
 	public function testNoAdmin() {
 		$user = new User(array(

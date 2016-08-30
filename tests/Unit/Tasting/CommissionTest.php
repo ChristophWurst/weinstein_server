@@ -18,12 +18,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+
+namespace Test\Unit\Tasting;
+
 use App\Tasting\Commission;
-use App\Tasting\TastingSession;
+use Test\TestCase;
 
 class CommissionTest extends TestCase {
 
-	use Way\Tests\ModelHelpers;
+	use \Way\Tests\ModelHelpers;
 
 	public function testHasManyTaster() {
 		$this->assertHasMany('tasters', Commission::class);

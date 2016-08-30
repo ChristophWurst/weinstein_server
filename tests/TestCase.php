@@ -1,5 +1,7 @@
 <?php
 
+namespace Test;
+
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;

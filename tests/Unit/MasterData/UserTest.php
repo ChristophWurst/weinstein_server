@@ -18,12 +18,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+
+namespace Test\Unit\MasterData;
+
 use App\MasterData\User;
 use Illuminate\Support\Facades\Hash;
+use Test\TestCase;
 
 class UserTest extends TestCase {
 
-	use Way\Tests\ModelHelpers;
+	use \Way\Tests\ModelHelpers;
 
 	public function testNoAdmin() {
 		$user1 = new User(array(

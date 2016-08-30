@@ -1,8 +1,5 @@
 <?php
 
-use App\MasterData\Association;
-use App\MasterData\User;
-
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -21,9 +18,16 @@ use App\MasterData\User;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+
+namespace Test\Unit\MasterData;
+
+use App\MasterData\Association;
+use App\MasterData\User;
+use Test\TestCase;
+
 class AssociationTest extends TestCase {
 
-	use Way\Tests\ModelHelpers;
+	use \Way\Tests\ModelHelpers;
 
 	public function testNoAdmin() {
 		$user = new User(array(

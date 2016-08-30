@@ -18,11 +18,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+
+namespace Test\Unit\MasterData;
+
 use App\WineQuality;
+use Test\TestCase;
 
 class WineQualityTest extends TestCase {
 
-	use Way\Tests\ModelHelpers;
+	use \Way\Tests\ModelHelpers;
 
 	public function testHasWines() {
 		$this->assertHasMany('wines', WineQuality::class);

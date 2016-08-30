@@ -1,5 +1,7 @@
 <?php
 
+namespace Test\Unit\MasterData;
+
 use App\Database\Repositories\ApplicantRepository;
 use App\Database\Repositories\AssociationRepository;
 use App\Database\Repositories\CompetitionRepository;
@@ -11,6 +13,8 @@ use App\MasterData\Store;
 use App\MasterData\User;
 use App\MasterData\WineSort;
 use Illuminate\Support\Collection;
+use PHPUnit_Framework_MockObject_MockObject;
+use Test\TestCase;
 
 class StoreTest extends TestCase {
 

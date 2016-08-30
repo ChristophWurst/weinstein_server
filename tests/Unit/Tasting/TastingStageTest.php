@@ -1,7 +1,5 @@
 <?php
 
-use App\Tasting\TastingStage;
-
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -20,9 +18,15 @@ use App\Tasting\TastingStage;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+
+namespace Test\Unit\Tasting;
+
+use App\Tasting\TastingStage;
+use Test\TestCase;
+
 class TastingStageTest extends TestCase {
 
-	use Way\Tests\ModelHelpers;
+	use \Way\Tests\ModelHelpers;
 
 	public function testHasManyTastingNumbers() {
 		$this->assertHasMany('tastingnumbers', TastingStage::class);

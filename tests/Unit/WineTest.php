@@ -18,11 +18,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+
+namespace Test\Unit;
+
 use App\Wine;
+use Test\TestCase;
 
 class WineTest extends TestCase {
 
-	use Way\Tests\ModelHelpers;
+	use \Way\Tests\ModelHelpers;
 
 	public function testBelongsToApplicant() {
 		$this->assertBelongsTo('applicant', Wine::class);

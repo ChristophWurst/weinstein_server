@@ -1,7 +1,5 @@
 <?php
 
-use App\Tasting\TastingSession;
-
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -20,9 +18,15 @@ use App\Tasting\TastingSession;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+
+namespace Test\Unit\Tasting;
+
+use App\Tasting\TastingSession;
+use Test\TestCase;
+
 class TastingSessionTest extends TestCase {
 
-	use Way\Tests\ModelHelpers;
+	use \Way\Tests\ModelHelpers;
 
 	public function testHasManyCommissions() {
 		$this->assertHasMany('commissions', TastingSession::class);

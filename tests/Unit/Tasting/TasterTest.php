@@ -1,7 +1,5 @@
 <?php
 
-use App\Tasting\Taster;
-
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -20,9 +18,15 @@ use App\Tasting\Taster;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+
+namespace Test\Unit\Tasting;
+
+use App\Tasting\Taster;
+use Test\TestCase;
+
 class TasterTest extends TestCase {
 
-	use Way\Tests\ModelHelpers;
+	use \Way\Tests\ModelHelpers;
 
 	public function testBelongsToCommission() {
 		$this->assertBelongsTo('commission', Taster::class);

@@ -1,7 +1,5 @@
 <?php
 
-use App\MasterData\WineSort;
-
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -20,9 +18,15 @@ use App\MasterData\WineSort;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+
+namespace Test\Unit\MasterData;
+
+use App\MasterData\WineSort;
+use Test\TestCase;
+
 class WineSortTest extends TestCase {
 
-	use Way\Tests\ModelHelpers;
+	use \Way\Tests\ModelHelpers;
 
 	public function testHasMany() {
 		$this->assertHasMany('wines', WineSort::class);
