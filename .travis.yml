@@ -33,6 +33,7 @@ script:
     - find . -name \*.php -not -path './vendor/*' -exec php -l "{}" \;
 
     # Generate secure key
+    - bootstrap/cache/compiled.php
     - php artisan key:generate --no-interaction
 
     # Prepare DB

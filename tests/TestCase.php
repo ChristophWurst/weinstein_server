@@ -2,9 +2,9 @@
 
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Application;
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Foundation\Testing\TestCase;
 
-abstract class TestCase extends BaseTestCase {
+abstract class TestCase extends TestCase {
 
 	/**
 	 * The base URL to use while testing the application.
