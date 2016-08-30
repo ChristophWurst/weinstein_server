@@ -169,9 +169,9 @@ use App\MasterData\Competition;
             @yield('content')
         </div><!--/ .container -->
         
-        <script src="{!! asset('js/jquery-1.11.2.min.js') !!}"></script>
-        <script src="{!! asset('js/bootstrap.min.js') !!}"></script>
-        <script src="{!! asset('js/select2.min.js') !!}"></script>
+        <script src="{!! asset('js/vendor/jquery/dist/jquery.min.js') !!}"></script>
+        <script src="{!! asset('js/vendor/bootstrap/dist/js/boostrap.min.js') !!}"></script>
+        <script src="{!! asset('js/vendor/select2/dist/select2.min.js') !!}"></script>
         <script src="{!! asset('js/select2_locale_de.js') !!}"></script>
         <script src="{!! asset('js/weinstein.js') !!}"></script>
         

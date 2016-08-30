@@ -1,0 +1,23 @@
+{
+  "name": "Weinstein",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Christoph Wurst <christoph@winzerhof-wurst.at>"
+  ],
+  "license": "AGPLv3",
+  "homepage": "https://github.com/ChristophWurst/weinstein_server",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.0",
+    "select2": "^4.0.3",
+    "bootstrap": "^3.2.7"
+  }
+}

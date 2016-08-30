@@ -21,3 +21,6 @@ nbproject/private
 /public/storage
 Homestead.yaml
 Homestead.json
+
+# Bower components
+/public/js/vendor
