@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
 Route::get('', array(
 	'as' => 'start',
 	'uses' => 'StartController@index'
