@@ -27,7 +27,6 @@ use App\TastingNumber;
 use App\TastingSession;
 use App\MasterData\User;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Route;
 
 class TastingAbilities {
 

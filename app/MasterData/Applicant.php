@@ -101,7 +101,7 @@ class Applicant extends Model implements AdministrateModel {
 	/**
 	 * 1 applicant : 1 address
 	 * 
-	 * @return type
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function address() {
 		return $this->belongsTo(Address::class);
@@ -110,7 +110,7 @@ class Applicant extends Model implements AdministrateModel {
 	/**
 	 * n applicants : 1 association
 	 * 
-	 * @return type
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function association() {
 		return $this->belongsTo(Association::class);
@@ -119,7 +119,7 @@ class Applicant extends Model implements AdministrateModel {
 	/**
 	 * n applicants : 1 user
 	 * 
-	 * @return type
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function user() {
 		return $this->belongsTo(User::class, 'wuser_username', 'username');

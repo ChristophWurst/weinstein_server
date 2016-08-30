@@ -24,45 +24,45 @@ use Illuminate\Support\Facades\DB;
  */
 class UserTableSeeder extends Seeder {
 
-    /**
-     * Insert new user into database
-     * 
-     * @param string $username
-     * @param string $password
-     * @param boolean $admin
-     * @return User
-     */
-    public static function createUser($username, $password, $admin) {
-        return User::create(array(
-            'username' => $username,
-            'password' => $password,
-            'admin' => $admin,
-        ));
-    }
+	/**
+	 * Insert new user into database
+	 * 
+	 * @param string $username
+	 * @param string $password
+	 * @param boolean $admin
+	 * @return User
+	 */
+	public static function createUser($username, $password, $admin) {
+		return User::create(array(
+			'username' => $username,
+			'password' => $password,
+			'admin' => $admin,
+		));
+	}
 
-    /**
-     * Run user table seeder
-     */
-    public function run() {
-        //delete all users
-        DB::table('wuser')->delete();
+	/**
+	 * Run user table seeder
+	 */
+	public function run() {
+		//delete all users
+		DB::table('wuser')->delete();
 
-        //users
-        $this->createUser('user1', 'user1!?', false);
-        $this->createUser('user2', 'user2!?', false);
-        $this->createUser('user3', 'user3!?', false);
-        $this->createUser('user4', 'user4!?', false);
-        $this->createUser('user5', 'user5!?', false);
+		//users
+		$this->createUser('user1', 'user1!?', false);
+		$this->createUser('user2', 'user2!?', false);
+		$this->createUser('user3', 'user3!?', false);
+		$this->createUser('user4', 'user4!?', false);
+		$this->createUser('user5', 'user5!?', false);
 
-        //admins
-        $this->createUser('admin1', 'admin1!?', true);
-        $this->createUser('admin2', 'admin2!?', true);
-        $this->createUser('admin3', 'admin3!?', true);
-        $this->createUser('admin4', 'admin4!?', true);
-        $this->createUser('admin5', 'admin5!?', true);
+		//admins
+		$this->createUser('admin1', 'admin1!?', true);
+		$this->createUser('admin2', 'admin2!?', true);
+		$this->createUser('admin3', 'admin3!?', true);
+		$this->createUser('admin4', 'admin4!?', true);
+		$this->createUser('admin5', 'admin5!?', true);
 
-        //sample user
-        $this->createUser('christoph', 'test', true);
-    }
+		//sample user
+		$this->createUser('christoph', 'test', true);
+	}
 
 }

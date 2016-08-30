@@ -20,29 +20,29 @@
  */
 class CompetitionTableSeeder extends Seeder {
     
-    /**
-     * Insert new competition into database
-     * 
-     * @param string $label
-     * @param int $competitionState
-     * @param string|null $username
-     * @return Competition
-     */
-    public static function createCompetition($label, $competitionState, $username) {
-        return Competition::create(array(
-            'label' => $label,
-            'competitionstate_id' => $competitionState,
-            'wuser_username' => $username,
-        ));
-    }
+	/**
+	 * Insert new competition into database
+	 * 
+	 * @param string $label
+	 * @param int $competitionState
+	 * @param string|null $username
+	 * @return Competition
+	 */
+	public static function createCompetition($label, $competitionState, $username) {
+		return Competition::create(array(
+			'label' => $label,
+			'competitionstate_id' => $competitionState,
+			'wuser_username' => $username,
+		));
+	}
     
-    /**
-     * Run competition seeder
-     */
-    public function run() {
-        DB::table('competition')->delete();
+	/**
+	 * Run competition seeder
+	 */
+	public function run() {
+		DB::table('competition')->delete();
         
-        $this->createCompetition('comp1', 1, 'user1');
-    }
+		$this->createCompetition('comp1', 1, 'user1');
+	}
     
 }

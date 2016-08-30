@@ -37,32 +37,38 @@ interface TastingHandler {
 	/**
 	 * @param Competition $competition
 	 * @param int $tasting
+	 * @return void
 	 */
 	public function lockTastingNumbers(Competition $competition, $tasting);
 
 	/**
 	 * @param Competition $competition
 	 * @param int $tasting
+	 * @return void
 	 */
 	public function lockTasting(Competition $competition, $tasting);
 
 	/**
 	 * @param Competition $competition
+	 * @return void
 	 */
 	public function lockKdb(Competition $competition);
 
 	/**
 	 * @param Competition $competition
+	 * @return void
 	 */
 	public function lockExcluded(Competition $competition);
 
 	/**
 	 * @param Competition $competition
+	 * @return void
 	 */
 	public function lockSosi(Competition $competition);
 
 	/**
 	 * @param Competition $competition
+	 * @return void
 	 */
 	public function lockChoosing(Competition $competition);
 
@@ -81,17 +87,20 @@ interface TastingHandler {
 	/**
 	 * @param UploadedFile $file
 	 * @param Competition $competition
+	 * @return integer
 	 */
 	public function importTastingNumbers(UploadedFile $file, Competition $competition);
 
 	/**
 	 * @param TastingNumber $tastingNumber
+	 * @return void
 	 */
 	public function deleteTastingNumber(TastingNumber $tastingNumber);
 
 	/**
 	 * @param Competition $competition
 	 * @param TastingStage $tastingStage
+	 * @return Collection
 	 */
 	public function getUntastedTastingNumbers(Competition $competition, TastingStage $tastingStage);
 
@@ -118,23 +127,26 @@ interface TastingHandler {
 	/**
 	 * @param array $data
 	 * @param Competition $competition
+	 * @return TastingSession
 	 */
 	public function createTastingSession(array $data, Competition $competition);
 
 	/**
 	 * @param TastingSession $tastingSession
 	 * @param array $data
-	 * @param Competition $competition
+	 * @return void
 	 */
 	public function updateTastingSession(TastingSession $tastingSession, array $data);
 
 	/**
 	 * @param TastingSession $tastingSession
+	 * @return void
 	 */
 	public function lockTastingSession(TastingSession $tastingSession);
 
 	/**
 	 * @param TastingSession $tastingSession
+	 * @return void
 	 */
 	public function deleteTastingSession(TastingSession $tastingSession);
 
@@ -164,6 +176,7 @@ interface TastingHandler {
 	 * @param array $data
 	 * @param TastingSession $tastingSession
 	 * @param Commission $commission
+	 * @return void
 	 */
 	public function updateTasting(array $data, TastingNumber $tastingNumber, TastingSession $tastingSession, Commission $commission);
 

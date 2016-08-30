@@ -26,10 +26,16 @@ use App\Support\Activity\Log;
 
 class ActivityLogRepository {
 
+	/**
+	 * @param integer $limit
+	 */
 	public function findMostRecent($limit) {
 		return Log::orderBy('created_at', 'desc')->take(max([$limit, 500]))->get();
 	}
 
+	/**
+	 * @param string $message
+	 */
 	public function create($message, User $user = null) {
 		$entry = new Log([
 			'message' => $message,
