@@ -29,6 +29,9 @@ before_script:
     - cat .env
 
 script:
+    # Check PHP syntax
+    - find . -name \*.php -not -path './vendor/*' -exec php -l "{}" \;
+
     # Generate secure key
     - php artisan key:generate --no-interaction
 

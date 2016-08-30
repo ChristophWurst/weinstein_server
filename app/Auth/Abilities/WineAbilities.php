@@ -211,7 +211,7 @@ class WineAbilities {
 	 * @param Wine $wine
 	 * @return bool
 	 */
-	public function updateExcluded(User $user, Wine $wine) {
+	public function updateChosen(User $user, Wine $wine) {
 		
 	}
 
