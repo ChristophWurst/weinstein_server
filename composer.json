@@ -21,7 +21,6 @@
         "symfony/dom-crawler": "2.8.*|3.0.*",
 	"phpspec/phpspec": "~2.1",
 	"way/laravel-test-helpers": "dev-master"
-
     },
     "autoload": {
         "classmap": [
