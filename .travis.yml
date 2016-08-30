@@ -39,4 +39,9 @@ script:
     - php artisan migrate --no-interaction
 
     # Test PHP
+    - phpenv config-add xdebug.ini
     - phpunit -c tests/phpunit.xml
+
+    # Upload coverage results to scrutinizer
+    - wget https://scrutinizer-ci.com/ocular.phar
+    - php ocular.phar code-coverage:upload --format=php-clover clover.xml
