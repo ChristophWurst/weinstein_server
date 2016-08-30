@@ -21,6 +21,8 @@
 
 namespace App\Exception;
 
+use Exception;
+
 class ValidationModelMissingException extends Exception {
 
 }
