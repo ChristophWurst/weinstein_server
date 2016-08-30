@@ -37,6 +37,9 @@ class EnrollmentForm {
 		$this->competition = $wine->competition;
 	}
 
+	/**
+	 * @param string $text
+	 */
 	private function encode($text) {
 		return iconv('utf-8', 'ISO-8859-2', $text);
 	}

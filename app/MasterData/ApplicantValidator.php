@@ -79,7 +79,6 @@ class ApplicantValidator extends Validator {
 	/**
 	 * Get rules for updating an existing applicant
 	 * 
-	 * @param Model $model
 	 * @return array
 	 */
 	protected function getUpdateRules(array $data, Model $applicant = null) {

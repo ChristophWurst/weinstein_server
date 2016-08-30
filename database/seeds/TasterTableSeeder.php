@@ -20,23 +20,23 @@
  */
 class TasterTableSeeder extends Seeder {
 
-    /**
-     * Insert new taster into database
-     * 
-     * @param int $nr
-     * @param string $name
-     * @param boolean $active
-     * @param tasterside $commission
-     * @param int $tastingsession
-     * @return Taster
-     */
-    public static function createTaster($nr, $name, $active, $commission) {
-        return Taster::create(array(
-                    'nr' => $nr,
-                    'name' => $name,
-                    'active' => $active,
-                    'commission_id' => $commission,
-        ));
-    }
+	/**
+	 * Insert new taster into database
+	 * 
+	 * @param int $nr
+	 * @param string $name
+	 * @param boolean $active
+	 * @param tasterside $commission
+	 * @param int $tastingsession
+	 * @return Taster
+	 */
+	public static function createTaster($nr, $name, $active, $commission) {
+		return Taster::create(array(
+					'nr' => $nr,
+					'name' => $name,
+					'active' => $active,
+					'commission_id' => $commission,
+		));
+	}
 
 }

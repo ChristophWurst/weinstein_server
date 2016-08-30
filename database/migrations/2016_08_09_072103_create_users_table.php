@@ -31,7 +31,6 @@ class CreateUsersTable extends Migration {
 	 * -- Table `weinstein`.`wuser`
 	 * -- -----------------------------------------------------
 	 * DROP TABLE IF EXISTS `weinstein`.`wuser` ;
-
 	 * CREATE TABLE IF NOT EXISTS `weinstein`.`wuser` (
 	 *   `username` VARCHAR(80) NOT NULL,
 	 *   `password` VARCHAR(80) NULL,

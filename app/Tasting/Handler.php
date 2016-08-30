@@ -208,6 +208,9 @@ class Handler implements TastingHandler {
 		return $this->tastingNumberRepository->delete($tastingNumber);
 	}
 
+	/**
+	 * @param integer $limit
+	 */
 	public function getUntastedTastingNumbers(Competition $competition, TastingStage $tastingStage, $limit = null) {
 		return $this->tastingNumberRepository->findUntasted($competition, $tastingStage, $limit);
 	}
