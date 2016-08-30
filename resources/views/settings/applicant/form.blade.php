@@ -24,13 +24,13 @@
         {!! Form::Label('id', 'Betriebsnummer', array('class' => 'col-sm-2 col-md-2 control-label')) !!}
         <div class="col-sm-10 col-md-3">
             <?php
-            $options = [
-                'class' => 'form-control'
-            ];
-            if ($edit) {
-                $options['readonly'] = 'readonly';
-            }
-            ?>
+			$options = [
+				'class' => 'form-control'
+			];
+			if ($edit) {
+				$options['readonly'] = 'readonly';
+			}
+			?>
             {!! Form::text('id', ($edit ? $applicant->id : ''), $options) !!}
         </div>
     </div>

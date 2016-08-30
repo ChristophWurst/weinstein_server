@@ -44,8 +44,8 @@ class AddressCatalogueExport {
 	 * @var array of string
 	 */
 	private $headers = [
-	    'StandNr',
-	    'Betrieb',
+		'StandNr',
+		'Betrieb',
 	];
 
 	/**

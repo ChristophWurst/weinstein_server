@@ -41,7 +41,7 @@ class EnrollmentForm {
 		return iconv('utf-8', 'ISO-8859-2', $text);
 	}
 
-	private function addTitle(FPDF &$pdf) {
+	private function addTitle(FPDF&$pdf) {
 		$pdf->SetFont('Arial', 'B', 15);
 		// Move to the right
 		$pdf->Cell(40);
@@ -50,7 +50,7 @@ class EnrollmentForm {
 		$pdf->Ln(25);
 	}
 
-	private function addHeader(FPDF &$pdf) {
+	private function addHeader(FPDF&$pdf) {
 		$pdf->SetFont('Arial', 'B', 12);
 		$pdf->Write(5, $this->encode('Anliefertermine: '));
 
@@ -84,7 +84,7 @@ class EnrollmentForm {
 		$pdf->Ln(10);
 	}
 
-	private function addWineData(FPDF &$pdf) {
+	private function addWineData(FPDF&$pdf) {
 		$pdf->Cell(15);
 		$pdf->SetFont('Arial', '', 10);
 		$pdf->Cell(35, 10, $this->encode('bitte ankreuzen'));
@@ -131,7 +131,7 @@ class EnrollmentForm {
 		}
 		$pdf->Write(5, $this->encode('Staatliche Prüfnummer: ' . $approvalNr));
 
-		$commaToDot = function ($val) {
+		$commaToDot = function($val) {
 			return str_replace('.', ',', $val);
 		};
 

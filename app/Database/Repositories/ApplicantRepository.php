@@ -21,7 +21,6 @@
 
 namespace App\Database\Repositories;
 
-use App\Exceptions\NotImplementedException;
 use App\MasterData\Address;
 use App\MasterData\Applicant;
 use App\MasterData\User;

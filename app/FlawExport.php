@@ -34,19 +34,19 @@ class FlawExport {
 
 	private $wines;
 	private $headers = [
-	    'DateiNr',
-	    'Sorte',
-	    'Qualität',
-	    'Marke',
-	    'Jahr',
-	    'BetriebsNr',
-	    'Betriebsbezeichnung',
-	    'Titel',
-	    'Vorname',
-	    'Nachname',
-	    'Weinstand',
-	    '1. Bewertung',
-	    'Kommentar',
+		'DateiNr',
+		'Sorte',
+		'Qualität',
+		'Marke',
+		'Jahr',
+		'BetriebsNr',
+		'Betriebsbezeichnung',
+		'Titel',
+		'Vorname',
+		'Nachname',
+		'Weinstand',
+		'1. Bewertung',
+		'Kommentar',
 	];
 
 	/**

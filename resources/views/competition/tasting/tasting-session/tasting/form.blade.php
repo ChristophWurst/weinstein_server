@@ -58,9 +58,9 @@
                 {!! Form::hidden('tastingnumber_id' . ($side === 'a' ? 1 : 2),
                             $tastingnumber->id) !!}
                 <?php
-                    $commission = $tastingSession->commissions()->where('side', $side)->first();
-                    $tasters = $commission->tasters()->active()->get();
-                ?>
+					$commission = $tastingSession->commissions()->where('side', $side)->first();
+					$tasters = $commission->tasters()->active()->get();
+				?>
                 @foreach ($tasters as $taster)
                 <div class="form-group">
                     {!! Form::Label($side . $taster->nr, $taster->nr . ' - ' . $taster->name, array('class' => 'col-xs-6 col-sm-9 col-md-8 col-lg-8 control-label')) !!}

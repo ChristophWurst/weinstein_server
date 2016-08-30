@@ -20,35 +20,35 @@
  */
 class TastingNumberTableSeeder extends Seeder {
     
-    /**
-     * Insert new tasting number into database
-     * 
-     * @param int $nr
-     * @param int $wine
-     * @param int $tastingstage
-     * @return TastingNumber
-     */
-    public static function createTastingNumber($nr, $wine, $tastingstage) {
-        return TastingNumber::create(array(
-            'nr' => $nr,
-            'wine_id' => $wine,
-            'tastingstage_id' => $tastingstage,
-        ));
-    }
+	/**
+	 * Insert new tasting number into database
+	 * 
+	 * @param int $nr
+	 * @param int $wine
+	 * @param int $tastingstage
+	 * @return TastingNumber
+	 */
+	public static function createTastingNumber($nr, $wine, $tastingstage) {
+		return TastingNumber::create(array(
+			'nr' => $nr,
+			'wine_id' => $wine,
+			'tastingstage_id' => $tastingstage,
+		));
+	}
     
-    /**
-     * Run tasting number seeder
-     */
-    public function run() {
-        //delete existing tasting numbers
-        DB::table('tastingnumber')->delete();
+	/**
+	 * Run tasting number seeder
+	 */
+	public function run() {
+		//delete existing tasting numbers
+		DB::table('tastingnumber')->delete();
         
-        foreach (Competition::all() as $competition) {
-            $i = 1;
-            foreach ($competition->wines as $wine) {
-                $this->createTastingNumber($i, $wine->id, 1);
-                $i++;
-            }
-        }
-    }
+		foreach (Competition::all() as $competition) {
+			$i = 1;
+			foreach ($competition->wines as $wine) {
+				$this->createTastingNumber($i, $wine->id, 1);
+				$i++;
+			}
+		}
+	}
 }

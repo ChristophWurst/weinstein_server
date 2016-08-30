@@ -29,8 +29,8 @@ class CommissionTableSeeder {
 	 */
 	public static function createCommission($side, $tastingSession) {
 		return Commission::create(array(
-			    'side' => $side,
-			    'tastingsession_id' => $tastingSession,
+				'side' => $side,
+				'tastingsession_id' => $tastingSession,
 		));
 	}
 

@@ -11,10 +11,10 @@ class FixUserRememberme extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::table('wuser', function (Blueprint $table) {
+		Schema::table('wuser', function(Blueprint $table) {
 			$table->dropColumn('remember_token');
 		});
-		Schema::table('wuser', function (Blueprint $table) {
+		Schema::table('wuser', function(Blueprint $table) {
 			$table->rememberToken();
 		});
 	}
