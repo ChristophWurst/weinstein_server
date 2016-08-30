@@ -44,4 +44,4 @@ script:
 
     # Upload coverage results to scrutinizer
     - wget https://scrutinizer-ci.com/ocular.phar
-    - php ocular.phar code-coverage:upload --format=php-clover clover.xml
+    - php ocular.phar code-coverage:upload --format=php-clover tests/clover.xml
