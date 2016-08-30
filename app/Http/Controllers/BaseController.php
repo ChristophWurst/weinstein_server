@@ -38,7 +38,7 @@ class BaseController extends Controller {
 
 	/** @var array */
 	protected $selectNone = [
-	    'none' => 'kein',
+		'none' => 'kein',
 	];
 
 	/**

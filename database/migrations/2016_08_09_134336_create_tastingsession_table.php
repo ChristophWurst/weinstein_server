@@ -49,7 +49,7 @@ class CreateTastingsessionTable extends Migration {
 	public function up() {
 		Schema::dropIfExists('tastingsession');
 
-		Schema::create('tastingsession', function (Blueprint $table) {
+		Schema::create('tastingsession', function(Blueprint $table) {
 			$table->engine = 'InnoDB';
 
 			$table->increments('id');

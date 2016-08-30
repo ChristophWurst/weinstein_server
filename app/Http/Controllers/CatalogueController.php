@@ -39,8 +39,8 @@ class CatalogueController extends BaseController {
 		$we = new AddressCatalogueExport($competition->addressCatalogue);
 		$filename = 'Adresskatalog.xls';
 		$headers = [
-		    'Content-Type' => 'application/vnd.ms-excel',
-		    'Content-Disposition' => 'attachment; filename="' . $filename . '"'
+			'Content-Type' => 'application/vnd.ms-excel',
+			'Content-Disposition' => 'attachment; filename="' . $filename . '"'
 		];
 		return Response::download($we->asExcel(), $filename, $headers);
 	}
@@ -63,8 +63,8 @@ class CatalogueController extends BaseController {
 		$we = new WebCatalogueExport($wines);
 		$filename = 'Webkatalog.xls';
 		$headers = [
-		    'Content-Type' => 'application/vnd.ms-excel',
-		    'Content-Disposition' => 'attachment; filename="' . $filename . '"'
+			'Content-Type' => 'application/vnd.ms-excel',
+			'Content-Disposition' => 'attachment; filename="' . $filename . '"'
 		];
 		return Response::download($we->asExcel(), $filename, $headers);
 	}
@@ -85,8 +85,8 @@ class CatalogueController extends BaseController {
 		$we = new TastingCatalogueExport($wines);
 		$filename = 'Kostkatalog.xls';
 		$headers = [
-		    'Content-Type' => 'application/vnd.ms-excel',
-		    'Content-Disposition' => 'attachment; filename="' . $filename . '"'
+			'Content-Type' => 'application/vnd.ms-excel',
+			'Content-Disposition' => 'attachment; filename="' . $filename . '"'
 		];
 		return Response::download($we->asExcel(), $filename, $headers);
 	}

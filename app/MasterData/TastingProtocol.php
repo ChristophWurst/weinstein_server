@@ -104,7 +104,7 @@ class TastingProtocol {
 	 * 
 	 * @param PHPExcel_Worksheet $sheet
 	 */
-	private function setHeaders(PHPExcel_Worksheet &$sheet) {
+	private function setHeaders(PHPExcel_Worksheet&$sheet) {
 		$sheet->setCellValue('A1', 'Kostnummer');
 		$sheet->setCellValue('B1', 'Dateinummer');
 		$sheet->setCellValue('C1', 'Gesamtergebnis');
@@ -121,7 +121,7 @@ class TastingProtocol {
 	 * @param \Taster $taster
 	 * @return int
 	 */
-	private function getTasterColumn(\Taster &$taster) {
+	private function getTasterColumn(\Taster&$taster) {
 		if (is_null($this->tasterColumns)) {
 			$this->tasterColumns = array();
 			//init maps
@@ -139,7 +139,7 @@ class TastingProtocol {
 	 * @param \TastingNumber $tastingnumber
 	 * @return array
 	 */
-	private function getResults(\TastingNumber &$tastingnumber) {
+	private function getResults(\TastingNumber&$tastingnumber) {
 		$result = array();
 
 		//find result values
@@ -164,7 +164,7 @@ class TastingProtocol {
 	 * 
 	 * @param PHPExcel_Worksheet $sheet
 	 */
-	private function setData(PHPExcel_Worksheet &$sheet) {
+	private function setData(PHPExcel_Worksheet&$sheet) {
 		$data = $this->tastingSession->tastedwines()
 			->orderBy('tastingnumber_nr')
 			->select('tastingnumber_nr', 'tastingnumber_id', 'wine_id', 'wine_nr', 'result')

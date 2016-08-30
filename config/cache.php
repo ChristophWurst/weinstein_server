@@ -2,7 +2,7 @@
 
 return [
 
-    /*
+	/*
     |--------------------------------------------------------------------------
     | Default Cache Store
     |--------------------------------------------------------------------------
@@ -15,9 +15,9 @@ return [
     |
     */
 
-    'default' => env('CACHE_DRIVER', 'file'),
+	'default' => env('CACHE_DRIVER', 'file'),
 
-    /*
+	/*
     |--------------------------------------------------------------------------
     | Cache Stores
     |--------------------------------------------------------------------------
@@ -28,46 +28,46 @@ return [
     |
     */
 
-    'stores' => [
+	'stores' => [
 
-        'apc' => [
-            'driver' => 'apc',
-        ],
+		'apc' => [
+			'driver' => 'apc',
+		],
 
-        'array' => [
-            'driver' => 'array',
-        ],
+		'array' => [
+			'driver' => 'array',
+		],
 
-        'database' => [
-            'driver' => 'database',
-            'table' => 'cache',
-            'connection' => null,
-        ],
+		'database' => [
+			'driver' => 'database',
+			'table' => 'cache',
+			'connection' => null,
+		],
 
-        'file' => [
-            'driver' => 'file',
-            'path' => storage_path('framework/cache'),
-        ],
+		'file' => [
+			'driver' => 'file',
+			'path' => storage_path('framework/cache'),
+		],
 
-        'memcached' => [
-            'driver' => 'memcached',
-            'servers' => [
-                [
-                    'host' => env('MEMCACHED_HOST', '127.0.0.1'),
-                    'port' => env('MEMCACHED_PORT', 11211),
-                    'weight' => 100,
-                ],
-            ],
-        ],
+		'memcached' => [
+			'driver' => 'memcached',
+			'servers' => [
+				[
+					'host' => env('MEMCACHED_HOST', '127.0.0.1'),
+					'port' => env('MEMCACHED_PORT', 11211),
+					'weight' => 100,
+				],
+			],
+		],
 
-        'redis' => [
-            'driver' => 'redis',
-            'connection' => 'default',
-        ],
+		'redis' => [
+			'driver' => 'redis',
+			'connection' => 'default',
+		],
 
-    ],
+	],
 
-    /*
+	/*
     |--------------------------------------------------------------------------
     | Cache Key Prefix
     |--------------------------------------------------------------------------
@@ -78,6 +78,6 @@ return [
     |
     */
 
-    'prefix' => 'laravel',
+	'prefix' => 'laravel',
 
 ];

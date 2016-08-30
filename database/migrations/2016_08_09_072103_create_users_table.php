@@ -31,7 +31,6 @@ class CreateUsersTable extends Migration {
 	 * -- Table `weinstein`.`wuser`
 	 * -- -----------------------------------------------------
 	 * DROP TABLE IF EXISTS `weinstein`.`wuser` ;
-
 	 * CREATE TABLE IF NOT EXISTS `weinstein`.`wuser` (
 	 *   `username` VARCHAR(80) NOT NULL,
 	 *   `password` VARCHAR(80) NULL,
@@ -45,7 +44,7 @@ class CreateUsersTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create('wuser', function (Blueprint $table) {
+		Schema::create('wuser', function(Blueprint $table) {
 			$table->engine = 'InnoDB';
 
 			$table->string('username');

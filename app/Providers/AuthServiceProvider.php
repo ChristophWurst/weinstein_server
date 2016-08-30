@@ -33,7 +33,7 @@ class AuthServiceProvider extends ServiceProvider {
 	public function boot(Gate $gate) {
 		$this->registerPolicies($gate);
 
-		$gate->before(function (User $user) {
+		$gate->before(function(User $user) {
 			return $user->admin;
 		});
 

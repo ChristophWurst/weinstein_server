@@ -39,7 +39,7 @@ class CreateCompetitionTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create('competition', function (Blueprint $table) {
+		Schema::create('competition', function(Blueprint $table) {
 			$table->engine = 'InnoDB';
 
 			$table->increments('id');

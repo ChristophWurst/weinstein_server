@@ -39,8 +39,8 @@ class Commission extends Model {
 	 * @var array
 	 */
 	protected $fillable = [
-	    'side',
-	    'tastingsession_id',
+		'side',
+		'tastingsession_id',
 	];
 
 	/**
