@@ -90,7 +90,8 @@ class Handler implements WineHandler {
 		$validator->setCompetition($competition);
 		$validator->setUser(Auth::user());
 		$validator->validateUpdate();
-		$wine->update($data);
+
+		$this->wineRepository->update($wine, $data);
 		//ActivityLogger::log('Wein [' . $wine->nr . '] bei Bewerb [' . $competition->label . '] bearbeitet');
 		return $wine;
 	}
@@ -105,8 +106,10 @@ class Handler implements WineHandler {
 		if ($validator->fails()) {
 			throw new ValidationException($validator->messages());
 		}
-		$wine->kdb = $data['value'];
-		$wine->save();
+
+		$this->wineRepository->update($wine, [
+			'kdb' => $data['value'],
+		]);
 	}
 
 	/**
@@ -171,8 +174,9 @@ class Handler implements WineHandler {
 		if ($validator->fails()) {
 			throw new ValidationException($validator->messages());
 		}
-		$wine->excluded = $data['value'];
-		$wine->save();
+		$this->wineRepository->update($wine, [
+			'excluded' => $data['value'],
+		]);
 	}
 
 	/**
@@ -238,8 +242,10 @@ class Handler implements WineHandler {
 		if ($validator->fails()) {
 			throw new ValidationException($validator->messages());
 		}
-		$wine->sosi = $data['value'];
-		$wine->save();
+
+		$this->wineRepository->update($wine, [
+			'sosi' => $data['value']
+		]);
 	}
 
 	/**
@@ -303,12 +309,14 @@ class Handler implements WineHandler {
 	 * @throws ValidationException
 	 */
 	public function updateChosen(Wine $wine, array $data) {
-		$validator = \Validator::make($data, array('value' => 'required|boolean'));
+		$validator = Validator::make($data, array('value' => 'required|boolean'));
 		if ($validator->fails()) {
 			throw new ValidationException($validator->messages());
 		}
-		$wine->chosen = $data['value'];
-		$wine->save();
+
+		$this->wineRepository->update($wine, [
+			'chosen' => $data['value'],
+		]);
 	}
 
 	/**
@@ -371,7 +379,7 @@ class Handler implements WineHandler {
 	 * @return Wine
 	 */
 	public function delete(Wine $wine) {
-		$wine->delete();
+		$this->wineRepository->delete($wine);
 		//ActivityLogger::log('Wein [' . $wine->nr . '] von Bewerb [' . $wine->competition->label . '] gel&ouml;scht');
 	}
 
@@ -384,7 +392,7 @@ class Handler implements WineHandler {
 	 * @return Collection
 	 */
 	public function getAll(Competition $competition = null) {
-		return $this->dataProvider->getAll($competition);
+		return $this->wineRepository->findAll($competition);
 	}
 
 	/**
@@ -396,10 +404,10 @@ class Handler implements WineHandler {
 	 * @return Collection
 	 */
 	public function getUsersWines(User $user, Competition $competition, $query = false) {
-		if ($user->admin) {
-			return $this->dataProvider->getAll($competition, $query);
+		if ($user->isAdmin()) {
+			return $this->wineRepository->findAll($competition, $query);
 		} else {
-			return $this->dataProvider->getUsersWines($user, $competition, $query);
+			return $this->wineRepository->findUsersWines($user, $competition, $query);
 		}
 	}
 

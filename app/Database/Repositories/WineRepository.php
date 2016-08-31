@@ -63,7 +63,7 @@ class WineRepository {
 	 * @praam boolen $queryOnly
 	 * @return DbCollection
 	 */
-	public function getUsersWines(User $user, Competition $competition, $queryOnly = false) {
+	public function findUsersWines(User $user, Competition $competition, $queryOnly = false) {
 		$query = $competition->wine_details()
 			->where('applicant_username', $user->username)
 			->orWhere('association_username', $user->username)
@@ -73,6 +73,14 @@ class WineRepository {
 		} else {
 			return $query->get();
 		}
+	}
+
+	public function update(Wine $wine, array $data) {
+		$wine->updae($data);
+	}
+
+	public function delete(Wine $wine) {
+		$wine->delete();
 	}
 
 }
