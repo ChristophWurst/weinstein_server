@@ -24,6 +24,9 @@ namespace App\Tasting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
+/**
+ * @property int $id
+ */
 class TastingStage extends Model {
 
 	/**
@@ -39,7 +42,7 @@ class TastingStage extends Model {
 	 * @return Relation
 	 */
 	public function tastingnumbers() {
-		return $this->hasMany('TastingNumber');
+		return $this->hasMany(TastingNumber::class);
 	}
 
 	/**
@@ -48,7 +51,7 @@ class TastingStage extends Model {
 	 * @return Relation
 	 */
 	public function tastingsessions() {
-		return $this->hasMany('TastingSession');
+		return $this->hasMany(TastingSession::class);
 	}
 
 }

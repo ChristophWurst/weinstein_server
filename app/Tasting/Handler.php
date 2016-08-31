@@ -78,7 +78,7 @@ class Handler implements TastingHandler {
 	}
 
 	public function lockTastingNumbers(Competition $competition) {
-		if (in_array($competition->competitionstate->description, [
+		if (in_array($competition->competitionState->description, [
 				'TASTINGNUMBERS1',
 				'TASTINGNUMBERS2'
 			])) {
@@ -91,10 +91,10 @@ class Handler implements TastingHandler {
 	}
 
 	public function lockTasting(Competition $competition) {
-		if ($competition->competitionstate->description === 'TASTING1') {
+		if ($competition->competitionState->description === 'TASTING1') {
 			$competition->competitionstate_id += 1;
 			$this->competitionRepository->update($competition);
-		} elseif ($competition->competitionstate->description === 'TASTING2') {
+		} elseif ($competition->competitionState->description === 'TASTING2') {
 			$competition->competitionstate_id += 1;
 			$this->competitionRepository->update($competition);
 		} else {

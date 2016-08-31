@@ -88,8 +88,8 @@ class TastingSessionController extends BaseController {
 		View::share('tastingstage', $competition->getTastingStage());
 		View::share('tastingsessions',
 			$this->tastingHandler->getAllTastingSessions($competition, $competition->getTastingStage(), Auth::user()));
-		$tasting1 = $competition->competitionstate->id === CompetitionState::STATE_TASTING1;
-		$tasting2 = $competition->competitionstate->id === CompetitionState::STATE_TASTING2;
+		$tasting1 = $competition->competitionState->id === CompetitionState::STATE_TASTING1;
+		$tasting2 = $competition->competitionState->id === CompetitionState::STATE_TASTING2;
 		View::share('show_finish1',
 			$tasting1 && $competition->wine_details()->count() === $competition->wine_details()->whereNotNull('rating1')->count());
 		View::share('show_finish2',

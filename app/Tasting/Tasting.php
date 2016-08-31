@@ -24,6 +24,14 @@ namespace App\Tasting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
+/**
+ * @property int $id
+ * @property int $taster_id
+ * @property Taster $taster
+ * @property int $tastingnumber_id
+ * @property TastingNumber $tastingnumber
+ * @property int $rating
+ */
 class Tasting extends Model {
 
 	/**

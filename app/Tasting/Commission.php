@@ -24,6 +24,12 @@ namespace App\Tasting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
+/**
+ * @property int $id
+ * @property char $side
+ * @property int $tastingsession_id
+ * @property TastingSession $tastingSession
+ */
 class Commission extends Model {
 
 	/**
@@ -39,8 +45,8 @@ class Commission extends Model {
 	 * @var array
 	 */
 	protected $fillable = [
-	    'side',
-	    'tastingsession_id',
+		'side',
+		'tastingsession_id',
 	];
 
 	/**

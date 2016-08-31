@@ -26,6 +26,12 @@ use App\MasterData\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $wuser_username
+ * @property User $user
+ */
 class Association extends Model implements AdministrateModel {
 
 	/**

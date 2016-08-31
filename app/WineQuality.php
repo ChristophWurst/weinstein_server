@@ -24,6 +24,11 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
+/**
+ * @property int $id
+ * @property string $label
+ * @property string $abbr
+ */
 class WineQuality extends Model {
 
 	/**

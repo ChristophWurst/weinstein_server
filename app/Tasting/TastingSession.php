@@ -33,7 +33,15 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 
 /**
+ * @property int $id
+ * @property int $competition_id
  * @property Competition $competition
+ * @property int $tastingstage_id
+ * @property TastingStage $tastingstage
+ * @property string $wuser_username
+ * @property User $user
+ * @property int $nr
+ * @property bool $locked
  * @property Collection $tasters
  * @property DbCollection $commissions
  */

@@ -39,7 +39,7 @@ class TastingNumberAbilities {
 	}
 
 	private function checkCompetitionState(Competition $competition) {
-		return in_array($competition->competitionstate->id, [
+		return in_array($competition->competitionState->id, [
 			CompetitionState::STATE_ENROLLMENT,
 			CompetitionState::STATE_TASTINGNUMBERS1,
 			CompetitionState::STATE_TASTINGNUMBERS2
@@ -51,7 +51,7 @@ class TastingNumberAbilities {
 	}
 
 	private function checkTranslate(Competition $competition) {
-		return in_array($competition->competitionstate->id, [
+		return in_array($competition->competitionState->id, [
 			CompetitionState::STATE_TASTING1,
 			CompetitionState::STATE_TASTING2
 		]);

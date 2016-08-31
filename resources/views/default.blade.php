@@ -52,8 +52,8 @@ use App\MasterData\Competition;
                         <li><a href="{!! $compLink !!}">Bewerb</a></li>
                         @else
                         <?php 
-                            $stateTastingNumbers = in_array($competition->competitionstate->description, array('ENROLLMENT', 'TASTINGNUMBERS1', 'TASTINGNUMBERS2')) && $competition->enrollmentFinished();
-                            $stateTasting = in_array($competition->competitionstate->description, array('TASTING1', 'TASTING2'));
+                            $stateTastingNumbers = in_array($competition->competitionState->description, array('ENROLLMENT', 'TASTINGNUMBERS1', 'TASTINGNUMBERS2')) && $competition->enrollmentFinished();
+                            $stateTasting = in_array($competition->competitionState->description, array('TASTING1', 'TASTING2'));
                         ?>
                         <li class="{!! (Request::is('competition/*') && !in_array(Request::Segment(3), array('enrollment', 'tasting', 'evaluation')) && Request::Segment(2) !== 'tasting') ? 'active' : '' !!}">
                             <a href="{!! route('competition/show', array('competition' => $competition->id)) !!}">&Uuml;bersicht</a>

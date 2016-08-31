@@ -25,6 +25,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * @property int $id
+ * @property string $description
+ */
 class CompetitionState extends Model {
 
 	const STATE_ENROLLMENT = 1;

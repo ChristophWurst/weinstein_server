@@ -22,14 +22,37 @@
 namespace App;
 
 use App\AdministrateModel;
-use App\Tasting\TastingStage;
+use App\MasterData\Applicant;
+use App\MasterData\Competition;
 use App\MasterData\User;
+use App\MasterData\WineSort;
+use App\Tasting\TastingStage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
 
 /**
+ * @property int $id
+ * @property int $nr
+ * @property int $competition_id
  * @property Competition $competition
+ * @property int $applicant_id
+ * @property Applicant $applicant
+ * @property int $winesort_id
+ * @property WineSort $wineSort
+ * @property int $winequality_id
+ * @property WineQuality $winequality
+ * @property string $label
+ * @property int $vintage
+ * @property float $alcohol
+ * @property float $alcoholtot
+ * @property float $sugar
+ * @property string $approvalnr
+ * @property bool $kdb
+ * @property bool $sosi
+ * @property bool $choosen
+ * @property bool $excluded
+ * @property string $comment
  */
 class Wine extends Model implements AdministrateModel {
 

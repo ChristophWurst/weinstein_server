@@ -38,7 +38,7 @@ class TastingSessionAbilities {
 	}
 
 	private function checkTastingStage(Competition $competition) {
-		return in_array($competition->competitionstate->id, [
+		return in_array($competition->competitionState->id, [
 			CompetitionState::STATE_TASTING1,
 			CompetitionState::STATE_TASTING2
 		]);

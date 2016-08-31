@@ -253,7 +253,7 @@ class Store implements MasterDataStore {
 			});
 
 			//$competition->user()->associate(null);
-			$competition->competitionstate()->associate(CompetitionState::find(CompetitionState::STATE_ENROLLMENT));
+			$competition->competitionState()->associate(CompetitionState::find(CompetitionState::STATE_ENROLLMENT));
 			$competition->save();
 		});
 		//ActivityLogger::log('Bewerb [' . $competition->label . '] zur&uuml;ckgesetzt');

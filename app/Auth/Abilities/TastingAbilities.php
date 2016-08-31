@@ -43,7 +43,7 @@ class TastingAbilities {
 	private function checkTastingSessionState(TastingSession $tastingSession) {
 		$competition = $tastingSession->competition;
 
-		if (!in_array($competition->competitionstate->id, [CompetitionState::STATE_TASTING1, CompetitionState::STATE_TASTING2])) {
+		if (!in_array($competition->competitionState->id, [CompetitionState::STATE_TASTING1, CompetitionState::STATE_TASTING2])) {
 			Log::info('competition states do not match');
 			return false;
 		}

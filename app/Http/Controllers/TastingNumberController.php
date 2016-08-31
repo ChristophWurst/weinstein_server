@@ -55,13 +55,13 @@ class TastingNumberController extends BaseController {
 		$showAdd = false;
 		$showComplete = false;
 		$left = -1;
-		if ($competition->competitionstate->id === CompetitionState::STATE_ENROLLMENT) {
+		if ($competition->competitionState->id === CompetitionState::STATE_ENROLLMENT) {
 			$showAdd = true;
-		} else if ($competition->competitionstate->id === CompetitionState::STATE_TASTINGNUMBERS1) {
+		} else if ($competition->competitionState->id === CompetitionState::STATE_TASTINGNUMBERS1) {
 			$left = $competition->wines()->count() - $competition->wines()->withTastingNumber($competition->getTastingStage())->count();
 			$showComplete = $left === 0;
 			$showAdd = !$showComplete; //show add if not all wines are assigned
-		} else if ($competition->competitionstate->id === CompetitionState::STATE_TASTINGNUMBERS2) {
+		} else if ($competition->competitionState->id === CompetitionState::STATE_TASTINGNUMBERS2) {
 			// there is no check (for now)
 			// kdb wines do not have to be tasted a second time
 			$kdbWines = $competition->wines()->kdb()->count();
@@ -107,11 +107,11 @@ class TastingNumberController extends BaseController {
 					->withInput();
 		}
 		//if all wines are assigned, redirect to the list index page
-		if (in_array($competition->competitionstate->id,
+		if (in_array($competition->competitionState->id,
 				[CompetitionState::STATE_ENROLLMENT, CompetitionState::STATE_TASTINGNUMBERS1])) {
 			$allWines = $competition->wines()->count();
 			$assigned = $competition->wines()->withTastingNumber($competition->getTastingStage())->count();
-		} elseif ($competition->competitionstate->id === CompetitionState::STATE_TASTINGNUMBERS2) {
+		} elseif ($competition->competitionState->id === CompetitionState::STATE_TASTINGNUMBERS2) {
 			$allWines = $competition->wines()->kdb()->count();
 			$assigned = $competition->wines()->kdb()->withTastingNumber($competition->getTastingStage())->count();
 		}

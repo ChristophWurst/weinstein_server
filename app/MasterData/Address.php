@@ -23,6 +23,13 @@ namespace App\MasterData;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property int $zipcode
+ * @property string $city
+ * @property int $street
+ * @property string $nr
+ */
 class Address extends Model {
 
 	/**

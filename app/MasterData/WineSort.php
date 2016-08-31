@@ -27,6 +27,11 @@ use App\Wine;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
+/**
+ * @property int $id
+ * @property int $order
+ * @property string $name
+ */
 class WineSort extends Model {
 
 	/**

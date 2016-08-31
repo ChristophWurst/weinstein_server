@@ -24,6 +24,14 @@ namespace App\Tasting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
+/**
+ * @property int $id
+ * @property int $commission_id
+ * @property Commission $commission
+ * @property int $nr
+ * @property string $name
+ * @property bool $active
+ */
 class Taster extends Model {
 
 	/**

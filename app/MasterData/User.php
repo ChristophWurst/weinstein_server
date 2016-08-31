@@ -28,6 +28,12 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * @property string $username
+ * @property string $password
+ * @property bool $admin
+ * @property string $remember_token
+ */
 class User extends Authenticatable {
 
 	/**

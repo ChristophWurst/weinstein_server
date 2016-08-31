@@ -100,7 +100,7 @@ class WineController extends BaseController {
 				->withEditChosen($competition->competitionState->id === CompetitionState::STATE_CHOOSE)
 				->withShowChosen($competition->competitionState->id >= CompetitionState::STATE_CHOOSE)
 				->withShowCompleteChoosing($competition->competitionState->id === CompetitionState::STATE_CHOOSE)
-				->withExportFlaws($competition->competitionstate->id >= CompetitionState::STATE_KDB);
+				->withExportFlaws($competition->competitionState->id >= CompetitionState::STATE_KDB);
 	}
 
 	/**

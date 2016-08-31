@@ -27,7 +27,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
+ * @property int $id
+ * @property int $tastingstage_id
+ * @property TastingStage $tastingstage
+ * @property int $wine_id
  * @property Wine $wine
+ * @property int $nr
  */
 class TastingNumber extends Model {
 

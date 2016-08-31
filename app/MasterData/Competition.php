@@ -34,8 +34,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
- * @property CompetitionState $competitionstate
+ * @property int $id
+ * @property string $label
+ * @property string $wuser_username
+ * @property User $user
  * @property int $competitionstate_id
+ * @property CompetitionState $competitionState
  */
 class Competition extends Model implements AdministrateModel {
 
@@ -79,10 +83,10 @@ class Competition extends Model implements AdministrateModel {
 	 * @return TastingStage|null
 	 */
 	public function getTastingStage() {
-		if (in_array($this->competitionstate->description, ['ENROLLMENT', 'TASTINGNUMBERS1', 'TASTING1'])) {
+		if (in_array($this->competitionState->description, ['ENROLLMENT', 'TASTINGNUMBERS1', 'TASTING1'])) {
 			return TastingStage::find(1);
 		}
-		if (in_array($this->competitionstate->description, ['TASTINGNUMBERS2', 'TASTING2'])) {
+		if (in_array($this->competitionState->description, ['TASTINGNUMBERS2', 'TASTING2'])) {
 			return TastingStage::find(2);
 		}
 		return null;

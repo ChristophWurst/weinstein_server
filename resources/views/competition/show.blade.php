@@ -6,7 +6,7 @@
 @if (Auth::user()->admin)
 <div class="container-fluid">
     <div class="progress">
-        <?php $progress = $competition->competitionstate->id/count($competition_states) * 100 ?>
+        <?php $progress = $competition->competitionState->id/count($competition_states) * 100 ?>
         <div class="progress-bar" role="progressbar" aria-valuenow="{{ $progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $progress }}%;">
             <span class="sr-only">{{ $progress }}% erledigt</span>
         </div>
@@ -22,7 +22,7 @@
         </thead>
         <tbody>
             @foreach ($competition_states as $state)
-            <?php $currentState = $competition->competitionstate->id; ?>
+            <?php $currentState = $competition->competitionState->id; ?>
             <?php $active = $state->id === $currentState ?>
             <tr>
                 <td class="{{ $active ? 'active' : '' }}">{{ $state->id }}</td>

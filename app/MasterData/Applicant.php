@@ -25,8 +25,27 @@ use App\AdministrateModel;
 use App\MasterData\User;
 use App\Wine;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
+/**
+ * @property int $id
+ * @property string $wuser_username
+ * @property User $user
+ * @property int $association_id
+ * @property Association $association
+ * @property int $address_id
+ * @property Address $address
+ * @property string $label
+ * @property string $title
+ * @property string $firstname
+ * @property string $lastname
+ * @property string $phone
+ * @property string $fax
+ * @property string $mobile
+ * @property string $email
+ * @property string $web
+ */
 class Applicant extends Model implements AdministrateModel {
 
 	/**
@@ -101,7 +120,7 @@ class Applicant extends Model implements AdministrateModel {
 	/**
 	 * 1 applicant : 1 address
 	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 * @return BelongsTo
 	 */
 	public function address() {
 		return $this->belongsTo(Address::class);
@@ -110,7 +129,7 @@ class Applicant extends Model implements AdministrateModel {
 	/**
 	 * n applicants : 1 association
 	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 * @return BelongsTo
 	 */
 	public function association() {
 		return $this->belongsTo(Association::class);
@@ -119,7 +138,7 @@ class Applicant extends Model implements AdministrateModel {
 	/**
 	 * n applicants : 1 user
 	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 * @return BelongsTo
 	 */
 	public function user() {
 		return $this->belongsTo(User::class, 'wuser_username', 'username');

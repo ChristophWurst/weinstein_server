@@ -31,7 +31,7 @@ class WineAbilities {
 	use CommonAbilities;
 
 	private function checkAddWine(Competition $competition) {
-		return $competition->competitionstate->id === CompetitionState::STATE_ENROLLMENT;
+		return $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT;
 	}
 
 	private function checkEditWine(User $user, Wine $wine) {
@@ -42,26 +42,26 @@ class WineAbilities {
 			return false;
 		}
 
-		if ($competition->competitionstate->id !== CompetitionState::where('description', '=', 'ENROLLMENT')->first()->id) {
+		if ($competition->competitionState->id !== CompetitionState::where('description', '=', 'ENROLLMENT')->first()->id) {
 			return false;
 		}
 		return true;
 	}
 
 	private function checkImportKdb(Competition $competition) {
-		return $competition->competitionstate->id === CompetitionState::STATE_KDB;
+		return $competition->competitionState->id === CompetitionState::STATE_KDB;
 	}
 
 	private function checkImportExcluded(Competition $competition) {
-		return $competition->competitionstate->id === CompetitionState::STATE_EXCLUDE;
+		return $competition->competitionState->id === CompetitionState::STATE_EXCLUDE;
 	}
 
 	private function checkEditSosi(Competition $competition) {
-		return $competition->competitionstate->id === CompetitionState::STATE_SOSI;
+		return $competition->competitionState->id === CompetitionState::STATE_SOSI;
 	}
 
 	private function checkSosiImport(Competition $competition) {
-		return $competition->competitionstate->id === CompetitionState::STATE_SOSI;
+		return $competition->competitionState->id === CompetitionState::STATE_SOSI;
 	}
 
 	private function isWineAdmin(User $user, Wine $wine) {
@@ -69,15 +69,15 @@ class WineAbilities {
 	}
 
 	private function checkEditChosen(User $user, Wine $wine, Competition $competition) {
-		return !$wine->applicant->association->administrates($user) && $competition->competitionstate->id === CompetitionState::STATE_CHOOSE;
+		return !$wine->applicant->association->administrates($user) && $competition->competitionState->id === CompetitionState::STATE_CHOOSE;
 	}
 
 	private function checkImportChosen(Competition $competition) {
-		return $competition->competitionstate->id === CompetitionState::STATE_CHOOSE;
+		return $competition->competitionState->id === CompetitionState::STATE_CHOOSE;
 	}
 
 	private function checkExportFlaws(Competition $competition) {
-		return $competition->competitionstate->id >= CompetitionState::STATE_KDB;
+		return $competition->competitionState->id >= CompetitionState::STATE_KDB;
 	}
 
 	/**

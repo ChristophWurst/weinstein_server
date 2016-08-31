@@ -16,7 +16,7 @@
             @foreach ($competitions as $c)
             <tr>
                 <td>
-                    {{  $c->competitionstate->getDescription() }}
+                    {{  $c->competitionState->getDescription() }}
                 </td>
                 @if ($c->wuser_username)
                 <td class="text-center">

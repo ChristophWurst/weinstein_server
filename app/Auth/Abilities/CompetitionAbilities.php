@@ -44,14 +44,14 @@ class CompetitionAbilities {
 			return false;
 		}
 
-		if ($competition->competitionstate->id === CompetitionState::STATE_TASTINGNUMBERS1) {
+		if ($competition->competitionState->id === CompetitionState::STATE_TASTINGNUMBERS1) {
 			$withNumber = $competition->wines()->withTastingNumber(TastingStage::find(1))->count();
 			$total = $competition->wine_details()->count();
 			if ($withNumber < $total) {
 				return false;
 			}
 			return true;
-		} else if ($competition->competitionstate->id === CompetitionState::STATE_TASTINGNUMBERS2) {
+		} else if ($competition->competitionState->id === CompetitionState::STATE_TASTINGNUMBERS2) {
 			// just allow it - there are no restrictions (for now)
 			return true;
 		} else {
@@ -65,14 +65,14 @@ class CompetitionAbilities {
 			return false;
 		}
 
-		if ($competition->competitionstate->id === CompetitionState::STATE_TASTING1) {
+		if ($competition->competitionState->id === CompetitionState::STATE_TASTING1) {
 			$tasted = $competition->wine_details()->whereNotNull('rating1')->count();
 			$total = $competition->wine_details()->count();
 			if ($tasted < $total) {
 				return false;
 			}
 			return true;
-		} else if ($competition->competitionstate->id === CompetitionState::STATE_TASTING2) {
+		} else if ($competition->competitionState->id === CompetitionState::STATE_TASTING2) {
 			// just allow it - there are no restrictions (for now)
 			return true;
 		} else {
@@ -82,19 +82,19 @@ class CompetitionAbilities {
 	}
 
 	public function completeKdb(User $user, Competition $competition) {
-		return $this->isAdmin($user) && $competition->competitionstate->id === CompetitionState::STATE_KDB;
+		return $this->isAdmin($user) && $competition->competitionState->id === CompetitionState::STATE_KDB;
 	}
 
 	public function completeExcluded(User $user, Competition $competition) {
-		return $this->isAdmin($user) && $competition->competitionstate->id === CompetitionState::STATE_EXCLUDE;
+		return $this->isAdmin($user) && $competition->competitionState->id === CompetitionState::STATE_EXCLUDE;
 	}
 
 	public function completeSosi(User $user, Competition $competition) {
-		return $this->isAdmin($user) && $competition->competitionstate->id === CompetitionState::STATE_SOSI;
+		return $this->isAdmin($user) && $competition->competitionState->id === CompetitionState::STATE_SOSI;
 	}
 
 	public function completeChoosing(User $user, Competition $competition) {
-		return $this->isAdmin($user) && $competition->competitionstate->id === CompetitionState::STATE_CHOOSE;
+		return $this->isAdmin($user) && $competition->competitionState->id === CompetitionState::STATE_CHOOSE;
 	}
 
 }
