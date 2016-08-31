@@ -28,7 +28,7 @@ class CommissionRepository {
 
 	public function create(array $data, TastingSession $tastingSession) {
 		$commission = new Commission($data);
-		$commission->tastingsession()->associate($tastingSession);
+		$commission->tastingSession()->associate($tastingSession);
 		$commission->save();
 		return $commission;
 	}

@@ -268,11 +268,11 @@ class HandlerTest extends TestCase {
 		$tastingNumber = new TastingNumber();
 
 		$this->tastingNumberRepository->expects($this->once())
-			->method('getAll')
+			->method('findAllForCompetitionTastingStage')
 			->with($competition, $tastingStage)
 			->will($this->returnValue([$tastingNumber]));
 
-		$this->assertEquals([$tastingNumber], $this->handler->getUntastedTastingNumbers($competition, $tastingStage));
+		$this->assertEquals([$tastingNumber], $this->handler->getAllTastingNumbers($competition, $tastingStage));
 	}
 
 	public function testGetAllTastingSessionsAsAdmin() {

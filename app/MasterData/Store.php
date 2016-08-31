@@ -150,7 +150,7 @@ class Store implements MasterDataStore {
 				if ($data['email'] === '') {
 					unset($data['email']);
 				}
-				$this->create($data);
+				$this->createApplicant($data);
 			}
 		} catch (ValidationException $ve) {
 			DB::rollback();

@@ -72,7 +72,7 @@ class Commission extends Model {
 	 * 
 	 * @return Relation
 	 */
-	public function tastingsession() {
+	public function tastingSession() {
 		return $this->belongsTo('TastingSession');
 	}
 

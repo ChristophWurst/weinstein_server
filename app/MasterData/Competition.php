@@ -29,6 +29,7 @@ use App\Tasting\TastingSession;
 use App\Tasting\TastingStage;
 use App\Wine;
 use App\WineDetails;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -40,6 +41,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @property User $user
  * @property int $competitionstate_id
  * @property CompetitionState $competitionState
+ * @property Collection $wines
  */
 class Competition extends Model implements AdministrateModel {
 
@@ -112,7 +114,7 @@ class Competition extends Model implements AdministrateModel {
 	 * 
 	 * @return Relation
 	 */
-	public function competitionstate() {
+	public function competitionState() {
 		return $this->belongsTo(CompetitionState::class);
 	}
 

@@ -98,6 +98,7 @@ interface MasterDataStore {
 
 	/**
 	 * @param UploadedFile $file
+	 * @return int nr of rows imported
 	 */
 	public function importApplicants(UploadedFile $file);
 

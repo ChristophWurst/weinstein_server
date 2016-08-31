@@ -65,7 +65,7 @@ class TastingAbilities {
 	 */
 	private function competitionsMatch(TastingSession $tastingSession, Commission $commission, TastingNumber $tastingNumber) {
 		$competition1 = $tastingSession->competition;
-		$competition2 = $commission->tastingsession->competition;
+		$competition2 = $commission->tastingSession->competition;
 
 		if ($competition1->id !== $competition2->id) {
 			return false;
@@ -83,7 +83,7 @@ class TastingAbilities {
 		$tastingStage1 = $tastingNumber->tastingstage;
 		$tastingStage2 = $competition1->getTastingStage();
 
-		if ($tastingStage1->id !== $tastingStage3->id) {
+		if ($tastingStage1->id !== $tastingStage2->id) {
 			Log::info('tasting stages do not match');
 			return false;
 		}

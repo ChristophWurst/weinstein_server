@@ -76,7 +76,7 @@ class WineRepository {
 	}
 
 	public function update(Wine $wine, array $data) {
-		$wine->updae($data);
+		$wine->update($data);
 	}
 
 	public function delete(Wine $wine) {
