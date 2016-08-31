@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
+ * @property CompetitionState $competitionstate
  * @property int $competitionstate_id
  */
 class Competition extends Model implements AdministrateModel {
