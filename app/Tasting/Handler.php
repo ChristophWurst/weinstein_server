@@ -147,7 +147,7 @@ class Handler implements TastingHandler {
 		//competition's tasting stage is choosen by default
 		$tastingStage = $competition->getTastingStage;
 
-		return $this->tastingNumberRepository->create($data, $wine);
+		return $this->tastingNumberRepository->create($data, $wine, $tastingStage);
 	}
 
 	public function importTastingNumbers(UploadedFile $file, Competition $competition) {

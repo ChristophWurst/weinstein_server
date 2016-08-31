@@ -26,6 +26,7 @@ use App\MasterData\User;
 use App\Wine;
 use Illuminate\Database\Eloquent\Collection as DbCollection;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 
 class WineRepository {
@@ -45,6 +46,7 @@ class WineRepository {
 	 * Get competitions wines
 	 * 
 	 * @param Competition $competition
+	 * @param boolean $queryOnly
 	 * @return Collection|Relation
 	 */
 	public function findAll(Competition $competition, $queryOnly = false) {
@@ -61,8 +63,8 @@ class WineRepository {
 	 * 
 	 * @param User $user
 	 * @param Competition $competition
-	 * @param boolen $queryOnly
-	 * @return DbCollection
+	 * @param boolean $queryOnly
+	 * @return DbCollection|Builder
 	 */
 	public function findUsersWines(User $user, Competition $competition, $queryOnly = false) {
 		$query = $competition->wine_details()
