@@ -24,3 +24,6 @@ Homestead.json
 
 # Bower components
 /public/js/vendor
+
+# Test report
+tests/clover.xml

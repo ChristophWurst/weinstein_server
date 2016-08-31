@@ -21,10 +21,16 @@
 
 namespace App\MasterData;
 
+use App\AddressCatalogue;
 use App\AdministrateModel;
 use App\MasterData\User;
+use App\Tasting\TastingNumber;
+use App\Tasting\TastingSession;
 use App\Tasting\TastingStage;
+use App\Wine;
+use App\WineDetails;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 class Competition extends Model implements AdministrateModel {
@@ -90,7 +96,7 @@ class Competition extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function addressCatalogue() {
-		return $this->hasMany('AddressCatalogue', 'competition_id', 'id');
+		return $this->hasMany(AddressCatalogue::class, 'competition_id', 'id');
 	}
 
 	/**
@@ -99,7 +105,7 @@ class Competition extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function competitionstate() {
-		return $this->belongsTo('CompetitionState');
+		return $this->belongsTo(CompetitionState::class);
 	}
 
 	/**
@@ -108,16 +114,16 @@ class Competition extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function tastingnumbers() {
-		return $this->hasManyThrough('TastingNumber', 'Wine');
+		return $this->hasManyThrough(TastingNumber::class, 'Wine');
 	}
 
 	/**
 	 * 1 competition : n tasting sessions
 	 * 
-	 * @return Relation
+	 * @return HasMany
 	 */
 	public function tastingsessions() {
-		return $this->hasMany('TastingSession');
+		return $this->hasMany(TastingSession::class);
 	}
 
 	/**
@@ -126,7 +132,7 @@ class Competition extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function user() {
-		return $this->belongsTo('User', 'wuser_username', 'username');
+		return $this->belongsTo(User::class, 'wuser_username', 'username');
 	}
 
 	/**
@@ -135,7 +141,7 @@ class Competition extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function wines() {
-		return $this->hasMany('Wine');
+		return $this->hasMany(Wine::class);
 	}
 
 	/**
@@ -144,7 +150,7 @@ class Competition extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function wine_details() {
-		return $this->hasMany('WineDetails');
+		return $this->hasMany(WineDetails::class);
 	}
 
 }

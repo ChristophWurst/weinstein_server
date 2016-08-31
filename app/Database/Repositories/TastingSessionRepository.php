@@ -49,15 +49,8 @@ class TastingSessionRepository {
 		return $tastingSession;
 	}
 
-	public function update(TastingSession $tastingSession, array $data, User $user = null) {
+	public function update(TastingSession $tastingSession, array $data) {
 		$tastingSession->update($data);
-
-		if (is_null($user)) {
-			$tastingSession->user()->dissociate();
-		} else {
-			$tastingSession->user()->associate($user);
-		}
-		$tastingSession->save();
 	}
 
 	public function delete(TastingSession $tastingSession) {

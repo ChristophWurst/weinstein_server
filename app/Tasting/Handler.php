@@ -77,10 +77,7 @@ class Handler implements TastingHandler {
 		$this->commissionRepository = $commissionRepository;
 	}
 
-	public function lockTastingNumbers(Competition $competition, $tasting) {
-		if (!in_array($tasting, array(1, 2))) {
-			throw new InvalidArgumentException();
-		}
+	public function lockTastingNumbers(Competition $competition) {
 		if (in_array($competition->competitionstate->description, [
 				'TASTINGNUMBERS1',
 				'TASTINGNUMBERS2'
@@ -90,24 +87,14 @@ class Handler implements TastingHandler {
 		} else {
 			throw new Exception('invalid competition state');
 		}
-
-		//close all sessions
-		foreach ($competition->tastingsessions as $session) {
-			$session->locked = true;
-			$this->tastingSessionRepository->update($session);
-		}
 		//ActivityLogger::log('Bewerb [' . $competition->label . '] ' . $tasting . '. Kostnummernvergabe beendet');
 	}
 
-	public function lockTasting(Competition $competition, $tasting) {
-		if (!in_array($tasting, array(1, 2))) {
-			throw new InvalidArgumentException();
-		}
-		$state = $competition->competitionstate->description;
-		if ($competition->competitionstate->description == 'TASTING1') {
+	public function lockTasting(Competition $competition) {
+		if ($competition->competitionstate->description === 'TASTING1') {
 			$competition->competitionstate_id += 1;
 			$this->competitionRepository->update($competition);
-		} elseif ($competition->competitionstate->description == 'TASTING2') {
+		} elseif ($competition->competitionstate->description === 'TASTING2') {
 			$competition->competitionstate_id += 1;
 			$this->competitionRepository->update($competition);
 		} else {
@@ -116,10 +103,11 @@ class Handler implements TastingHandler {
 
 		// close all sessions
 		foreach ($competition->tastingsessions as $session) {
-			$session->locked = true;
-			$this->tastingSessionRepository->update($session);
+			$this->tastingSessionRepository->update($session, [
+				'locked' => true
+			]);
 		}
-		$state = $state == 'TASTING1' ? 1 : 2;
+		//$stateId = $state === 'TASTING1' ? 1 : 2;
 		//ActivityLogger::log('Bewerb [' . $competition->label . '] ' . $state . '. Verkostung beendet');
 	}
 
@@ -215,8 +203,8 @@ class Handler implements TastingHandler {
 		return $this->tastingNumberRepository->findUntasted($competition, $tastingStage, $limit);
 	}
 
-	public function getAllTastingNumbers(Competition $competition, TastingStage $tastingStage = null) {
-		return $this->tastingNumberRepository->getAll($competition, $tastingStage);
+	public function getAllTastingNumbers(Competition $competition, TastingStage $tastingStage) {
+		return $this->tastingNumberRepository->findAllForCompetitionTastingStage($competition, $tastingStage);
 	}
 
 	public function getAllTastingSessions(Competition $competition, TastingStage $tastingStage, User $user = null) {
@@ -252,7 +240,7 @@ class Handler implements TastingHandler {
 		$this->commissionRepository->create($dataA, $tastingSession);
 
 
-		if ($nr == 2) {
+		if ($nr === 2) {
 			$dataB = [
 				'side' => 'b',
 			];
@@ -269,8 +257,9 @@ class Handler implements TastingHandler {
 	}
 
 	public function lockTastingSession(TastingSession $tastingSession) {
-		$tastingSession->locked = true;
-		$tastingSession->save(); // TODO: move to repo
+		$this->tastingSessionRepository->update($tastingSession, [
+			'locked' => true,
+		]);
 	}
 
 	public function deleteTastingSession(TastingSession $tastingSession) {
@@ -382,7 +371,7 @@ class Handler implements TastingHandler {
 		if ($tastingNumbers->count() > 0) {
 			$data['a'] = $tastingNumbers->get(0);
 		}
-		if ($tastingNumbers->count() > 1 && $tastingSession->commissions()->count() > 1) {
+		if ($tastingNumbers->count() > 1 && $tastingSession->commissions->count() > 1) {
 			$data['b'] = $tastingNumbers->get(1);
 		}
 		return $data;

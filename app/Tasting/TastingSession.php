@@ -23,10 +23,11 @@ namespace App\Tasting;
 
 use App\AdministrateModel;
 use App\MasterData\Competition;
+use App\MasterData\User;
 use App\Tasting\TastingStage;
+use App\Tastingng\TastedWine;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use App\MasterData\User;
 use Illuminate\Support\Collection;
 
 /**
@@ -98,7 +99,7 @@ class TastingSession extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function competition() {
-		return $this->belongsTo('Competition');
+		return $this->belongsTo(Competition::class);
 	}
 
 	/**
@@ -107,7 +108,7 @@ class TastingSession extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function commissions() {
-		return $this->hasMany('Commission', 'tastingsession_id', 'id');
+		return $this->hasMany(Commission::class, 'tastingsession_id', 'id');
 	}
 
 	/**
@@ -116,7 +117,7 @@ class TastingSession extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function tastedwines() {
-		return $this->hasMany('TastedWine', 'tastingsession_id', 'id');
+		return $this->hasMany(TastedWine::class, 'tastingsession_id', 'id');
 	}
 
 	/**
@@ -125,7 +126,7 @@ class TastingSession extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function tasters() {
-		return $this->hasManyThrough('Taster', 'Commission', 'tastingsession_id', 'commission_id');
+		return $this->hasManyThrough(Taster::class, Commission::class, 'tastingsession_id', 'commission_id');
 	}
 
 	/**
@@ -134,7 +135,7 @@ class TastingSession extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function tastingstage() {
-		return $this->belongsTo('TastingStage');
+		return $this->belongsTo(TastingStage::class);
 	}
 
 	/**
@@ -143,7 +144,7 @@ class TastingSession extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function user() {
-		return $this->belongsTo('User', 'wuser_username', 'username');
+		return $this->belongsTo(User::class, 'wuser_username', 'username');
 	}
 
 	/**

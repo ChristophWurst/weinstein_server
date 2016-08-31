@@ -36,17 +36,15 @@ interface TastingHandler {
 
 	/**
 	 * @param Competition $competition
-	 * @param int $tasting
 	 * @return void
 	 */
-	public function lockTastingNumbers(Competition $competition, $tasting);
+	public function lockTastingNumbers(Competition $competition);
 
 	/**
 	 * @param Competition $competition
-	 * @param int $tasting
 	 * @return void
 	 */
-	public function lockTasting(Competition $competition, $tasting);
+	public function lockTasting(Competition $competition);
 
 	/**
 	 * @param Competition $competition
@@ -111,7 +109,7 @@ interface TastingHandler {
 	 * @param TastingStage $tastingStage
 	 * @return Collection
 	 */
-	public function getAllTastingNumbers(Competition $competition, TastingStage $tastingStage = null);
+	public function getAllTastingNumbers(Competition $competition, TastingStage $tastingStage);
 
 	/**
 	 * Get all tasting sessions
