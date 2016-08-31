@@ -134,7 +134,7 @@ class ApplicantController extends BaseController {
 
 		try {
 			$file = Input::file('xlsfile');
-			$this->masterDataStore->importApplicants($file);
+			$rowsImported = $this->masterDataStore->importApplicants($file);
 		} catch (ValidationException $ve) {
 			return Redirect::route('settings.applicants/import')->withErrors($ve->getErrors());
 		}
