@@ -26,6 +26,8 @@ use App\MasterData\Competition;
 use App\MasterData\User;
 use App\Tasting\TastingStage;
 use App\Tastingng\TastedWine;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as DbCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
@@ -33,6 +35,7 @@ use Illuminate\Support\Collection;
 /**
  * @property Competition $competition
  * @property Collection $tasters
+ * @property DbCollection $commissions
  */
 class TastingSession extends Model implements AdministrateModel {
 
@@ -150,9 +153,9 @@ class TastingSession extends Model implements AdministrateModel {
 	/**
 	 * scope tasting sessions of a given tasting stage
 	 * 
-	 * @param type $query
+	 * @param Builder $query
 	 * @param TastingStage $ts
-	 * @return type
+	 * @return Builder
 	 */
 	public function scopeOfTastingStage($query, TastingStage $ts) {
 		return $query->where('tastingstage_id', '=', $ts->id);
