@@ -114,6 +114,8 @@ class TastingNumberController extends BaseController {
 		} elseif ($competition->competitionState->id === CompetitionState::STATE_TASTINGNUMBERS2) {
 			$allWines = $competition->wines()->kdb()->count();
 			$assigned = $competition->wines()->kdb()->withTastingNumber($competition->getTastingStage())->count();
+		} else {
+			throw Exception('invalid application state, should be TASTINGNUMBERS1 or TASTINGNUMBERS2');
 		}
 		if ($assigned === $allWines) {
 			return Redirect::route('tasting.numbers', ['competition' => $competition->id]);

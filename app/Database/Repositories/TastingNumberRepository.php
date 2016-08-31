@@ -62,10 +62,9 @@ class TastingNumberRepository {
 		return $query->take($limit)->get();
 	}
 
-	public function create(array $data, Competition $competition, Wine $wine) {
+	public function create(array $data, Wine $wine) {
 		$tastingNumber = new TastingNumber($data);
 
-		$tastingNumber->competition()->associate($competition);
 		$tastingNumber->wine()->associate($wine);
 		$tastingNumber->save();
 

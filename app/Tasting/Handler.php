@@ -38,7 +38,6 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
-use InvalidArgumentException;
 use PHPExcel_IOFactory;
 
 class Handler implements TastingHandler {
@@ -148,7 +147,7 @@ class Handler implements TastingHandler {
 		//competition's tasting stage is choosen by default
 		$tastingStage = $competition->getTastingStage;
 
-		return $this->tastingNumberRepository->create($data, $tastingStage, $wine);
+		return $this->tastingNumberRepository->create($data, $wine);
 	}
 
 	public function importTastingNumbers(UploadedFile $file, Competition $competition) {
@@ -309,6 +308,7 @@ class Handler implements TastingHandler {
 			} else {
 				Log::error('Invalid commission side ' . $commission->side);
 				App::abort(500);
+				return;
 			}
 
 			/**

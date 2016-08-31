@@ -200,6 +200,7 @@ class Handler implements WineHandler {
 		$sheet = $doc->getActiveSheet();
 
 		DB::beginTransaction();
+		$rowCount = 0;
 		try {
 			$competition->wines()->update(array('excluded' => false));
 			$rowCount = 1;
@@ -374,9 +375,7 @@ class Handler implements WineHandler {
 	/**
 	 * Delete the wine
 	 * 
-	 * @param User $user
-	 * @param Competition $competition
-	 * @return Wine
+	 * @param Wine $wine
 	 */
 	public function delete(Wine $wine) {
 		$this->wineRepository->delete($wine);

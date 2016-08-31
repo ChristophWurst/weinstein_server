@@ -127,10 +127,10 @@ class TastingSessionAbilities {
 
 	/**
 	 * @param User $user
-	 * @param Competition $competition
+	 * @param Competition $tastingSession
 	 * @return bool
 	 */
-	public function exportResult(User $user, Competition $competition) {
+	public function exportResult(User $user, TastingSession $tastingSession) {
 		return $this->isTastinSessionAdmin($user, $tastingSession)
 			&& $this->checkTastingStage($tastingSession->competition)
 			&& $this->checkTastingSessionLocked($tastingSession);

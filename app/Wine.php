@@ -39,7 +39,7 @@ use Illuminate\Support\Facades\DB;
  * @property int $applicant_id
  * @property Applicant $applicant
  * @property int $winesort_id
- * @property WineSort $wineSort
+ * @property WineSort $winesort
  * @property int $winequality_id
  * @property WineQuality $winequality
  * @property string $label

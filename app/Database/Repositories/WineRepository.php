@@ -25,12 +25,13 @@ use App\MasterData\Competition;
 use App\MasterData\User;
 use App\Wine;
 use Illuminate\Database\Eloquent\Collection as DbCollection;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 
 class WineRepository {
 
 	public function findByNr(Competition $competition, $nr) {
-		Wine::where('competition_id', $competition->id)
+		return Wine::where('competition_id', $competition->id)
 			->where('nr', $nr)
 			->first();
 	}
@@ -44,7 +45,7 @@ class WineRepository {
 	 * Get competitions wines
 	 * 
 	 * @param Competition $competition
-	 * @return Collection
+	 * @return Collection|Relation
 	 */
 	public function findAll(Competition $competition, $queryOnly = false) {
 		$query = $competition->wine_details();
@@ -60,7 +61,7 @@ class WineRepository {
 	 * 
 	 * @param User $user
 	 * @param Competition $competition
-	 * @praam boolen $queryOnly
+	 * @param boolen $queryOnly
 	 * @return DbCollection
 	 */
 	public function findUsersWines(User $user, Competition $competition, $queryOnly = false) {

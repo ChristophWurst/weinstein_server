@@ -26,6 +26,19 @@ use App\Tasting\TastingSession;
 
 class CommissionRepository {
 
+	/**
+	 * @param int $id
+	 * @return Commission
+	 */
+	public function find($id) {
+		return Commission::find($id);
+	}
+
+	/**
+	 * @param array $data
+	 * @param TastingSession $tastingSession
+	 * @return Commission
+	 */
 	public function create(array $data, TastingSession $tastingSession) {
 		$commission = new Commission($data);
 		$commission->tastingSession()->associate($tastingSession);

@@ -31,7 +31,7 @@ trait CommonAbilities {
 	}
 
 	public function administratesCompetition(User $user, Competition $competition) {
-		return $user->admin || $competition->user()->username === $user->username;
+		return $user->admin || $competition->user->username === $user->username;
 	}
 
 }

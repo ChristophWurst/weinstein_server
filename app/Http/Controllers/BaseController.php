@@ -32,13 +32,13 @@ use Illuminate\Support\Facades\View;
 class BaseController extends Controller {
 
 	use AuthorizesRequests;
-	
+
 	/** @var Competition */
 	protected $competition;
 
 	/** @var array */
 	protected $selectNone = [
-	    'none' => 'kein',
+		'none' => 'kein',
 	];
 
 	/**
