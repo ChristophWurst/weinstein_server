@@ -43,11 +43,11 @@ class ApplicantAbilities {
 	}
 
 	public function create(User $user) {
-		return $this->isAdmin($user);
+		return false;
 	}
 
 	public function import(User $user) {
-		return $this->isAdmin($user);
+		return false;
 	}
 
 	public function edit(User $user, Applicant $applicant) {

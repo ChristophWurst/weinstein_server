@@ -70,7 +70,7 @@ class Competition extends Model implements AdministrateModel {
 	 * @return boolean
 	 */
 	public function administrates(User $user) {
-		if ($user->admin) {
+		if ($user->isAdmin()) {
 			return true;
 		}
 		if ($user->username === $this->wuser_username) {

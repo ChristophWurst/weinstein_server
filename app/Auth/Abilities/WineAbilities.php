@@ -37,7 +37,7 @@ class WineAbilities {
 	private function checkEditWine(User $user, Wine $wine) {
 		$competition = $wine->competition;
 
-		if (!$this->isAdmin($user) && !is_null($wine->nr)) {
+		if (!$user->isAdmin() && !is_null($wine->nr)) {
 			// Once ID is set, only admin may edit the wine
 			return false;
 		}

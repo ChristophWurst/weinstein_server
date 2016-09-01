@@ -35,7 +35,7 @@
             "tests/TestCase.php"
         ],
 	"psr-4": {
-	    "Test\\": "./"
+	    "Test\\": "tests/"
         }
     },
     "scripts": {

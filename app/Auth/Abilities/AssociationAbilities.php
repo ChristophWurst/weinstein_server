@@ -29,7 +29,7 @@ class AssociationAbilities {
 	use CommonAbilities;
 
 	private function administrates(User $user, Association $association) {
-		return $association->user && $association->user->username !== $user->username;
+		return $association->user && $association->user->username === $user->username;
 	}
 
 	public function show(User $user, Association $association) {
@@ -37,7 +37,7 @@ class AssociationAbilities {
 	}
 
 	public function create(User $user) {
-		return $this->isAdmin($user);
+		return false;
 	}
 
 	public function edit(User $user, Association $association) {

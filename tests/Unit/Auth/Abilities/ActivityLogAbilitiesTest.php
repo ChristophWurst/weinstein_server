@@ -19,15 +19,38 @@
  *
  */
 
-namespace App\Auth\Abilities;
+namespace Test\Unit\Auth\Abilities;
 
-use App\MasterData\Competition;
+use App\Auth\Abilities\ActivityLogAbilities;
 use App\MasterData\User;
+use Mockery;
+use Test\TestCase;
 
-trait CommonAbilities {
+class ActivityLogAbilitiesTest extends TestCase {
 
-	public function administratesCompetition(User $user, Competition $competition) {
-		return $user->isAdmin() || $competition->user->username === $user->username;
+	/** @var ActivityLogAbilities */
+	private $abilities;
+
+	protected function setUp() {
+		parent::setUp();
+
+		$this->abilities = new ActivityLogAbilities();
+	}
+
+	public function testViewAsAdmin() {
+		$user = Mockery::mock(User::class);
+
+		$user->shouldReceive('isAdmin')->once()->andReturn(true);
+
+		$this->assertTrue($this->abilities->view($user));
+	}
+
+	public function testViewAsNonAdmin() {
+		$user = Mockery::mock(User::class);
+
+		$user->shouldReceive('isAdmin')->once()->andReturn(false);
+
+		$this->assertFalse($this->abilities->view($user));
 	}
 
 }

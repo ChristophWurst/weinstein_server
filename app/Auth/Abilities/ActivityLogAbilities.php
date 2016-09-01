@@ -26,7 +26,7 @@ use App\MasterData\User;
 class ActivityLogAbilities {
 
 	public function view(User $user) {
-		return $user->admin;
+		return $user->isAdmin();
 	}
 
 }

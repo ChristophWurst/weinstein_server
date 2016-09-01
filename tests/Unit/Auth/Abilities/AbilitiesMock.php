@@ -19,15 +19,38 @@
  *
  */
 
-namespace App\Auth\Abilities;
+namespace Test\Unit\Auth\Abilities;
 
 use App\MasterData\Competition;
 use App\MasterData\User;
+use Mockery;
+use Mockery\MockInterface;
 
-trait CommonAbilities {
+trait AbilitiesMock {
 
-	public function administratesCompetition(User $user, Competition $competition) {
-		return $user->isAdmin() || $competition->user->username === $user->username;
+	/**
+	 * @return User|MockInterface
+	 */
+	public function getUserMock() {
+		$user = Mockery::mock(User::class);
+		$user->shouldReceive('isAdmin')->andReturn(false);
+		return $user;
+	}
+
+	/**
+	 * @return User|MockInterface
+	 */
+	public function getAdminMock() {
+		$admin = Mockery::mock(User::class);
+		$admin->shouldReceive('isAdmin')->andReturn(true);
+		return $admin;
+	}
+	
+	/**
+	 * @return Competition|MockInterface
+	 */
+	public function getCompetitionMock() {
+		return Mockery::mock(Competition::class);
 	}
 
 }

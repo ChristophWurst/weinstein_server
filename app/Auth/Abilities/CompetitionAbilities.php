@@ -36,11 +36,12 @@ class CompetitionAbilities {
 	}
 
 	public function reset(User $user, Competition $competition) {
-		return $this->isAdmin($user);
+		return false;
 	}
 
 	public function completeTasingNumbers(User $user, Competition $competition) {
-		if (!$this->isAdmin($user)) {
+		// TODO: what about the competition admin???
+		if (!$user->isAdmin()) {
 			return false;
 		}
 
@@ -61,7 +62,7 @@ class CompetitionAbilities {
 	}
 
 	public function completeTasting(User $user, Competition $competition) {
-		if (!$this->isAdmin($user)) {
+		if (!$user->isAdmin()) {
 			return false;
 		}
 
@@ -82,19 +83,19 @@ class CompetitionAbilities {
 	}
 
 	public function completeKdb(User $user, Competition $competition) {
-		return $this->isAdmin($user) && $competition->competitionState->id === CompetitionState::STATE_KDB;
+		return $user->isAdmin() && $competition->competitionState->id === CompetitionState::STATE_KDB;
 	}
 
 	public function completeExcluded(User $user, Competition $competition) {
-		return $this->isAdmin($user) && $competition->competitionState->id === CompetitionState::STATE_EXCLUDE;
+		return $user->isAdmin() && $competition->competitionState->id === CompetitionState::STATE_EXCLUDE;
 	}
 
 	public function completeSosi(User $user, Competition $competition) {
-		return $this->isAdmin($user) && $competition->competitionState->id === CompetitionState::STATE_SOSI;
+		return $user->isAdmin() && $competition->competitionState->id === CompetitionState::STATE_SOSI;
 	}
 
 	public function completeChoosing(User $user, Competition $competition) {
-		return $this->isAdmin($user) && $competition->competitionState->id === CompetitionState::STATE_CHOOSE;
+		return $user->isAdmin() && $competition->competitionState->id === CompetitionState::STATE_CHOOSE;
 	}
 
 }
