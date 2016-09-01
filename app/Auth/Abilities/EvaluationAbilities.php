@@ -29,7 +29,7 @@ class EvaluationAbilities {
 	use CommonAbilities;
 
 	public function show(User $user, Competition $competition) {
-		return $this->isAdmin()istratesCompetition($user, $competition);
+		return $this->administratesCompetition($user, $competition);
 	}
 
 }
