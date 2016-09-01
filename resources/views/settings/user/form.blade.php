@@ -31,7 +31,7 @@
             {!! Form::text('password', '', array('class' => 'form-control')) !!}
         </div>
     </div>
-    @if((Auth::user()->admin) && ($edit && (Auth::user()->username != $data['username'])))
+    @if((Auth::user()->isAdmin()) && ($edit && (Auth::user()->username != $data['username'])))
         <div class="form-group">
             {!! Form::Label('admin', 'Administrator', array('class' => 'col-sm-2 col-md-2 control-label')) !!}
             <div class="col-sm-10 col-md-2">

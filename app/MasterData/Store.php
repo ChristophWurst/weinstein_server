@@ -197,7 +197,7 @@ class Store implements MasterDataStore {
 	}
 
 	public function getAssociations(User $user = null) {
-		if (is_null($user) || $user->admin) {
+		if (is_null($user) || $user->isAdmin()) {
 			return $this->associationRepository->findAll();
 		}
 		return $this->associationRepository->findForUser($user);
@@ -261,7 +261,7 @@ class Store implements MasterDataStore {
 	}
 
 	public function getUsers(User $user = null) {
-		if (is_null($user) || $user->admin) {
+		if (is_null($user) || $user->isAdmin()) {
 			return $this->userRepository->findAll();
 		}
 		// Non-admin users see only their own user

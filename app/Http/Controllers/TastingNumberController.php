@@ -39,7 +39,6 @@ class TastingNumberController extends BaseController {
 	private $tastingHandler;
 
 	public function __construct(TastingHandler $tastingHandler) {
-		parent::__construct();
 		$this->tastingHandler = $tastingHandler;
 	}
 

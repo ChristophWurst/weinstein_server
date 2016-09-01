@@ -6,7 +6,7 @@
     <li>
         {!! link_to_route('settings.users', 'Benutzer') !!}
     </li>
-    @if (Auth::user()->admin)
+    @if (Auth::user()->isAdmin())
     <li>
         {!! link_to_route('settings.competitions', 'Bewerbe') !!}
     </li>

@@ -15,7 +15,7 @@ use App\MasterData\WineSort;
                 <a href="{!! route('settings') !!}">&Uuml;bersicht</a>
             </li>
         </ul>
-        @if (Auth::user()->admin)
+        @if (Auth::user()->isAdmin())
         <ul class="nav nav-sidebar">
             <li class="{!! Request::is('settings/competition*') ? 'active' : '' !!}">
                 <a href="{!! route('settings.competitions') !!}">Bewerb</a>

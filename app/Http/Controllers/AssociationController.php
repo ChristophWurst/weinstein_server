@@ -44,7 +44,6 @@ class AssociationController extends BaseController {
 	 * Constructor
 	 */
 	public function __construct(MasterDataStore $masterDataStore, AuthManager $auth) {
-		parent::__construct();
 		$this->masterDataStore = $masterDataStore;
 		$this->auth = $auth;
 
@@ -126,7 +125,7 @@ class AssociationController extends BaseController {
 
 		return View::make('settings/association/form')
 				->withData($association)
-				->withUsers($this->auth->user()->admin ? $this->selectNone + User::all()->lists('username', 'username')->all() : $this->auth->user()->lists('username', 'username')->all());
+				->withUsers($this->auth->user()->isAdmin() ? $this->selectNone + User::all()->lists('username', 'username')->all() : $this->auth->user()->lists('username', 'username')->all());
 	}
 
 	/**
@@ -144,7 +143,7 @@ class AssociationController extends BaseController {
 			$data['wuser_username'] = null;
 		}
 		// only admin can change user
-		if (!$this->auth->user()->admin) {
+		if (!$this->auth->user()->isAdmin()) {
 			unset($data['wuser_username']);
 		}
 

@@ -39,7 +39,6 @@ class AuthenticationController extends BaseController {
 	private $auth;
 
 	public function __construct(AuthManager $auth, ActivityLogger $activityLogger) {
-		parent::__construct();
 		$this->auth = $auth;
 		$this->activityLogger = $activityLogger;
 	}

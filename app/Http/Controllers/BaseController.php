@@ -21,7 +21,6 @@
 
 namespace App\Http\Controllers;
 
-use App\MasterData\Competition;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\App;
@@ -32,9 +31,6 @@ use Illuminate\Support\Facades\View;
 class BaseController extends Controller {
 
 	use AuthorizesRequests;
-
-	/** @var Competition */
-	protected $competition;
 
 	/** @var array */
 	protected $selectNone = [
@@ -59,19 +55,6 @@ class BaseController extends Controller {
 	protected function setupLayout() {
 		if (!is_null($this->layout)) {
 			$this->layout = View::make($this->layout);
-		}
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * loads session variable
-	 * 
-	 */
-	public function __construct() {
-		$this->competition = Route::input('competition');
-		if (!is_null($this->competition)) {
-			View::share('competition', $this->competition);
 		}
 	}
 

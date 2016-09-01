@@ -48,7 +48,6 @@ class WineController extends BaseController {
 	private $wineHandler;
 
 	public function __construct(WineHandler $wineHandler) {
-		parent::__construct();
 		$this->wineHandler = $wineHandler;
 	}
 

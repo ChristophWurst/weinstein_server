@@ -19,30 +19,24 @@
  *
  */
 
-namespace App\Http\Controllers;
+namespace Test\Unit\Http\Controllers;
 
-use App\Contracts\ActivityLogger;
-use App\Http\Controllers\BaseController;
-use Illuminate\Http\Response;
+use App\MasterData\User;
+use Mockery;
 
-class ActivityLogController extends BaseController {
+trait AuthorizationHelper {
 
-	/** @var ActivityLogger */
-	private $activityLogger;
+	protected function getAdminMock() {
+		$user = Mockery::mock(User::class);
 
-	public function __construct(ActivityLogger $activityLogger) {
-		$this->activityLogger = $activityLogger;
-	}
+		$user->shouldReceive('isAdmin')
+			->withNoArgs()
+			->andReturn(true);
+		$user->shouldReceive('getAttribute')
+			->with('username')
+			->andReturn('frank');
 
-	/**
-	 * Show all logs
-	 * 
-	 * @return Response
-	 */
-	public function index() {
-		$this->authorize('view-activitylog');
-
-		return view('settings/activitylog/index')->with('logs', $this->activityLogger->getMostRecentLogs());
+		return $user;
 	}
 
 }

@@ -3,7 +3,7 @@
 @section('content')
 
 <h1>Bewerb</h1>
-@if (Auth::user()->admin)
+@if (Auth::user()->isAdmin())
 <div class="container-fluid">
     <div class="progress">
         <?php $progress = $competition->competitionState->id/count($competition_states) * 100 ?>

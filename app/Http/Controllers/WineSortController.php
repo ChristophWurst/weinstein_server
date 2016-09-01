@@ -35,7 +35,6 @@ class WineSortController extends BaseController {
 	private $masterDataStore;
 
 	public function __construct(MasterDataStore $masterDataStore) {
-		parent::__construct();
 		$this->masterDataStore = $masterDataStore;
 	}
 

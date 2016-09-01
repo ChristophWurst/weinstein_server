@@ -121,7 +121,7 @@ use App\MasterData\Competition;
                                 <li class="divider">
                                     
                                 </li>
-                                @if (Auth::user()->admin)
+                                @if (Auth::user()->isAdmin())
                                 <li class="{!! Request::is('settings/competition*') ? 'active' : '' !!}">
                                     <a href="{!! route('settings.competitions'); !!}">Bewerb</a>
                                 </li>

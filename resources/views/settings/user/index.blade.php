@@ -2,7 +2,7 @@
 
 @section('settings_content')
 <h1>Benutzer</h1>
-@if (Auth::user()->admin)
+@if (Auth::user()->isAdmin())
 <a class="btn btn-default"
    type="button"
    href="{!! route('settings.users/create') !!}">
@@ -26,7 +26,7 @@
                     {!! link_to_route('settings.user/show', $u->username, array('username' => $u->username)) !!}
                 </td>
                 <td>
-                    @if ($u->admin)
+                    @if ($u->isAdmin())
                     <span class="glyphicon glyphicon-ok"></span>
                     @else
                     -

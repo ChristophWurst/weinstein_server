@@ -42,7 +42,6 @@ class ApplicantController extends BaseController {
 	private $auth;
 
 	public function __construct(MasterDataStore $masterDataStore, AuthManager $auth) {
-		parent::__construct();
 		$this->masterDataStore = $masterDataStore;
 		$this->auth = $auth;
 	}

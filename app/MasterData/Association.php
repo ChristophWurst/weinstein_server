@@ -59,7 +59,7 @@ class Association extends Model implements AdministrateModel {
 	 * @return bool
 	 */
 	public function administrates(User $user) {
-		if ($user->admin) {
+		if ($user->isAdmin()) {
 			return true;
 		}
 		return $this->wuser_username === $user->username;

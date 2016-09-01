@@ -47,7 +47,6 @@ class CompetitionController extends BaseController {
 	private $auth;
 
 	public function __construct(MasterDataStore $masterDataStore, TastingHandler $tastingHandler, AuthManager $auth) {
-		parent::__construct();
 		$this->masterDataStore = $masterDataStore;
 		$this->tastingHandler = $tastingHandler;
 		$this->auth = $auth;

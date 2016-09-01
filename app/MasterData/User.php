@@ -91,7 +91,7 @@ class User extends Authenticatable {
 	];
 
 	public function administrates(User $user) {
-		if ($user->admin) {
+		if ($user->isAdmin()) {
 			return true;
 		}
 		return $user->username === $this->username;
@@ -227,7 +227,7 @@ class User extends Authenticatable {
 	 * @return boolean
 	 */
 	public function isAdmin() {
-		return $this->admin === true;
+		return $this->isAdmin() === true;
 	}
 
 }

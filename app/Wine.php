@@ -102,7 +102,7 @@ class Wine extends Model implements AdministrateModel {
 	 * @return bool
 	 */
 	public function administrates(User $user) {
-		if ($user->admin) {
+		if ($user->isAdmin()) {
 			// Sys admin
 			return true;
 		}
@@ -209,7 +209,7 @@ class Wine extends Model implements AdministrateModel {
 	 * @return Query
 	 */
 	public function scopeAdmin($query, User $user) {
-		if ($user->admin) {
+		if ($user->isAdmin()) {
 			return $query;
 		}
 		$applicants = $user->applicants->lists('id');

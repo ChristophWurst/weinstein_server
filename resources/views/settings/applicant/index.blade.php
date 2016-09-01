@@ -2,7 +2,7 @@
 
 @section('settings_content')
 <h1>Betriebe</h1>
-@if (Auth::user()->admin)
+@if (Auth::user()->isAdmin())
 <a class="btn btn-default"
    type="button"
    href="{!! route('settings.applicants/create') !!}">

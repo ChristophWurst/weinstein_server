@@ -22,15 +22,16 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\MasterDataStore;
+use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\MasterData\User;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\View;
-use App\Exceptions\ValidationException;
+use function view;
 
 class UserController extends BaseController {
 
@@ -41,7 +42,6 @@ class UserController extends BaseController {
 	private $auth;
 
 	public function __construct(MasterDataStore $masterDataStore, AuthManager $auth) {
-		parent::__construct();
 		$this->masterDataStore = $masterDataStore;
 		$this->auth = $auth;
 	}
@@ -59,7 +59,7 @@ class UserController extends BaseController {
 
 		$user = $this->auth->user();
 		$users = $this->masterDataStore->getUsers($user);
-		return View::make('settings/user/index')->with('users', $users);
+		return view('settings/user/index')->with('users', $users);
 	}
 
 	/**
@@ -69,7 +69,7 @@ class UserController extends BaseController {
 	public function create() {
 		$this->authorize('create-user');
 
-		return View::make('settings/user/form');
+		return view('settings/user/form');
 	}
 
 	/**
@@ -83,10 +83,8 @@ class UserController extends BaseController {
 		$data = Input::all();
 
 		//convert admin value to boolean
-		if (isset($data['admin']) && $data['admin'] === 'true') {
-			$data['admin'] = true;
-		} else {
-			$data['admin'] = false;
+		if (isset($data['admin'])) {
+			$data['admin'] = $data['admin'] === 'true';
 		}
 
 		try {
@@ -96,7 +94,7 @@ class UserController extends BaseController {
 					->withErrors($ve->getErrors())
 					->withInput();
 		}
-		Log::info('user <' . $data['username'] . '> created by ' . $this->auth->user()->username);
+		//Log::info('user <' . $data['username'] . '> created by ' . $this->auth->user()->username);
 		return Redirect::route('settings.users');
 	}
 
@@ -109,7 +107,7 @@ class UserController extends BaseController {
 	public function show(User $user) {
 		$this->authorize('show-user', $user);
 
-		return View::make('settings/user/show')->with('data', $user);
+		return view('settings/user/show')->with('data', $user);
 	}
 
 	/**
@@ -124,7 +122,7 @@ class UserController extends BaseController {
 	public function edit(User $user) {
 		$this->authorize('edit-user', $user);
 
-		return View::make('settings/user/form')->with([
+		return view('settings/user/form')->with([
 				'data' => $user
 		]);
 	}
@@ -182,7 +180,7 @@ class UserController extends BaseController {
 	public function delete(User $user) {
 		$this->authorize('delete-user', $user);
 
-		return View::make('settings/user/delete')->with('user', $user);
+		return view('settings/user/delete')->with('user', $user);
 	}
 
 	/**

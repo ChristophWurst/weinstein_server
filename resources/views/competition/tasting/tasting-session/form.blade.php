@@ -26,7 +26,7 @@
     <div class="form-group">
         {!! Form::Label('wuser_username', 'Verwalter', array('class' => 'col-sm-2 col-md-2 control-label')) !!}
         <div class="col-sm-10 col-md-3">
-            @if (Auth::user()->admin)
+            @if (Auth::user()->isAdmin())
             {!! Form::select('wuser_username', $users, ($edit ? $data['wuser_username'] : 'none'), array('class' => 'form-control col-md-3')) !!}
             @else
             {!! Form::select('wuser_username', $users, ($edit ? $data['wuser_username'] : 'none'), array('class' => 'form-control col-md-3', 'readonly' => true)) !!}
