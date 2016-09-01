@@ -227,7 +227,7 @@ class User extends Authenticatable {
 	 * @return boolean
 	 */
 	public function isAdmin() {
-		return $this->isAdmin() === true;
+		return $this->admin === true;
 	}
 
 }
