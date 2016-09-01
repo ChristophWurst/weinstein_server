@@ -73,4 +73,12 @@ class CompetitionState extends Model {
 		}
 	}
 
+	/**
+	 * @param int $id
+	 * @return boolean
+	 */
+	public function is($id) {
+		return $this->id === $id;
+	}
+
 }

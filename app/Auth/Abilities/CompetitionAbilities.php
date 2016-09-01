@@ -83,19 +83,19 @@ class CompetitionAbilities {
 	}
 
 	public function completeKdb(User $user, Competition $competition) {
-		return $user->isAdmin() && $competition->competitionState->id === CompetitionState::STATE_KDB;
+		return $user->isAdmin() && $competition->competitionState->is(CompetitionState::STATE_KDB);
 	}
 
 	public function completeExcluded(User $user, Competition $competition) {
-		return $user->isAdmin() && $competition->competitionState->id === CompetitionState::STATE_EXCLUDE;
+		return $user->isAdmin() && $competition->competitionState->is(CompetitionState::STATE_EXCLUDE);
 	}
 
 	public function completeSosi(User $user, Competition $competition) {
-		return $user->isAdmin() && $competition->competitionState->id === CompetitionState::STATE_SOSI;
+		return $user->isAdmin() && $competition->competitionState->is(CompetitionState::STATE_SOSI);
 	}
 
 	public function completeChoosing(User $user, Competition $competition) {
-		return $user->isAdmin() && $competition->competitionState->id === CompetitionState::STATE_CHOOSE;
+		return $user->isAdmin() && $competition->competitionState->is(CompetitionState::STATE_CHOOSE);
 	}
 
 }

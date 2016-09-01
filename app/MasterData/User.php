@@ -94,10 +94,7 @@ class User extends Authenticatable {
 		if ($user->admin) {
 			return true;
 		}
-		if ($user->username === $this->username) {
-			return true;
-		}
-		return false;
+		return $user->username === $this->username;
 	}
 
 	/**

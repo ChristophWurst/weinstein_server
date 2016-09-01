@@ -28,22 +28,20 @@ class UserAbilities {
 	use CommonAbilities;
 
 	private function administratesUser(User $user1, User $user2) {
-		return $user1->administrates($user2);
+		return $user2->administrates($user1);
 	}
 
 	/**
-	 * @param User $user
 	 * @return boolean
 	 */
-	public function index(User $user) {
+	public function index() {
 		return true; // filtered anyway
 	}
 
 	/**
-	 * @param User $user
 	 * @return boolean
 	 */
-	public function create(User $user) {
+	public function create() {
 		return false; // Admin only
 	}
 
@@ -61,15 +59,13 @@ class UserAbilities {
 	 * @param User $user2
 	 */
 	public function edit(User $user1, User $user2) {
-		$this->administratesUser($user1, $user2);
+		return $this->administratesUser($user1, $user2);
 	}
 
 	/**
-	 * @param User $user1
-	 * @param User $user2
 	 * @return boolean
 	 */
-	public function delete(User $user1, User $user2) {
+	public function delete() {
 		return false; // Admin only
 	}
 

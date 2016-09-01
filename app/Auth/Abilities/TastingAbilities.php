@@ -21,11 +21,11 @@
 
 namespace App\Auth\Abilities;
 
-use App\Tasting\Commission;
 use App\MasterData\CompetitionState;
-use App\TastingNumber;
-use App\TastingSession;
 use App\MasterData\User;
+use App\Tasting\Commission;
+use App\Tasting\TastingNumber;
+use App\Tasting\TastingSession;
 use Illuminate\Support\Facades\Log;
 
 class TastingAbilities {

@@ -23,8 +23,8 @@ namespace App\Auth\Abilities;
 
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
-use App\TastingNumber;
 use App\MasterData\User;
+use App\Tasting\TastingNumber;
 
 class TastingNumberAbilities {
 
