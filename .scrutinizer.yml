@@ -6,6 +6,7 @@ filter:
     excluded_paths:
         - 'vendor/*'
         - 'config/*'
+        - 'tests/'
 
 imports:
     - javascript
