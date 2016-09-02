@@ -30,7 +30,7 @@ before_script:
 
 script:
     # Check PHP syntax
-    - find . -name \*.php -not -path './vendor/*' -exec php -l "{}" \;
+    - find . -name \*.php -not -path './vendor/*' -exec php -l "{}" \; | grep --invert-match "No syntax errors detected in *"
 
     # Generate secure key
     - rm bootstrap/cache/compiled.php
