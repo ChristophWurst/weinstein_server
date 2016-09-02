@@ -35,6 +35,7 @@ script:
     # Generate secure key
     - rm bootstrap/cache/compiled.php
     - php artisan key:generate --no-interaction
+    - cat .env
 
     # Prepare DB
     - php artisan migrate --no-interaction
