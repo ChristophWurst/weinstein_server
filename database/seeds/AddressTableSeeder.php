@@ -20,21 +20,21 @@
  */
 class AddressTableSeeder extends Seeder {
     
-    /**
-     * Insert new address into database
-     * 
-     * @param int $zipcode
-     * @param string $city
-     * @param string $street
-     * @param string $nr
-     */
-    public static function createAddress($zipcode, $city, $street, $nr) {
-        return Address::create(array(
-            'zipcode' => $zipcode,
-            'city' => $city,
-            'street' => $street,
-            'nr' => $nr,
-        ));
-    }
+	/**
+	 * Insert new address into database
+	 * 
+	 * @param int $zipcode
+	 * @param string $city
+	 * @param string $street
+	 * @param string $nr
+	 */
+	public static function createAddress($zipcode, $city, $street, $nr) {
+		return Address::create(array(
+			'zipcode' => $zipcode,
+			'city' => $city,
+			'street' => $street,
+			'nr' => $nr,
+		));
+	}
     
 }

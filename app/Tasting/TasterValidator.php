@@ -45,8 +45,8 @@ class TasterValidator extends Validator {
 	 */
 	protected function getAttributeNames() {
 		return array(
-		    'commission_id' => 'Kommission',
-		    'name' => 'Name',
+			'commission_id' => 'Kommission',
+			'name' => 'Name',
 		);
 	}
 
@@ -61,8 +61,8 @@ class TasterValidator extends Validator {
 			throw new Exception('TastingSession needed');
 		}
 		return array(
-		    'commission_id' => 'required|exists:commission,id',
-		    'name' => 'required|min:1|max:70',
+			'commission_id' => 'required|exists:commission,id',
+			'name' => 'required|min:1|max:70',
 		);
 	}
 

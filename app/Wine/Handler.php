@@ -189,7 +189,7 @@ class Handler implements WineHandler {
 	public function importExcluded(UploadedFile $file, Competition $competition) {
 		//iterate over all entries and try to store them
 		//
-        //if exceptions occur, all db actions are rolled back to prevent data 
+		//if exceptions occur, all db actions are rolled back to prevent data 
 		//inconsistency
 		try {
 			$doc = PHPExcel_IOFactory::load($file->getRealPath());

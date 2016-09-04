@@ -85,7 +85,7 @@ class Wine extends Model implements AdministrateModel {
 	/**
 	 * Get next possible id for insert
 	 * 
-	 * @param int $competition
+	 * @param Competition $competition
 	 * @return int
 	 */
 	public static function maxId(Competition $competition) {

@@ -35,6 +35,9 @@ class TasterRepository {
 		return $tastingSession->tasters;
 	}
 
+	/**
+	 * @param Commission $commission
+	 */
 	public function create($data, $commission) {
 		$taster = new Taster($data);
 		$taster->commission()->associate($commission);

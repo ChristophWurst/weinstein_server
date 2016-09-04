@@ -44,20 +44,20 @@ class TastingCatalogueExport {
 	 * @var array of string
 	 */
 	private $headers = [
-	    'DateiNr',
-	    'SortenNr',
-	    'Sorte',
-	    'QualNr',
-	    'Qualität',
-	    'Marke',
-	    'Jahr',
-	    'BetriebsNr',
-	    'Name',
-	    'WeinstandNr',
-	    'Weinstand',
-	    'Bewertung',
-	    'KdB',
-	    'SoSi',
+		'DateiNr',
+		'SortenNr',
+		'Sorte',
+		'QualNr',
+		'Qualität',
+		'Marke',
+		'Jahr',
+		'BetriebsNr',
+		'Name',
+		'WeinstandNr',
+		'Weinstand',
+		'Bewertung',
+		'KdB',
+		'SoSi',
 	];
 
 	/**
