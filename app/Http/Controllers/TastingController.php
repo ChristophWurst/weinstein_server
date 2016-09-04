@@ -27,20 +27,24 @@ use App\Http\Controllers\BaseController;
 use App\Tasting\Commission;
 use App\Tasting\TastingNumber;
 use App\Tasting\TastingSession;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\View;
 
 class TastingController extends BaseController {
 
 	/** @var TastingHandler */
 	private $tastingHandler;
 
-	public function __construct(TastingHandler $tastingHandler) {
+	/** @var Factory */
+	private $viewFactory;
+
+	public function __construct(TastingHandler $tastingHandler, Factory $viewFactory) {
 		$this->tastingHandler = $tastingHandler;
+		$this->viewFactory = $viewFactory;
 	}
 
 	/**
@@ -52,7 +56,7 @@ class TastingController extends BaseController {
 	public function add(TastingSession $tastingSession) {
 		$this->authorize('create-tasting', $tastingSession);
 
-		return View::make('competition/tasting/tasting-session/tasting/form')->with([
+		return $this->viewFactory->make('competition/tasting/tasting-session/tasting/form', [
 				'competition' => $tastingSession->competition,
 				'tastingSession' => $tastingSession,
 				'tastingNumbers' => $this->tastingHandler->getNextTastingNumbers($tastingSession),
@@ -95,7 +99,7 @@ class TastingController extends BaseController {
 			Log::error('cannot retaste' . $tastingNumber->id . ', it has not yet been tasted');
 			App::abort(500);
 		}
-		return View::make('competition/tasting/tasting-session/tasting/form')->with([
+		return $this->viewFactory->make('competition/tasting/tasting-session/tasting/form')->with([
 				'edit' => true,
 				'competition' => $tastingSession->competition,
 				'commission' => $commission,

@@ -23,12 +23,12 @@ namespace App\Http\Controllers;
 
 use App\Contracts\ActivityLogger;
 use Illuminate\Auth\AuthManager;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\View;
 
 class AuthenticationController extends BaseController {
 
@@ -38,9 +38,18 @@ class AuthenticationController extends BaseController {
 	/** @var AuthManager */
 	private $auth;
 
-	public function __construct(AuthManager $auth, ActivityLogger $activityLogger) {
+	/** @var Factory */
+	private $viewFactory;
+
+	/**
+	 * @param AuthManager $auth
+	 * @param ActivityLogger $activityLogger
+	 * @param Factory $viewFactory
+	 */
+	public function __construct(AuthManager $auth, ActivityLogger $activityLogger, Factory $viewFactory) {
 		$this->auth = $auth;
 		$this->activityLogger = $activityLogger;
+		$this->viewFactory = $viewFactory;
 	}
 
 	/**
@@ -49,7 +58,7 @@ class AuthenticationController extends BaseController {
 	 * @return Response
 	 */
 	public function account() {
-		return View::make('account/account');
+		return $this->viewFactory->make('account/account');
 	}
 
 	/**
@@ -58,7 +67,7 @@ class AuthenticationController extends BaseController {
 	 * @return Response
 	 */
 	public function login() {
-		return View::make('account/login');
+		return $this->viewFactory->make('account/login');
 	}
 
 	/**

@@ -26,11 +26,11 @@ use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\MasterData\Applicant;
 use Illuminate\Auth\AuthManager;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\View;
 use function view;
 
 class ApplicantController extends BaseController {
@@ -41,9 +41,18 @@ class ApplicantController extends BaseController {
 	/** @var AuthManager */
 	private $auth;
 
-	public function __construct(MasterDataStore $masterDataStore, AuthManager $auth) {
+	/** @var Factory */
+	private $viewFactory;
+
+	/**
+	 * @param MasterDataStore $masterDataStore
+	 * @param AuthManager $auth
+	 * @param Factory $viewFactory
+	 */
+	public function __construct(MasterDataStore $masterDataStore, AuthManager $auth, Factory $viewFactory) {
 		$this->masterDataStore = $masterDataStore;
 		$this->auth = $auth;
+		$this->viewFactory = $viewFactory;
 	}
 
 	/**
@@ -54,7 +63,9 @@ class ApplicantController extends BaseController {
 	public function index() {
 		$user = $this->auth->user();
 		$applicants = $this->masterDataStore->getApplicants($user);
-		return view('settings/applicant/index')->withApplicants($applicants);
+		return $this->viewFactory->make('settings/applicant/index', [
+			'applicants' => $applicants,
+		]);
 	}
 
 	/**
@@ -65,9 +76,10 @@ class ApplicantController extends BaseController {
 	public function create() {
 		$this->authorize('create-applicant');
 
-		return view('settings/applicant/form')
-				->withAssociations($this->masterDataStore->getAssociations()->lists('select_label', 'id')->all())
-				->withUsers($this->selectNone + $this->masterDataStore->getUsers()->lists('username', 'username')->all());
+		return $this->viewFactory->make('settings/applicant/form', [
+			'associations' => $this->masterDataStore->getAssociations()->lists('select_label', 'id')->all(),
+			'users' => $this->selectNone + $this->masterDataStore->getUsers()->lists('username', 'username')->all(),
+		]);
 	}
 
 	/**
@@ -102,7 +114,7 @@ class ApplicantController extends BaseController {
 	public function show(Applicant $applicant) {
 		$this->authorize('show-applicant', $applicant);
 
-		return View::make('settings/applicant/show')->with([
+		return $this->viewFactory->make('settings/applicant/show', [
 				'data' => $applicant
 		]);
 	}
@@ -115,7 +127,7 @@ class ApplicantController extends BaseController {
 	public function getImport() {
 		$this->authorize('import-applicant');
 
-		return View::make('settings/applicant/import');
+		return $this->viewFactory->make('settings/applicant/import');
 	}
 
 	/**
@@ -151,11 +163,12 @@ class ApplicantController extends BaseController {
 		$this->authorize('edit-applicant', $applicant);
 
 		$editId = $applicant->association->administrates($this->auth->user());
-		return View::make('settings/applicant/form')
-				->withApplicant($applicant)
-				->withEditId($editId)
-				->withAssociations($this->masterDataStore->getAssociations()->lists('select_label', 'id')->all())
-				->withUsers($this->selectNone + $this->masterDataStore->getUsers()->lists('username', 'username')->all());
+		return $this->viewFactory->make('settings/applicant/form', [
+			'applicant' => $applicant,
+			'editId' => $editId,
+			'associations' => $this->masterDataStore->getAssociations()->lists('select_label', 'id')->all(),
+			'users' => $this->selectNone + $this->masterDataStore->getUsers()->lists('username', 'username')->all(),
+		]);
 	}
 
 	/**

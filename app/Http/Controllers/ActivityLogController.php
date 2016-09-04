@@ -23,15 +23,20 @@ namespace App\Http\Controllers;
 
 use App\Contracts\ActivityLogger;
 use App\Http\Controllers\BaseController;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Response;
 
 class ActivityLogController extends BaseController {
 
+	/** @var Factory */
+	private $viewFactory;
+
 	/** @var ActivityLogger */
 	private $activityLogger;
 
-	public function __construct(ActivityLogger $activityLogger) {
+	public function __construct(ActivityLogger $activityLogger, Factory $viewFactory) {
 		$this->activityLogger = $activityLogger;
+		$this->viewFactory = $viewFactory;
 	}
 
 	/**
@@ -42,7 +47,9 @@ class ActivityLogController extends BaseController {
 	public function index() {
 		$this->authorize('view-activitylog');
 
-		return view('settings/activitylog/index')->with('logs', $this->activityLogger->getMostRecentLogs());
+		return $this->viewFactory->make('settings/activitylog/index', [
+			'logs' => $this->activityLogger->getMostRecentLogs(),
+		]);
 	}
 
 }

@@ -27,19 +27,23 @@ use App\Http\Controllers\BaseController;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\Tasting\TastingNumber;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\View;
 
 class TastingNumberController extends BaseController {
 
 	/** @var TastingHandler */
 	private $tastingHandler;
 
-	public function __construct(TastingHandler $tastingHandler) {
+	/** @var Factory */
+	private $viewFactory;
+
+	public function __construct(TastingHandler $tastingHandler, Factory $viewFactory) {
 		$this->tastingHandler = $tastingHandler;
+		$this->viewFactory = $viewFactory;
 	}
 
 	/**
@@ -69,11 +73,12 @@ class TastingNumberController extends BaseController {
 			$showComplete = true;
 		}
 
-		return View::make('competition/tasting/tasting-number/index')
-				->withNumbers($this->tastingHandler->getAllTastingNumbers($competition, $competition->getTastingStage()))
-				->withShowAdd($showAdd)
-				->withLeft($left)
-				->withFinished($showComplete);
+		return $this->viewFactory->make('competition/tasting/tasting-number/index', [
+			'numbers' => $this->tastingHandler->getAllTastingNumbers($competition, $competition->getTastingStage()),
+			'showAdd' => $showAdd,
+			'left' => $left,
+			'finished' => $showComplete,
+		]);
 	}
 
 	/**
@@ -85,7 +90,7 @@ class TastingNumberController extends BaseController {
 	public function assign(Competition $competition) {
 		$this->authorize('assign-tastingnumber');
 
-		return View::make('competition/tasting/tasting-number/form');
+		return $this->viewFactory->make('competition/tasting/tasting-number/form');
 	}
 
 	/**
@@ -131,7 +136,9 @@ class TastingNumberController extends BaseController {
 	public function deallocate(TastingNumber $tastingNumber) {
 		$this->authorize('unassign-tastingnumber');
 
-		return View::make('competition/tasting/tasting-number/deallocate')->with('data', $tastingNumber);
+		return $this->viewFactory->make('competition/tasting/tasting-number/deallocate', [
+			'data' => $tastingNumber
+		]);
 	}
 
 	/**
@@ -158,7 +165,7 @@ class TastingNumberController extends BaseController {
 	public function import(Competition $competition) {
 		$this->authorize('import-tastingnumbers');
 
-		return View::make('competition/tasting/tasting-number/import');
+		return $this->viewFactory->make('competition/tasting/tasting-number/import');
 	}
 
 	/**

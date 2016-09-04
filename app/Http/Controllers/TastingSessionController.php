@@ -31,19 +31,27 @@ use App\Tasting\Commission;
 use App\Tasting\TastingProtocol;
 use App\Tasting\TastingSession;
 use App\Tasting\TastingStage;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\View;
 
 class TastingSessionController extends BaseController {
 
 	/** @var TastingHandler */
 	private $tastingHandler;
 
-	public function __construct(TastingHandler $tastingHandler) {
+	/** @var Factory */
+	private $viewFactory;
+
+	/**
+	 * @param TastingHandler $tastingHandler
+	 * @param Factory $viewFactory
+	 */
+	public function __construct(TastingHandler $tastingHandler, Factory $viewFactory) {
 		$this->tastingHandler = $tastingHandler;
+		$this->viewFactory = $viewFactory;
 		$this->middleware('@filterTastingSessionAdmin',
 			[
 			'except' => [
@@ -84,15 +92,15 @@ class TastingSessionController extends BaseController {
 	 * @param Competition $competition
 	 */
 	private function shareCommonViewData(Competition $competition) {
-		View::share('competition', $competition);
-		View::share('tastingstage', $competition->getTastingStage());
-		View::share('tastingsessions',
+		$this->viewFactory->share('competition', $competition);
+		$this->viewFactory->share('tastingstage', $competition->getTastingStage());
+		$this->viewFactory->share('tastingsessions',
 			$this->tastingHandler->getAllTastingSessions($competition, $competition->getTastingStage(), Auth::user()));
 		$tasting1 = $competition->competitionState->id === CompetitionState::STATE_TASTING1;
 		$tasting2 = $competition->competitionState->id === CompetitionState::STATE_TASTING2;
-		View::share('show_finish1',
+		$this->viewFactory->share('show_finish1',
 			$tasting1 && $competition->wine_details()->count() === $competition->wine_details()->whereNotNull('rating1')->count());
-		View::share('show_finish2',
+		$this->viewFactory->share('show_finish2',
 			$tasting2 && $competition->wines()->withTastingNumber(TastingStage::find(2))->count() === $competition->wine_details()->kdb()->whereNotNull('rating2')->count());
 	}
 
@@ -106,7 +114,7 @@ class TastingSessionController extends BaseController {
 		$this->authorize('show-tastingsessions', $competition);
 
 		$this->shareCommonViewData($competition);
-		return View::make('competition/tasting/tasting-session/index');
+		return $this->viewFactory->make('competition/tasting/tasting-session/index');
 	}
 
 	/**
@@ -119,8 +127,10 @@ class TastingSessionController extends BaseController {
 		$this->authorize('create-tastingsession', $competition);
 
 		$this->shareCommonViewData($competition);
-		return View::make('competition/tasting/tasting-session/form')->withUsers($this->selectNone + User::all()->lists('username',
-					'username')->all());
+		return $this->viewFactory->make('competition/tasting/tasting-session/form',
+				[
+				'users' => $this->selectNone + User::all()->lists('username', 'username')->all(),
+		]);
 	}
 
 	/**
@@ -157,7 +167,7 @@ class TastingSessionController extends BaseController {
 		$this->authorize('show-tastingsession', $tastingSession);
 
 		$this->shareCommonViewData($tastingSession->competition);
-		return View::make('competition/tasting/tasting-session/show')
+		return $this->viewFactory->make('competition/tasting/tasting-session/show')
 				->withData($tastingSession)
 				->withTastingFinished($this->tastingHandler->isTastingFinished($tastingSession->competition));
 	}
@@ -218,9 +228,11 @@ class TastingSessionController extends BaseController {
 		$this->authorize('edit-tastingsession', $tastingSession);
 
 		$this->shareCommonViewData($tastingSession->competition);
-		return View::make('competition/tasting/tasting-session/form')
-				->withData($tastingSession)
-				->withUsers($this->selectNone + User::all()->lists('username', 'username')->all());
+		return $this->viewFactory->make('competition/tasting/tasting-session/form',
+				[
+				'data' => $tastingSession,
+				'users' => $this->selectNone + User::all()->lists('username', 'username')->all(),
+		]);
 	}
 
 	/**
@@ -288,7 +300,7 @@ class TastingSessionController extends BaseController {
 		$this->authorize('show-tastingsession-statistics', $tastingSession);
 
 		$this->shareCommonViewData($tastingSession->competition);
-		return View::make('competition/tasting/tasting-session/statistics')
+		return $this->viewFactory->make('competition/tasting/tasting-session/statistics')
 				->withTastingSession($tastingSession);
 	}
 
@@ -302,7 +314,7 @@ class TastingSessionController extends BaseController {
 		$this->authorize('lock-tastingsession', $tastingSession);
 
 		$this->shareCommonViewData($tastingSession->competition);
-		return View::make('competition/tasting/tasting-session/complete')->with([
+		return $this->viewFactory->make('competition/tasting/tasting-session/complete', [
 				'data' => $tastingSession,
 		]);
 	}
@@ -332,7 +344,7 @@ class TastingSessionController extends BaseController {
 		$this->authorize('delete-tastingsession', $tastingSession);
 
 		$this->shareCommonViewData($tastingSession->competition);
-		return View::make('competition/tasting/tasting-session/delete')->with([
+		return $this->viewFactory->make('competition/tasting/tasting-session/delete')->with([
 				'data' => $tastingSession,
 		]);
 	}

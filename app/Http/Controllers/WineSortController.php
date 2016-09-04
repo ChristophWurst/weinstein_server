@@ -24,18 +24,26 @@ namespace App\Http\Controllers;
 use App\Contracts\MasterDataStore;
 use App\Exceptions\ValidationException;
 use App\MasterData\WineSort;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\View;
 
 class WineSortController extends BaseController {
 
 	/** @var MasterDataStore */
 	private $masterDataStore;
 
-	public function __construct(MasterDataStore $masterDataStore) {
+	/** @var Factory */
+	private $viewFactory;
+
+	/**
+	 * @param MasterDataStore $masterDataStore
+	 * @param Factory $viewFactory
+	 */
+	public function __construct(MasterDataStore $masterDataStore, Factory $viewFactory) {
 		$this->masterDataStore = $masterDataStore;
+		$this->viewFactory = $viewFactory;
 	}
 
 	/**
@@ -46,7 +54,9 @@ class WineSortController extends BaseController {
 	public function index() {
 		$this->authorize('list-winesorts');
 
-		return View::make('settings/winesorts/index')->with('sorts', $this->masterDataStore->getWineSorts());
+		return $this->viewFactory->make('settings/winesorts/index', [
+				'sorts' => $this->masterDataStore->getWineSorts(),
+		]);
 	}
 
 	/**
@@ -57,7 +67,7 @@ class WineSortController extends BaseController {
 	public function create() {
 		$this->authorize('create-winesort');
 
-		return View::make('settings/winesorts/form');
+		return $this->viewFactory->make('settings/winesorts/form');
 	}
 
 	/**
@@ -88,7 +98,7 @@ class WineSortController extends BaseController {
 	public function edit(WineSort $wineSort) {
 		$this->authorize('update-winesort', $wineSort);
 
-		return View::make('settings/winesorts/form')->with([
+		return $this->viewFactory->make('settings/winesorts/form', [
 				'data' => $wineSort,
 		]);
 	}

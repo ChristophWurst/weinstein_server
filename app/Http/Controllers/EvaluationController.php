@@ -21,12 +21,22 @@
 
 namespace App\Http\Controllers;
 
-use App\MasterData\Competition;
 use App\Http\Controllers\BaseController;
+use App\MasterData\Competition;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\View;
 
 class EvaluationController extends BaseController {
+
+	/** @var Factory */
+	private $viewFactory;
+
+	/**
+	 * @param Factory $viewFactory
+	 */
+	public function __construct(Factory $viewFactory) {
+		$this->viewFactory = $viewFactory;
+	}
 
 	/**
 	 * @param Competition $competition
@@ -35,10 +45,11 @@ class EvaluationController extends BaseController {
 	public function protocols(Competition $competition) {
 		$this->authorize('show-evaluations');
 
-		return View::make('competition/evaluation/index')
-				->withCompetition($competition)
-				->withTastingSessions1($competition->tastingsessions()->whereTastingstage_id(1)->get())
-				->withTastingSessions2($competition->tastingsessions()->whereTastingstage_id(2)->get());
+		return $this->viewFactory->make('competition/evaluation/index', [
+			'competition' => $competition,
+			'tastingSession1' => $competition->tastingsessions()->whereTastingstage_id(1)->get(),
+			'tastingSession2' => $competition->tastingsessions()->whereTastingstage_id(2)->get(),
+		]);
 	}
 
 }

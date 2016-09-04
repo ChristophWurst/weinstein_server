@@ -27,10 +27,10 @@ use App\Http\Controllers\BaseController;
 use App\MasterData\Association;
 use App\MasterData\User;
 use Illuminate\Auth\AuthManager;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\View;
 
 class AssociationController extends BaseController {
 
@@ -40,12 +40,18 @@ class AssociationController extends BaseController {
 	/** @var AuthManager */
 	private $auth;
 
+	/** @var Factory */
+	private $viewFactory;
+
 	/**
-	 * Constructor
+	 * @param MasterDataStore $masterDataStore
+	 * @param AuthManager $auth
+	 * @param Factory $viewFactory
 	 */
-	public function __construct(MasterDataStore $masterDataStore, AuthManager $auth) {
+	public function __construct(MasterDataStore $masterDataStore, AuthManager $auth, Factory $viewFactory) {
 		$this->masterDataStore = $masterDataStore;
 		$this->auth = $auth;
+		$this->viewFactory = $viewFactory;
 
 		//register filters
 		$this->middleware('auth');
@@ -62,7 +68,9 @@ class AssociationController extends BaseController {
 	public function index() {
 		$user = $this->auth->user();
 		$associations = $this->masterDataStore->getAssociations($user);
-		return View::make('settings/association/index')->with('associations', $associations);
+		return $this->viewFactory->make('settings/association/index', [
+				'associations' => $associations
+		]);
 	}
 
 	/**
@@ -74,7 +82,7 @@ class AssociationController extends BaseController {
 		$this->authorize('create-association');
 
 		$users = $this->masterDataStore->getUsers()->lists('username', 'username')->all();
-		return View::make('settings/association/form')->withUsers($this->selectNone + $users);
+		return $this->viewFactory->make('settings/association/form')->withUsers($this->selectNone + $users);
 	}
 
 	/**
@@ -109,7 +117,9 @@ class AssociationController extends BaseController {
 	public function show(Association $association) {
 		$this->authorize('show-association', $association);
 
-		return View::make('settings/association/show')->with('data', $association);
+		return $this->viewFactory->make('settings/association/show', [
+				'data' => $association,
+		]);
 	}
 
 	/**
@@ -123,9 +133,10 @@ class AssociationController extends BaseController {
 	public function edit(Association $association) {
 		$this->authorize('create-association', $association);
 
-		return View::make('settings/association/form')
+		return $this->viewFactory->make('settings/association/form')
 				->withData($association)
-				->withUsers($this->auth->user()->isAdmin() ? $this->selectNone + User::all()->lists('username', 'username')->all() : $this->auth->user()->lists('username', 'username')->all());
+				->withUsers($this->auth->user()->isAdmin() ? $this->selectNone + User::all()->lists('username', 'username')->all() : $this->auth->user()->lists('username',
+							'username')->all());
 	}
 
 	/**

@@ -21,9 +21,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\View;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\Response;
 
 class SettingsController extends BaseController {
+
+	/** @var Factory */
+	private $viewFactory;
+
+	/**
+	 * @param Factory $viewFactory
+	 */
+	public function __construct(Factory $viewFactory) {
+		$this->viewFactory = $viewFactory;
+	}
 
 	/**
 	 * Show the settings page
@@ -31,7 +42,7 @@ class SettingsController extends BaseController {
 	 * @return Response
 	 */
 	public function index() {
-		return View::make('settings/index');
+		return $this->viewFactory->make('settings/index');
 	}
 
 }

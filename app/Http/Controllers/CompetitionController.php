@@ -28,10 +28,10 @@ use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\Tasting\TastingStage;
 use Illuminate\Auth\AuthManager;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\View;
 use Symfony\Component\Process\Exception\InvalidArgumentException;
 use function view;
 
@@ -46,10 +46,21 @@ class CompetitionController extends BaseController {
 	/** @var AuthManager */
 	private $auth;
 
-	public function __construct(MasterDataStore $masterDataStore, TastingHandler $tastingHandler, AuthManager $auth) {
+	/** @var Factory */
+	private $viewFactory;
+
+	/**
+	 * @param MasterDataStore $masterDataStore
+	 * @param TastingHandler $tastingHandler
+	 * @param AuthManager $auth
+	 * @param Factory $viewFactory
+	 */
+	public function __construct(MasterDataStore $masterDataStore, TastingHandler $tastingHandler, AuthManager $auth,
+		Factory $viewFactory) {
 		$this->masterDataStore = $masterDataStore;
 		$this->tastingHandler = $tastingHandler;
 		$this->auth = $auth;
+		$this->viewFactory = $viewFactory;
 	}
 
 	/**
@@ -61,7 +72,7 @@ class CompetitionController extends BaseController {
 		$user = $this->auth->user();
 		$competitions = $this->masterDataStore->getCompetitions($user);
 
-		return view('settings/competition/index')->with([
+		return $this->viewFactory->make('settings/competition/index', [
 				'competitions' => $competitions,
 		]);
 	}
@@ -73,19 +84,20 @@ class CompetitionController extends BaseController {
 	 * @return Response
 	 */
 	public function show(Competition $competition) {
-		return view('competition/show')
-				->withCompetition($competition)
-				->withCompetitionStates(CompetitionState::all())
-				->withWines($competition->wines()->count())
-				->withWinesWithNr($competition->wines()->whereNotNull('nr')->count())
-				->withWinesTasted1($competition->wine_details()->whereNotNull('rating1')->count())
-				->withWinesTasted2($competition->wine_details()->kdb()->whereNotNull('rating2')->count())
-				->withWinesKdb($competition->wines()->kdb()->count())
-				->withWinesExcluded($competition->wines()->excluded()->count())
-				->withWinesTastingNumber1($competition->wines()->withTastingNumber(TastingStage::find(1))->count())
-				->withWinesTastingNumber2($competition->wines()->withTastingNumber(TastingStage::find(2))->count())
-				->withWinesSosi($competition->wines()->sosi()->count())
-				->withWinesChosen($competition->wines()->chosen()->count());
+		return $this->viewFactory->make('competition/show', [
+			'competition' => $competition,
+			'competitionStates' => CompetitionState::all(),
+			'wines' => $competition->wines()->count(),
+			'winesWithNr' => $competition->wines()->whereNotNull('nr')->count(),
+			'winesTasted1' => $competition->wine_details()->whereNotNull('rating1')->count(),
+			'winesTasted2' => $competition->wine_details()->kdb()->whereNotNull('rating2')->count(),
+			'winesKdb' => $competition->wines()->kdb()->count(),
+			'winesExcluded' => $competition->wines()->excluded()->count(),
+			'winesTastingNumber1' => $competition->wines()->withTastingNumber(TastingStage::find(1))->count(),
+			'winesTastingNumber2' => $competition->wines()->withTastingNumber(TastingStage::find(2))->count(),
+			'winesSosi' => $competition->wines()->sosi()->count(),
+			'winesChosen' => $competition->wines()->chosen()->count(),
+		]);
 	}
 
 	/**
@@ -102,9 +114,10 @@ class CompetitionController extends BaseController {
 		if (!in_array($tasting, [1, 2])) {
 			throw new InvalidArgumentException();
 		}
-		return View::make('competition/complete-tasting')
-				->withData($competition)
-				->withTasting($tasting);
+		return $this->viewFactory->make('competition/complete-tasting', [
+			'data' => $competition,
+			'tasting' => $tasting,
+		]);
 	}
 
 	/**
@@ -129,7 +142,7 @@ class CompetitionController extends BaseController {
 	public function completeKdb(Competition $competition) {
 		$this->authorize('complete-competition-kdb');
 
-		return View::make('competition/complete-kdb')
+		return $this->viewFactory->make('competition/complete-kdb')
 				->withData($competition);
 	}
 
@@ -153,8 +166,9 @@ class CompetitionController extends BaseController {
 	public function completeExcluded(Competition $competition) {
 		$this->authorize('complete-competition-excluded');
 
-		return View::make('competition/complete-excluded')
-				->withData($competition);
+		return $this->viewFactory->make('competition/complete-excluded', [
+			'data' => $competition,
+		]);
 	}
 
 	/**
@@ -177,7 +191,7 @@ class CompetitionController extends BaseController {
 	public function completeSosi(Competition $competition) {
 		$this->authorize('complete-competition-sosi');
 
-		return View::make('competition/complete-sosi')
+		return $this->viewFactory->make('competition/complete-sosi')
 				->withData($competition);
 	}
 
@@ -201,8 +215,9 @@ class CompetitionController extends BaseController {
 	public function completeChoosing(Competition $competition) {
 		$this->authorize('complete-competition-choosing');
 
-		return View::make('competition/complete-choosing')
-				->withData($competition);
+		return $this->viewFactory->make('competition/complete-choosing', [
+			'data' => $competition,
+		]);
 	}
 
 	/**
@@ -233,9 +248,9 @@ class CompetitionController extends BaseController {
 			throw new InvalidArgumentException();
 		}
 
-		return View::make('competition/complete-tastingnumbers')->with([
-				'data' => $competition,
-				'tasting' => $tasting,
+		return $this->viewFactory->make('competition/complete-tastingnumbers', [
+			'data' => $competition,
+			'tasting' => $tasting,
 		]);
 	}
 
@@ -264,7 +279,7 @@ class CompetitionController extends BaseController {
 	public function getReset(Competition $competition) {
 		$this->authorize('reset-competition', $competition);
 
-		return View::make('settings/competition/reset');
+		return $this->viewFactory->make('settings/competition/reset');
 	}
 
 	/**

@@ -21,9 +21,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\View;
+use Illuminate\Contracts\View\Factory;
+use Symfony\Component\HttpFoundation\Response;
 
 class StartController extends BaseController {
+
+	/** @var Factory */
+	private $viewFactory;
+
+	/**
+	 * @param Factory $viewFactory
+	 */
+	public function __construct(Factory $viewFactory) {
+		$this->viewFactory = $viewFactory;
+	}
 
 	/**
 	 * Show start page
@@ -31,7 +42,7 @@ class StartController extends BaseController {
 	 * @return Response
 	 */
 	public function index() {
-		return View::make('index');
+		return $this->viewFactory->make('index');
 	}
 
 }
