@@ -58,8 +58,6 @@ class UserController extends BaseController {
 	 * @return Response
 	 */
 	public function index() {
-		$this->authorize('list-users');
-
 		$user = $this->auth->user();
 		$users = $this->masterDataStore->getUsers($user);
 		return $this->viewFactory->make('settings/user/index', [

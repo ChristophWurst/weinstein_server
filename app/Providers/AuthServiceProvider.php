@@ -112,7 +112,6 @@ class AuthServiceProvider extends ServiceProvider {
 		/**
 		 * User
 		 */
-		$gate->define('list-users', UserAbilities::class . '@index');
 		$gate->define('create-user', UserAbilities::class . '@create');
 		$gate->define('show-user', UserAbilities::class . '@show');
 		$gate->define('edit-user', UserAbilities::class . '@edit');

@@ -34,13 +34,6 @@ class UserAbilities {
 	/**
 	 * @return boolean
 	 */
-	public function index() {
-		return true; // filtered anyway
-	}
-
-	/**
-	 * @return boolean
-	 */
 	public function create() {
 		return false; // Admin only
 	}
