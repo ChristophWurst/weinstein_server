@@ -37,12 +37,6 @@ class UserAbilitiesTest extends TestCase {
 		$this->abilities = new UserAbilities();
 	}
 
-	public function testIndex() {
-		$user = $this->getUserMock();
-
-		$this->assertTrue($this->abilities->index($user));
-	}
-
 	public function testCreate() {
 		$user = $this->getUserMock();
 
