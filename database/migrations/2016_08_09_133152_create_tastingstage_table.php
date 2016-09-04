@@ -23,7 +23,7 @@ class CreateTastingstageTable extends Migration {
 	public function up() {
 		Schema::dropIfExists('tastingstage');
 
-		Schema::create('tastingstage', function (Blueprint $table) {
+		Schema::create('tastingstage', function(Blueprint $table) {
 			$table->engine = 'InnoDB';
 
 			$table->integer('id')->unsigned();

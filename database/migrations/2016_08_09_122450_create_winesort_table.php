@@ -26,7 +26,7 @@ class CreateWinesortTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create('winesort', function (Blueprint $table) {
+		Schema::create('winesort', function(Blueprint $table) {
 			$table->engine = 'InnoDB';
 
 			$table->increments('id');

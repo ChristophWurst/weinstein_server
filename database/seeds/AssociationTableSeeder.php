@@ -23,7 +23,7 @@ class AssociationTableSeeder extends Seeder {
     /**
      * Insert new association into database
      * 
-     * @param (big)int $id
+     * @param integer $id
      * @param string $name
      * @param int|null $username
      * @return Association
