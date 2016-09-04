@@ -25,13 +25,12 @@ use App\Contracts\MasterDataStore;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\MasterData\User;
+use Exception;
 use Illuminate\Auth\AuthManager;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
-use function view;
 
 class UserController extends BaseController {
 
@@ -41,9 +40,13 @@ class UserController extends BaseController {
 	/** @var AuthManager */
 	private $auth;
 
-	public function __construct(MasterDataStore $masterDataStore, AuthManager $auth) {
+	/** @var Factory */
+	private $viewFactory;
+
+	public function __construct(MasterDataStore $masterDataStore, AuthManager $auth, Factory $viewFactory) {
 		$this->masterDataStore = $masterDataStore;
 		$this->auth = $auth;
+		$this->viewFactory = $viewFactory;
 	}
 
 	/**
@@ -59,7 +62,9 @@ class UserController extends BaseController {
 
 		$user = $this->auth->user();
 		$users = $this->masterDataStore->getUsers($user);
-		return view('settings/user/index')->with('users', $users);
+		return $this->viewFactory->make('settings/user/index', [
+				'users' => $users
+		]);
 	}
 
 	/**
@@ -69,18 +74,19 @@ class UserController extends BaseController {
 	public function create() {
 		$this->authorize('create-user');
 
-		return view('settings/user/form');
+		return $this->viewFactory->make('settings/user/form');
 	}
 
 	/**
 	 * Store a newly created resource in storage.
 	 *
+	 * @param Request $request
 	 * @return Response
 	 */
-	public function store() {
+	public function store(Request $request) {
 		$this->authorize('create-user');
 
-		$data = Input::all();
+		$data = $request->all();
 
 		//convert admin value to boolean
 		if (isset($data['admin'])) {
@@ -107,7 +113,9 @@ class UserController extends BaseController {
 	public function show(User $user) {
 		$this->authorize('show-user', $user);
 
-		return view('settings/user/show')->with('data', $user);
+		return $this->viewFactory->make('settings/user/show', [
+				'data' => $user,
+		]);
 	}
 
 	/**
@@ -122,7 +130,7 @@ class UserController extends BaseController {
 	public function edit(User $user) {
 		$this->authorize('edit-user', $user);
 
-		return view('settings/user/form')->with([
+		return $this->viewFactory->make('settings/user/form', [
 				'data' => $user
 		]);
 	}
@@ -137,15 +145,15 @@ class UserController extends BaseController {
 	 * @param User $user        	
 	 * @return Response
 	 */
-	public function update(User $user) {
+	public function update(User $user, Request $request) {
 		$this->authorize('edit-user', $user);
 
-		$data = Input::all();
+		$data = $request->all();
 		// convert admin value to boolean
 		$data['admin'] = (isset($data['admin']) && $data['admin'] === 'true');
 
 
-		// prevent admin from removing her/his own admin privileges
+		// prevent admins from removing their own admin privileges
 		if ($this->auth->user()->username === $user->username) {
 			unset($data['admin']);
 		}
@@ -180,7 +188,9 @@ class UserController extends BaseController {
 	public function delete(User $user) {
 		$this->authorize('delete-user', $user);
 
-		return view('settings/user/delete')->with('user', $user);
+		return $this->viewFactory->make('settings/user/delete', [
+				'user' => $user
+		]);
 	}
 
 	/**
@@ -189,18 +199,17 @@ class UserController extends BaseController {
 	 * @param User $user        	
 	 * @return Response
 	 */
-	public function destroy(User $user) {
+	public function destroy(User $user, Request $request) {
 		$this->authorize('delete-user', $user);
 
 		//prevent user from deleting her/his own account
-		if ($user->username === $this->auth->user()->username) {
-			App::abort(500);
+		if ($user->is($this->auth->user())) {
+			new Exception('users must not delete themselves');
 		}
 
-		if (Input::get('del') == 'Ja') {
+		if ($request->get('del') === 'Ja') {
 			$this->masterDataStore->deleteUser($user);
 		}
-		Log::info('user <' . $user->username . '> deleted by ' . $this->auth->user()->username);
 		return Redirect::route('settings.users');
 	}
 

@@ -38,9 +38,13 @@ class ValidationException extends Exception {
 	 * 
 	 * @param MessageBag $errors
 	 */
-	public function __construct(MessageBag $errors) {
+	public function __construct(MessageBag $errors = null) {
 		parent::__construct("Validation Error", 0, null);
-		$this->errors = $errors;
+		if (is_null($errors)) {
+			$this->errors = new MessageBag();
+		} else {
+			$this->errors = $errors;
+		}
 	}
 
 	/**

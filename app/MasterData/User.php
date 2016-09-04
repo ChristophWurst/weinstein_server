@@ -230,4 +230,14 @@ class User extends Authenticatable {
 		return $this->admin === true;
 	}
 
+	/**
+	 * Check wheter two user objects are referencing the same data set
+	 *
+	 * @param User $other
+	 * @return boolean
+	 */
+	public function is(User $other) {
+		return $this->username === $other->username;
+	}
+
 }

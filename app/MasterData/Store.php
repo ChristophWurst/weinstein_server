@@ -287,6 +287,7 @@ class Store implements MasterDataStore {
 
 	public function deleteUser(User $user) {
 		$this->userRepository->delete($user);
+		//Log::info('user <' . $user->username . '> deleted by ' . $this->auth->user()->username);
 		//ActivityLogger::log('Benutzer [' . $username . '] gel&ouml;scht');
 	}
 
