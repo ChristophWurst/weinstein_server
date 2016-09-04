@@ -46,15 +46,15 @@ use App\MasterData\Competition;
                     <ul class="nav navbar-nav">
                         @if (!isset($competition))
                         <?php
-                            $comp = Competition::all()->first();
-                            $compLink = $comp ? url('competition', array('competition' => $comp->id)) : null;
-                        ?>
+							$comp = Competition::all()->first();
+							$compLink = $comp ? url('competition', array('competition' => $comp->id)) : null;
+						?>
                         <li><a href="{!! $compLink !!}">Bewerb</a></li>
                         @else
                         <?php 
-                            $stateTastingNumbers = in_array($competition->competitionState->description, array('ENROLLMENT', 'TASTINGNUMBERS1', 'TASTINGNUMBERS2')) && $competition->enrollmentFinished();
-                            $stateTasting = in_array($competition->competitionState->description, array('TASTING1', 'TASTING2'));
-                        ?>
+							$stateTastingNumbers = in_array($competition->competitionState->description, array('ENROLLMENT', 'TASTINGNUMBERS1', 'TASTINGNUMBERS2')) && $competition->enrollmentFinished();
+							$stateTasting = in_array($competition->competitionState->description, array('TASTING1', 'TASTING2'));
+						?>
                         <li class="{!! (Request::is('competition/*') && !in_array(Request::Segment(3), array('enrollment', 'tasting', 'evaluation')) && Request::Segment(2) !== 'tasting') ? 'active' : '' !!}">
                             <a href="{!! route('competition/show', array('competition' => $competition->id)) !!}">&Uuml;bersicht</a>
                         </li>
