@@ -23,23 +23,31 @@ namespace Test\Unit\Http\Controllers;
 
 use App\Contracts\ActivityLogger;
 use App\Http\Controllers\ActivityLogController;
-use App\MasterData\User;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Collection;
 use Mockery;
+use Mockery\MockInterface;
 use Test\TestCase;
 
 class ActivityLogControllerTest extends TestCase {
 
 	use AuthorizationHelper;
 
-	/** @var ActivityLogger|\Mockery\MockInterface */
+	/** @var ActivityLogger|MockInterface */
 	private $activityLogger;
+
+	/** @var Factory|MockInterface */
+	private $viewFactory;
+
+	/** @var ActivityLogController */
+	private $controller;
 
 	protected function setUp() {
 		parent::setUp();
 
 		$this->activityLogger = Mockery::mock(ActivityLogger::class);
-		$this->app->instance(ActivityLogger::class, $this->activityLogger);
+		$this->viewFactory = Mockery::mock(Factory::class);
+		$this->controller = new ActivityLogController($this->activityLogger, $this->viewFactory);
 	}
 
 	public function testIndex() {
@@ -49,11 +57,14 @@ class ActivityLogControllerTest extends TestCase {
 		$this->activityLogger->shouldReceive('getMostRecentLogs')
 			->once()
 			->andReturn($data);
+		$this->viewFactory->shouldReceive('make')
+			->once()
+			->with('settings/activitylog/index', [
+				'logs' => $data,
+			])
+			->andReturn('view');
 
-		$this->get('settings/activitylog');
-
-		$this->assertResponseOk();
-		$this->assertViewHas('logs', $data);
+		$this->assertEquals('view', $this->controller->index());
 	}
 
 }
