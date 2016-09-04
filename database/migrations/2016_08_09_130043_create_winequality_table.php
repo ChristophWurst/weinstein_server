@@ -25,7 +25,7 @@ class CreateWinequalityTable extends Migration {
 	public function up() {
 		Schema::dropIfExists('winequality');
 
-		Schema::create('winequality', function (Blueprint $table) {
+		Schema::create('winequality', function(Blueprint $table) {
 			$table->engine = 'InnoDB';
 
 			$table->integer('id')->unsigned();

@@ -35,7 +35,7 @@ class CreateTasterTable extends Migration {
 	public function up() {
 		Schema::dropIfExists('taster');
 
-		Schema::create('taster', function (Blueprint $table) {
+		Schema::create('taster', function(Blueprint $table) {
 			$table->engine = 'InnoDB';
 
 			$table->increments('id');

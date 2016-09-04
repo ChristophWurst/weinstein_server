@@ -83,7 +83,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function showAll(User $user, Competition $competition) {
 		
@@ -92,7 +92,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function show(User $user, Competition $competition) {
 		
@@ -101,7 +101,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function create(User $user, Competition $competition) {
 		
@@ -110,7 +110,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function enrollmentPdf(User $user, Competition $competition) {
 		
@@ -119,7 +119,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function edit(User $user, Competition $competition) {
 		
@@ -128,7 +128,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function delete(User $user, Competition $competition) {
 		
@@ -137,7 +137,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function redirect(User $user, Competition $competition) {
 		
@@ -146,7 +146,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function kdb(User $user, Competition $competition) {
 		
@@ -155,7 +155,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Wine $wine
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function updateKdb(User $user, Wine $wine) {
 		
@@ -164,7 +164,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function importKdb(User $user, Competition $competition) {
 		
@@ -173,7 +173,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Wine $wine
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function updateExcluded(User $user, Wine $wine) {
 		
@@ -182,7 +182,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function importExcluded(User $user, Competition $competition) {
 		
@@ -191,7 +191,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Wine $wine
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function updateSosi(User $user, Wine $wine) {
 		
@@ -200,7 +200,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Wine $wine
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function importSosi(User $user, Wine $wine) {
 		
@@ -209,7 +209,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Wine $wine
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function updateChosen(User $user, Wine $wine) {
 		
@@ -218,7 +218,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function importChosen(User $user, Competition $competition) {
 		
@@ -227,7 +227,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function excluded(User $user, Competition $competition) {
 		
@@ -236,7 +236,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function sosi(User $user, Competition $competition) {
 		
@@ -245,7 +245,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function chosen(User $user, Competition $competition) {
 		
@@ -254,7 +254,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function exportAll(User $user, Competition $competition) {
 		
@@ -263,7 +263,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function exportKdb(User $user, Competition $competition) {
 		
@@ -272,7 +272,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function exportSosi(User $user, Competition $competition) {
 		
@@ -281,7 +281,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function exportChosen(User $user, Competition $competition) {
 		
@@ -290,7 +290,7 @@ class WineAbilities {
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return bool
+	 * @return boolean|null
 	 */
 	public function exportFlaws(User $user, Competition $competition) {
 		
