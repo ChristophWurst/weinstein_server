@@ -54,7 +54,7 @@ class CreateApplicantTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create('applicant', function (Blueprint $table) {
+		Schema::create('applicant', function(Blueprint $table) {
 			$table->engine = 'InnoDB';
 
 			$table->increments('id');

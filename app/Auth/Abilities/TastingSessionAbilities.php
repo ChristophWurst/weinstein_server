@@ -127,7 +127,7 @@ class TastingSessionAbilities {
 
 	/**
 	 * @param User $user
-	 * @param Competition $tastingSession
+	 * @param TastingSession $tastingSession
 	 * @return bool
 	 */
 	public function exportResult(User $user, TastingSession $tastingSession) {

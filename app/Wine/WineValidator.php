@@ -56,16 +56,16 @@ class WineValidator extends Validator {
 	 */
 	protected function getAttributeNames() {
 		return array(
-		    'nr' => 'Dateinummer',
-		    'applicant_id' => 'Betrieb',
-		    'label' => 'Marke',
-		    'winesort_id' => 'Sorte',
-		    'winequality_id' => 'Qualit&auml;tsstufe',
-		    'vintage' => 'Jahrgang',
-		    'alcohol' => 'Alkohol',
-		    'alcoholtot' => 'Alkohol gesamt',
-		    'sugar' => 'Zucker',
-		    'approvalnr' => 'Pr&uuml;fnummer',
+			'nr' => 'Dateinummer',
+			'applicant_id' => 'Betrieb',
+			'label' => 'Marke',
+			'winesort_id' => 'Sorte',
+			'winequality_id' => 'Qualit&auml;tsstufe',
+			'vintage' => 'Jahrgang',
+			'alcohol' => 'Alkohol',
+			'alcoholtot' => 'Alkohol gesamt',
+			'sugar' => 'Zucker',
+			'approvalnr' => 'Pr&uuml;fnummer',
 		);
 	}
 
@@ -76,7 +76,7 @@ class WineValidator extends Validator {
 	 */
 	protected function getErrorMessages() {
 		return array(
-		    'association_id.exists' => 'Verein existiert nicht oder kann nicht automatisch zugeordnet werden',
+			'association_id.exists' => 'Verein existiert nicht oder kann nicht automatisch zugeordnet werden',
 		);
 	}
 
@@ -88,20 +88,20 @@ class WineValidator extends Validator {
 	 */
 	protected function getCreateRules(array $data) {
 		return array(
-		    'nr' => $this->competition->administrates($this->user) ? 'required|integer|min:1'
-			    . '|unique:wine,nr,'
-			    . 'NULL,id,'
-			    . 'competition_id,' . $this->competition->id : '',
-		    'applicant_id' => 'required|exists:applicant,id',
-		    'label' => 'max:25',
-		    'winesort_id' => 'required|exists:winesort,id',
-		    'winequality_id' => 'Exists:winequality,id',
-		    'vintage' => 'required|integer|between:2000,2030',
-		    'alcohol' => 'required|numeric|between:0.1,20.0',
-		    'alcoholtot' => 'numeric|between:0.1,30.0',
-		    'sugar' => 'required|numeric|between:0.1,300.0',
-		    'approvalnr' => ($this->competition->administrates($this->user) ? 'sometimes' : 'required')
-		    . '|alpha_num|max:20',
+			'nr' => $this->competition->administrates($this->user) ? 'required|integer|min:1'
+				. '|unique:wine,nr,'
+				. 'NULL,id,'
+				. 'competition_id,' . $this->competition->id : '',
+			'applicant_id' => 'required|exists:applicant,id',
+			'label' => 'max:25',
+			'winesort_id' => 'required|exists:winesort,id',
+			'winequality_id' => 'Exists:winequality,id',
+			'vintage' => 'required|integer|between:2000,2030',
+			'alcohol' => 'required|numeric|between:0.1,20.0',
+			'alcoholtot' => 'numeric|between:0.1,30.0',
+			'sugar' => 'required|numeric|between:0.1,300.0',
+			'approvalnr' => ($this->competition->administrates($this->user) ? 'sometimes' : 'required')
+			. '|alpha_num|max:20',
 		);
 	}
 
@@ -115,20 +115,20 @@ class WineValidator extends Validator {
 	protected function getUpdateRules(array $data, Model $model = null) {
 		$nrUnchanged = isset($data['nr']) && $data['nr'] !== '' && !is_null($data['nr']) && $data['nr'] == $model->nr;
 		return array(
-		    'nr' => $nrUnchanged || !$this->competition->administrates($this->user) ? '' : ('required|integer|min:1'
-			    . '|unique:wine,nr,'
-			    . 'NULL,id,'
-			    . 'competition_id,' . $this->competition->id),
-		    'applicant_id' => 'required|exists:applicant,id',
-		    'label' => 'max:25',
-		    'winesort_id' => 'required|exists:winesort,id',
-		    'winequality_id' => 'Exists:winequality,id',
-		    'vintage' => 'required|integer|between:2000,2030',
-		    'alcohol' => 'required|numeric|between:0.1,99.9',
-		    'alcoholtot' => 'numeric|between:0.1,99.',
-		    'sugar' => 'required|numeric|between:0.1,300.0',
-		    'approvalnr' => ($this->competition->administrates($this->user) ? 'sometimes' : 'required')
-		    . '|alpha_num|max:20',
+			'nr' => $nrUnchanged || !$this->competition->administrates($this->user) ? '' : ('required|integer|min:1'
+				. '|unique:wine,nr,'
+				. 'NULL,id,'
+				. 'competition_id,' . $this->competition->id),
+			'applicant_id' => 'required|exists:applicant,id',
+			'label' => 'max:25',
+			'winesort_id' => 'required|exists:winesort,id',
+			'winequality_id' => 'Exists:winequality,id',
+			'vintage' => 'required|integer|between:2000,2030',
+			'alcohol' => 'required|numeric|between:0.1,99.9',
+			'alcoholtot' => 'numeric|between:0.1,99.',
+			'sugar' => 'required|numeric|between:0.1,300.0',
+			'approvalnr' => ($this->competition->administrates($this->user) ? 'sometimes' : 'required')
+			. '|alpha_num|max:20',
 		);
 	}
 

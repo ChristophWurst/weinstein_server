@@ -43,8 +43,8 @@ class ResultExport {
 	 * @var array of string
 	 */
 	private $headers = [
-	    'Kostnummer',
-	    'Bewertung',
+		'Kostnummer',
+		'Bewertung',
 	];
 
 	/**

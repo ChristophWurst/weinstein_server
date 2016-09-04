@@ -22,7 +22,7 @@ class CreateCompetitionstateTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create('competition_state', function (Blueprint $table) {
+		Schema::create('competition_state', function(Blueprint $table) {
 			$table->engine = 'InnoDB';
 
 			$table->integer('id')->unsigned();

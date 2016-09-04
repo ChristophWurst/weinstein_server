@@ -27,7 +27,6 @@ class TasterTableSeeder extends Seeder {
 	 * @param string $name
 	 * @param boolean $active
 	 * @param tasterside $commission
-	 * @param int $tastingsession
 	 * @return Taster
 	 */
 	public static function createTaster($nr, $name, $active, $commission) {
