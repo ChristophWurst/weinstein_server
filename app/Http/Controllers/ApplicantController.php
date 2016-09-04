@@ -27,11 +27,11 @@ use App\Http\Controllers\BaseController;
 use App\MasterData\Applicant;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use function view;
 
 class ApplicantController extends BaseController {
 
@@ -64,7 +64,7 @@ class ApplicantController extends BaseController {
 		$user = $this->auth->user();
 		$applicants = $this->masterDataStore->getApplicants($user);
 		return $this->viewFactory->make('settings/applicant/index', [
-			'applicants' => $applicants,
+				'applicants' => $applicants,
 		]);
 	}
 
@@ -76,9 +76,12 @@ class ApplicantController extends BaseController {
 	public function create() {
 		$this->authorize('create-applicant');
 
+		$associations = $this->masterDataStore->getAssociations()->lists('select_label', 'id')->all();
+		$users = $this->selectNone + $this->masterDataStore->getUsers()->lists('username', 'username')->all();
+
 		return $this->viewFactory->make('settings/applicant/form', [
-			'associations' => $this->masterDataStore->getAssociations()->lists('select_label', 'id')->all(),
-			'users' => $this->selectNone + $this->masterDataStore->getUsers()->lists('username', 'username')->all(),
+				'associations' => $associations,
+				'users' => $users,
 		]);
 	}
 
@@ -87,10 +90,10 @@ class ApplicantController extends BaseController {
 	 * 
 	 * @return Response
 	 */
-	public function store() {
+	public function store(Request $request) {
 		$this->authorize('create-applicant');
 
-		$data = Input::all();
+		$data = $request->all();
 		//remove default user of form's select
 		if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
 			unset($data['wuser_username']);
@@ -135,16 +138,16 @@ class ApplicantController extends BaseController {
 	 *
 	 * @return Response
 	 */
-	public function postImport() {
+	public function postImport(Request $request) {
 		$this->authorize('import-applicant');
 
 		//check for file existense
-		if (!Input::hasFile('xlsfile')) {
+		if (!$request->hasFile('xlsfile')) {
 			return Redirect::route('settings.applicants/import');
 		}
 
 		try {
-			$file = Input::file('xlsfile');
+			$file = $request->file('xlsfile');
 			$rowsImported = $this->masterDataStore->importApplicants($file);
 		} catch (ValidationException $ve) {
 			return Redirect::route('settings.applicants/import')->withErrors($ve->getErrors());
@@ -163,11 +166,14 @@ class ApplicantController extends BaseController {
 		$this->authorize('edit-applicant', $applicant);
 
 		$editId = $applicant->association->administrates($this->auth->user());
-		return $this->viewFactory->make('settings/applicant/form', [
-			'applicant' => $applicant,
-			'editId' => $editId,
-			'associations' => $this->masterDataStore->getAssociations()->lists('select_label', 'id')->all(),
-			'users' => $this->selectNone + $this->masterDataStore->getUsers()->lists('username', 'username')->all(),
+		$associations = $this->masterDataStore->getAssociations()->lists('select_label', 'id')->all();
+		$users = $this->selectNone + $this->masterDataStore->getUsers()->lists('username', 'username')->all();
+		return $this->viewFactory->make('settings/applicant/form',
+				[
+				'applicant' => $applicant,
+				'editId' => $editId,
+				'associations' => $associations,
+				'users' => $users,
 		]);
 	}
 
