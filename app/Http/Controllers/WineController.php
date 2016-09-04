@@ -35,11 +35,12 @@ use App\MasterData\CompetitionWine\WineQuality;
 use App\MasterData\WineSort;
 use App\Wine;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\Response;
+use Illuminate\Http\Response as Resp;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 
 class WineController extends BaseController {
@@ -78,7 +79,7 @@ class WineController extends BaseController {
 	 * others see their administrated associations/applicants wines
 	 * 
 	 * @param Competition $competition
-	 * @return Response
+	 * @return Resp
 	 */
 	public function index(Competition $competition) {
 		$this->authorize('list-wines', $competition);
@@ -114,7 +115,7 @@ class WineController extends BaseController {
 	/**
 	 * 
 	 * @param Wine $wine
-	 * @return Response2
+	 * @return Resp
 	 */
 	public function show(Wine $wine) {
 		$this->authorize('show-wine', $wine);
@@ -203,27 +204,28 @@ class WineController extends BaseController {
 	 * Create a new wine
 	 * 
 	 * @param Competition $competition
-	 * @return Response
+	 * @return Resp
 	 */
 	public function create(Competition $competition) {
 		$this->authorize('create-wine', $competition);
 
 		$user = Auth::user();
 		$applicants = $competition->administrates($user) ? Applicant::all() : $user->applicants;
-		return $this->viewFactory->make('competition/wines/form')
-				->withId(Wine::maxId($competition) + 1)
-				->withApplicants($applicants->lists('select_label', 'id')->all())
-				->withAssociations(['auto' => 'automatisch zuordnen'] + Association::all()->lists('select_label', 'id')->all())
-				->withWinesorts(WineSort::all()->lists('select_label', 'id')->all())
-				->withWinequalities(['none' => '0 - keine'] + WineQuality::get()->lists('select_label', 'id')->all())
-				->withShowNr($competition->administrates(Auth::user()));
+		return $this->viewFactory->make('competition/wines/form', [
+			'id' => Wine::maxId($competition) + 1,
+			'applicants' => $applicants->lists('select_label', 'id')->all(),
+			'associations' => ['auto' => 'automatisch zuordnen'] + Association::all()->lists('select_label', 'id')->all(),
+			'winesorts' => WineSort::all()->lists('select_label', 'id')->all(),
+			'winequalities' => ['none' => '0 - keine'] + WineQuality::get()->lists('select_label', 'id')->all(),
+			'showNr' => $competition->administrates(Auth::user()),
+		]);
 	}
 
 	/**
 	 * Store the newly created wine
 	 * 
 	 * @param Competition $competition
-	 * @return Response
+	 * @return Resp
 	 */
 	public function store(Competition $competition) {
 		$this->authorize('create-wine', $competition);
@@ -291,7 +293,7 @@ class WineController extends BaseController {
 	 * Update an existing wine
 	 * 
 	 * @param Wine $wine
-	 * @return Response
+	 * @return Resp
 	 */
 	public function edit(Wine $wine) {
 		$this->authorize('update-wine', $wine);
@@ -315,7 +317,7 @@ class WineController extends BaseController {
 	 * association, competition, sort
 	 * 
 	 * @param Wine $wine
-	 * @return Response
+	 * @return Resp
 	 */
 	public function update(Wine $wine) {
 		$this->authorize('update-wine', $wine);
@@ -365,7 +367,7 @@ class WineController extends BaseController {
 	 * Show confirmation dialog for deleting the wine
 	 * 
 	 * @param Wine $wine
-	 * @return Response
+	 * @return Resp
 	 */
 	public function delete(Wine $wine) {
 		$this->authorize('delete-wine', $wine);
@@ -412,7 +414,7 @@ class WineController extends BaseController {
 	 * Show import form
 	 * 
 	 * @param Competition $competition
-	 * @return Response
+	 * @return Resp
 	 */
 	public function importKdb(Competition $competition) {
 		$this->authorize('import-kdb-wines', $competition);
@@ -468,7 +470,7 @@ class WineController extends BaseController {
 	 * Show import form
 	 * 
 	 * @param Competition $competition
-	 * @return Response
+	 * @return Resp
 	 */
 	public function importExcluded(Competition $competition) {
 		$this->authorize('import-excluded-wines', $competition);
@@ -530,7 +532,7 @@ class WineController extends BaseController {
 	 * Show import form
 	 * 
 	 * @param Competition $competition
-	 * @return Response
+	 * @return Resp
 	 */
 	public function importSosi(Competition $competition) {
 		$this->authorize('import-sosi-wines', $competition);
@@ -586,7 +588,7 @@ class WineController extends BaseController {
 	 * Show import form
 	 * 
 	 * @param Competition $competition
-	 * @return Response
+	 * @return Resp
 	 */
 	public function importChosen(Competition $competition) {
 		$this->authorize('import-chosen-wines', $competition);
@@ -622,7 +624,7 @@ class WineController extends BaseController {
 	 * Export competitions wines as Excel
 	 * 
 	 * @param Competition $competition
-	 * @return Response
+	 * @return Resp
 	 */
 	public function exportAll(Competition $competition) {
 		$this->authorize('export-wines', $competition);
@@ -644,7 +646,7 @@ class WineController extends BaseController {
 	 * Export competitions kdb wines as Excel
 	 * 
 	 * @param Competition $competition
-	 * @return Response
+	 * @return Resp
 	 */
 	public function exportKdb(Competition $competition) {
 		$this->authorize('export-wines-kdb', $competition);
@@ -667,7 +669,7 @@ class WineController extends BaseController {
 	 * Export competitions sosi wines as Excel
 	 * 
 	 * @param Competition $competition
-	 * @return Response
+	 * @return Resp
 	 */
 	public function exportSosi(Competition $competition) {
 		$this->authorize('export-wines-sosi', $competition);
@@ -690,7 +692,7 @@ class WineController extends BaseController {
 	 * Export competitions chosen wines as Excel
 	 * 
 	 * @param Competition $competition
-	 * @return Response
+	 * @return Resp
 	 */
 	public function exportChosen(Competition $competition) {
 		$this->authorize('export-wines-chosen', $competition);

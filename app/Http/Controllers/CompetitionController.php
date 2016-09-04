@@ -142,8 +142,9 @@ class CompetitionController extends BaseController {
 	public function completeKdb(Competition $competition) {
 		$this->authorize('complete-competition-kdb');
 
-		return $this->viewFactory->make('competition/complete-kdb')
-				->withData($competition);
+		return $this->viewFactory->make('competition/complete-kdb', [
+			'data' => $competition,
+		]);
 	}
 
 	/**
@@ -191,8 +192,9 @@ class CompetitionController extends BaseController {
 	public function completeSosi(Competition $competition) {
 		$this->authorize('complete-competition-sosi');
 
-		return $this->viewFactory->make('competition/complete-sosi')
-				->withData($competition);
+		return $this->viewFactory->make('competition/complete-sosi', [
+			'competition' => $competition,
+		]);
 	}
 
 	/**

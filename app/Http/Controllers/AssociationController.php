@@ -82,7 +82,9 @@ class AssociationController extends BaseController {
 		$this->authorize('create-association');
 
 		$users = $this->masterDataStore->getUsers()->lists('username', 'username')->all();
-		return $this->viewFactory->make('settings/association/form')->withUsers($this->selectNone + $users);
+		return $this->viewFactory->make('settings/association/form', [
+				'users' => $this->selectNone + $users,
+		]);
 	}
 
 	/**
@@ -133,10 +135,12 @@ class AssociationController extends BaseController {
 	public function edit(Association $association) {
 		$this->authorize('create-association', $association);
 
-		return $this->viewFactory->make('settings/association/form')
-				->withData($association)
-				->withUsers($this->auth->user()->isAdmin() ? $this->selectNone + User::all()->lists('username', 'username')->all() : $this->auth->user()->lists('username',
-							'username')->all());
+		$users = $this->auth->user()->isAdmin() ? $this->selectNone + User::all()->lists('username', 'username')->all() : $this->auth->user()->lists('username',
+				'username')->all();
+		return $this->viewFactory->make('settings/association/form', [
+				'data' => $association,
+				'users' => $users,
+		]);
 	}
 
 	/**

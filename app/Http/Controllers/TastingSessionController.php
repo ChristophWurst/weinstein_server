@@ -167,9 +167,10 @@ class TastingSessionController extends BaseController {
 		$this->authorize('show-tastingsession', $tastingSession);
 
 		$this->shareCommonViewData($tastingSession->competition);
-		return $this->viewFactory->make('competition/tasting/tasting-session/show')
-				->withData($tastingSession)
-				->withTastingFinished($this->tastingHandler->isTastingFinished($tastingSession->competition));
+		return $this->viewFactory->make('competition/tasting/tasting-session/show', [
+			'data' => $tastingSession,
+			'tastingFinished' => $this->tastingHandler->isTastingFinished($tastingSession->competition),
+		]);
 	}
 
 	/**
@@ -300,8 +301,9 @@ class TastingSessionController extends BaseController {
 		$this->authorize('show-tastingsession-statistics', $tastingSession);
 
 		$this->shareCommonViewData($tastingSession->competition);
-		return $this->viewFactory->make('competition/tasting/tasting-session/statistics')
-				->withTastingSession($tastingSession);
+		return $this->viewFactory->make('competition/tasting/tasting-session/statistics', [
+			'tastingSession' => $tastingSession
+		]);
 	}
 
 	/**
