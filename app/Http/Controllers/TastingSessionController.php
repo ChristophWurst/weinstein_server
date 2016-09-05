@@ -108,7 +108,7 @@ class TastingSessionController extends BaseController {
 	 * list current competitions tasting sessions
 	 * 
 	 * @param Competition $competition
-	 * @return Response
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function index(Competition $competition) {
 		$this->authorize('show-tastingsessions', $competition);
@@ -121,7 +121,7 @@ class TastingSessionController extends BaseController {
 	 * Show form for adding new session
 	 * 
 	 * @param Competition $competition
-	 * @return Response
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function add(Competition $competition) {
 		$this->authorize('create-tastingsession', $competition);
@@ -161,7 +161,7 @@ class TastingSessionController extends BaseController {
 	 * Show the specified tasting session
 	 * 
 	 * @param TastingSession $tastingSession
-	 * @return Response
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function show(TastingSession $tastingSession) {
 		$this->authorize('show-tastingsession', $tastingSession);
@@ -223,7 +223,7 @@ class TastingSessionController extends BaseController {
 	 * Show update form
 	 * 
 	 * @param TastingSession $tastingSession
-	 * @return Response
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function edit(TastingSession $tastingSession) {
 		$this->authorize('edit-tastingsession', $tastingSession);
@@ -310,7 +310,7 @@ class TastingSessionController extends BaseController {
 	 * Show user confirmation for completing/locking tasting session
 	 * 
 	 * @param TastingSession $tastingSession
-	 * @return Response
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function complete(TastingSession $tastingSession) {
 		$this->authorize('lock-tastingsession', $tastingSession);
@@ -340,7 +340,7 @@ class TastingSessionController extends BaseController {
 	 * Show user confirmation for deleting tasting sessions
 	 * 
 	 * @param TastingSession $tastingSession
-	 * @return Response
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function delete(TastingSession $tastingSession) {
 		$this->authorize('delete-tastingsession', $tastingSession);

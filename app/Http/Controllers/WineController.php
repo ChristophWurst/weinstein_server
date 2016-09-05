@@ -79,7 +79,7 @@ class WineController extends BaseController {
 	 * others see their administrated associations/applicants wines
 	 * 
 	 * @param Competition $competition
-	 * @return Resp
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function index(Competition $competition) {
 		$this->authorize('list-wines', $competition);
@@ -115,7 +115,7 @@ class WineController extends BaseController {
 	/**
 	 * 
 	 * @param Wine $wine
-	 * @return Resp
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function show(Wine $wine) {
 		$this->authorize('show-wine', $wine);
@@ -204,7 +204,7 @@ class WineController extends BaseController {
 	 * Create a new wine
 	 * 
 	 * @param Competition $competition
-	 * @return Resp
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function create(Competition $competition) {
 		$this->authorize('create-wine', $competition);
@@ -293,7 +293,7 @@ class WineController extends BaseController {
 	 * Update an existing wine
 	 * 
 	 * @param Wine $wine
-	 * @return Resp
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function edit(Wine $wine) {
 		$this->authorize('update-wine', $wine);
@@ -414,7 +414,7 @@ class WineController extends BaseController {
 	 * Show import form
 	 * 
 	 * @param Competition $competition
-	 * @return Resp
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function importKdb(Competition $competition) {
 		$this->authorize('import-kdb-wines', $competition);
@@ -470,7 +470,7 @@ class WineController extends BaseController {
 	 * Show import form
 	 * 
 	 * @param Competition $competition
-	 * @return Resp
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function importExcluded(Competition $competition) {
 		$this->authorize('import-excluded-wines', $competition);
@@ -532,7 +532,7 @@ class WineController extends BaseController {
 	 * Show import form
 	 * 
 	 * @param Competition $competition
-	 * @return Resp
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function importSosi(Competition $competition) {
 		$this->authorize('import-sosi-wines', $competition);
@@ -588,7 +588,7 @@ class WineController extends BaseController {
 	 * Show import form
 	 * 
 	 * @param Competition $competition
-	 * @return Resp
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function importChosen(Competition $competition) {
 		$this->authorize('import-chosen-wines', $competition);
