@@ -19,30 +19,40 @@
  *
  */
 
-namespace App\Http\Controllers;
+namespace Test\Unit\Http\Controllers;
 
+use App\Http\Controllers\StartController;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Mockery;
+use Mockery\MockInterface;
+use Test\TestCase;
 
-class StartController extends BaseController {
+class StartControllerTest extends TestCase {
 
-	/** @var Factory */
+	/** @var Factory|MockInterface */
 	private $view;
 
-	/**
-	 * @param Factory $view
-	 */
-	public function __construct(Factory $view) {
-		$this->view = $view;
+	/** @var StartController */
+	private $controller;
+
+	protected function setUp() {
+		parent::setUp();
+
+		$this->view = Mockery::mock(Factory::class);
+
+		$this->controller = new StartController($this->view);
 	}
 
-	/**
-	 * Show start page
-	 * 
-	 * @return View
-	 */
-	public function index() {
-		return $this->view->make('index');
+	public function testIndex() {
+		$view = Mockery::mock(View::class);
+
+		$this->view->shouldReceive('make')
+			->once()
+			->with('index')
+			->andReturn($view);
+
+		$this->assertSame($view, $this->controller->index());
 	}
 
 }
