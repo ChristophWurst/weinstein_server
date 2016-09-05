@@ -28,6 +28,7 @@ use App\Tasting\Commission;
 use App\Tasting\TastingNumber;
 use App\Tasting\TastingSession;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
@@ -40,11 +41,15 @@ class TastingController extends BaseController {
 	private $tastingHandler;
 
 	/** @var Factory */
-	private $viewFactory;
+	private $view;
 
-	public function __construct(TastingHandler $tastingHandler, Factory $viewFactory) {
+	/**
+	 * @param TastingHandler $tastingHandler
+	 * @param Factory $view
+	 */
+	public function __construct(TastingHandler $tastingHandler, Factory $view) {
 		$this->tastingHandler = $tastingHandler;
-		$this->viewFactory = $viewFactory;
+		$this->view = $view;
 	}
 
 	/**
@@ -56,7 +61,7 @@ class TastingController extends BaseController {
 	public function add(TastingSession $tastingSession) {
 		$this->authorize('create-tasting', $tastingSession);
 
-		return $this->viewFactory->make('competition/tasting/tasting-session/tasting/form', [
+		return $this->view->make('competition/tasting/tasting-session/tasting/form', [
 				'competition' => $tastingSession->competition,
 				'tastingSession' => $tastingSession,
 				'tastingNumbers' => $this->tastingHandler->getNextTastingNumbers($tastingSession),
@@ -69,11 +74,11 @@ class TastingController extends BaseController {
 	 * @param TastingSession $tastingSession
 	 * @return Response
 	 */
-	public function store(TastingSession $tastingSession) {
+	public function store(TastingSession $tastingSession, Request $request) {
 		$this->authorize('create-tasting', $tastingSession);
 
 		try {
-			$data = Input::all();
+			$data = $request->all();
 			$this->tastingHandler->createTasting($data, $tastingSession);
 		} catch (ValidationException $ve) {
 			return Redirect::route('tasting.session/taste', ['tastingsession' => $tastingSession->id])
@@ -99,7 +104,7 @@ class TastingController extends BaseController {
 			Log::error('cannot retaste' . $tastingNumber->id . ', it has not yet been tasted');
 			App::abort(500);
 		}
-		return $this->viewFactory->make('competition/tasting/tasting-session/tasting/form')->with([
+		return $this->view->make('competition/tasting/tasting-session/tasting/form')->with([
 				'edit' => true,
 				'competition' => $tastingSession->competition,
 				'commission' => $commission,
