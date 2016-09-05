@@ -60,10 +60,10 @@ class TastingSessionTableSeeder extends Seeder {
 				foreach (range(1, rand(1, 2)) as $comm) {
 					$commission = CommissionTableSeeder::createCommission($comm == 1 ? 'A' : 'B', $session->id);
 					foreach (range(1, rand(2, 10)) as $nr) {
-						TasterTableSeeder::createTaster($nr, 'Taster A' . $nr, rand(1,10) !== 5, $commission->id);
+						TasterTableSeeder::createTaster($nr, 'Taster A' . $nr, rand(1, 10) !== 5, $commission->id);
 					}
 					foreach (range(1, rand(2, 10)) as $nr) {
-						TasterTableSeeder::createTaster($nr, 'Taster B' . $nr, rand(1,10) !== 5, $commission->id);
+						TasterTableSeeder::createTaster($nr, 'Taster B' . $nr, rand(1, 10) !== 5, $commission->id);
 					}
 				}
 			}

@@ -168,7 +168,7 @@ class CompetitionController extends BaseController {
 
 	/**
 	 * @param Competition $competition
-	 * @return Response
+	 * @return View
 	 */
 	public function completeExcluded(Competition $competition) {
 		$this->authorize('complete-competition-excluded');

@@ -50,7 +50,7 @@ class TastingNumberController extends BaseController {
 	 * Show list of all assigned tasting numbers
 	 * 
 	 * @param Competition $competition
-	 * @return Response
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function index(Competition $competition) {
 		$this->authorize('show-tastingnumbers', $competition);
@@ -85,7 +85,7 @@ class TastingNumberController extends BaseController {
 	 * Assign new tasting number
 	 * 
 	 * @param Competition $competition
-	 * @return Response
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function assign(Competition $competition) {
 		$this->authorize('assign-tastingnumber');
@@ -131,7 +131,7 @@ class TastingNumberController extends BaseController {
 	 * Ask user about deallocating the specified tasting number
 	 * 
 	 * @param TastingNumber $tastingNumber
-	 * @return Response
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function deallocate(TastingNumber $tastingNumber) {
 		$this->authorize('unassign-tastingnumber');
@@ -160,7 +160,7 @@ class TastingNumberController extends BaseController {
 	 * Show import form
 	 * 
 	 * @param Competition $competition
-	 * @return Response
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function import(Competition $competition) {
 		$this->authorize('import-tastingnumbers');
