@@ -26,7 +26,6 @@ use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
@@ -39,17 +38,17 @@ class AuthenticationController extends BaseController {
 	private $auth;
 
 	/** @var Factory */
-	private $viewFactory;
+	private $view;
 
 	/**
 	 * @param AuthManager $auth
 	 * @param ActivityLogger $activityLogger
-	 * @param Factory $viewFactory
+	 * @param Factory $view
 	 */
-	public function __construct(AuthManager $auth, ActivityLogger $activityLogger, Factory $viewFactory) {
+	public function __construct(AuthManager $auth, ActivityLogger $activityLogger, Factory $view) {
 		$this->auth = $auth;
 		$this->activityLogger = $activityLogger;
-		$this->viewFactory = $viewFactory;
+		$this->view = $view;
 	}
 
 	/**
@@ -58,7 +57,7 @@ class AuthenticationController extends BaseController {
 	 * @return Response
 	 */
 	public function account() {
-		return $this->viewFactory->make('account/account');
+		return $this->view->make('account/account');
 	}
 
 	/**
@@ -67,7 +66,7 @@ class AuthenticationController extends BaseController {
 	 * @return Response
 	 */
 	public function login() {
-		return $this->viewFactory->make('account/login');
+		return $this->view->make('account/login');
 	}
 
 	/**
@@ -99,9 +98,9 @@ class AuthenticationController extends BaseController {
 	 * @return Response
 	 */
 	public function logout() {
-		if (Auth::check()) {
+		if ($this->auth->check()) {
 			$user = $this->auth->user();
-			Auth::logout();
+			$this->auth->logout();
 			$this->activityLogger->logUserAction('hat sich vom System abgemeldet', $user);
 		}
 		return Redirect::route('start');
