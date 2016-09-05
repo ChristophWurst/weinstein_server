@@ -25,9 +25,10 @@ use App\Contracts\MasterDataStore;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\MasterData\Association;
-use App\MasterData\User;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -41,7 +42,7 @@ class AssociationController extends BaseController {
 	private $auth;
 
 	/** @var Factory */
-	private $viewFactory;
+	private $view;
 
 	/**
 	 * @param MasterDataStore $masterDataStore
@@ -51,10 +52,7 @@ class AssociationController extends BaseController {
 	public function __construct(MasterDataStore $masterDataStore, AuthManager $auth, Factory $viewFactory) {
 		$this->masterDataStore = $masterDataStore;
 		$this->auth = $auth;
-		$this->viewFactory = $viewFactory;
-
-		//register filters
-		$this->middleware('auth');
+		$this->view = $viewFactory;
 	}
 
 	/**
@@ -63,12 +61,12 @@ class AssociationController extends BaseController {
 	 * - admin may see all
 	 * - other users see only administrated ones
 	 *
-	 * @return Response
+	 * @return View
 	 */
 	public function index() {
 		$user = $this->auth->user();
 		$associations = $this->masterDataStore->getAssociations($user);
-		return $this->viewFactory->make('settings/association/index', [
+		return $this->view->make('settings/association/index', [
 				'associations' => $associations
 		]);
 	}
@@ -76,26 +74,28 @@ class AssociationController extends BaseController {
 	/**
 	 * Show the form for creating a new association
 	 *
-	 * @return Response
+	 * @return View
 	 */
 	public function create() {
 		$this->authorize('create-association');
 
 		$users = $this->masterDataStore->getUsers()->lists('username', 'username')->all();
-		return $this->viewFactory->make('settings/association/form', [
+		return $this->view->make('settings/association/form', [
 				'users' => $this->selectNone + $users,
 		]);
 	}
 
 	/**
 	 * Validate and store new association
-	 * 
+	 *
+	 * @param Request $request
+	 *
 	 * @return Response
 	 */
-	public function store() {
+	public function store(Request $request) {
 		$this->authorize('create-association');
 
-		$data = Input::all();
+		$data = $request->all();
 		//remove default user of form's select
 		if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
 			unset($data['wuser_username']);
@@ -114,12 +114,12 @@ class AssociationController extends BaseController {
 	 * Show specified associatoin
 	 * 
 	 * @param Association $association
-	 * @return Responce
+	 * @return View
 	 */
 	public function show(Association $association) {
 		$this->authorize('show-association', $association);
 
-		return $this->viewFactory->make('settings/association/show', [
+		return $this->view->make('settings/association/show', [
 				'data' => $association,
 		]);
 	}
@@ -130,14 +130,18 @@ class AssociationController extends BaseController {
 	 * redirect if user is neither maintainer nor admin
 	 * 
 	 * @param  Association $association
-	 * @return Response
+	 * @return View
 	 */
 	public function edit(Association $association) {
 		$this->authorize('create-association', $association);
 
-		$users = $this->auth->user()->isAdmin() ? $this->selectNone + User::all()->lists('username', 'username')->all() : $this->auth->user()->lists('username',
-				'username')->all();
-		return $this->viewFactory->make('settings/association/form', [
+		$user = $this->auth->user();
+		if ($user->isAdmin()) {
+			$users = $this->selectNone + $this->masterDataStore->getUsers()->lists('username', 'username')->all();
+		} else {
+			$users = $user->lists('username', 'username')->all();
+		}
+		return $this->view->make('settings/association/form', [
 				'data' => $association,
 				'users' => $users,
 		]);
@@ -146,19 +150,20 @@ class AssociationController extends BaseController {
 	/**
 	 * Update the specified association in storage
 	 *
-	 * @param Association $association       	
+	 * @param Association $association
+	 * @param Request $request
 	 * @return Response
 	 */
-	public function update(Association $association) {
+	public function update(Association $association, Request $request) {
 		$this->authorize('create-association', $association);
 
-		$data = Input::all();
+		$data = $request->all();
 		// remove default user of form's select
 		if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
 			$data['wuser_username'] = null;
 		}
 		// only admin can change user
-		if (!$this->auth->user()->isAdmin()) {
+		if (isset($data['wuser_username']) && !$this->auth->user()->isAdmin()) {
 			unset($data['wuser_username']);
 		}
 
