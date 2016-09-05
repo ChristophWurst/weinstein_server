@@ -19,30 +19,40 @@
  *
  */
 
-namespace App\Http\Controllers;
+namespace Test\Unit\Http\Controllers;
 
+use App\Http\Controllers\SettingsController;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Mockery;
+use Mockery\MockInterface;
+use Test\TestCase;
 
-class SettingsController extends BaseController {
+class SettingsControllerTest extends TestCase {
 
-	/** @var Factory */
+	/** @var Factory|MockInterface */
 	private $view;
+	
+	/** @var SettingsController */
+	private $controller;
+	
+	protected function setUp() {
+		parent::setUp();
 
-	/**
-	 * @param Factory $view
-	 */
-	public function __construct(Factory $view) {
-		$this->view = $view;
+		$this->view = Mockery::mock(Factory::class);
+
+		$this->controller = new SettingsController($this->view);
 	}
 
-	/**
-	 * Show the settings page
-	 * 
-	 * @return View
-	 */
-	public function index() {
-		return $this->view->make('settings/index');
+	public function testIndex() {
+		$view = Mockery::mock(View::class);
+
+		$this->view->shouldReceive('make')
+			->once()
+			->with('settings/index')
+			->andReturn($view);
+
+		$this->assertSame($view, $this->controller->index());
 	}
 
 }
