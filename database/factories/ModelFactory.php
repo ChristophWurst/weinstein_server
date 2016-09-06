@@ -4,7 +4,7 @@ use App\MasterData\Address;
 use App\MasterData\Applicant;
 use App\MasterData\Association;
 use App\MasterData\User;
-use Faker\Generator;
+use Faker\Generator as FakeData;
 
 $factory->define(User::class,
 	function () {
@@ -36,7 +36,7 @@ $factory->define(Association::class,
 });
 
 $factory->define(Applicant::class,
-	function(Generator $faker) {
+	function(FakeData $faker) {
 	return [
 		'id' => rand(10000, 999999),
 		'association_id' => null, // Must be overriden, otherwise this fails due to referential integrity constraints
@@ -55,7 +55,7 @@ $factory->define(Applicant::class,
 });
 
 $factory->define(Address::class,
-	function(Generator $faker) {
+	function(FakeData $faker) {
 	return [
 		'street' => $faker->streetAddress,
 		'nr' => $faker->numberBetween(1, 300),
