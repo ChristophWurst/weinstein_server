@@ -23,7 +23,6 @@ namespace Test\Integration;
 
 use App\MasterData\User;
 use Test\TestCase;
-use function factory;
 
 class SettingsTest extends TestCase {
 
