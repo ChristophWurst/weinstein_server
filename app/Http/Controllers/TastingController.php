@@ -72,6 +72,7 @@ class TastingController extends BaseController {
 	 * Validate and store tasting results
 	 * 
 	 * @param TastingSession $tastingSession
+	 * @param Request $request
 	 * @return Response
 	 */
 	public function store(TastingSession $tastingSession, Request $request) {
@@ -104,7 +105,7 @@ class TastingController extends BaseController {
 			Log::error('cannot retaste' . $tastingNumber->id . ', it has not yet been tasted');
 			App::abort(500);
 		}
-		return $this->view->make('competition/tasting/tasting-session/tasting/form')->with([
+		return $this->view->make('competition/tasting/tasting-session/tasting/form', [
 				'edit' => true,
 				'competition' => $tastingSession->competition,
 				'commission' => $commission,
@@ -118,13 +119,14 @@ class TastingController extends BaseController {
 	 * @param TastingSession $tastingSession
 	 * @param TastingNumber $tastingNumber
 	 * @param Commission $commission
+	 * @param Request $request
 	 * @return type
 	 */
-	public function update(TastingSession $tastingSession, TastingNumber $tastingNumber, Commission $commission) {
+	public function update(TastingSession $tastingSession, TastingNumber $tastingNumber, Commission $commission, Request $request) {
 		$this->authorize('edit-tasting', [$tastingSession, $commission, $tastingNumber]);
 
 		try {
-			$data = Input::all();
+			$data = $request->all();
 			$this->tastingHandler->updateTasting($data, $tastingNumber, $tastingSession, $commission);
 		} catch (ValidationException $ve) {
 			return Redirect::route('tasting.session/retaste',
