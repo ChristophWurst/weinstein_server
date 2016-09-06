@@ -16,7 +16,7 @@ use App\MasterData\Competition;
         <link href="{!! asset('css/bootstrap-theme.css') !!}" rel="stylesheet">
         
         <link href="{!! asset('css/weinstein.css') !!}" rel="stylesheet">
-        <link href="{!! asset('css/select2.css') !!}" rel="stylesheet">
+        <link href="{!! asset('js/vendor/select2/dist/css/select2.min.css') !!}" rel="stylesheet">
         <link href="{!! asset('css/select2-bootstrap.css') !!}" rel="stylesheet">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -168,13 +168,13 @@ use App\MasterData\Competition;
         <div class="container-fluid">
             @yield('content')
         </div><!--/ .container -->
-        
+
         <script src="{!! asset('js/vendor/jquery/dist/jquery.min.js') !!}"></script>
-        <script src="{!! asset('js/vendor/bootstrap/dist/js/boostrap.min.js') !!}"></script>
-        <script src="{!! asset('js/vendor/select2/dist/select2.min.js') !!}"></script>
+        <script src="{!! asset('js/vendor/bootstrap/dist/js/bootstrap.min.js') !!}"></script>
+        <script src="{!! asset('js/vendor/select2/dist/js/select2.min.js') !!}"></script>
         <script src="{!! asset('js/select2_locale_de.js') !!}"></script>
         <script src="{!! asset('js/weinstein.js') !!}"></script>
-        
+
         <script>
             var _token = '<?php echo csrf_token(); ?>';
             $(document).on('ajaxSend',function(elm, xhr) {
@@ -184,4 +184,3 @@ use App\MasterData\Competition;
         </script>
     </body>
 </html>
-
