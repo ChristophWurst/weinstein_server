@@ -98,7 +98,7 @@ class ApplicantsTest extends TestCase {
 		$this->assertResponseOk();
 
 		$data = array_merge($address->toArray(), $applicant->toArray());
-		$data['label'] = str_random(10);
+		$data['label'] = 'Winzerhof XYZ';
 		$this->post('settings/applicant/' . $applicant->id . '/edit', $data);
 		$this->assertRedirectedTo('settings/applicants');
 
