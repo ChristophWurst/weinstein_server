@@ -26,8 +26,7 @@ use Test\TestCase;
 
 class AuthTest extends TestCase {
 
-	private $username = 'user1';
-	private $password = 'user1!?';
+	use \Illuminate\Foundation\Testing\DatabaseTransactions;
 
 	public function testLoginWrongCredentials() {
 		$this->post('login', [
@@ -39,9 +38,13 @@ class AuthTest extends TestCase {
 	}
 
 	public function testLogin() {
+		$user = factory(User::class)->create([
+			'password' => 'passme', // The mutator will hash it for us
+		]);
+
 		$this->post('login', [
-			'username' => $this->username,
-			'password' => $this->password,
+			'username' => $user->username,
+			'password' => 'passme',
 		]);
 
 		$this->assertRedirectedTo('account');
@@ -54,7 +57,7 @@ class AuthTest extends TestCase {
 	}
 
 	public function testLogout() {
-		$user = User::find($this->username);
+		$user = factory(User::class)->make();
 		$this->be($user);
 
 		$this->get('logout');

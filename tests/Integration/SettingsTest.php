@@ -23,6 +23,7 @@ namespace Test\Integration;
 
 use App\MasterData\User;
 use Test\TestCase;
+use function factory;
 
 class SettingsTest extends TestCase {
 
@@ -66,7 +67,7 @@ class SettingsTest extends TestCase {
 	 * @dataProvider pagesThatNeedAdminPermsData
 	 */
 	public function testNeedsAdminPermissions($uri, $method = 'GET') {
-		$user = User::find('user1');
+		$user = factory(User::class)->make();
 		$this->be($user);
 
 		$this->call($method, $uri);

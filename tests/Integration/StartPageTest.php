@@ -23,8 +23,11 @@ namespace Test\Integration;
 
 use App\MasterData\User;
 use Test\TestCase;
+use function factory;
 
 class StartPageTest extends TestCase {
+	
+	use \Illuminate\Foundation\Testing\DatabaseTransactions;
 
 	public function testVisitStartPageAnonymously() {
 		$this->get('/');
@@ -33,7 +36,7 @@ class StartPageTest extends TestCase {
 	}
 
 	public function testVisitStartPage() {
-		$user = User::find('user1');
+		$user = factory(User::class)->make();
 		$this->be($user);
 
 		$this->get('/');
