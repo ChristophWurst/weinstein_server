@@ -27,6 +27,8 @@ use function factory;
 
 class SettingsTest extends TestCase {
 
+	use \Illuminate\Foundation\Testing\DatabaseTransactions;
+
 	public function pagesThatRequireAuthData() {
 		return [
 			['settings'],
