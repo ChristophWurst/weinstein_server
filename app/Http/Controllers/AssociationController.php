@@ -96,7 +96,7 @@ class AssociationController extends BaseController {
 
 		$data = $request->all();
 		//remove default user of form's select
-		if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
+		if (isset($data['wuser_username']) && (empty($data['wuser_username']) || $data['wuser_username'] === 'none')) {
 			unset($data['wuser_username']);
 		}
 		try {

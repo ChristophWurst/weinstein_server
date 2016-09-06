@@ -1,5 +1,6 @@
 <?php
 
+use App\MasterData\Association;
 use App\MasterData\User;
 
 $factory->define(User::class,
@@ -19,5 +20,14 @@ $factory->defineAs(User::class, 'admin',
 		'password' => bcrypt(str_random(10)),
 		'remember_token' => str_random(10),
 		'admin' => true,
+	];
+});
+
+$factory->define(Association::class,
+	function() {
+	return [
+		'id' => rand(10000, 99000),
+		'name' => str_random(10),
+		'wuser_username' => null,
 	];
 });
