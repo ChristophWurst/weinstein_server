@@ -1,7 +1,10 @@
 <?php
 
+use App\MasterData\Address;
+use App\MasterData\Applicant;
 use App\MasterData\Association;
 use App\MasterData\User;
+use Faker\Generator;
 
 $factory->define(User::class,
 	function () {
@@ -29,5 +32,34 @@ $factory->define(Association::class,
 		'id' => rand(10000, 99000),
 		'name' => str_random(10),
 		'wuser_username' => null,
+	];
+});
+
+$factory->define(Applicant::class,
+	function(Generator $faker) {
+	return [
+		'id' => rand(10000, 999999),
+		'association_id' => null, // Must be overriden, otherwise this fails due to referential integrity constraints
+		'wuser_username' => null,
+		'address_id' => null, // Will fail, too
+		'label' => str_random(10),
+		'title' => 'Dr.',
+		'firstname' => $faker->firstName,
+		'lastname' => $faker->lastName,
+		'phone' => $faker->phoneNumber,
+		'fax' => $faker->phoneNumber,
+		'mobile' => $faker->phoneNumber,
+		'email' => $faker->email,
+		'web' => substr($faker->url, 0, 50),
+	];
+});
+
+$factory->define(Address::class,
+	function(Generator $faker) {
+	return [
+		'street' => $faker->streetAddress,
+		'nr' => $faker->numberBetween(1, 300),
+		'zipcode' => $faker->numberBetween(1000, 9999),
+		'city' => $faker->city,
 	];
 });
