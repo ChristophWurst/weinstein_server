@@ -49,25 +49,28 @@ class SettingsTest extends TestCase {
 	}
 
 	public function pagesThatNeedAdminPermsData() {
+		/* @var $otherUser User */
+		$otherUser = factory(User::class)->create();
+		$user = factory(User::class)->make();
+
 		return [
-			['settings/users/create'],
-			['settings/winesorts'],
-			['settings/winesorts/create'],
-			['settings/activitylog'],
-			['settings/user/user1/delete'],
-			['settings/user/user1/delete', 'POST'],
-			['settings/user/user2/edit'],
-			['settings/user/user2/edit', 'POST'],
-			['settings/associations/create'],
-			['settings/applicants/create'],
+			[$user, 'settings/users/create'],
+			[$user, 'settings/winesorts'],
+			[$user, 'settings/winesorts/create'],
+			[$user, 'settings/activitylog'],
+			[$user, 'settings/user/' . $user->username . '/delete'],
+			[$user, 'settings/user/' . $user->username . '/delete', 'POST'],
+			[$user, 'settings/user/' . $otherUser->username . '/edit'],
+			[$user, 'settings/user/' . $otherUser->username . '/edit', 'POST'],
+			[$user, 'settings/associations/create'],
+			[$user, 'settings/applicants/create'],
 		];
 	}
 
 	/**
 	 * @dataProvider pagesThatNeedAdminPermsData
 	 */
-	public function testNeedsAdminPermissions($uri, $method = 'GET') {
-		$user = factory(User::class)->make();
+	public function testNeedsAdminPermissions(User $user, $uri, $method = 'GET') {
 		$this->be($user);
 
 		$this->call($method, $uri);
