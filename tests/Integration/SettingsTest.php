@@ -23,6 +23,7 @@ namespace Test\Integration;
 
 use App\MasterData\User;
 use Test\TestCase;
+use function factory;
 
 class SettingsTest extends TestCase {
 
@@ -48,31 +49,28 @@ class SettingsTest extends TestCase {
 	}
 
 	public function pagesThatNeedAdminPermsData() {
-		/* @var $otherUser User */
-		$otherUser = factory(User::class)->create();
-		$user = factory(User::class)->make();
-
 		return [
-			[$user, 'settings/users/create'],
-			[$user, 'settings/winesorts'],
-			[$user, 'settings/winesorts/create'],
-			[$user, 'settings/activitylog'],
-			[$user, 'settings/user/' . $user->username . '/delete'],
-			[$user, 'settings/user/' . $user->username . '/delete', 'POST'],
-			[$user, 'settings/user/' . $otherUser->username . '/edit'],
-			[$user, 'settings/user/' . $otherUser->username . '/edit', 'POST'],
-			[$user, 'settings/associations/create'],
-			[$user, 'settings/applicants/create'],
+			['settings/users/create'],
+			['settings/winesorts'],
+			['settings/winesorts/create'],
+			['settings/activitylog'],
+			['settings/user/{username}/delete'],
+			['settings/user/{username}/delete', 'POST'],
+			['settings/user/{username}/edit'],
+			['settings/user/{username}/edit', 'POST'],
+			['settings/associations/create'],
+			['settings/applicants/create'],
 		];
 	}
 
 	/**
 	 * @dataProvider pagesThatNeedAdminPermsData
 	 */
-	public function testNeedsAdminPermissions(User $user, $uri, $method = 'GET') {
+	public function testNeedsAdminPermissions($uri, $method = 'GET') {
+		$user = factory(User::class)->create();
 		$this->be($user);
 
-		$this->call($method, $uri);
+		$this->call($method, str_replace('{username}', $user->username, $uri));
 
 		$this->assertResponseStatus(403);
 	}
