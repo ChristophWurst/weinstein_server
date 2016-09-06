@@ -87,17 +87,17 @@ class CompetitionController extends BaseController {
 	public function show(Competition $competition) {
 		return $this->view->make('competition/show', [
 			'competition' => $competition,
-			'competitionStates' => CompetitionState::all(),
+			'competition_states' => CompetitionState::all(),
 			'wines' => $competition->wines()->count(),
-			'winesWithNr' => $competition->wines()->whereNotNull('nr')->count(),
-			'winesTasted1' => $competition->wine_details()->whereNotNull('rating1')->count(),
-			'winesTasted2' => $competition->wine_details()->kdb()->whereNotNull('rating2')->count(),
-			'winesKdb' => $competition->wines()->kdb()->count(),
-			'winesExcluded' => $competition->wines()->excluded()->count(),
-			'winesTastingNumber1' => $competition->wines()->withTastingNumber(TastingStage::find(1))->count(),
-			'winesTastingNumber2' => $competition->wines()->withTastingNumber(TastingStage::find(2))->count(),
-			'winesSosi' => $competition->wines()->sosi()->count(),
-			'winesChosen' => $competition->wines()->chosen()->count(),
+			'wines_with_nr' => $competition->wines()->whereNotNull('nr')->count(),
+			'wines_tasted1' => $competition->wine_details()->whereNotNull('rating1')->count(),
+			'wines_tasted2' => $competition->wine_details()->kdb()->whereNotNull('rating2')->count(),
+			'wines_kdb' => $competition->wines()->kdb()->count(),
+			'wines_excluded' => $competition->wines()->excluded()->count(),
+			'wines_tasting_number1' => $competition->wines()->withTastingNumber(TastingStage::find(1))->count(),
+			'wines_tasting_number2' => $competition->wines()->withTastingNumber(TastingStage::find(2))->count(),
+			'wines_sosi' => $competition->wines()->sosi()->count(),
+			'wines_chosen' => $competition->wines()->chosen()->count(),
 		]);
 	}
 

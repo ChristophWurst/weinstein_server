@@ -47,7 +47,7 @@ class CompetitionState extends Model {
 	 * 
 	 * @var string
 	 */
-	protected $table = 'competitionstate';
+	protected $table = 'competition_state';
 
 	/**
 	 * Convert competition state to german string

@@ -1,3 +1,8 @@
+<?php
+use App\MasterData\CompetitionState;
+?>
+
+
 @extends('default')
 
 @section('content')
@@ -33,7 +38,7 @@
                     @else
                         @if ($state-> id == $currentState)
                             @if ($currentState == CompetitionState::STATE_ENROLLMENT)
-                                {{ $wines_with_nr }}/{{ $wines }} Weine &uuml;bernommen
+                                {{ $wines_with_nr }}/{{ $wines }} Weinen &uuml;bernommen
                             @elseif ($currentState == CompetitionState::STATE_TASTINGNUMBERS1)
                                 {{ $wines_tasting_number1 }}/{{ $wines }} zugewiesen
                             @elseif ($currentState == CompetitionState::STATE_TASTING1)

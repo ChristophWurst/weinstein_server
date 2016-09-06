@@ -1,5 +1,6 @@
 <?php
 use App\MasterData\Competition;
+use App\MasterData\CompetitionState;
 ?>
 <!DOCTYPE html>
 <html lang="de">

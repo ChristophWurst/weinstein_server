@@ -190,7 +190,7 @@ Route::group(array('prefix' => 'competition/{competition}', 'middleware' => 'aut
 		));
 	});
 
-	Route::get('', array(
+	Route::get('evaluations', array(
 		'as' => 'evaluation',
 		'uses' => 'EvaluationController@index'
 	));

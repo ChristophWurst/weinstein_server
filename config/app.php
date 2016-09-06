@@ -145,6 +145,7 @@ return [
 		App\Providers\MasterDataServiceProvider::class,
 		App\Providers\RouteServiceProvider::class,
 		App\Providers\TastingServiceProvider::class,
+		App\Providers\WineServiceProvider::class,
 	],
 	/*
 	  |--------------------------------------------------------------------------

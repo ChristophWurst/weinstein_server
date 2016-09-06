@@ -24,17 +24,18 @@ namespace App\Http\Controllers;
 use App\Contracts\WineHandler;
 use App\EnrollmentForm;
 use App\Exceptions\ValidationException;
+use App\FlawExport;
 use App\Http\Controllers\BaseController;
 use App\MasterData\Applicant;
 use App\MasterData\Association;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
-use App\MasterData\CompetitionWine\FlawExport;
-use App\MasterData\CompetitionWine\WineExport;
-use App\MasterData\CompetitionWine\WineQuality;
 use App\MasterData\WineSort;
 use App\Wine;
+use App\WineExport;
+use App\WineQuality;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Response as Resp;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -79,7 +80,7 @@ class WineController extends BaseController {
 	 * others see their administrated associations/applicants wines
 	 * 
 	 * @param Competition $competition
-	 * @return \Illuminate\Contracts\View\View
+	 * @return View
 	 */
 	public function index(Competition $competition) {
 		$this->authorize('list-wines', $competition);
@@ -89,33 +90,35 @@ class WineController extends BaseController {
 		$wines = $this->wineHandler->getUsersWines(Auth::user(), $competition, true)->orderBy('id')->paginate(50);
 
 		return $this->viewFactory->make('competition/wines/index', [
+			'competition' => $competition,
 			'user' => Auth::user(),
-			'competitionAdmin' => $competitionAdmin,
+			'competition_admin' => $competitionAdmin,
 			'wines' => $wines,
-			'showAddWine' => $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT,
-			'showEditWine' => $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT,
-			'showRating1' => $competition->competitionState->id >= CompetitionState::STATE_TASTING1,
-			'showRating2' => $competitionAdmin && $competition->competitionState->id >= CompetitionState::STATE_TASTING2,
-			'editKdb' => $competition->competitionState->id === CompetitionState::STATE_KDB,
-			'showKdb' => $competition->competitionState->id >= CompetitionState::STATE_KDB,
-			'showCompleteKdb' => $competition->competitionState->id === CompetitionState::STATE_KDB,
-			'editExcluded' => $competition->competitionState->id === CompetitionState::STATE_EXCLUDE,
-			'showExcluded' => $competition->competitionState->id >= CompetitionState::STATE_EXCLUDE,
-			'showCompleteExclude' => $competition->competitionState->id === CompetitionState::STATE_EXCLUDE,
-			'editSosi' => $competition->competitionState->id === CompetitionState::STATE_SOSI,
-			'showSosi' => $competition->competitionState->id >= CompetitionState::STATE_SOSI,
-			'showCompleteSosi' => $competition->competitionState->id === CompetitionState::STATE_SOSI,
-			'showEditChosen' => $competition->competitionState->id === CompetitionState::STATE_CHOOSE,
-			'showChosen' => $competition->competitionState->id >= CompetitionState::STATE_CHOOSE,
-			'showCompleteChoosing' => $competition->competitionState->id === CompetitionState::STATE_CHOOSE,
-			'showExportFlaws' => $competition->competitionState->id >= CompetitionState::STATE_KDB,
+			'show_add_wine' => $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT,
+			'show_edit_wine' => $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT,
+			'show_rating1' => $competition->competitionState->id >= CompetitionState::STATE_TASTING1,
+			'show_rating2' => $competitionAdmin && $competition->competitionState->id >= CompetitionState::STATE_TASTING2,
+			'edit_kdb' => $competition->competitionState->id === CompetitionState::STATE_KDB,
+			'show_kdb' => $competition->competitionState->id >= CompetitionState::STATE_KDB,
+			'show_complete_kdb' => $competition->competitionState->id === CompetitionState::STATE_KDB,
+			'edit_excluded' => $competition->competitionState->id === CompetitionState::STATE_EXCLUDE,
+			'show_excluded' => $competition->competitionState->id >= CompetitionState::STATE_EXCLUDE,
+			'show_complete_exclude' => $competition->competitionState->id === CompetitionState::STATE_EXCLUDE,
+			'edit_sosi' => $competition->competitionState->id === CompetitionState::STATE_SOSI,
+			'show_sosi' => $competition->competitionState->id >= CompetitionState::STATE_SOSI,
+			'show_complete_sosi' => $competition->competitionState->id === CompetitionState::STATE_SOSI,
+			'show_edit_chosen' => $competition->competitionState->id === CompetitionState::STATE_CHOOSE,
+			'show_chosen' => $competition->competitionState->id >= CompetitionState::STATE_CHOOSE,
+			'edit_chosen' => $competition->competitionState->id === CompetitionState::STATE_CHOOSE,
+			'show_complete_choosing' => $competition->competitionState->id === CompetitionState::STATE_CHOOSE,
+			'export_flaws' => $competition->competitionState->id >= CompetitionState::STATE_KDB,
 		]);
 	}
 
 	/**
 	 * 
 	 * @param Wine $wine
-	 * @return \Illuminate\Contracts\View\View
+	 * @return View
 	 */
 	public function show(Wine $wine) {
 		$this->authorize('show-wine', $wine);
@@ -133,8 +136,8 @@ class WineController extends BaseController {
 
 		return $this->viewFactory->make('competition/wines/show', [
 			'wine' => $wine,
-			'showEditWine' => $showEdit,
-			'showRating2' => $competitionAdmin,
+			'show_edit_wine' => $showEdit,
+			'show_rating2' => $competitionAdmin,
 		]);
 	}
 
@@ -204,7 +207,7 @@ class WineController extends BaseController {
 	 * Create a new wine
 	 * 
 	 * @param Competition $competition
-	 * @return \Illuminate\Contracts\View\View
+	 * @return View
 	 */
 	public function create(Competition $competition) {
 		$this->authorize('create-wine', $competition);
@@ -217,7 +220,7 @@ class WineController extends BaseController {
 			'associations' => ['auto' => 'automatisch zuordnen'] + Association::all()->lists('select_label', 'id')->all(),
 			'winesorts' => WineSort::all()->lists('select_label', 'id')->all(),
 			'winequalities' => ['none' => '0 - keine'] + WineQuality::get()->lists('select_label', 'id')->all(),
-			'showNr' => $competition->administrates(Auth::user()),
+			'show_nr' => $competition->administrates(Auth::user()),
 		]);
 	}
 
@@ -293,7 +296,7 @@ class WineController extends BaseController {
 	 * Update an existing wine
 	 * 
 	 * @param Wine $wine
-	 * @return \Illuminate\Contracts\View\View
+	 * @return View
 	 */
 	public function edit(Wine $wine) {
 		$this->authorize('update-wine', $wine);
@@ -306,7 +309,7 @@ class WineController extends BaseController {
 			'associations' => ['auto' => 'automatisch zuordnen'] + Association::all()->lists('select_label', 'id')->all(),
 			'winesorts' => WineSort::all()->lists('select_label', 'id')->all(),
 			'winequalities' => ['none' => '0 - keine'] + WineQuality::get()->lists('select_label', 'id')->all(),
-			'showNr' => $wine->competition->administrates(Auth::user()),
+			'show_nr' => $wine->competition->administrates(Auth::user()),
 		]);
 	}
 
@@ -414,7 +417,7 @@ class WineController extends BaseController {
 	 * Show import form
 	 * 
 	 * @param Competition $competition
-	 * @return \Illuminate\Contracts\View\View
+	 * @return View
 	 */
 	public function importKdb(Competition $competition) {
 		$this->authorize('import-kdb-wines', $competition);
@@ -470,7 +473,7 @@ class WineController extends BaseController {
 	 * Show import form
 	 * 
 	 * @param Competition $competition
-	 * @return \Illuminate\Contracts\View\View
+	 * @return View
 	 */
 	public function importExcluded(Competition $competition) {
 		$this->authorize('import-excluded-wines', $competition);
@@ -532,7 +535,7 @@ class WineController extends BaseController {
 	 * Show import form
 	 * 
 	 * @param Competition $competition
-	 * @return \Illuminate\Contracts\View\View
+	 * @return View
 	 */
 	public function importSosi(Competition $competition) {
 		$this->authorize('import-sosi-wines', $competition);
@@ -588,7 +591,7 @@ class WineController extends BaseController {
 	 * Show import form
 	 * 
 	 * @param Competition $competition
-	 * @return \Illuminate\Contracts\View\View
+	 * @return View
 	 */
 	public function importChosen(Competition $competition) {
 		$this->authorize('import-chosen-wines', $competition);
