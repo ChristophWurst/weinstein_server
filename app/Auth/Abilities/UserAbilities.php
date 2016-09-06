@@ -26,7 +26,7 @@ use App\MasterData\User;
 class UserAbilities {
 
 	use CommonAbilities;
-
+	
 	private function administratesUser(User $user1, User $user2) {
 		return $user2->administrates($user1);
 	}

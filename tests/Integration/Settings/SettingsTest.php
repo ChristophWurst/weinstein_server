@@ -19,7 +19,7 @@
  *
  */
 
-namespace Test\Integration;
+namespace Test\Integration\Settings;
 
 use App\MasterData\User;
 use Test\TestCase;
@@ -58,8 +58,8 @@ class SettingsTest extends TestCase {
 			['settings/activitylog'],
 			['settings/user/{username}/delete'],
 			['settings/user/{username}/delete', 'POST'],
-			['settings/user/{username}/edit'],
-			['settings/user/{username}/edit', 'POST'],
+			['settings/user/{otherUsername}/edit'],
+			['settings/user/{otherUsername}/edit', 'POST'],
 			['settings/associations/create'],
 			['settings/applicants/create'],
 		];
@@ -70,9 +70,12 @@ class SettingsTest extends TestCase {
 	 */
 	public function testNeedsAdminPermissions($uri, $method = 'GET') {
 		$user = factory(User::class)->create();
+		$otherUser = factory(User::class)->create();
 		$this->be($user);
+		$uri = str_replace('{username}', $user->username, $uri);
+		$uri = str_replace('{otherUsername}', $otherUser->username, $uri);
 
-		$this->call($method, str_replace('{username}', $user->username, $uri));
+		$this->call($method, $uri);
 
 		$this->assertResponseStatus(403);
 	}
