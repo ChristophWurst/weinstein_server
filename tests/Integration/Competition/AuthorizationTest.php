@@ -29,26 +29,29 @@ class AuthorizationTest extends TestCase {
 
 	use \Illuminate\Foundation\Testing\DatabaseTransactions;
 
-	public function urisThatNeedAuthenticationData() {
-		$competition = factory(Competition::class)->create();
+	public static function urisThatNeedAuthenticationData() {
+
 
 		return [
-			['competition/' . $competition->id],
-			['competition/' . $competition->id . '/wines'],
-			['competition/' . $competition->id . '/wines/create'],
-			['competition/' . $competition->id . '/wines/create', 'POST'],
-			['competition/' . $competition->id . '/wines/export'],
-			['competition/' . $competition->id . '/wines/export-kdb'],
-			['competition/' . $competition->id . '/wines/export-spsi'],
-			['competition/' . $competition->id . '/wines/export-chosen'],
-			['competition/' . $competition->id . '/wines/redirect/123'],
+			['competition/{id}'],
+			['competition/{id}/wines'],
+			['competition/{id}/wines/create'],
+			['competition/{id}/wines/create', 'POST'],
+			['competition/{id}/wines/export'],
+			['competition/{id}/wines/export-kdb'],
+			['competition/{id}/wines/export-sosi'],
+			['competition/{id}/wines/export-chosen'],
+			['competition/{id}/wines/redirect/123'],
 		];
 	}
 
 	/**
 	 * @dataProvider urisThatNeedAuthenticationData
 	 */
-	public function testNoAnonymouseAccess($uri, $method = 'GET') {
+	public function testNoAnonymouseAccess($rawUri, $method = 'GET') {
+		$competition = factory(Competition::class)->create();
+		$uri = str_replace('{id}', $competition->id, $rawUri);
+
 		$this->call($method, $uri);
 		$this->assertRedirectedTo('login');
 	}
