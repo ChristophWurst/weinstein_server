@@ -9,8 +9,11 @@
 	 processIsolation="false"
 	 stopOnFailure="false">
 	<testsuites>
-		<testsuite name="Application Test Suite">
-			<directory suffix="Test.php">.</directory>
+		<testsuite name="Application Tests">
+			<directory suffix="Test.php">./Integration</directory>
+		</testsuite>
+		<testsuite name="Unit Tests">
+			<directory suffix="Test.php">./Unit</directory>
 		</testsuite>
 	</testsuites>
 	<filter>
