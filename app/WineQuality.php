@@ -31,6 +31,8 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  */
 class WineQuality extends Model {
 
+	public $timestamps = false;
+
 	/**
 	 * Table name
 	 * 

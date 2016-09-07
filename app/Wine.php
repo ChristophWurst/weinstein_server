@@ -26,6 +26,7 @@ use App\MasterData\Applicant;
 use App\MasterData\Competition;
 use App\MasterData\User;
 use App\MasterData\WineSort;
+use App\Tasting\TastingNumber;
 use App\Tasting\TastingStage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -123,7 +124,7 @@ class Wine extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function applicant() {
-		return $this->belongsTo('Applicant');
+		return $this->belongsTo(Applicant::class);
 	}
 
 	/**
@@ -132,7 +133,7 @@ class Wine extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function competition() {
-		return $this->belongsTo('Competition');
+		return $this->belongsTo(Competition::class);
 	}
 
 	/**
@@ -141,7 +142,7 @@ class Wine extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function tastingnumbers() {
-		return $this->hasMany('TastingNumber');
+		return $this->hasMany(TastingNumber::class);
 	}
 
 	/**
@@ -150,7 +151,7 @@ class Wine extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function winesort() {
-		return $this->belongsTo('WineSort');
+		return $this->belongsTo(WineSort::class);
 	}
 
 	/**
@@ -159,7 +160,7 @@ class Wine extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function winequality() {
-		return $this->belongsTo('WineQuality');
+		return $this->belongsTo(WineQuality::class);
 	}
 
 	/**

@@ -82,12 +82,7 @@ class ApplicantsTest extends TestCase {
 
 	public function testEditApplicant() {
 		$admin = factory(User::class, 'admin')->create();
-		$association = factory(Association::class)->create();
-		$address = factory(Address::class)->create();
-		$applicant = factory(Applicant::class)->create([
-			'association_id' => $association->id,
-			'address_id' => $address->id,
-		]);
+		$applicant = factory(Applicant::class)->create();
 
 		$this->be($admin);
 
@@ -97,7 +92,7 @@ class ApplicantsTest extends TestCase {
 		$this->get('settings/applicant/' . $applicant->id . '/edit');
 		$this->assertResponseOk();
 
-		$data = array_merge($address->toArray(), $applicant->toArray());
+		$data = array_merge($applicant->address->toArray(), $applicant->toArray());
 		$data['label'] = 'Winzerhof XYZ';
 		$this->post('settings/applicant/' . $applicant->id . '/edit', $data);
 		$this->assertRedirectedTo('settings/applicants');

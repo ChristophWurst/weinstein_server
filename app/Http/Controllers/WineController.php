@@ -83,8 +83,6 @@ class WineController extends BaseController {
 	 * @return View
 	 */
 	public function index(Competition $competition) {
-		$this->authorize('list-wines', $competition);
-
 		$competitionAdmin = $competition->administrates(Auth::user());
 
 		$wines = $this->wineHandler->getUsersWines(Auth::user(), $competition, true)->orderBy('id')->paginate(50);
@@ -210,8 +208,6 @@ class WineController extends BaseController {
 	 * @return View
 	 */
 	public function create(Competition $competition) {
-		$this->authorize('create-wine', $competition);
-
 		$user = Auth::user();
 		$applicants = $competition->administrates($user) ? Applicant::all() : $user->applicants;
 		return $this->viewFactory->make('competition/wines/form', [
@@ -231,8 +227,6 @@ class WineController extends BaseController {
 	 * @return Resp
 	 */
 	public function store(Competition $competition) {
-		$this->authorize('create-wine', $competition);
-
 		try {
 			$data = Input::all();
 			if (isset($data['alcohol'])) {

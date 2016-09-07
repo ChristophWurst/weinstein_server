@@ -86,6 +86,7 @@ class CompetitionController extends BaseController {
 	 */
 	public function show(Competition $competition) {
 		return $this->view->make('competition/show', [
+			'isCompetitionAdmin' => $competition->administrates($this->auth->user()),
 			'competition' => $competition,
 			'competition_states' => CompetitionState::all(),
 			'wines' => $competition->wines()->count(),

@@ -85,25 +85,7 @@ class WineAbilities {
 	 * @param Competition $competition
 	 * @return boolean|null
 	 */
-	public function showAll(User $user, Competition $competition) {
-		
-	}
-
-	/**
-	 * @param User $user
-	 * @param Competition $competition
-	 * @return boolean|null
-	 */
 	public function show(User $user, Competition $competition) {
-		
-	}
-
-	/**
-	 * @param User $user
-	 * @param Competition $competition
-	 * @return boolean|null
-	 */
-	public function create(User $user, Competition $competition) {
 		
 	}
 
