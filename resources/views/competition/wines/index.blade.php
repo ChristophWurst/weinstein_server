@@ -103,6 +103,7 @@
        Fehlerprotokoll exportieren
     </a>
     @endif
+	@if ($competition_admin)
     <div class="container-fluid pull-left">
         <div class="input-group" id="search-wine">
             <input type="text"
@@ -116,6 +117,7 @@
             </span>
         </div><!-- /input-group -->
     </div>
+	@endif
 </div>
 <div class="text-right">
     {!! $wines->render() !!}
