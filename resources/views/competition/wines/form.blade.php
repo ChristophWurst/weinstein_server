@@ -103,20 +103,71 @@
 @stop
 
 @section ('script')
+function oldMatcher(matcher) {
+		function wrappedMatcher(params, data) {
+			var match = $.extend(true, {}, data);
+
+			if (params.term == null || $.trim(params.term) === '') {
+				return match;
+			}
+
+			if (data.children) {
+				for (var c = data.children.length - 1; c >= 0; c--) {
+					var child = data.children[c];
+
+					// Check if the child object matches
+					// The old matcher returned a boolean true or false
+					var doesMatch = matcher(params.term, child.text, child);
+
+					// If the child didn't match, pop it off
+					if (!doesMatch) {
+						match.children.splice(c, 1);
+					}
+				}
+
+				if (match.children.length > 0) {
+					return match;
+				}
+			}
+
+			if (matcher(params.term, data.text, data)) {
+				return match;
+			}
+
+			return null;
+		}
+
+		return wrappedMatcher;
+}
+
 function select_matcher(term, text) {
     return text.toUpperCase().indexOf(term.toUpperCase())==0;
 }
 
+var select2_open;
+// open select2 dropdown on focus
+$(document).on('focus', '.select2-selection--single', function(e) {
+    select2_open = $(this).parent().parent().siblings('select');
+    select2_open.select2('open');
+});
+
+// fix for ie11
+if (/rv:11.0/i.test(navigator.userAgent)) {
+    $(document).on('blur', '.select2-search__field', function (e) {
+        select2_open.select2('close');
+    });
+}
+
 $("#applicant_id").select2({
-    matcher: select_matcher
+    matcher: oldMatcher(select_matcher)
 });
 $("#association_id").select2({
-    matcher: select_matcher
+    matcher: oldMatcher(select_matcher)
 });
 $("#winesort_id").select2({
-    matcher: select_matcher
+    matcher: oldMatcher(select_matcher)
 });
 $("#winequality_id").select2({
-    matcher: select_matcher
+    matcher: oldMatcher(select_matcher)
 });
 @stop
