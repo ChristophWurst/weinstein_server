@@ -4,6 +4,12 @@
 
 @section('content')
 <h1>Wein {{ $edit ? '&auml;ndern' : 'hinzuf&uuml;gen' }}</h1>
+@if($success)
+    <div class="alert alert-success">
+        <strong>Wein gespeichert.</strong> Der Wein wurde erfolgreich gespeichert. Sie können nun weitere Weine anlegen.
+		<a href="{!! route('enrollment.wines', array('competition' => $competition->id)) !!}">Zurück zur Übersicht</a>
+    </div>
+@endif
 @if(count($errors->all()) > 0)
     <div class="alert alert-danger">
         <strong>Fehler!</strong> Bitte korrigieren Sie folgende Eingaben:

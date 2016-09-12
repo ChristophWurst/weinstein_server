@@ -79,6 +79,7 @@ class EnrollmentTest extends TestCase {
 		$this->assertRedirectedTo('competition/' . $competition->id . '/wines/create');
 		$this->get('competition/' . $competition->id . '/wines/create');
 		$this->dontSee('Fehler!');
+		$this->see('Wein gespeichert.');
 
 		$this->get('competition/' . $competition->id . '/wines');
 		$this->see($wine->label);

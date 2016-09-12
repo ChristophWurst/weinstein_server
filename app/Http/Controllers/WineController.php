@@ -36,6 +36,7 @@ use App\WineExport;
 use App\WineQuality;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response as Resp;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -205,18 +206,21 @@ class WineController extends BaseController {
 	 * Create a new wine
 	 * 
 	 * @param Competition $competition
+	 * @param Request $request
 	 * @return View
 	 */
-	public function create(Competition $competition) {
+	public function create(Competition $competition, Request $request) {
 		$user = Auth::user();
 		$applicants = $competition->administrates($user) ? Applicant::all() : $user->applicants;
 		return $this->viewFactory->make('competition/wines/form', [
+			'competition' => $competition,
 			'id' => Wine::maxId($competition) + 1,
 			'applicants' => $applicants->lists('select_label', 'id')->all(),
 			'associations' => ['auto' => 'automatisch zuordnen'] + Association::all()->lists('select_label', 'id')->all(),
 			'winesorts' => WineSort::all()->lists('select_label', 'id')->all(),
 			'winequalities' => ['none' => '0 - keine'] + WineQuality::get()->lists('select_label', 'id')->all(),
 			'show_nr' => $competition->administrates(Auth::user()),
+			'success' => $request->session()->has('wine_added_successfully'),
 		]);
 	}
 
@@ -224,9 +228,10 @@ class WineController extends BaseController {
 	 * Store the newly created wine
 	 * 
 	 * @param Competition $competition
+	 * @param Request $request
 	 * @return Resp
 	 */
-	public function store(Competition $competition) {
+	public function store(Competition $competition, Request $request) {
 		try {
 			$data = Input::all();
 			if (isset($data['alcohol'])) {
@@ -267,9 +272,10 @@ class WineController extends BaseController {
 					->withErrors($ve->getErrors())
 					->withInput();
 		}
-		Input::flashOnly([
-			'applicant_id'
+		$request->flashOnly([
+			'applicant_id',
 		]);
+		$request->session()->flash('wine_added_successfully', true);
 		return Redirect::route('enrollment.wines/create', ['competition' => $competition->id]);
 	}
 
