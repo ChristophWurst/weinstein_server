@@ -306,6 +306,7 @@ class WineController extends BaseController {
 		$user = Auth::user();
 		$applicants = $wine->competition->administrates($user) ? Applicant::all() : $user->applicants;
 		return $this->viewFactory->make('competition/wines/form', [
+			'success' => false,
 			'wine' => $wine,
 			'applicants' => $applicants->lists('select_label', 'id')->all(),
 			'associations' => ['auto' => 'automatisch zuordnen'] + Association::all()->lists('select_label', 'id')->all(),

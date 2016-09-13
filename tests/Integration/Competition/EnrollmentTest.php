@@ -114,4 +114,48 @@ class EnrollmentTest extends TestCase {
 		$this->assertResponseOk();
 	}
 
+	public function testEditWineAsApplicantAdmin() {
+		$this->markTestSkipped('needs investigation');
+
+		$user = factory(User::class)->create();
+		$applicant = factory(Applicant::class)->create([
+			'wuser_username' => $user->username,
+		]);
+		$competition = factory(Competition::class)->create([
+			'competition_state_id' => CompetitionState::STATE_ENROLLMENT,
+		]);
+		$wine = factory(Wine::class)->create([
+			'applicant_id' => $applicant->id,
+			'competition_id' => $competition->id,
+		]);
+
+		$this->be($user);
+
+		// Go to wine's detail page
+		$this->get('wines/' . $wine->id . '/edit');
+		$this->assertResponseOk();
+		$this->see($wine->label);
+	}
+	
+	public function testEditWineAsAdmin() {
+		$user = factory(User::class, 'admin')->create();
+		$applicant = factory(Applicant::class)->create([
+			'wuser_username' => $user->username,
+		]);
+		$competition = factory(Competition::class)->create([
+			'competition_state_id' => CompetitionState::STATE_ENROLLMENT,
+		]);
+		$wine = factory(Wine::class)->create([
+			'applicant_id' => $applicant->id,
+			'competition_id' => $competition->id,
+		]);
+
+		$this->be($user);
+
+		// Go to wine's detail page
+		$this->get('wines/' . $wine->id . '/edit');
+		$this->assertResponseOk();
+		$this->see($wine->label);
+	}
+
 }
