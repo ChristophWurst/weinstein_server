@@ -85,4 +85,35 @@ class TastingNumbersTest extends TestCase {
 		$this->assertRedirectedTo('competition/' . $competition->id . '/numbers');
 	}
 
+	public function testDeallocateTastingNumbers() {
+		$user = factory(User::class, 'admin')->create();
+		$competition = factory(Competition::class)->create([
+			'competition_state_id' => CompetitionState::STATE_ENROLLMENT,
+		]);
+		$wine = factory(Wine::class)->create([
+			'competition_id' => $competition->id,
+		]);
+		$tastingNumber = factory(TastingNumber::class)->create([
+			'wine_id' => $wine->id,
+		]);
+
+		$this->be($user);
+
+		$this->get('number/' . $tastingNumber->id . '/deallocate');
+		$this->assertResponseOk();
+		$this->post('number/' . $tastingNumber->id . '/deallocate', [
+			'del' => 'Nein',
+		]);
+		// Nothing should have changed
+		$this->get('number/' . $tastingNumber->id . '/deallocate');
+		$this->assertResponseOk();
+
+		$this->get('number/' . $tastingNumber->id . '/deallocate');
+		$this->assertResponseOk();
+		$this->post('number/' . $tastingNumber->id . '/deallocate', [
+			'del' => 'Ja',
+		]);
+		$this->assertRedirectedTo('competition/' . $competition->id . '/numbers');
+	}
+
 }
