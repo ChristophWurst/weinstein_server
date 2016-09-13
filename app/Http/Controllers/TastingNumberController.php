@@ -28,6 +28,7 @@ use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\Tasting\TastingNumber;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
@@ -50,7 +51,7 @@ class TastingNumberController extends BaseController {
 	 * Show list of all assigned tasting numbers
 	 * 
 	 * @param Competition $competition
-	 * @return \Illuminate\Contracts\View\View
+	 * @return View
 	 */
 	public function index(Competition $competition) {
 		$this->authorize('show-tastingnumbers', $competition);
@@ -74,8 +75,9 @@ class TastingNumberController extends BaseController {
 		}
 
 		return $this->viewFactory->make('competition/tasting/tasting-number/index', [
+			'competition' => $competition,
 			'numbers' => $this->tastingHandler->getAllTastingNumbers($competition, $competition->getTastingStage()),
-			'showAdd' => $showAdd,
+			'show_add' => $showAdd,
 			'left' => $left,
 			'finished' => $showComplete,
 		]);
@@ -85,7 +87,7 @@ class TastingNumberController extends BaseController {
 	 * Assign new tasting number
 	 * 
 	 * @param Competition $competition
-	 * @return \Illuminate\Contracts\View\View
+	 * @return View
 	 */
 	public function assign(Competition $competition) {
 		$this->authorize('assign-tastingnumber');
@@ -131,7 +133,7 @@ class TastingNumberController extends BaseController {
 	 * Ask user about deallocating the specified tasting number
 	 * 
 	 * @param TastingNumber $tastingNumber
-	 * @return \Illuminate\Contracts\View\View
+	 * @return View
 	 */
 	public function deallocate(TastingNumber $tastingNumber) {
 		$this->authorize('unassign-tastingnumber');
@@ -160,7 +162,7 @@ class TastingNumberController extends BaseController {
 	 * Show import form
 	 * 
 	 * @param Competition $competition
-	 * @return \Illuminate\Contracts\View\View
+	 * @return View
 	 */
 	public function import(Competition $competition) {
 		$this->authorize('import-tastingnumbers');

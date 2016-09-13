@@ -25,6 +25,7 @@ use App\Tasting\TastingStage;
 use App\Wine;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Query;
 
 /**
  * @property int $id
@@ -60,7 +61,7 @@ class TastingNumber extends Model {
 	 * @return Relation
 	 */
 	public function tastings() {
-		return $this->hasMany('Tasting', 'tastingnumber_id', 'id');
+		return $this->hasMany(Tasting::class, 'tastingnumber_id', 'id');
 	}
 
 	/**
@@ -68,7 +69,7 @@ class TastingNumber extends Model {
 	 * @return Relation
 	 */
 	public function tastingstage() {
-		return $this->belongsTo('TastingStage');
+		return $this->belongsTo(TastingStage::class);
 	}
 
 	/**
@@ -77,15 +78,15 @@ class TastingNumber extends Model {
 	 * @return Relation
 	 */
 	public function wine() {
-		return $this->belongsTo('Wine');
+		return $this->belongsTo(Wine::class);
 	}
 
 	/**
 	 * Scope tasting numbers to given tasting stage
 	 * 
-	 * @param \Illuminate\Database\Query $query
+	 * @param Query $query
 	 * @param TastingStage $tastingStage
-	 * @return \Illuminate\Database\Query
+	 * @return Query
 	 */
 	public function scopeTastingStage($query, TastingStage $tastingStage) {
 		return $query->where('tastingstage_id', '=', $tastingStage->id);

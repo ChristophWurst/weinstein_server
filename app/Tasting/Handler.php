@@ -145,7 +145,7 @@ class Handler implements TastingHandler {
 
 		$wine = $this->wineRepository->findByNr($competition, $data['wine_nr']);
 		//competition's tasting stage is choosen by default
-		$tastingStage = $competition->getTastingStage;
+		$tastingStage = $competition->getTastingStage();
 
 		return $this->tastingNumberRepository->create($data, $wine, $tastingStage);
 	}

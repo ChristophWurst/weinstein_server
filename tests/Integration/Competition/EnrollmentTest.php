@@ -136,7 +136,7 @@ class EnrollmentTest extends TestCase {
 		$this->assertResponseOk();
 		$this->see($wine->label);
 	}
-	
+
 	public function testEditWineAsAdmin() {
 		$user = factory(User::class, 'admin')->create();
 		$applicant = factory(Applicant::class)->create([

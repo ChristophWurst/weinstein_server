@@ -124,7 +124,7 @@ class Competition extends Model implements AdministrateModel {
 	 * @return Relation
 	 */
 	public function tastingnumbers() {
-		return $this->hasManyThrough(TastingNumber::class, 'Wine');
+		return $this->hasManyThrough(TastingNumber::class, Wine::class);
 	}
 
 	/**
