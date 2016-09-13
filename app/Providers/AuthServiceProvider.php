@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Auth\Abilities\ActivityLogAbilities;
 use App\Auth\Abilities\ApplicantAbilities;
+use App\Auth\Abilities\AssociationAbilities;
 use App\Auth\Abilities\CatalogueAbilities;
 use App\Auth\Abilities\CompetitionAbilities;
 use App\Auth\Abilities\EvaluationAbilities;
@@ -11,7 +12,6 @@ use App\Auth\Abilities\TastingAbilities;
 use App\Auth\Abilities\TastingNumberAbilities;
 use App\Auth\Abilities\TastingSessionAbilities;
 use App\Auth\Abilities\UserAbilities;
-use App\Auth\Abilities\WineAbilities;
 use App\MasterData\User;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -54,9 +54,9 @@ class AuthServiceProvider extends ServiceProvider {
 		/**
 		 * Association
 		 */
-		$gate->define('show-association', ApplicantAbilities::class . '@show');
-		$gate->define('create-association', ApplicantAbilities::class . '@create');
-		$gate->define('edit-association', ApplicantAbilities::class . '@edit');
+		$gate->define('show-association', AssociationAbilities::class . '@show');
+		$gate->define('create-association', AssociationAbilities::class . '@create');
+		$gate->define('edit-association', AssociationAbilities::class . '@edit');
 
 		/**
 		 * Catalogue
