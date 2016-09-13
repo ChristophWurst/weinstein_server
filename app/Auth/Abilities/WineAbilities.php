@@ -82,20 +82,20 @@ class WineAbilities {
 
 	/**
 	 * @param User $user
-	 * @param Competition $competition
-	 * @return boolean|null
+	 , Wine $wine
+	 * @return boolean
 	 */
-	public function show(User $user, Competition $competition) {
-		
+	public function show(User $user, Wine $wine) {
+		return $wine->administrates($user);
 	}
 
 	/**
 	 * @param User $user
-	 * @param Competition $competition
-	 * @return boolean|null
+	 , Wine $wine
+	 * @return boolean
 	 */
-	public function enrollmentPdf(User $user, Competition $competition) {
-		
+	public function enrollmentPdf(User $user, Wine $wine) {
+		return $wine->administrates($user);
 	}
 
 	/**

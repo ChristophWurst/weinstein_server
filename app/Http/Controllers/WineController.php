@@ -22,7 +22,6 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\WineHandler;
-use App\EnrollmentForm;
 use App\Exceptions\ValidationException;
 use App\FlawExport;
 use App\Http\Controllers\BaseController;
@@ -32,6 +31,7 @@ use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\MasterData\WineSort;
 use App\Wine;
+use App\Wine\EnrollmentForm;
 use App\WineExport;
 use App\WineQuality;
 use Illuminate\Contracts\View\Factory;
@@ -111,6 +111,7 @@ class WineController extends BaseController {
 			'edit_chosen' => $competition->competitionState->id === CompetitionState::STATE_CHOOSE,
 			'show_complete_choosing' => $competition->competitionState->id === CompetitionState::STATE_CHOOSE,
 			'export_flaws' => $competition->competitionState->id >= CompetitionState::STATE_KDB,
+			'show_enrollment_pdf_export'=> $competition->competitionState->is(CompetitionState::STATE_ENROLLMENT),
 		]);
 	}
 

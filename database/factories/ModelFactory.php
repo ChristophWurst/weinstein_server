@@ -95,6 +95,12 @@ $factory->define(Wine::class,
 		'winesort_id' => function() {
 			return factory(WineSort::class)->create()->id;
 		},
+		'competition_id' => function() {
+			return factory(Competition::class)->create()->id;
+		},
+		'applicant_id' => function() {
+			return factory(Applicant::class)->create()->id;
+		},
 		'winequality_id' => rand(1, 10), // Hard-coded, but should exist in DB
 	];
 });

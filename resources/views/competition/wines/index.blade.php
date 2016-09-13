@@ -158,6 +158,9 @@
                 @if ($show_edit_wine)
                 <th></th>
                 @endif
+				@if ($show_enrollment_pdf_export)
+				<th class="text-center">Formular</th>
+				@endif
             </tr>
         </thead>
         <tbody id="wine_list">
@@ -279,6 +282,9 @@
                 @elseif ($edit_chosen)
                 <td class="hidden update_url">{!! route('enrollment.wines/update-chosen', array('wine' => $wine->id)) !!}</td>
                 @endif
+				<td class="text-center">
+                    {!! link_to_route('enrollment.wines/enrollment-pdf', 'drucken', array('wine' => $wine->id)) !!}
+                </td>
             </tr>
             @endforeach
         </tbody>

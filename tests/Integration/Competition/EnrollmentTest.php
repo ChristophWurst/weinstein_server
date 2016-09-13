@@ -23,10 +23,9 @@ namespace Test\Integration\Competition;
 
 use App\MasterData\Applicant;
 use App\MasterData\Competition;
+use App\MasterData\CompetitionState;
 use App\MasterData\User;
-use App\MasterData\WineSort;
 use App\Wine;
-use App\WineQuality;
 use Test\TestCase;
 use function factory;
 
@@ -43,7 +42,7 @@ class EnrollmentTest extends TestCase {
 		$this->dontSee('0/0 Weinen übernommen');
 	}
 
-	public function testFreshCompettionAsAdmin() {
+	public function testFreshCompetitionAsAdmin() {
 		$user = factory(User::class)->create();
 		$competition = factory(Competition::class)->create([
 			'wuser_username' => $user->username,
@@ -83,6 +82,36 @@ class EnrollmentTest extends TestCase {
 
 		$this->get('competition/' . $competition->id . '/wines');
 		$this->see($wine->label);
+	}
+
+	public function testShowWinesDetailPage() {
+		$user = factory(User::class)->create();
+		$applicant = factory(Applicant::class)->create([
+			'wuser_username' => $user->username,
+		]);
+		$competition = factory(Competition::class)->create([
+			'competition_state_id' => CompetitionState::STATE_ENROLLMENT,
+		]);
+		$wine = factory(Wine::class)->create([
+			'applicant_id' => $applicant->id,
+			'competition_id' => $competition->id,
+		]);
+
+		$this->be($user);
+
+		// See 'drucken' link on wines page
+		$this->get('competition/' . $competition->id . '/wines');
+		$this->assertResponseOk();
+		$this->see('drucken');
+
+		// Go to wine's detail page
+		$this->get('wines/' . $wine->id);
+		$this->assertResponseOk();
+		$this->see($wine->label);
+
+		// Print enrollment PDF
+		$this->get('wines/' . $wine->id . '/enrollment-pdf');
+		$this->assertResponseOk();
 	}
 
 }

@@ -19,17 +19,19 @@
  *
  */
 
-namespace App;
+namespace App\Wine;
 
+use App\MasterData\Competition;
+use App\Wine;
 use fpdf\FPDF;
 use Illuminate\Support\Str;
 
 class EnrollmentForm {
 
-	/**
-	 * @var Wine
-	 */
+	/** @var Wine */
 	private $wine;
+	
+	/** @var Competition */
 	private $competition;
 
 	public function __construct(Wine $wine) {
@@ -58,7 +60,8 @@ class EnrollmentForm {
 		$pdf->Write(5, $this->encode('Anliefertermine: '));
 
 		$pdf->SetFont('Arial', '', 12);
-		$pdf->Write(5, $this->encode('8. und 9. April 2015 laut beiliegender Aufstellung '
+		$pdf->Write(5,
+			$this->encode('8. und 9. April 2015 laut beiliegender Aufstellung '
 				. 'im Landesweingut Retz, 2 Stk. 0,75l bzw. bei kleineren 3 Flashen je Probe (umseitige'
 				. ' Bedingungen beachten!)'));
 
@@ -68,7 +71,8 @@ class EnrollmentForm {
 		$pdf->Write(5, $this->encode('Achtung: '));
 
 		$pdf->SetFont('Arial', '', 12);
-		$pdf->Write(5, $this->encode('Jene Betriebe, welche schon im Vorjahr teilgenommen haben, '
+		$pdf->Write(5,
+			$this->encode('Jene Betriebe, welche schon im Vorjahr teilgenommen haben, '
 				. 'brauchen kein Stammdatenblatt mehr ausfüllen, ist nur bei erstmaliger Teilnahme '
 				. 'notwendig. Alle Formulare sind auch unter www.bwv-retz.at abrufbar.'));
 
@@ -124,7 +128,8 @@ class EnrollmentForm {
 		$pdf->Write(5, $this->encode('Marke: ' . $label));
 
 		$pdf->Ln(10);
-		$pdf->Write(5, $this->encode('Qualitätsstufe: ' . $this->wine->winequality->label
+		$pdf->Write(5,
+			$this->encode('Qualitätsstufe: ' . $this->wine->winequality->label
 				. ' (' . $this->wine->winequality->abbr . ')'));
 
 		$pdf->Ln(10);
@@ -145,7 +150,8 @@ class EnrollmentForm {
 
 		$pdf->Ln(20);
 		$pdf->SetFont('Arial', 'B', 10);
-		$pdf->Write(5, $this->encode('Kopie (Seite 1 und 2 genügen!) des Prüfnummernbescheides'
+		$pdf->Write(5,
+			$this->encode('Kopie (Seite 1 und 2 genügen!) des Prüfnummernbescheides'
 				. ' unbeding belegen! Bitte nicht anheften!'));
 
 		$pdf->Ln(40);
