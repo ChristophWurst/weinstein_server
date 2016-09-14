@@ -84,7 +84,7 @@ use App\MasterData\CompetitionState;
                                     <a href="{{ route('evaluation.protocols', array('competition' => $competition->id)) }}">Kostprotokolle</a>
                                 </li>
                                 @endif
-                                @if ($competition->administrates(Auth::user()) && $competition->competitionstate_id === CompetitionState::STATE_FINISHED)
+                                @if ($competition->administrates(Auth::user()) && $competition->competition_state_id === CompetitionState::STATE_FINISHED)
                                 <li role="presentation" class="dropdown-header">Kataloge</li>
                                 <li class="{{ Request::segment(3) == 'evaluation' && Request::segment(4) == 'catalogues' ? 'active' : '' }}">
                                     <a href="{{ route('evaluation.catalogues/tasting', array('competition' => $competition->id)) }}">Kostkatalog</a>

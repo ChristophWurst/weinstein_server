@@ -61,7 +61,7 @@ class CatalogueAbilitiesTest extends TestCase {
 			->once()
 			->andReturn(true);
 		$competition->shouldReceive('getAttribute')
-			->with('competitionstate_id')
+			->with('competition_state_id')
 			->andReturn(CompetitionState::STATE_EXCLUDE);
 
 		$this->assertFalse($this->abilities->create($user, $competition));
@@ -76,7 +76,7 @@ class CatalogueAbilitiesTest extends TestCase {
 			->once()
 			->andReturn(true);
 		$competition->shouldReceive('getAttribute')
-			->with('competitionstate_id')
+			->with('competition_state_id')
 			->andReturn(CompetitionState::STATE_FINISHED);
 
 		$this->assertTrue($this->abilities->create($user, $competition));

@@ -39,7 +39,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @property string $label
  * @property string $wuser_username
  * @property User $user
- * @property int $competitionstate_id
+ * @property int $competition_state_id
  * @property CompetitionState $competitionState
  * @property Collection $wines
  */

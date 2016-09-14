@@ -81,7 +81,7 @@ class Handler implements TastingHandler {
 				'TASTINGNUMBERS1',
 				'TASTINGNUMBERS2'
 			])) {
-			$competition->competitionstate_id += 1;
+			$competition->competition_state_id += 1;
 			$this->competitionRepository->update($competition);
 		} else {
 			throw new Exception('invalid competition state');
@@ -91,10 +91,10 @@ class Handler implements TastingHandler {
 
 	public function lockTasting(Competition $competition) {
 		if ($competition->competitionState->description === 'TASTING1') {
-			$competition->competitionstate_id += 1;
+			$competition->competition_state_id += 1;
 			$this->competitionRepository->update($competition);
 		} elseif ($competition->competitionState->description === 'TASTING2') {
-			$competition->competitionstate_id += 1;
+			$competition->competition_state_id += 1;
 			$this->competitionRepository->update($competition);
 		} else {
 			throw new Exception('invalid competition state');
@@ -111,25 +111,25 @@ class Handler implements TastingHandler {
 	}
 
 	public function lockKdb(Competition $competition) {
-		$competition->competitionstate_id += 1;
+		$competition->competition_state_id += 1;
 		$this->competitionRepository->update($competition);
 		//ActivityLogger::log('Bewerb [' . $competition->label . '] KdB Zuweisung beendet');
 	}
 
 	public function lockExcluded(Competition $competition) {
-		$competition->competitionstate_id += 1;
+		$competition->competition_state_id += 1;
 		$this->competitionRepository->update($competition);
 		//ActivityLogger::log('Bewerb [' . $competition->label . '] Ausschluss beendet');
 	}
 
 	public function lockSosi(Competition $competition) {
-		$competition->competitionstate_id += 1;
+		$competition->competition_state_id += 1;
 		$this->competitionRepository->update($competition);
 		//ActivityLogger::log('Bewerb [' . $competition->label . '] SoSi Zuweisung beendet');
 	}
 
 	public function lockChoosing(Competition $competition) {
-		$competition->competitionstate_id += 1;
+		$competition->competition_state_id += 1;
 		$this->competitionRepository->update($competition);
 		//ActivityLogger::log('Bewerb [' . $competition->label . '] Auswahl beendet');
 	}

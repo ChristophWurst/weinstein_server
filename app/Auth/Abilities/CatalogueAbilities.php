@@ -32,7 +32,7 @@ class CatalogueAbilities {
 	}
 
 	private function checkCompetitionState(Competition $competition) {
-		return $competition->competitionstate_id === CompetitionState::STATE_FINISHED;
+		return $competition->competition_state_id === CompetitionState::STATE_FINISHED;
 	}
 
 	public function create(User $user, Competition $competition) {

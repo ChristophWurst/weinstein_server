@@ -31,7 +31,7 @@ class CompetitionTableSeeder extends Seeder {
 	public static function createCompetition($label, $competitionState, $username) {
 		return Competition::create(array(
 			'label' => $label,
-			'competitionstate_id' => $competitionState,
+			'competition_state_id' => $competitionState,
 			'wuser_username' => $username,
 		));
 	}

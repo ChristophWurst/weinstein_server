@@ -84,19 +84,25 @@ class HandlerTest extends TestCase {
 	}
 
 	public function testLockTastingNumbersInvalidTastingStage() {
-		$this->setExpectedException(Exception::class);
+		$this->setExpectedException(Exception::class, 'invalid competition state');
 
-		$competition = new Competition();
-		$competition->competitionstate_id = 2;
-		$competitionState = new CompetitionState();
-		$competitionState->description = 'TASTINGNUMBERS1';
+		$competition = \Mockery::mock(Competition::class);
+		$competitionState = \Mockery::mock(CompetitionState::class);
+		$competition->shouldReceive('getAttribute')
+			->once()
+			->with('competitionState')
+			->andReturn($competitionState);
+		$competitionState->shouldReceive('getAttribute')
+			->once()
+			->with('description')
+			->andReturn('ENROLLMENT');
 
 		$this->handler->lockTastingNumbers($competition);
 	}
 
 	public function testLockTastingNumbers() {
 		$competition = new Competition();
-		$competition->competitionstate_id = 2;
+		$competition->competition_state_id = 2;
 		$competitionState = new CompetitionState();
 		$competitionState->description = 'TASTINGNUMBERS1';
 		$competition->competitionstate()->associate($competitionState);
@@ -110,7 +116,7 @@ class HandlerTest extends TestCase {
 
 	public function testLockTasting1() {
 		$competition = new Competition();
-		$competition->competitionstate_id = 2;
+		$competition->competition_state_id = 2;
 		$competitionState = new CompetitionState();
 		$competitionState->description = 'TASTING1';
 		$competition->competitionstate()->associate($competitionState);
@@ -132,7 +138,7 @@ class HandlerTest extends TestCase {
 
 	public function testLockTasting2() {
 		$competition = new Competition();
-		$competition->competitionstate_id = 2;
+		$competition->competition_state_id = 2;
 		$competitionState = new CompetitionState();
 		$competitionState->description = 'TASTING2';
 		$competition->competitionstate()->associate($competitionState);
@@ -154,7 +160,7 @@ class HandlerTest extends TestCase {
 
 	public function testLockTastingInvalidTastingStage() {
 		$competition = new Competition();
-		$competition->competitionstate_id = 2;
+		$competition->competition_state_id = 2;
 		$competitionState = new CompetitionState();
 		$competitionState->description = 'ENROLLMENT';
 		$competition->competitionstate()->associate($competitionState);
@@ -165,7 +171,7 @@ class HandlerTest extends TestCase {
 
 	public function testLockKdb() {
 		$competition = new Competition();
-		$competition->competitionstate_id = CompetitionState::STATE_KDB;
+		$competition->competition_state_id = CompetitionState::STATE_KDB;
 		$this->competitionRepository->expects($this->once())
 			->method('update')
 			->with($competition);
@@ -175,7 +181,7 @@ class HandlerTest extends TestCase {
 
 	public function testLockExcluded() {
 		$competition = new Competition();
-		$competition->competitionstate_id = CompetitionState::STATE_EXCLUDE;
+		$competition->competition_state_id = CompetitionState::STATE_EXCLUDE;
 		$this->competitionRepository->expects($this->once())
 			->method('update')
 			->with($competition);
@@ -185,7 +191,7 @@ class HandlerTest extends TestCase {
 
 	public function testLockSosi() {
 		$competition = new Competition();
-		$competition->competitionstate_id = CompetitionState::STATE_SOSI;
+		$competition->competition_state_id = CompetitionState::STATE_SOSI;
 		$this->competitionRepository->expects($this->once())
 			->method('update')
 			->with($competition);
@@ -195,7 +201,7 @@ class HandlerTest extends TestCase {
 
 	public function testLockChoosing() {
 		$competition = new Competition();
-		$competition->competitionstate_id = CompetitionState::STATE_CHOOSE;
+		$competition->competition_state_id = CompetitionState::STATE_CHOOSE;
 		$this->competitionRepository->expects($this->once())
 			->method('update')
 			->with($competition);

@@ -34,7 +34,7 @@ class CompetitionRepository {
 	}
 
 	public function increaseStage(Competition $competition) {
-		$competition->competitionstate_id += 1;
+		$competition->competition_state_id += 1;
 		$competition->save();
 	}
 
