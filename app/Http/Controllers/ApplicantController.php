@@ -27,6 +27,7 @@ use App\Http\Controllers\BaseController;
 use App\MasterData\Applicant;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
@@ -58,7 +59,7 @@ class ApplicantController extends BaseController {
 	/**
 	 * Display a listing of all applicants the user is permitted to see
 	 *
-	 * @return Response
+	 * @return View
 	 */
 	public function index() {
 		$user = $this->auth->user();
@@ -71,7 +72,7 @@ class ApplicantController extends BaseController {
 	/**
 	 * Show the form for creating a new applicant
 	 *
-	 * @return Response
+	 * @return View
 	 */
 	public function create() {
 		$this->authorize('create-applicant');
@@ -112,7 +113,7 @@ class ApplicantController extends BaseController {
 	 * Display the specified applicant
 	 *
 	 * @param Applicant $applicant        	
-	 * @return Response
+	 * @return View
 	 */
 	public function show(Applicant $applicant) {
 		$this->authorize('show-applicant', $applicant);
@@ -125,7 +126,7 @@ class ApplicantController extends BaseController {
 	/**
 	 * Show the form for importing applicants
 	 *
-	 * @return Response
+	 * @return View
 	 */
 	public function getImport() {
 		$this->authorize('import-applicant');
@@ -160,7 +161,7 @@ class ApplicantController extends BaseController {
 	 * Show the form for editing the specified applicant
 	 *
 	 * @param Applicant $applicant        	
-	 * @return Response
+	 * @return View
 	 */
 	public function edit(Applicant $applicant) {
 		$this->authorize('edit-applicant', $applicant);
