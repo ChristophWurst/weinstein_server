@@ -55,7 +55,7 @@ class Commission extends Model {
 	 * @return Relation
 	 */
 	public function statistic() {
-		return $this->hasOne('App\Tasting\CommissionStatistic');
+		return $this->hasOne(CommissionStatistic::class);
 	}
 
 	/**
@@ -64,7 +64,7 @@ class Commission extends Model {
 	 * @return Relation
 	 */
 	public function tasters() {
-		return $this->hasMany('Taster', 'commission_id', 'id');
+		return $this->hasMany(Taster::class, 'commission_id', 'id');
 	}
 
 	/**
@@ -73,7 +73,7 @@ class Commission extends Model {
 	 * @return Relation
 	 */
 	public function tastingSession() {
-		return $this->belongsTo('TastingSession');
+		return $this->belongsTo(TastingSession::class, 'tastingsession_id');
 	}
 
 }

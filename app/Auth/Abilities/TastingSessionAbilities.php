@@ -44,10 +44,6 @@ class TastingSessionAbilities {
 		]);
 	}
 
-	private function checkTastingSessionLocked(TastingSession $tastingSession) {
-		return $tastingSession->locked;
-	}
-
 	private function isTastingSessionDeletable(TastingSession $tastingSession) {
 		return $tastingSession->tasters->count() > 0;
 	}
@@ -78,8 +74,7 @@ class TastingSessionAbilities {
 	 */
 	public function edit(User $user, TastingSession $tastingSession) {
 		return $this->isTastinSessionAdmin($user, $tastingSession)
-			&& $this->checkTastingStage($tastingSession->competition)
-			&& $this->checkTastingSessionLocked($tastingSession);
+			&& $this->checkTastingStage($tastingSession->competition);
 	}
 
 	/**
@@ -89,8 +84,7 @@ class TastingSessionAbilities {
 	 */
 	public function show(User $user, TastingSession $tastingSession) {
 		return $this->isTastinSessionAdmin($user, $tastingSession)
-			&& $this->checkTastingStage($tastingSession->competition)
-			&& $this->checkTastingSessionLocked($tastingSession);
+			&& $this->checkTastingStage($tastingSession->competition);
 	}
 
 	/**
@@ -100,8 +94,7 @@ class TastingSessionAbilities {
 	 */
 	public function tasters(User $user, TastingSession $tastingSession) {
 		return $this->isTastinSessionAdmin($user, $tastingSession)
-			&& $this->checkTastingStage($tastingSession->competition)
-			&& $this->checkTastingSessionLocked($tastingSession);
+			&& $this->checkTastingStage($tastingSession->competition);
 	}
 
 	/**
@@ -111,8 +104,7 @@ class TastingSessionAbilities {
 	 */
 	public function addTaster(User $user, TastingSession $tastingSession) {
 		return $this->isTastinSessionAdmin($user, $tastingSession)
-			&& $this->checkTastingStage($tastingSession->competition)
-			&& !$this->checkTastingSessionLocked($tastingSession);
+			&& $this->checkTastingStage($tastingSession->competition);
 	}
 
 	/**
@@ -132,8 +124,7 @@ class TastingSessionAbilities {
 	 */
 	public function exportResult(User $user, TastingSession $tastingSession) {
 		return $this->isTastinSessionAdmin($user, $tastingSession)
-			&& $this->checkTastingStage($tastingSession->competition)
-			&& $this->checkTastingSessionLocked($tastingSession);
+			&& $this->checkTastingStage($tastingSession->competition);
 	}
 
 	/**
@@ -143,8 +134,7 @@ class TastingSessionAbilities {
 	 */
 	public function lock(User $user, TastingSession $tastingSession) {
 		return $this->isTastinSessionAdmin($user, $tastingSession)
-			&& $this->checkTastingStage($tastingSession->competition)
-			&& $this->checkTastingSessionLocked($tastingSession);
+			&& $this->checkTastingStage($tastingSession->competition);
 	}
 
 	/**
@@ -155,7 +145,6 @@ class TastingSessionAbilities {
 	public function delete(User $user, TastingSession $tastingSession) {
 		return $this->isTastinSessionAdmin($user, $tastingSession)
 			&& $this->checkTastingStage($tastingSession->competition)
-			&& $this->checkTastingSessionLocked($tastingSession)
 			&& $this->isTastingSessionDeletable($tastingSession);
 	}
 

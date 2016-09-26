@@ -25,7 +25,6 @@ use App\AdministrateModel;
 use App\MasterData\Competition;
 use App\MasterData\User;
 use App\Tasting\TastingStage;
-use App\Tastingng\TastedWine;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as DbCollection;
 use Illuminate\Database\Eloquent\Model;

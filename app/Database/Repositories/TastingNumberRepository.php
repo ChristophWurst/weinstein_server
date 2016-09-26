@@ -22,9 +22,9 @@
 namespace App\Database\Repositories;
 
 use App\MasterData\Competition;
+use App\Tasting\TastedWine;
 use App\Tasting\TastingNumber;
 use App\Tasting\TastingStage;
-use App\Tastingng\TastedWine;
 use App\Wine;
 use Illuminate\Support\Collection;
 

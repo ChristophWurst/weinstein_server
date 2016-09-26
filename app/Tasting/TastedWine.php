@@ -19,7 +19,7 @@
  *
  */
 
-namespace App\Tastingng;
+namespace App\Tasting;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,7 +30,7 @@ class TastedWine extends Model {
 	 * 
 	 * @var string
 	 */
-	protected $table = TastedWine::class;
+	protected $table = 'tasted_wine';
 
 	/**
 	 * round db value because of rounding noise

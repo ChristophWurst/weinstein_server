@@ -22,6 +22,7 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\TastingHandler;
+use App\Exceptions\IllegalTastingStageException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\MasterData\Competition;
@@ -32,6 +33,9 @@ use App\Tasting\TastingProtocol;
 use App\Tasting\TastingSession;
 use App\Tasting\TastingStage;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response as Response2;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -52,38 +56,6 @@ class TastingSessionController extends BaseController {
 	public function __construct(TastingHandler $tastingHandler, Factory $viewFactory) {
 		$this->tastingHandler = $tastingHandler;
 		$this->viewFactory = $viewFactory;
-		$this->middleware('@filterTastingSessionAdmin',
-			[
-			'except' => [
-				'index',
-				'add',
-				'store',
-				'exportResult',
-				'statistic',
-			],
-		]);
-		$this->middleware('@filterTastingStage', [
-			'except' => [
-				'exportProtocol',
-			],
-		]);
-		$this->middleware('@filterTastingSessionLocked',
-			[
-			'except' => [
-				'index',
-				'add',
-				'store',
-				'show',
-				'tasters',
-				'exportProtocol',
-			],
-		]);
-		$this->middleware('@filterTastingSessionDeletable', [
-			'only' => [
-				'delete',
-				'destroy',
-			],
-		]);
 	}
 
 	/**
@@ -104,14 +76,28 @@ class TastingSessionController extends BaseController {
 			$tasting2 && $competition->wines()->withTastingNumber(TastingStage::find(2))->count() === $competition->wine_details()->kdb()->whereNotNull('rating2')->count());
 	}
 
+	private function checkCompetitionState(Competition $competition) {
+		// TODO: might make sense to move to BL layer
+		if (!$competition->competitionState->is(CompetitionState::STATE_TASTING1) || !$competition->competitionState->is(CompetitionState::STATE_TASTING1)) {
+			throw new IllegalTastingStageException();
+		}
+	}
+
+	private function checkTastingSessionLocked(TastingSession $tastingSession) {
+		if ($tastingSession->locked) {
+			throw new IllegalTastingStageException();
+		}
+	}
+
 	/**
 	 * list current competitions tasting sessions
 	 * 
 	 * @param Competition $competition
-	 * @return \Illuminate\Contracts\View\View
+	 * @return View
 	 */
 	public function index(Competition $competition) {
 		$this->authorize('show-tastingsessions', $competition);
+		$this->checkCompetitionState($competition);
 
 		$this->shareCommonViewData($competition);
 		return $this->viewFactory->make('competition/tasting/tasting-session/index');
@@ -121,10 +107,11 @@ class TastingSessionController extends BaseController {
 	 * Show form for adding new session
 	 * 
 	 * @param Competition $competition
-	 * @return \Illuminate\Contracts\View\View
+	 * @return View
 	 */
 	public function add(Competition $competition) {
 		$this->authorize('create-tastingsession', $competition);
+		$this->checkCompetitionState($competition);
 
 		$this->shareCommonViewData($competition);
 		return $this->viewFactory->make('competition/tasting/tasting-session/form',
@@ -141,6 +128,7 @@ class TastingSessionController extends BaseController {
 	 */
 	public function store(Competition $competition) {
 		$this->authorize('create-tastingsession', $competition);
+		$this->checkCompetitionState($competition);
 
 		$data = Input::all();
 		//unset user if set to 'none'
@@ -161,15 +149,17 @@ class TastingSessionController extends BaseController {
 	 * Show the specified tasting session
 	 * 
 	 * @param TastingSession $tastingSession
-	 * @return \Illuminate\Contracts\View\View
+	 * @return View
 	 */
 	public function show(TastingSession $tastingSession) {
 		$this->authorize('show-tastingsession', $tastingSession);
+		$this->checkCompetitionState($tastingSession->competition);
 
 		$this->shareCommonViewData($tastingSession->competition);
-		return $this->viewFactory->make('competition/tasting/tasting-session/show', [
-			'data' => $tastingSession,
-			'tastingFinished' => $this->tastingHandler->isTastingFinished($tastingSession->competition),
+		return $this->viewFactory->make('competition/tasting/tasting-session/show',
+				[
+				'data' => $tastingSession,
+				'tasting_finished' => $this->tastingHandler->isTastingFinished($tastingSession->competition),
 		]);
 	}
 
@@ -178,10 +168,11 @@ class TastingSessionController extends BaseController {
 	 * 
 	 * @param TastingSession $tastingSession
 	 * @param Commission $commission
-	 * @return type
+	 * @return Response2
 	 */
 	public function exportResult(TastingSession $tastingSession, Commission $commission) {
 		$this->authorize('export-tastingsession-result', $tastingSession);
+		$this->checkCompetitionState($tastingSession->competition);
 
 		$wines = $tastingSession
 			->tastedwines()
@@ -223,10 +214,12 @@ class TastingSessionController extends BaseController {
 	 * Show update form
 	 * 
 	 * @param TastingSession $tastingSession
-	 * @return \Illuminate\Contracts\View\View
+	 * @return View
 	 */
 	public function edit(TastingSession $tastingSession) {
 		$this->authorize('edit-tastingsession', $tastingSession);
+		$this->checkCompetitionState($tastingSession->competition);
+		$this->checkTastingSessionLocked($tastingSession);
 
 		$this->shareCommonViewData($tastingSession->competition);
 		return $this->viewFactory->make('competition/tasting/tasting-session/form',
@@ -244,6 +237,8 @@ class TastingSessionController extends BaseController {
 	 */
 	public function update(TastingSession $tastingSession) {
 		$this->authorize('edit-tastingsession');
+		$this->checkCompetitionState($tastingSession->competition);
+		$this->checkTastingSessionLocked($tastingSession);
 
 		$data = Input::all();
 		//unset user if set to 'none'
@@ -264,10 +259,11 @@ class TastingSessionController extends BaseController {
 	 * 
 	 * @param TastingSession $tastingSession
 	 * @param Commission $commission
-	 * @return json
+	 * @return JsonResponse
 	 */
 	public function tasters(TastingSession $tastingSession, Commission $commission) {
 		$this->authorize('list-tastingsession-tasters');
+		$this->checkCompetitionState($tastingSession->competition);
 
 		return Response::json($commission->tasters->toArray());
 	}
@@ -279,6 +275,8 @@ class TastingSessionController extends BaseController {
 	 */
 	public function addTaster(TastingSession $tastingSession) {
 		$this->authorize('add-tastingsession-taster', $tastingSession);
+		$this->checkCompetitionState($tastingSession->competition);
+		$this->checkTastingSessionLocked($tastingSession);
 
 		try {
 			$data = Input::all();
@@ -299,10 +297,13 @@ class TastingSessionController extends BaseController {
 
 	public function statistics(TastingSession $tastingSession) {
 		$this->authorize('show-tastingsession-statistics', $tastingSession);
+		$this->checkCompetitionState($tastingSession->competition);
+		$this->checkTastingSessionLocked($tastingSession);
 
 		$this->shareCommonViewData($tastingSession->competition);
-		return $this->viewFactory->make('competition/tasting/tasting-session/statistics', [
-			'tastingSession' => $tastingSession
+		return $this->viewFactory->make('competition/tasting/tasting-session/statistics',
+				[
+				'tasting_session' => $tastingSession
 		]);
 	}
 
@@ -310,10 +311,12 @@ class TastingSessionController extends BaseController {
 	 * Show user confirmation for completing/locking tasting session
 	 * 
 	 * @param TastingSession $tastingSession
-	 * @return \Illuminate\Contracts\View\View
+	 * @return View
 	 */
 	public function complete(TastingSession $tastingSession) {
 		$this->authorize('lock-tastingsession', $tastingSession);
+		$this->checkCompetitionState($tastingSession->competition);
+		$this->checkTastingSessionLocked($tastingSession);
 
 		$this->shareCommonViewData($tastingSession->competition);
 		return $this->viewFactory->make('competition/tasting/tasting-session/complete', [
@@ -329,6 +332,8 @@ class TastingSessionController extends BaseController {
 	 */
 	public function lock(TastingSession $tastingSession) {
 		$this->authorize('lock-tastingsession', $tastingSession);
+		$this->checkCompetitionState($tastingSession->competition);
+		$this->checkTastingSessionLocked($tastingSession);
 
 		if (Input::has('del') && Input::get('del') == 'Ja') {
 			$this->tastingHandler->lockTastingSession($tastingSession);
@@ -340,10 +345,12 @@ class TastingSessionController extends BaseController {
 	 * Show user confirmation for deleting tasting sessions
 	 * 
 	 * @param TastingSession $tastingSession
-	 * @return \Illuminate\Contracts\View\View
+	 * @return View
 	 */
 	public function delete(TastingSession $tastingSession) {
 		$this->authorize('delete-tastingsession', $tastingSession);
+		$this->checkCompetitionState($tastingSession->competition);
+		$this->checkTastingSessionLocked($tastingSession);
 
 		$this->shareCommonViewData($tastingSession->competition);
 		return $this->viewFactory->make('competition/tasting/tasting-session/delete')->with([
@@ -359,6 +366,8 @@ class TastingSessionController extends BaseController {
 	 */
 	public function destroy(TastingSession $tastingSession) {
 		$this->authorize('delete-tastingsession', $tastingSession);
+		$this->checkCompetitionState($tastingSession->competition);
+		$this->checkTastingSessionLocked($tastingSession);
 
 		$competition = $tastingSession->competition;
 		if (Input::get('del') == 'Ja') {

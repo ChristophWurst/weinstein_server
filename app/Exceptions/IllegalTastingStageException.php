@@ -19,15 +19,18 @@
  *
  */
 
-namespace App\Database\Repositories;
+namespace App\Exceptions;
 
-use App\Tasting\TastedWine;
-use App\Tasting\TastingNumber;
+use Exception;
 
-class TastedWineRepository {
+class IllegalTastingStageException extends Exception {
 
-	public function isTasted(TastingNumber $tastingNumber) {
-		return TastedWine::where('tastingnumber_id', $tastingNumber->id)->count() > 0;
+	public function __construct($tastingStage = null) {
+		if (is_null($tastingStage)) {
+			parent::__construct();
+		} else {
+			parent::__construct("invalid tasting stage <$tastingStage>");
+		}
 	}
 
 }
