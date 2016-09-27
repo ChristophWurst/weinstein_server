@@ -24,10 +24,9 @@ namespace App\Database\Repositories;
 use App\MasterData\Competition;
 use App\MasterData\User;
 use App\Wine;
-use Illuminate\Database\Eloquent\Collection as DbCollection;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Collection;
 
 class WineRepository {
 
@@ -64,7 +63,7 @@ class WineRepository {
 	 * @param User $user
 	 * @param Competition $competition
 	 * @param boolean $queryOnly
-	 * @return DbCollection|Builder
+	 * @return Collection|Builder
 	 */
 	public function findUsersWines(User $user, Competition $competition, $queryOnly = false) {
 		$query = $competition->wine_details()

@@ -219,7 +219,8 @@ class Handler implements TastingHandler {
 		$validator->setCompetition($competition);
 		$validator->validateCreate();
 
-		$data['nr'] = $competition->tastingsessions()->ofTastingStage($competition->getTastingStage())->max('nr') + 1;
+		$tastingStage = $competition->getTastingStage();
+		$data['nr'] = $competition->tastingsessions()->ofTastingStage($tastingStage)->max('nr') + 1;
 		$tastingSession = $this->tastingSessionRepository->create($data, $competition, $competition->getTastingStage());
 
 		$this->createCommissions($tastingSession, $data['commissions']);

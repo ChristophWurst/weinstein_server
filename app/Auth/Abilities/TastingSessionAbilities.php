@@ -64,7 +64,8 @@ class TastingSessionAbilities {
 	 * @return bool
 	 */
 	public function create(User $user, Competition $competition) {
-		return $this->checkTastingStage($competition);
+		return $competition->administrates($user)
+			&& $this->checkTastingStage($competition);
 	}
 
 	/**
@@ -73,7 +74,7 @@ class TastingSessionAbilities {
 	 * @return bool
 	 */
 	public function edit(User $user, TastingSession $tastingSession) {
-		return $this->isTastinSessionAdmin($user, $tastingSession)
+		return $tastingSession->competition->administrates($user)
 			&& $this->checkTastingStage($tastingSession->competition);
 	}
 

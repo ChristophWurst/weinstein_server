@@ -26,10 +26,9 @@ use App\MasterData\Competition;
 use App\MasterData\User;
 use App\Tasting\TastingStage;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection as DbCollection;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Support\Collection;
 
 /**
  * @property int $id
@@ -42,7 +41,7 @@ use Illuminate\Support\Collection;
  * @property int $nr
  * @property bool $locked
  * @property Collection $tasters
- * @property DbCollection $commissions
+ * @property Collection $commissions
  */
 class TastingSession extends Model implements AdministrateModel {
 
@@ -60,6 +59,7 @@ class TastingSession extends Model implements AdministrateModel {
 	 */
 	protected $fillable = [
 		'date',
+		'nr',
 		'competition_id',
 		'wuser_username',
 		'tastingstage_id',

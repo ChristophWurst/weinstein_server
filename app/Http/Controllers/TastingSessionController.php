@@ -236,7 +236,7 @@ class TastingSessionController extends BaseController {
 	 * @return Response
 	 */
 	public function update(TastingSession $tastingSession) {
-		$this->authorize('edit-tastingsession');
+		$this->authorize('edit-tastingsession', $tastingSession);
 		$this->checkCompetitionState($tastingSession->competition);
 		$this->checkTastingSessionLocked($tastingSession);
 

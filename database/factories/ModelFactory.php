@@ -8,6 +8,7 @@ use App\MasterData\CompetitionState;
 use App\MasterData\User;
 use App\MasterData\WineSort;
 use App\Tasting\TastingNumber;
+use App\Tasting\TastingSession;
 use App\Wine;
 use App\WineQuality;
 use Faker\Generator as FakeData;
@@ -127,8 +128,19 @@ $factory->define(TastingNumber::class,
 	return [
 		'tastingstage_id' => rand(1, 2),
 		'wine_id' => function() {
-			return factory(Wine::class)->create();
+			return factory(Wine::class)->create()->id;
 		},
 		'nr' => rand(1, 5000),
+	];
+});
+
+$factory->define(TastingSession::class, function() {
+	return [
+		'competition_id' => function() {
+			return factory(Competition::class)->create()->id;
+		},
+		'tastingstage_id' => rand(1, 2),
+		'nr' => rand(1, 100),
+		'locked' => false,
 	];
 });
