@@ -31,6 +31,7 @@ use App\Database\Repositories\TastingSessionRepository;
 use App\Database\Repositories\WineRepository;
 use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
+use App\MasterData\CompetitionState;
 use App\MasterData\User;
 use Exception;
 use Illuminate\Http\UploadedFile;
@@ -147,7 +148,12 @@ class Handler implements TastingHandler {
 		//competition's tasting stage is choosen by default
 		$tastingStage = $competition->getTastingStage();
 
-		return $this->tastingNumberRepository->create($data, $wine, $tastingStage);
+		$tastingNumber = $this->tastingNumberRepository->create($data, $wine, $tastingStage);
+		if ($competition->competition_state_id === CompetitionState::STATE_ENROLLMENT) {
+			$competition->competition_state_id = CompetitionState::STATE_TASTINGNUMBERS1;
+			$this->competitionRepository->update($competition);
+		}
+		return $tastingNumber;
 	}
 
 	public function importTastingNumbers(UploadedFile $file, Competition $competition) {
@@ -185,6 +191,10 @@ class Handler implements TastingHandler {
 			));
 			$messages->merge($ve->getErrors());
 			throw new ValidationException($messages);
+		}
+		if ($competition->competition_state_id === CompetitionState::STATE_ENROLLMENT) {
+			$competition->competition_state_id = CompetitionState::STATE_TASTINGNUMBERS1;
+			$this->competitionRepository->update($competition);
 		}
 		DB::commit();
 		//return number of read lines
@@ -334,7 +344,8 @@ class Handler implements TastingHandler {
 		}
 	}
 
-	public function updateTasting(array $data, TastingNumber $tastingNumber, TastingSession $tastingSession, Commission $commission) {
+	public function updateTasting(array $data, TastingNumber $tastingNumber, TastingSession $tastingSession,
+		Commission $commission) {
 		$validator = new TastingValidator($data, $tastingNumber);
 		$validator->setTastingSession($tastingSession);
 		$validator->setCommission($commission);
@@ -378,7 +389,7 @@ class Handler implements TastingHandler {
 		}
 		return $data;
 	}
-	
+
 	public function isTastingNumberTasted(TastingNumber $tastingNumber) {
 		return $this->tastingNumberRepository->isTasted($tastingNumber);
 	}

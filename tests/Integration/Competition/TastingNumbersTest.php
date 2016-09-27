@@ -45,6 +45,33 @@ class TastingNumbersTest extends TestCase {
 		$this->assertResponseOk();
 	}
 
+	public function testCompetitionStateIncreasesWhenFirstNumberIsAsssigned() {
+		$user = factory(User::class, 'admin')->create();
+		$competition = factory(Competition::class)->create([
+			'competition_state_id' => CompetitionState::STATE_ENROLLMENT,
+		]);
+		$wine = factory(Wine::class)->create([
+			'competition_id' => $competition->id,
+		]);
+		$tastingNumber = factory(TastingNumber::class)->make([
+			'wine_id' => $wine->id,
+		]);
+
+		$this->be($user);
+
+		$this->post('competition/' . $competition->id . '/numbers/assign',
+			[
+			'wine_nr' => $wine->nr,
+			'nr' => $tastingNumber->nr,
+		]);
+
+		$this->seeInDatabase('competition',
+			[
+			'id' => $competition->id,
+			'competition_state_id' => CompetitionState::STATE_TASTINGNUMBERS1,
+		]);
+	}
+
 	public function testAssignTastingNumber() {
 		$user = factory(User::class, 'admin')->create();
 		$competition = factory(Competition::class)->create([
@@ -131,9 +158,10 @@ class TastingNumbersTest extends TestCase {
 		$this->assertResponseOk();
 		$this->dontSee('Zuweisung abschl');
 
-		factory(TastingNumber::class)->create([
-			'wine_id' => $wine->id,
-			'tastingstage_id' => 1,
+		$this->post('competition/' . $competition->id . '/numbers/assign',
+			[
+			'wine_nr' => $wine->nr,
+			'nr' => 1
 		]);
 
 		$this->get('competition/' . $competition->id . '/numbers');
