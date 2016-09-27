@@ -137,7 +137,8 @@ class TastingSessionTest extends TestCase {
 		$this->assertResponseOk();
 		$this->get('competition/' . $competition->id . '/sessions/add');
 		$this->assertResponseOk();
-		$this->post('competition/' . $competition->id . '/sessions/add', [
+		$this->post('competition/' . $competition->id . '/sessions/add',
+			[
 			'commissions' => 2,
 			'wuser_username' => 'none',
 		]);
@@ -145,12 +146,13 @@ class TastingSessionTest extends TestCase {
 		$this->assertRedirectedTo('session/' . $session1->id);
 		$this->get('session/' . $session1->id);
 		$this->see('1. Sitzung');
-		
+
 		$this->get('competition/' . $competition->id . '/sessions');
 		$this->assertResponseOk();
 		$this->get('competition/' . $competition->id . '/sessions/add');
 		$this->assertResponseOk();
-		$this->post('competition/' . $competition->id . '/sessions/add', [
+		$this->post('competition/' . $competition->id . '/sessions/add',
+			[
 			'commissions' => 1,
 			'wuser_username' => 'none',
 		]);
@@ -158,6 +160,40 @@ class TastingSessionTest extends TestCase {
 		$this->assertRedirectedTo('session/' . $session2->id);
 		$this->get('session/' . $session2->id);
 		$this->see('2. Sitzung');
+	}
+
+	public function testEditTastingSession() {
+		$user = factory(User::class)->create();
+		$competition = factory(Competition::class)->create([
+			'competition_state_id' => CompetitionState::STATE_TASTING1,
+			'wuser_username' => $user->username,
+		]);
+		$tastingSession = factory(TastingSession::class)->create([
+			'competition_id' => $competition->id,
+		]);
+
+		$this->be($user);
+		$this->get('competition/' . $competition->id . '/sessions');
+		$this->assertResponseOk();
+		$this->get('session/' . $tastingSession->id);
+		$this->assertResponseOk();
+		$this->get('session/' . $tastingSession->id . '/edit');
+		$this->assertResponseOk();
+
+		// First, let's submit invalid values
+		$this->post('session/' . $tastingSession->id . '/edit', [
+			'wuser_username' => 'dontexist',
+		]);
+		$this->assertRedirectedTo('session/' . $tastingSession->id . '/edit');
+		$this->get('session/' . $tastingSession->id . '/edit');
+		$this->see('Fehler!');
+
+		// Second, with valid data again
+		$this->post('session/' . $tastingSession->id . '/edit', [
+			'wuser_username' => 'none',
+		]);
+		$this->assertRedirectedTo('session/' . $tastingSession->id);
+		$this->get('session/' . $tastingSession->id);
 	}
 
 }
