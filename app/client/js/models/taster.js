@@ -1,4 +1,4 @@
-<?php
+/* global Backbone */
 
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
@@ -19,34 +19,21 @@
  *
  */
 
-namespace App\Database\Repositories;
+var Weinstein = Weinstein || {};
 
-use App\Tasting\Commission;
-use App\Tasting\Taster;
-use App\Tasting\TastingSession;
+(function (Weinstein, Backbone) {
+	'use strict';
 
-class TasterRepository {
+	Weinstein.Models = Weinstein.Models || {};
 
-	public function find($id) {
-		return Taster::find($id);
-	}
+	Weinstein.Models.Taster = Backbone.Model.extend({
+		defaults: {
+			name: ''
+		}
+	});
 
-	public function findForTastingSession(TastingSession $tastingSession) {
-		return $tastingSession->tasters;
-	}
+	Weinstein.Models.TasterCollection = Backbone.Collection.extend({
+		model: Weinstein.Models.Taster
+	});
 
-	/**
-	 * @param Commission $commission
-	 */
-	public function create($data, Commission $commission) {
-		$taster = new Taster($data);
-		$taster->commission()->associate($commission);
-		$taster->save();
-		return $taster;
-	}
-
-	public function getActive(Commission $commission) {
-		return $commission->tasters()->active()->get();
-	}
-
-}
+})(Weinstein, Backbone);

@@ -8,6 +8,7 @@ use App\MasterData\CompetitionState;
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Weinstein</title>
         <link rel="icon" type="image/png" href="{!! asset('favicon.png') !!}">
         <link rel="apple-touch-icon" href="{!! asset('favicon_high.png') !!}" />
@@ -172,15 +173,21 @@ use App\MasterData\CompetitionState;
 
         <script src="{!! asset('js/vendor/jquery/dist/jquery.min.js') !!}"></script>
         <script src="{!! asset('js/vendor/bootstrap/dist/js/bootstrap.min.js') !!}"></script>
+		<script src="{!! asset('js/vendor/underscore/underscore.js') !!}"></script>
+		<script src="{!! asset('js/vendor/handlebars/handlebars.min.js') !!}"></script>
+		<script src="{!! asset('js/vendor/backbone/backbone.js') !!}"></script>
+		<script src="{!! asset('js/vendor/backbone.radio/build/backbone.radio.js') !!}"></script>
+		<script src="{!! asset('js/vendor/backbone.marionette/lib/backbone.marionette.js') !!}"></script>
         <script src="{!! asset('js/vendor/select2/dist/js/select2.min.js') !!}"></script>
         <script src="{!! asset('js/select2_locale_de.js') !!}"></script>
         <script src="{!! asset('js/weinstein.js') !!}"></script>
 
         <script>
-            var _token = '<?php echo csrf_token(); ?>';
-            $(document).on('ajaxSend',function(elm, xhr) {
-                xhr.setRequestHeader('X-CSRF-TOKEN', _token);
-            });
+			$(function(){ 
+				$.ajaxSetup({
+					headers: {'X-CSRF-TOKEN': '<?php echo csrf_token(); ?>'}
+				});
+			});
             @yield('script')
         </script>
     </body>

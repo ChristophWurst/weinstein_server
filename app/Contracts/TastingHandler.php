@@ -151,10 +151,10 @@ interface TastingHandler {
 	 * Add a new taster
 	 * 
 	 * @param array $data
-	 * @param TastingSession $tastingSession
+	 * @param Commission $commission
 	 * @return Taster
 	 */
-	public function addTasterToTastingSession(array $data, TastingSession $tastingSession);
+	public function addTasterToCommission(array $data, Commission $commission);
 
 	/**
 	 * @param TastingSession $tastingSession

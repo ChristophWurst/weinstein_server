@@ -53,19 +53,8 @@
             </div>
             <div class="panel-body container-fluid">
                 @foreach ($data->commissions as $commission)
-                <div class="col-md-6">
-                    <h3>Kommission {!! strtoupper($commission->side) !!}</h3>
-                    <ol id="commission{!! strtoupper($commission->side) !!}">
-                    </ol>
-                    @if (!$data->locked)
-                    <div class="input-group">
-                        {!! Form::text('name', '', array('class' => 'form-control', 'id' => 'input_comm' . strtoupper($commission->side))) !!}
-                        <span class="input-group-btn ">
-                            <button id="{!! 'btn_comm' . strtoupper($commission->side) !!}" class="btn btn-default" type="submit"><span class="glyphicon glyphicon-plus"></span></button>
-                        </span>
-                    </div>
-                    @endif
-                </div>
+                <div id="tasters-{{ $commission->side }}"
+					 class="col-md-6"></div>
                 @endforeach
             </div>
         </div>
@@ -165,17 +154,13 @@ $(function() {
 
 @foreach ($data->commissions as $commission)
 $(function() {
-    new tasterForm({
-        'updateUrl' : '{!! route('tasting.session/addtaster', array('tastingsession' => $data->id)) !!}',
-        'tastersUrl' : '{!! route('tasting.session/tasters', array('tastingsession' => $data->id, 'commission' => $commission->id)) !!}',
-        'commissionId' : {{ $commission->id }},
-        'button' : '{!! 'btn_comm' . strtoupper($commission->side) !!}',
-        'input' : '{!! 'input_comm' . strtoupper($commission->side) !!}',
-        'list' : '{!! 'commission' . strtoupper($commission->side) !!}',
-        'error_elem' : 'tasters_error',
-        'error_list' : 'tasters_error_list',
-        'locked' : {!! $data->locked !!}
-    });
+    var tv = new Weinstein.Views.TastersView({
+		el: '#tasters-{{ $commission->side }}',
+		side: '{{ $commission->side }}',
+		locked: {{ $commission->locked ? 'true' : 'false' }},
+		url : '{!! route('commissions.{commission}.tasters.index', array('commission' => $commission->id)) !!}'
+	});
+	tv.render();
 });
 @endforeach
 

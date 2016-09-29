@@ -296,16 +296,6 @@ Route::group(array('middleware' => 'auth'), function() {
 		Route::post('edit', array(
 			'uses' => 'TastingSessionController@update'
 		));
-		Route::get('commission/{commission}/tasters', array(
-			'uses' => 'TastingSessionController@tasters',
-			'before' => 'ajax',
-			'as' => 'tasting.session/tasters',
-		));
-		Route::post('addtaster', array(
-			'uses' => 'TastingSessionController@addTaster',
-			'before' => 'ajax',
-			'as' => 'tasting.session/addtaster',
-		));
 		Route::get('complete', array(
 			'as' => 'tasting.sessions/complete',
 			'uses' => 'TastingSessionController@complete'
@@ -350,6 +340,18 @@ Route::group(array('middleware' => 'auth'), function() {
 				'uses' => 'TastingController@update'
 			));
 		});
+	});
+	/**
+	 * Commission
+	 */
+	Route::group(array('prefix' => 'commissions/{commission}'), function() {
+		Route::resource('tasters', 'TasterController', [
+			'only' => [
+				'index',
+				'store',
+				'update',
+			],
+		]);
 	});
 });
 

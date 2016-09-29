@@ -255,46 +255,6 @@ class TastingSessionController extends BaseController {
 		return Redirect::route('tasting.session/show', ['tastingsession' => $tastingSession->id]);
 	}
 
-	/**
-	 * 
-	 * @param TastingSession $tastingSession
-	 * @param Commission $commission
-	 * @return JsonResponse
-	 */
-	public function tasters(TastingSession $tastingSession, Commission $commission) {
-		$this->authorize('list-tastingsession-tasters');
-		$this->checkCompetitionState($tastingSession->competition);
-
-		return Response::json($commission->tasters->toArray());
-	}
-
-	/**
-	 * Add a new taster
-	 * 
-	 * @param TastingSession $tastingSession
-	 */
-	public function addTaster(TastingSession $tastingSession) {
-		$this->authorize('add-tastingsession-taster', $tastingSession);
-		$this->checkCompetitionState($tastingSession->competition);
-		$this->checkTastingSessionLocked($tastingSession);
-
-		try {
-			$data = Input::all();
-			$this->tastingHandler->addTasterToTastingSession($data, $tastingSession);
-		} catch (ValidationException $ve) {
-			return Response::json([
-					'valid' => false,
-					'errors' => $ve->getErrors()->getMessages(),
-			]);
-		}
-		$commission = Commission::find($data['commission_id']);
-		$tasters = $commission->tasters()->orderBy('nr')->get()->toArray();
-		return Response::json([
-				'valid' => true,
-				'tasters' => $tasters,
-		]);
-	}
-
 	public function statistics(TastingSession $tastingSession) {
 		$this->authorize('show-tastingsession-statistics', $tastingSession);
 		$this->checkCompetitionState($tastingSession->competition);

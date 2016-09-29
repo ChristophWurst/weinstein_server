@@ -277,12 +277,10 @@ class Handler implements TastingHandler {
 		$this->tastingSessionRepository->delete($tastingSession);
 	}
 
-	public function addTasterToTastingSession(array $data, TastingSession $tastingSession) {
+	public function addTasterToCommission(array $data, Commission $commission) {
 		$validator = new TasterValidator($data);
-		$validator->setTastingSession($tastingSession);
+		$validator->setTastingSession($commission->tastingSession);
 		$validator->validateCreate();
-
-		$commission = $this->commissionRepository->find($data['commission_id']);
 
 		if ($commission->tasters()->orderBy('nr', 'desc')->first()) {
 			//commission has existing tasters
