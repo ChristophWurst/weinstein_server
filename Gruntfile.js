@@ -45,11 +45,22 @@ module.exports = function (grunt) {
 		watch: {
 			uglify: {
 				files: [
-					'app/client/js/**/*.js'
+					'app/client/js/[!tests]**/*.js'
 				],
 				tasks: [
 					'uglify'
 				]
+			}
+		},
+		karma: {
+			unit: {
+				configFile: 'karma.conf.js',
+				autoWatch: true
+			},
+			continuous: {
+				configFile: 'karma.conf.js',
+				browsers: ['PhantomJS'],
+				singleRun: true,
 			}
 		}
 	});
@@ -57,6 +68,9 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+
+	// Karma unit tests
+	grunt.loadNpmTasks('grunt-karma');
 
 	grunt.registerTask('dev', ['watch']);
 	grunt.registerTask('default', ['uglify', 'less']);
