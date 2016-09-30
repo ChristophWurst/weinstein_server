@@ -28,6 +28,7 @@ var Weinstein = Weinstein || {};
 
 	Weinstein.Models.Taster = Backbone.Model.extend({
 		defaults: {
+			active: true,
 			name: ''
 		}
 	});

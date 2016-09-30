@@ -81,7 +81,7 @@ class TasterController extends BaseController {
 		$competition = $tastingSession->competition;
 		$this->checkCompetitionState($competition);
 
-		$data = $request->only(['name']);
+		$data = $request->only(['active', 'name']);
 
 		try {
 			$taster = $this->handler->updateTaster($taster, $data);

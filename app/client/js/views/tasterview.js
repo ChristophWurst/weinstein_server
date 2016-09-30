@@ -28,9 +28,16 @@ var Weinstein = Weinstein || {};
 
 	var TASTER_TEMPLATE = ''
 		+ '{{#if editing}}'
-		+ '<input value={{name}} type="text"></input>'
+		+ '	<input value={{name}} type="text"></input>'
 		+ '{{else}}'
-		+ '<span>{{name}}</span>'
+		+ '	{{#unless active}}'
+		+ '		<s>'
+		+ '	{{/unless}}'
+		+ '	<span>{{name}}</span>'
+		+ '	{{#unless active}}'
+		+ '		<s>'
+		+ '	{{/unless}}'
+		+ '	<span class="disable glyphicon glyphicon-{{#if active}}remove{{else}}ok{{/if}}"></span>'
 		+ '{{/if}}';
 
 	var TASTERS_TEMPLATE = ''
@@ -51,12 +58,14 @@ var Weinstein = Weinstein || {};
 		editing: false,
 		ui: {
 			text: 'span',
-			input: 'input'
+			input: 'input',
+			disable: 'span.disable'
 		},
 		events: {
 			'dblclick @ui.text': '_onDoubleClick',
 			'keyup @ui.input': '_onInputKeyUp',
-			'focusout @ui.input': '_onInputFocusOut'
+			'focusout @ui.input': '_onInputFocusOut',
+			'click @ui.disable': '_onDisableTaster'
 		},
 		templateContext: function () {
 			return {
@@ -97,6 +106,15 @@ var Weinstein = Weinstein || {};
 		_onInputFocusOut: function () {
 			this.editing = false;
 			this.render();
+		},
+		_onDisableTaster: function() {
+			this.model.save({
+				active: !this.model.get('active')
+			}, {
+				wait: true,
+				success: _.bind(this._onUpdateSuccess, this),
+				error: _.bind(this._onUpdateError, this)
+			});
 		},
 		_onUpdateSuccess: function () {
 			this.editing = false;
