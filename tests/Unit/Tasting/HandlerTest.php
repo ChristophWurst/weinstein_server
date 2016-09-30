@@ -362,7 +362,7 @@ class HandlerTest extends TestCase {
 			->method('findForTastingSession')
 			->with($tastingSession);
 
-		$this->handler->getTastingSessionTasters($tastingSession);
+		$this->handler->getCommissionTasters($tastingSession);
 	}
 
 	public function testCreateTasting() {

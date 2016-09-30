@@ -8,6 +8,7 @@ use App\MasterData\Competition;
 use App\MasterData\User;
 use App\MasterData\WineSort;
 use App\Tasting\Commission;
+use App\Tasting\Taster;
 use App\Tasting\TastingNumber;
 use App\Tasting\TastingSession;
 use App\Wine;
@@ -42,6 +43,7 @@ class RouteServiceProvider extends ServiceProvider {
 		$router->model('commission', Commission::class);
 		$router->model('association', Association::class);
 		$router->model('competition', Competition::class);
+		$router->model('tasters', Taster::class);
 		$router->model('tastingnumber', TastingNumber::class);
 		$router->model('tastingsession', TastingSession::class);
 		$router->model('user', User::class);

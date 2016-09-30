@@ -154,13 +154,20 @@ interface TastingHandler {
 	 * @param Commission $commission
 	 * @return Taster
 	 */
-	public function addTasterToCommission(array $data, Commission $commission);
+	public function createTaster(array $data);
 
 	/**
-	 * @param TastingSession $tastingSession
+	 * @param Commission $commission
 	 * @return Collection
 	 */
-	public function getTastingSessionTasters(TastingSession $tastingSession);
+	public function getCommissionTasters(Commission $commission);
+
+	/**
+	 * @param Taster $taster
+	 * @param array $data
+	 * @return Taster
+	 */
+	public function updateTaster(Taster $taster, array $data);
 
 	/**
 	 * @param array $data

@@ -27,11 +27,6 @@ use Exception;
 class TasterValidator extends Validator {
 
 	/**
-	 * @var TastingSession
-	 */
-	private $tastingSession = null;
-
-	/**
 	 * Models class name
 	 *
 	 * @var array
@@ -45,6 +40,7 @@ class TasterValidator extends Validator {
 	 */
 	protected function getAttributeNames() {
 		return array(
+			'commission_id' => 'Kommission',
 			'name' => 'Name',
 		);
 	}
@@ -56,21 +52,10 @@ class TasterValidator extends Validator {
 	 * @return array
 	 */
 	protected function getCreateRules(array $data) {
-		if (is_null($this->tastingSession)) {
-			throw new Exception('TastingSession needed');
-		}
 		return array(
+			'commission_id' => 'required|exists:commission,id',
 			'name' => 'required|min:1|max:70',
 		);
-	}
-
-	/**
-	 * Set tasting session to create rules for
-	 * 
-	 * @param TastingSession $tastingSession
-	 */
-	public function setTastingSession(TastingSession $tastingSession) {
-		$this->tastingSession = $tastingSession;
 	}
 
 }

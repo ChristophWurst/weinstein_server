@@ -63,7 +63,7 @@ var Weinstein = Weinstein || {};
 				editing: this.editing
 			};
 		},
-		initialize: function(options) {
+		initialize: function (options) {
 			this.locked = options.locked;
 		},
 		_onDoubleClick: function () {
@@ -94,7 +94,7 @@ var Weinstein = Weinstein || {};
 				});
 			}
 		},
-		_onInputFocusOut: function() {
+		_onInputFocusOut: function () {
 			this.editing = false;
 			this.render();
 		},
@@ -113,18 +113,19 @@ var Weinstein = Weinstein || {};
 		tagName: 'ol',
 		locked: false,
 		childView: Weinstein.Views.TasterListItemView,
-		childViewOptions: function() {
+		childViewOptions: function () {
 			return {
 				locked: this.locked
 			};
 		},
-		initialize: function(options) {
+		initialize: function (options) {
 			this.locked = options.locked;
 		}
 	});
 
 	Weinstein.Views.TastersView = Marionette.View.extend({
 		template: Handlebars.compile(TASTERS_TEMPLATE),
+		commissionId: undefined,
 		regions: {
 			tasters: {
 				el: 'ol',
@@ -150,15 +151,21 @@ var Weinstein = Weinstein || {};
 		},
 		initialize: function (options) {
 			this.collection = options.collection || new Weinstein.Models.TasterCollection();
+			this.collection.url = options.url;
+			this.commissionId = options.commissionId;
 			this.side = options.side || '';
 			this.locked = options.locked || false;
-			this.collection.url = options.url;
 		},
 		onRender: function () {
 			this.showChildView('tasters', new Weinstein.Views.TasterListView({
-				collection: this.collection
+				collection: this.collection,
+				commissionId: this.commissionId
 			}));
-			this.collection.fetch();
+			this.collection.fetch({
+				data: {
+					commission_id: this.commissionId
+				}
+			});
 		},
 		_onNewTasterNameKeyPress: function (event) {
 			if (event.keyCode === 13) {
@@ -169,10 +176,26 @@ var Weinstein = Weinstein || {};
 			event.preventDefault();
 
 			var input = this.getUI('newTasterName');
+			var btn = this.getUI('addTasterBtn');
+
+			input.prop('disabled', true);
+			btn.prop('disabled', true);
 
 			this.collection.create({
-				name: input.val()
+				name: input.val(),
+				commission_id: this.commissionId
+			}, {
+				wait: true,
+				complete: this._onCreateComplete,
+				context: this
 			});
+		},
+		_onCreateComplete: function () {
+			var input = this.getUI('newTasterName');
+			var btn = this.getUI('addTasterBtn');
+
+			input.prop('disabled', false);
+			btn.prop('disabled', false);
 
 			input.val('');
 			input.focus();

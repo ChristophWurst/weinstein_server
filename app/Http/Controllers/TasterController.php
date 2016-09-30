@@ -8,6 +8,7 @@ use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\Tasting\Commission;
+use App\Tasting\Taster;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use function response;
@@ -33,8 +34,15 @@ class TasterController extends BaseController {
 	 *
 	 * @return Response
 	 */
-	public function index(Commission $commission) {
+	public function index(Request $request) {
 		$this->authorize('list-tastingsession-tasters');
+
+		$commission_id = $request->get('commission_id');
+		$commission = Commission::find($commission_id);
+		if (is_null($commission)) {
+			return response()->json([], 400);
+		}
+
 		$this->checkCompetitionState($commission->tastingSession->competition);
 
 		return response()->json($commission->tasters);
@@ -46,31 +54,43 @@ class TasterController extends BaseController {
 	 * @param  Request  $request
 	 * @return Response
 	 */
-	public function store(Request $request, Commission $commission) {
-		$this->authorize('list-tastingsession-tasters');
-		$this->checkCompetitionState($commission->tastingSession->competition);
-	
-		$data = $request->only(['name']);
+	public function store(Request $request) {
+		$this->authorize('create-tasters');
+
+		$data = $request->only(['name', 'commission_id']);
 
 		try {
-			$taster = $this->handler->addTasterToCommission($data, $commission);
+			$taster = $this->handler->createTaster($data);
 		} catch (ValidationException $ve) {
 			return response()->json([
-				'errors' => $ve->getErrors(),
-			], 422);
+					'errors' => $ve->getErrors(),
+					], 422);
 		}
 		return response()->json($taster);
 	}
 
 	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  Request  $request
-	 * @param  int  $id
+	 * @param Request $request
+	 * @param Taster $taster
 	 * @return Response
 	 */
-	public function update(Request $request, $id) {
-		//
+	public function update(Request $request, Taster $taster) {
+		$this->authorize('list-tastingsession-tasters');
+		$commission = $taster->commission;
+		$tastingSession = $commission->tastingSession;
+		$competition = $tastingSession->competition;
+		$this->checkCompetitionState($competition);
+
+		$data = $request->only(['name']);
+
+		try {
+			$taster = $this->handler->updateTaster($taster, $data);
+		} catch (ValidationException $ve) {
+			return response()->json([
+					'errors' => $ve->getErrors(),
+					], 422);
+		}
+		return response()->json($taster);
 	}
 
 }

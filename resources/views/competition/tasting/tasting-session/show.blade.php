@@ -158,7 +158,8 @@ $(function() {
 		el: '#tasters-{{ $commission->side }}',
 		side: '{{ $commission->side }}',
 		locked: {{ $commission->locked ? 'true' : 'false' }},
-		url : '{!! route('commissions.{commission}.tasters.index', array('commission' => $commission->id)) !!}'
+		url : '{!! route('tasters.index') !!}',
+		commissionId: {{ $commission->id }}
 	});
 	tv.render();
 });

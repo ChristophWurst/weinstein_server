@@ -31,8 +31,8 @@ class TasterRepository {
 		return Taster::find($id);
 	}
 
-	public function findForTastingSession(TastingSession $tastingSession) {
-		return $tastingSession->tasters;
+	public function findForCommission(Commission $commission) {
+		return $commission->tasters;
 	}
 
 	/**
@@ -47,6 +47,10 @@ class TasterRepository {
 
 	public function getActive(Commission $commission) {
 		return $commission->tasters()->active()->get();
+	}
+
+	public function update(Taster $taster, array $data) {
+		$taster->update($data);
 	}
 
 }

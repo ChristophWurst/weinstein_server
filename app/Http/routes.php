@@ -341,18 +341,13 @@ Route::group(array('middleware' => 'auth'), function() {
 			));
 		});
 	});
-	/**
-	 * Commission
-	 */
-	Route::group(array('prefix' => 'commissions/{commission}'), function() {
-		Route::resource('tasters', 'TasterController', [
-			'only' => [
-				'index',
-				'store',
-				'update',
-			],
-		]);
-	});
+	Route::resource('tasters', 'TasterController', [
+		'only' => [
+			'index',
+			'store',
+			'update',
+		],
+	]);
 });
 
 /*
