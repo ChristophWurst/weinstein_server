@@ -17,7 +17,7 @@ matrix:
 
 before_script:
     - npm install
-    - bower install
+    - ./node_modules/bower/bin/bower install
 
     - composer install
 
