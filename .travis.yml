@@ -16,6 +16,9 @@ matrix:
     fast_finish: true
 
 before_script:
+    - npm install
+    - bower install
+
     - composer install
 
     # Set up DB
@@ -29,6 +32,8 @@ before_script:
     - cat .env
 
 script:
+    - grunt
+
     # Check PHP syntax
     - find . -name \*.php -not -path './vendor/*' -exec php -l "{}" \;
 

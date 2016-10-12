@@ -73,5 +73,5 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-karma');
 
 	grunt.registerTask('dev', ['watch']);
-	grunt.registerTask('default', ['uglify', 'less']);
+	grunt.registerTask('default', ['uglify', 'less', 'karma:continuous']);
 };
