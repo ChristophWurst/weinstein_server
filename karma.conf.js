@@ -10,7 +10,12 @@ module.exports = function(config) {
 		// list of files / patterns to load in the browser
 		files: [
 			'public/js/vendor/jquery/dist/jquery.js',
-			{pattern: 'app/client/js/**/*.js', included: false},
+			'public/js/vendor/underscore/underscore.js',
+			'public/js/vendor/backbone/backbone.js',
+			'public/js/vendor/backbone.radio/build/backbone.radio.js',
+			'public/js/vendor/backbone.marionette/lib/backbone.marionette.js',
+			'public/js/vendor/handlebars/handlebars.js',
+			{pattern: 'app/client/js/**/*.js', included: true},
 			{pattern: 'app/client/js/tests/**/*.js', included: true}
 		],
 

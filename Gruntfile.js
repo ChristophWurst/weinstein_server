@@ -25,12 +25,22 @@ module.exports = function (grunt) {
 			options: {
 				sourceMap: true
 			},
-			my_targets: {
-				files: {
-					'public/js/weinstein.js': [
-						'app/client/js/**/*.js'
-					]
-				}
+			build: {
+				src: [
+					'app/client/js/**/*.js',
+					'!app/client/js/tests/**/*.js'
+				],
+				dest: 'public/js/weinstein.js'
+			}
+		},
+		watch: {
+			uglify: {
+				files: [
+					'<%= uglify.build.src %>'
+				],
+				tasks: [
+					'uglify'
+				]
 			}
 		},
 		less: {
@@ -40,16 +50,6 @@ module.exports = function (grunt) {
 					'public/css/bootstrap.css': 'app/client/less/bootstrap.less',
 					'public/css/bootstrap-theme.css': 'app/client/less/theme.less'
 				}
-			}
-		},
-		watch: {
-			uglify: {
-				files: [
-					'app/client/js/[!tests]**/*.js'
-				],
-				tasks: [
-					'uglify'
-				]
 			}
 		},
 		karma: {
@@ -73,5 +73,5 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-karma');
 
 	grunt.registerTask('dev', ['watch']);
-	grunt.registerTask('default', ['uglify', 'less']);
+	grunt.registerTask('default', ['uglify', 'less', 'karma:continuous']);
 };

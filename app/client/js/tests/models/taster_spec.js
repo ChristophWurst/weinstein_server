@@ -17,8 +17,15 @@
  *
  */
 
-describe('test', function() {
-	it('should never ever fail', function() {
-		expect('true words').toBe('true words');
+describe('Taster', function() {
+	var taster;
+	
+	beforeEach(function() {
+		taster = new Weinstein.Models.Taster();
+	});
+	
+	it('has default values',function() {
+		expect(taster.get('active')).toBe(true);
+		expect(taster.get('name')).toBe('');
 	});
 });

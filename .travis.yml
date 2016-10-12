@@ -10,12 +10,17 @@ addons:
 
 cache:
     directories:
-      - "$HOME/.composer/cache/files"
+    - "$HOME/.composer/cache/files"
+    - "$HOME/.npm"
+    - "$HOME/.cache/bower"
 
 matrix:
     fast_finish: true
 
 before_script:
+    - npm install
+    - ./node_modules/bower/bin/bower install
+
     - composer install
 
     # Set up DB
@@ -29,6 +34,8 @@ before_script:
     - cat .env
 
 script:
+    - grunt
+
     # Check PHP syntax
     - find . -name \*.php -not -path './vendor/*' -exec php -l "{}" \;
 
