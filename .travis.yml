@@ -10,7 +10,9 @@ addons:
 
 cache:
     directories:
-      - "$HOME/.composer/cache/files"
+    - "$HOME/.composer/cache/files"
+    - "$HOME/.npm"
+    - "$HOME/.cache/bower"
 
 matrix:
     fast_finish: true
