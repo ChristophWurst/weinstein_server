@@ -28,7 +28,7 @@ module.exports = function (grunt) {
 			my_targets: {
 				files: {
 					'public/js/weinstein.js': [
-						'app/client/js/**/*.js'
+						'app/client/js/[!tests]**/*.js'
 					]
 				}
 			}
