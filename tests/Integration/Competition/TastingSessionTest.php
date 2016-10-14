@@ -25,12 +25,13 @@ use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\MasterData\User;
 use App\Tasting\TastingSession;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Test\TestCase;
 use function factory;
 
 class TastingSessionTest extends TestCase {
 
-	use \Illuminate\Foundation\Testing\DatabaseTransactions;
+	use DatabaseTransactions;
 
 	public function anonymousPermissionsData() {
 		return [

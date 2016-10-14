@@ -7,6 +7,8 @@ use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\MasterData\User;
 use App\MasterData\WineSort;
+use App\Tasting\Commission;
+use App\Tasting\Taster;
 use App\Tasting\TastingNumber;
 use App\Tasting\TastingSession;
 use App\Wine;
@@ -142,5 +144,25 @@ $factory->define(TastingSession::class, function() {
 		'tastingstage_id' => rand(1, 2),
 		'nr' => rand(1, 100),
 		'locked' => false,
+	];
+});
+
+$factory->define(Commission::class, function() {
+	return [
+		'tastingsession_id' => function() {
+			return factory(TastingSession::class)->create()->id;
+		},
+		'side' => 'a'
+	];
+});
+
+$factory->define(Taster::class, function() {
+	return [
+		'commission_id' => function() {
+			return factory(Commission::class)->create()->id;
+		},
+		'nr' => rand(1, 1000),
+		'name' => str_random(10),
+		'active' => true,
 	];
 });

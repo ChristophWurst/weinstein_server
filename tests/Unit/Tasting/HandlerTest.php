@@ -356,13 +356,13 @@ class HandlerTest extends TestCase {
 	}
 
 	public function testGetTastingSessionTasters() {
-		$tastingSession = new TastingSession();
+		$commission = new Commission();
 
 		$this->tasterRepository->expects($this->once())
-			->method('findForTastingSession')
-			->with($tastingSession);
+			->method('findForCommission')
+			->with($commission);
 
-		$this->handler->getCommissionTasters($tastingSession);
+		$this->handler->getCommissionTasters($commission);
 	}
 
 	public function testCreateTasting() {

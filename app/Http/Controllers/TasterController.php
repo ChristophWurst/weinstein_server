@@ -35,13 +35,14 @@ class TasterController extends BaseController {
 	 * @return Response
 	 */
 	public function index(Request $request) {
-		$this->authorize('list-tastingsession-tasters');
-
 		$commission_id = $request->get('commission_id');
 		$commission = Commission::find($commission_id);
 		if (is_null($commission)) {
 			return response()->json([], 400);
 		}
+
+		$tastingSession = $commission->tastingSession;
+		$this->authorize('list-tastingsession-tasters', $tastingSession);
 
 		$this->checkCompetitionState($commission->tastingSession->competition);
 
@@ -55,7 +56,14 @@ class TasterController extends BaseController {
 	 * @return Response
 	 */
 	public function store(Request $request) {
-		$this->authorize('create-tasters');
+		$commission_id = $request->get('commission_id');
+		$commission = Commission::find($commission_id);
+		if (is_null($commission)) {
+			return response()->json([], 400);
+		}
+
+		$tastingSession = $commission->tastingSession;
+		$this->authorize('add-tastingsession-taster', $tastingSession);
 
 		$data = $request->only(['name', 'commission_id']);
 
@@ -75,7 +83,7 @@ class TasterController extends BaseController {
 	 * @return Response
 	 */
 	public function update(Request $request, Taster $taster) {
-		$this->authorize('list-tastingsession-tasters');
+		$this->authorize('edit-tastingsession-taster');
 		$commission = $taster->commission;
 		$tastingSession = $commission->tastingSession;
 		$competition = $tastingSession->competition;
