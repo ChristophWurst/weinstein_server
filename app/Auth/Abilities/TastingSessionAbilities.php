@@ -24,6 +24,7 @@ namespace App\Auth\Abilities;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\MasterData\User;
+use App\Tasting\Taster;
 use App\Tasting\TastingSession;
 
 /**
@@ -104,6 +105,17 @@ class TastingSessionAbilities {
 	 * @return bool
 	 */
 	public function addTaster(User $user, TastingSession $tastingSession) {
+		return $this->isTastinSessionAdmin($user, $tastingSession)
+			&& $this->checkTastingStage($tastingSession->competition);
+	}
+
+	/**
+	 * @param User $user
+	 * @param Taster $taster
+	 * @return bool
+	 */
+	public function editTaster(User $user, Taster $taster) {
+		$tastingSession = $taster->commission->tastingSession;
 		return $this->isTastinSessionAdmin($user, $tastingSession)
 			&& $this->checkTastingStage($tastingSession->competition);
 	}

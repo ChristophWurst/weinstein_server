@@ -22,13 +22,6 @@ class TasterController extends BaseController {
 		$this->handler = $handler;
 	}
 
-	private function checkCompetitionState(Competition $competition) {
-		// TODO: might make sense to move to BL layer
-		if (!$competition->competitionState->is(CompetitionState::STATE_TASTING1) || !$competition->competitionState->is(CompetitionState::STATE_TASTING1)) {
-			throw new IllegalTastingStageException();
-		}
-	}
-
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -43,8 +36,6 @@ class TasterController extends BaseController {
 
 		$tastingSession = $commission->tastingSession;
 		$this->authorize('list-tastingsession-tasters', $tastingSession);
-
-		$this->checkCompetitionState($commission->tastingSession->competition);
 
 		return response()->json($commission->tasters);
 	}
@@ -83,11 +74,7 @@ class TasterController extends BaseController {
 	 * @return Response
 	 */
 	public function update(Request $request, Taster $taster) {
-		$this->authorize('edit-tastingsession-taster');
-		$commission = $taster->commission;
-		$tastingSession = $commission->tastingSession;
-		$competition = $tastingSession->competition;
-		$this->checkCompetitionState($competition);
+		$this->authorize('edit-tastingsession-taster', $taster);
 
 		$data = $request->only(['active', 'name']);
 

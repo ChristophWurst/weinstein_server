@@ -159,4 +159,70 @@ class TasterTest extends TestCase {
 		$this->assertResponseStatus(400);
 	}
 
+	public function testUpdateTaster() {
+		$user = factory(User::class)->create();
+		$competition = factory(Competition::class)->create([
+			'competition_state_id' => CompetitionState::STATE_TASTING1,
+		]);
+		$tastingSession = factory(TastingSession::class)->create([
+			'competition_id' => $competition->id,
+			'wuser_username' => $user->username,
+		]);
+		$commission = factory(Commission::class)->create([
+			'tastingsession_id' => $tastingSession->id,
+		]);
+		$taster = factory(Taster::class)->create([
+			'commission_id' => $commission->id,
+		]);
+
+		$this->be($user);
+		$this->put('tasters/' . $taster->id, [
+			'name' => 'name2',
+			'active' => false,
+		]);
+		$this->assertResponseOk();
+		$this->assertJson($this->response->getContent());
+		$this->seeInDatabase('taster', [
+			'id' => $taster->id,
+			'name' => 'name2',
+			'active' => false,
+		]);
+	}
+
+	public function testUpdateTasterValidationError() {
+		$user = factory(User::class)->create();
+		$competition = factory(Competition::class)->create([
+			'competition_state_id' => CompetitionState::STATE_TASTING1,
+		]);
+		$tastingSession = factory(TastingSession::class)->create([
+			'competition_id' => $competition->id,
+			'wuser_username' => $user->username,
+		]);
+		$commission = factory(Commission::class)->create([
+			'tastingsession_id' => $tastingSession->id,
+		]);
+		$taster = factory(Taster::class)->create([
+			'commission_id' => $commission->id,
+		]);
+
+		$this->be($user);
+		$this->put('tasters/' . $taster->id, [
+			'commission_id' => $commission->id,
+			'name' => '',
+			'active' => 3,
+		]);
+		$this->assertResponseStatus(422);
+	}
+
+	public function testUpdateTasterInvalidCommission() {
+		$user = factory(User::class)->create();
+
+		$this->be($user);
+		$this->post('tasters', [
+			'commission_id' => 1000000,
+			'name' => '',
+		]);
+		$this->assertResponseStatus(400);
+	}
+
 }
