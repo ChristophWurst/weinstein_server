@@ -22,7 +22,7 @@
 namespace App\Tasting;
 
 use App\Validation\Validator;
-use Exception;
+use Illuminate\Database\Eloquent\Model;
 
 class TasterValidator extends Validator {
 
@@ -52,10 +52,18 @@ class TasterValidator extends Validator {
 	 * @return array
 	 */
 	protected function getCreateRules(array $data) {
-		return array(
+		return [
 			'commission_id' => 'required|exists:commission,id',
 			'name' => 'required|min:1|max:70',
-		);
+			'active' => 'bool',
+		];
+	}
+
+	protected function getUpdateRules(array $data, Model $model = null) {
+		return [
+			'name' => 'required|min:1|max:70',
+			'active' => 'bool',
+		];
 	}
 
 }

@@ -301,6 +301,9 @@ class Handler implements TastingHandler {
 	}
 
 	public function updateTaster(Taster $taster, array $data) {
+		$validator = new TasterValidator($data, $taster);
+		$validator->validateUpdate();
+
 		return $this->tasterRepository->update($taster, $data);
 	}
 
