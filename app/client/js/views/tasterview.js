@@ -28,7 +28,7 @@ var Weinstein = Weinstein || {};
 
 	var TASTER_TEMPLATE = ''
 		+ '{{#if editing}}'
-		+ '	<input value={{name}} type="text"></input>'
+		+ '	<input value="{{name}}" type="text"></input>'
 		+ '{{else}}'
 		+ '	{{#unless active}}'
 		+ '		<s>'
