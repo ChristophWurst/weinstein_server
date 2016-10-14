@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\TastingHandler;
-use App\Exceptions\IllegalTastingStageException;
 use App\Exceptions\ValidationException;
-use App\MasterData\Competition;
-use App\MasterData\CompetitionState;
 use App\Tasting\Commission;
 use App\Tasting\Taster;
 use Illuminate\Http\Request;
