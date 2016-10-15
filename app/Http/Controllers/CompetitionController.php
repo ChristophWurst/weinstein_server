@@ -137,7 +137,7 @@ class CompetitionController extends BaseController {
 		if ($request->has('del') && $request->get('del') === 'Ja') {
 			$this->tastingHandler->lockTasting($competition, $tasting);
 		}
-		return Redirect::route('competition/shows', [
+		return Redirect::route('competition/show', [
 			'competition' => $competition->id
 		]);
 	}

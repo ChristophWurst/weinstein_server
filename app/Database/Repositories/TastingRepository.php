@@ -27,11 +27,17 @@ use App\Tasting\TastingNumber;
 
 class TastingRepository {
 
+	/**
+	 * @param array $data
+	 * @param Taster $taster
+	 * @param TastingNumber $tastingNumber
+	 * @return Tasting
+	 */
 	public function create(array $data, Taster $taster, TastingNumber $tastingNumber) {
 		$tasting = new Tasting($data);
 		$tasting->taster()->associate($taster);
 		$tasting->tastingnumber()->associate($tastingNumber);
-		$taster->save();
+		$tasting->save();
 		return $tasting;
 	}
 

@@ -328,6 +328,8 @@ class Handler implements TastingHandler {
 				return;
 			}
 
+			$tastingNumber = $this->tastingNumberRepository->find($tastingNumber);
+
 			/**
 			 * store all tasters ratings
 			 * 
@@ -344,7 +346,6 @@ class Handler implements TastingHandler {
 			/*
 			 * Store comment
 			 */
-			$tastingNumber = $this->tastingNumberRepository->find($tastingNumber);
 			$this->wineRepository->addComment($tastingNumber->wine, $data['comment-' . $commission->side]);
 		}
 	}

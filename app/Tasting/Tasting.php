@@ -58,7 +58,7 @@ class Tasting extends Model {
 	 * @return Relation
 	 */
 	public function taster() {
-		return $this->belongsTo('Taster');
+		return $this->belongsTo(Taster::class);
 	}
 
 	/**
@@ -67,7 +67,7 @@ class Tasting extends Model {
 	 * @return Relation
 	 */
 	public function tastingnumber() {
-		return $this->belongsTo('TastingNumber');
+		return $this->belongsTo(TastingNumber::class);
 	}
 
 }
