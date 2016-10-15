@@ -36,6 +36,34 @@ class TasterTest extends TestCase {
 
 	use DatabaseTransactions;
 
+	public function tastingSessionUrlsData() {
+		return [
+			['session/{sessionId}'],
+			['session/{sessionId}/edit'],
+			['session/{sessionId}/edit', 'POST'],
+			['tasters?commission_id={commissionId}'],
+		];
+	}
+
+	/**
+	 * @dataProvider tastingSessionUrlsData
+	 */
+	public function testNonTastingSessionAdmin($url, $method = 'GET') {
+		$user = factory(User::class)->create();
+		$tastingSession = factory(TastingSession::class)->create([
+			'wuser_username' => $user->username,
+		]);
+		$commission = factory(Commission::class)->create([
+			'tastingsession_id' => $tastingSession->id,
+		]);
+		$url = str_replace('{sessionId}', $tastingSession->id, $url);
+		$url = str_replace('{commissionId}', $commission->id, $url);
+
+		$this->be($user);
+		$this->call($method, $url);
+		$this->assertResponseStatus(403);
+	}
+
 	public function testListTasters() {
 		$user = factory(User::class)->create();
 		$competition = factory(Competition::class)->create([
