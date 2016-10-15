@@ -34,7 +34,6 @@ use App\Tasting\TastingSession;
 use App\Tasting\TastingStage;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response as Response2;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -78,7 +77,7 @@ class TastingSessionController extends BaseController {
 
 	private function checkCompetitionState(Competition $competition) {
 		// TODO: might make sense to move to BL layer
-		if (!$competition->competitionState->is(CompetitionState::STATE_TASTING1) || !$competition->competitionState->is(CompetitionState::STATE_TASTING1)) {
+		if (!$competition->competitionState->is(CompetitionState::STATE_TASTING1) && !$competition->competitionState->is(CompetitionState::STATE_TASTING2)) {
 			throw new IllegalTastingStageException();
 		}
 	}
