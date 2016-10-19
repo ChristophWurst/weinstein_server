@@ -233,7 +233,7 @@ class Handler implements TastingHandler {
 		$data['nr'] = $competition->tastingsessions()->ofTastingStage($tastingStage)->max('nr') + 1;
 		$tastingSession = $this->tastingSessionRepository->create($data, $competition, $competition->getTastingStage());
 
-		$this->createCommissions($tastingSession, $data['commissions']);
+		$this->createCommissions($tastingSession, (int) $data['commissions']);
 
 		return $tastingSession;
 	}

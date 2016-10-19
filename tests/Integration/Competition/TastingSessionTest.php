@@ -147,6 +147,8 @@ class TastingSessionTest extends TestCase {
 		$this->assertRedirectedTo('session/' . $session1->id);
 		$this->get('session/' . $session1->id);
 		$this->see('1. Sitzung');
+		$this->see('Kommission A');
+		$this->see('Kommission B');
 
 		$this->get('competition/' . $competition->id . '/sessions');
 		$this->assertResponseOk();
@@ -161,6 +163,8 @@ class TastingSessionTest extends TestCase {
 		$this->assertRedirectedTo('session/' . $session2->id);
 		$this->get('session/' . $session2->id);
 		$this->see('2. Sitzung');
+		$this->see('Kommission A');
+		$this->dontSee('Kommission B');
 	}
 
 	public function testEditTastingSession() {
