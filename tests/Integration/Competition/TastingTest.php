@@ -41,6 +41,7 @@ class TastingTest extends TestCase {
 		return [
 				['session/{sessionId}/taste'],
 				['session/{sessionId}/taste', 'POST'],
+				['session/{sessionId}/export-result/{commissionId}'],
 		];
 	}
 
@@ -49,9 +50,13 @@ class TastingTest extends TestCase {
 	 */
 	public function testTastingPermissions($url, $method = 'GET') {
 		$session = factory(TastingSession::class)->create();
+		$commission = factory(Commission::class)->create([
+			'tastingsession_id' => $session->id,
+		]);
 		$user = factory(User::class)->make();
 
 		$url = str_replace('{sessionId}', $session->id, $url);
+		$url = str_replace('{commissionId}', $commission->id, $url);
 
 		$this->be($user);
 		$this->call($method, $url);
@@ -180,6 +185,13 @@ class TastingTest extends TestCase {
 		// Let's take a look at the statistics …
 		$this->get('session/' . $session->id . '/statistics');
 		$this->assertResponseOk();
+
+		// Now, let's take a look at the tasting protocols
+		/* @var $tastingSession TastingSession */
+		$session->commissions->each(function(Commission $commission) use ($session) {
+			$this->get('session/' . $session->id . '/export-result/' . $commission->id);
+			$this->assertResponseOk();
+		});
 	}
 
 }

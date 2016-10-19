@@ -103,7 +103,6 @@ class AuthServiceProvider extends ServiceProvider {
 		$gate->define('create-tastingsession', TastingSessionAbilities::class . '@create');
 		$gate->define('show-tastingsession', TastingSessionAbilities::class . '@show');
 		$gate->define('export-tastingsession-result', TastingSessionAbilities::class . '@exportResult');
-		$gate->define('export-tastingsession-result', TastingSessionAbilities::class . '@exportProtocol');
 		$gate->define('edit-tastingsession', TastingSessionAbilities::class . '@edit');
 		$gate->define('list-tastingsession-tasters', TastingSessionAbilities::class . '@tasters');
 		$gate->define('add-tastingsession-taster', TastingSessionAbilities::class . '@addTaster');
