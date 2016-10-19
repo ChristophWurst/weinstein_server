@@ -76,21 +76,23 @@ class TastingTest extends TestCase {
 			'tastingsession_id' => $session->id,
 			'side' => 'b',
 		]);
-		$tasters = factory(Taster::class, 4)->create([
+		$tasters1 = factory(Taster::class, 4)->create([
 			'commission_id' => $commission1->id,
 		]);
 		$nr = 1;
-		foreach ($tasters as $taster) {
+		foreach ($tasters1 as $taster) {
 			$taster->nr = $nr;
 			$taster->save();
+			$nr++;
 		}
-		$tasters = factory(Taster::class, 3)->create([
+		$tasters2 = factory(Taster::class, 3)->create([
 			'commission_id' => $commission2->id,
 		]);
 		$nr = 1;
-		foreach ($tasters as $taster) {
+		foreach ($tasters2 as $taster) {
 			$taster->nr = $nr;
 			$taster->save();
+			$nr++;
 		}
 		$wine1 = factory(Wine::class)->create([
 			'competition_id' => $competition->id,
@@ -121,12 +123,16 @@ class TastingTest extends TestCase {
 		$this->assertResponseOk();
 		$this->get('session/' . $session->id);
 		$this->assertResponseOk();
+		// Let's take a look at the statistics …
+		$this->get('session/' . $session->id . '/statistics');
+		$this->assertResponseOk();
 		$this->get('session/' . $session->id . '/taste');
 		$this->assertResponseOk();
-		// Time to drink some wine!
 
+		// Time to drink some wine!
 		// First, we submit without any tasting data – whoops!
-		$this->post('session/' . $session->id . '/taste', [
+		$this->post('session/' . $session->id . '/taste',
+			[
 			'tastingnumber_id1' => $tastingNumber1->id,
 			'comment-a' => '',
 			'tastingnumber_id2' => $tastingNumber2->id,
@@ -137,7 +143,8 @@ class TastingTest extends TestCase {
 		$this->see('Fehler!');
 
 		// Now with the actual data + comments
-		$this->post('session/' . $session->id . '/taste', [
+		$this->post('session/' . $session->id . '/taste',
+			[
 			'tastingnumber_id1' => $tastingNumber1->id,
 			'a1' => 11,
 			'a2' => 12,
@@ -156,7 +163,8 @@ class TastingTest extends TestCase {
 		$this->dontSee('1. Verkostung abschließen');
 
 		// Still one tasting number left …
-		$this->post('session/' . $session->id . '/taste', [
+		$this->post('session/' . $session->id . '/taste',
+			[
 			'tastingnumber_id1' => $tastingNumber3->id,
 			'a1' => 21,
 			'a2' => 22,
@@ -168,6 +176,10 @@ class TastingTest extends TestCase {
 		$this->get('session/' . $session->id);
 		$this->assertResponseOk();
 		$this->see('1. Verkostung abschließen');
+
+		// Let's take a look at the statistics …
+		$this->get('session/' . $session->id . '/statistics');
+		$this->assertResponseOk();
 	}
 
 }
