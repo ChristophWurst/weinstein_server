@@ -166,6 +166,28 @@ class TastingTest extends TestCase {
 		$this->get('session/' . $session->id);
 		$this->assertResponseOk();
 		$this->dontSee('1. Verkostung abschließen');
+		$this->seeInDatabase('wine', [
+			'id' => $tastingNumber2->wine->id,
+			'comment' => 'ungenießbar!',
+		]);
+
+		// Let's retaste wine2
+		$this->post('session/' . $session->id . '/retaste/' . $tastingNumber2->id . '/commission/' . $commission2->id,
+			[
+			'tastingnumber_id' => $tastingNumber2->id,
+			'b1' => '12',
+			'b2' => '13',
+			'b3' => 11,
+			'comment' => '',
+		]);
+		$this->assertRedirectedTo('session/' . $session->id);
+		$this->get('session/' . $session->id);
+		$this->assertResponseOk();
+		$this->dontSee('1. Verkostung abschließen');
+		$this->seeInDatabase('wine', [
+			'id' => $tastingNumber2->wine->id,
+			'comment' => '',
+		]);
 
 		// Still one tasting number left …
 		$this->post('session/' . $session->id . '/taste',
@@ -181,6 +203,10 @@ class TastingTest extends TestCase {
 		$this->get('session/' . $session->id);
 		$this->assertResponseOk();
 		$this->see('1. Verkostung abschließen');
+		$this->seeInDatabase('wine', [
+			'id' => $tastingNumber3->wine->id,
+			'comment' => '',
+		]);
 
 		// Let's take a look at the statistics …
 		$this->get('session/' . $session->id . '/statistics');
