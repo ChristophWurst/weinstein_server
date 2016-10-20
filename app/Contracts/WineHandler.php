@@ -97,5 +97,5 @@ interface WineHandler {
 
 	public function getAll(Competition $competition = null);
 
-	public function getUsersWines(User $user, Competition $competition, $query = false);
+	public function getUsersWines(User $user, Competition $competition);
 }

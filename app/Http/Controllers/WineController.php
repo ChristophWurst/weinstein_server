@@ -86,13 +86,11 @@ class WineController extends BaseController {
 	public function index(Competition $competition) {
 		$competitionAdmin = $competition->administrates(Auth::user());
 
-		$wines = $this->wineHandler->getUsersWines(Auth::user(), $competition, true)->orderBy('id')->paginate(50);
-
 		return $this->viewFactory->make('competition/wines/index', [
 			'competition' => $competition,
 			'user' => Auth::user(),
 			'competition_admin' => $competitionAdmin,
-			'wines' => $wines,
+			'wine_url' => route('wines.index', ['competition_id' => $competition->id]),
 			'show_add_wine' => $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT,
 			'show_edit_wine' => $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT,
 			'show_rating1' => $competition->competitionState->id >= CompetitionState::STATE_TASTING1,

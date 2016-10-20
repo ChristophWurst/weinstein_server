@@ -220,5 +220,4 @@ var Weinstein = Weinstein || {};
 		}
 	});
 
-	return Weinstein;
 })(Weinstein, Marionette, Handlebars, _);

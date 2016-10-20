@@ -399,14 +399,13 @@ class Handler implements WineHandler {
 	 * 
 	 * @param User $user
 	 * @param Competition $competition
-	 * @param boolean $query
 	 * @return Collection
 	 */
-	public function getUsersWines(User $user, Competition $competition, $query = false) {
+	public function getUsersWines(User $user, Competition $competition) {
 		if ($user->isAdmin()) {
-			return $this->wineRepository->findAll($competition, $query);
+			return $this->wineRepository->findAll($competition);
 		} else {
-			return $this->wineRepository->findUsersWines($user, $competition, $query);
+			return $this->wineRepository->findUsersWines($user, $competition);
 		}
 	}
 
