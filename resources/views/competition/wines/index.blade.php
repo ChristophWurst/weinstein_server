@@ -120,7 +120,7 @@
 	@endif
 </div>
 <div class="table-responsive">
-    <table class="table table-striped table-condensed">
+    <table id="wines" class="table table-striped table-condensed">
         <thead>
             <tr>
                 <th class="text-center">Dateinummer</th>
@@ -176,14 +176,13 @@ $(function() {
 	
 	var wines = new Weinstein.Models.WineCollection();
 	wines.url = '{{ $wine_url }}';
-	var wineList = new Weinstein.Views.WineListView({
-		el: $('#wine_list'),
-		collection: wines
+	var wineList = new Weinstein.Views.WineView({
+		el: $('#wines'),
+		wines: wines
 	});
 	wineList.render();
 	window.wineList = wineList;
 	wines.fetch();
-    
 });
 
 @stop
