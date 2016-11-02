@@ -119,35 +119,7 @@
     </div>
 	@endif
 </div>
-<div class="table-responsive">
-    <table id="wines" class="table table-striped table-condensed">
-        <thead>
-            <tr>
-                <th class="text-center">Dateinummer</th>
-                <th>Betrieb</th>
-                <th>Verein</th>
-                <th>Marke</th>
-                <th>Sorte</th>
-                <th>Jahr</th>
-                <th class="text-center">Qualit&auml;t</th>
-                <th class="text-center">Alk.</th>
-                <th class="text-center">Alk. ges.</th>
-                <th class="text-center">Zucker</th>
-                <th class="text-center">1. Bewertung</th>
-                <th class="text-center">2. Bewertung</th>
-                <th class="text-center">KdB</th>
-                <th class="text-center">Ex</th>
-                <th class="text-center">SoSi</th>
-                <th class="text-center">Ausschank</th>
-                <th></th>
-				@if ($show_enrollment_pdf_export)
-				<th class="text-center">Formular</th>
-				@endif
-            </tr>
-        </thead>
-        <tbody id="wine_list">
-        </tbody>
-    </table>
+<div id="wines-container" class="table-responsive">
 </div>
 <!-- /.table-responsive -->
 @stop
@@ -173,16 +145,25 @@ $(function() {
     button.click(function(e) {
         submit();
     });
-	
+
 	var wines = new Weinstein.Models.WineCollection();
 	wines.url = '{{ $wine_url }}';
 	var wineList = new Weinstein.Views.WineView({
-		el: $('#wines'),
-		wines: wines
+		el: $('#wines-container'),
+		wines: wines,
+		tableOptions: {
+			show_rating1: {{ $show_rating1 ? 'true' : 'false' }},
+			show_rating2: {{ $show_rating2 ? 'true' : 'false' }},
+			show_kdb: {{ $show_kdb ? 'true' : 'false' }},
+			show_excluded: {{ $show_excluded ? 'true' : 'false' }},
+			show_sosi: {{ $show_sosi ? 'true' : 'false' }},
+			show_chosen: {{ $show_chosen ? 'true' : 'false' }},
+			show_edit_wine: {{ $show_edit_wine ? 'true' : 'false' }}
+		}
 	});
 	wineList.render();
-	window.wineList = wineList;
 	wines.fetch();
+	window.wineList = wineList;
 });
 
 @stop
