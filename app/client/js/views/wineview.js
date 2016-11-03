@@ -61,7 +61,7 @@ var Weinstein = Weinstein || {};
 		'<td><a href="/settings/applicant/{{applicant.id}}">{{applicant.label}} {{applicant.lastname}}</a></td>' +
 		'<td><a href="/settings/association/{{applicant.association.id}}">{{applicant.association.name}}</a></td>' +
 		'<td>{{ label }}</td>' +
-		'<td><{{ winesort.name }}</td>' +
+		'<td>{{ winesort.name }}</td>' +
 		'<td>{{ vintage }}</td>' +
 		'<td class="text-center">' +
 		'	{{#if winequality}}{{ winequality.abbr }}{{else}}-{{/if}}' +
