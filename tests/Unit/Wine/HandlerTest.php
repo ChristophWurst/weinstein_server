@@ -202,7 +202,7 @@ class HandlerTest extends TestCase {
 
 		$user->shouldReceive('isAdmin')->once()->andReturn(true);
 		$result = Mockery::mock(Collection::class);
-		$this->wineRepository->shouldReceive('findAll')->once()->with($competition, false)->andReturn($result);
+		$this->wineRepository->shouldReceive('findAll')->once()->with($competition)->andReturn($result);
 
 		$this->assertEquals($result, $this->handler->getUsersWines($user, $competition));
 	}
@@ -213,9 +213,9 @@ class HandlerTest extends TestCase {
 
 		$user->shouldReceive('isAdmin')->once()->andReturn(false);
 		$result = Mockery::mock(Collection::class);
-		$this->wineRepository->shouldReceive('findUsersWines')->once()->with($user, $competition, false)->andReturn($result);
+		$this->wineRepository->shouldReceive('findUsersWines')->once()->with($user, $competition)->andReturn($result);
 
-		$this->assertEquals($result, $this->handler->getUsersWines($user, $competition, false));
+		$this->assertEquals($result, $this->handler->getUsersWines($user, $competition));
 	}
 
 }
