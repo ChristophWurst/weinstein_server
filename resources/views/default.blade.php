@@ -179,7 +179,7 @@ use App\MasterData\CompetitionState;
 		<script src="{!! asset('js/vendor/backbone.radio/build/backbone.radio.js') !!}"></script>
 		<script src="{!! asset('js/vendor/backbone.marionette/lib/backbone.marionette.js') !!}"></script>
         <script src="{!! asset('js/vendor/select2/dist/js/select2.min.js') !!}"></script>
-        <script src="{!! asset('js/select2_locale_de.js') !!}"></script>
+        <script src="{!! asset('js/vendor/select2/dist/js/i18n/de.js') !!}"></script>
         <script src="{!! asset('js/weinstein.js') !!}"></script>
 
         <script>
