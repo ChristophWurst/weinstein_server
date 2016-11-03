@@ -348,6 +348,9 @@ Route::group(array('middleware' => 'auth'), function() {
 			'update',
 		],
 	]);
+	Route::resource('wines', 'WineApiController', ['only' => [
+		'index',
+	]]);
 });
 
 /*

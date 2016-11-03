@@ -45,16 +45,12 @@ class WineRepository {
 	 * Get competitions wines
 	 * 
 	 * @param Competition $competition
-	 * @param boolean $queryOnly
-	 * @return Collection|Relation
+	 * @return Collection
 	 */
-	public function findAll(Competition $competition, $queryOnly = false) {
-		$query = $competition->wine_details();
-		if ($queryOnly) {
-			return $query;
-		} else {
-			return $query->get();
-		}
+	public function findAll(Competition $competition) {
+		return $competition->wine_details()
+			->with('applicant', 'applicant.association', 'winesort', 'winequality')
+			->get();
 	}
 
 	/**
@@ -62,19 +58,14 @@ class WineRepository {
 	 * 
 	 * @param User $user
 	 * @param Competition $competition
-	 * @param boolean $queryOnly
 	 * @return Collection|Builder
 	 */
-	public function findUsersWines(User $user, Competition $competition, $queryOnly = false) {
-		$query = $competition->wine_details()
+	public function findUsersWines(User $user, Competition $competition) {
+		return $competition->wine_details()
 			->where('applicant_username', $user->username)
 			->orWhere('association_username', $user->username)
-			->orderBy('nr');
-		if ($queryOnly) {
-			return $query;
-		} else {
-			return $query->get();
-		}
+			->with('applicant', 'applicant.association', 'winesort', 'winequality')
+			->get();
 	}
 
 	public function update(Wine $wine, array $data) {

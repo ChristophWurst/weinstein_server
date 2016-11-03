@@ -35,7 +35,7 @@ var Weinstein = Weinstein || {};
 		+ '	{{/unless}}'
 		+ '	<span>{{name}}</span>'
 		+ '	{{#unless active}}'
-		+ '		<s>'
+		+ '		</s>'
 		+ '	{{/unless}}'
 		+ '	<span class="disable glyphicon glyphicon-{{#if active}}remove{{else}}ok{{/if}}"></span>'
 		+ '{{/if}}';
@@ -220,5 +220,4 @@ var Weinstein = Weinstein || {};
 		}
 	});
 
-	return Weinstein;
 })(Weinstein, Marionette, Handlebars, _);
