@@ -57,10 +57,10 @@ use App\MasterData\CompetitionState;
 							$stateTastingNumbers = in_array($competition->competitionState->description, array('ENROLLMENT', 'TASTINGNUMBERS1', 'TASTINGNUMBERS2')) && $competition->enrollmentFinished();
 							$stateTasting = in_array($competition->competitionState->description, array('TASTING1', 'TASTING2'));
 						?>
-                        <li class="{!! (Request::is('competition/*') && !in_array(Request::Segment(3), array('enrollment', 'tasting', 'evaluation')) && Request::Segment(2) !== 'tasting') ? 'active' : '' !!}">
+                        <li class="{!! (Request::is('competition/*') && !in_array(Request::Segment(3), array('enrollment', 'tasting', 'evaluation', 'wines')) && Request::Segment(2) !== 'tasting') ? 'active' : '' !!}">
                             <a href="{!! route('competition/show', array('competition' => $competition->id)) !!}">&Uuml;bersicht</a>
                         </li>
-                        <li class="{!! Request::segment(4) == 'wines' ? 'active' : '' !!}">
+                        <li class="{!! Request::segment(3) == 'wines' ? 'active' : '' !!}">
                             <a href="{!! route('enrollment.wines', array('competition' => $competition->id)) !!}">Weine</a>
                         </li>
                         <li class="dropdown {!! Request::segment(1) == 'competition' && (Request::segment(2) == 'tasting' || Request::segment(3) == 'tasting') ? 'active' : '' !!}">
