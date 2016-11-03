@@ -79,9 +79,6 @@ class EnrollmentTest extends TestCase {
 		$this->get('competition/' . $competition->id . '/wines/create');
 		$this->dontSee('Fehler!');
 		$this->see('Wein gespeichert.');
-
-		$this->get('competition/' . $competition->id . '/wines');
-		$this->see($wine->label);
 	}
 
 	public function testShowWinesDetailPage() {
@@ -98,11 +95,6 @@ class EnrollmentTest extends TestCase {
 		]);
 
 		$this->be($user);
-
-		// See 'drucken' link on wines page
-		$this->get('competition/' . $competition->id . '/wines');
-		$this->assertResponseOk();
-		$this->see('drucken');
 
 		// Go to wine's detail page
 		$this->get('wines/' . $wine->id);
