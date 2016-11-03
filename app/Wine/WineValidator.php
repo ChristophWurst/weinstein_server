@@ -97,8 +97,8 @@ class WineValidator extends Validator {
 			'winesort_id' => 'required|exists:winesort,id',
 			'winequality_id' => 'Exists:winequality,id',
 			'vintage' => 'required|integer|between:2000,2030',
-			'alcohol' => 'required|numeric|between:0.1,20.0',
-			'alcoholtot' => 'numeric|between:0.1,30.0',
+			'alcohol' => 'required|numeric|between:0.1,30.0',
+			'alcoholtot' => 'numeric|between:0.1,99.9',
 			'sugar' => 'required|numeric|between:0.1,300.0',
 			'approvalnr' => ($this->competition->administrates($this->user) ? 'sometimes' : 'required')
 			. '|alpha_num|max:20',
@@ -124,8 +124,8 @@ class WineValidator extends Validator {
 			'winesort_id' => 'required|exists:winesort,id',
 			'winequality_id' => 'Exists:winequality,id',
 			'vintage' => 'required|integer|between:2000,2030',
-			'alcohol' => 'required|numeric|between:0.1,99.9',
-			'alcoholtot' => 'numeric|between:0.1,99.',
+			'alcohol' => 'required|numeric|between:0.1,30.0',
+			'alcoholtot' => 'numeric|between:0.1,99.9',
 			'sugar' => 'required|numeric|between:0.1,300.0',
 			'approvalnr' => ($this->competition->administrates($this->user) ? 'sometimes' : 'required')
 			. '|alpha_num|max:20',
