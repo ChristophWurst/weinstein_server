@@ -27,6 +27,7 @@ use App\MasterData\Competition;
 use App\MasterData\User;
 use App\Wine;
 use App\Wine\Handler;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Collection;
 use Mockery;
 use Test\TestCase;
@@ -187,21 +188,12 @@ class HandlerTest extends TestCase {
 		$this->handler->delete($wine);
 	}
 
-	public function testGetAll() {
-		$competition = Mockery::mock(Competition::class);
-
-		$result = Mockery::mock(Collection::class);
-		$this->wineRepository->shouldReceive('findAll')->once()->with($competition)->andReturn($result);
-
-		$this->assertEquals($result, $this->handler->getAll($competition));
-	}
-
 	public function testGetUsersWineAsAdmin() {
 		$user = Mockery::mock(User::class);
 		$competition = Mockery::mock(Competition::class);
 
 		$user->shouldReceive('isAdmin')->once()->andReturn(true);
-		$result = Mockery::mock(Collection::class);
+		$result = Mockery::mock(Paginator::class);
 		$this->wineRepository->shouldReceive('findAll')->once()->with($competition)->andReturn($result);
 
 		$this->assertEquals($result, $this->handler->getUsersWines($user, $competition));
@@ -212,7 +204,7 @@ class HandlerTest extends TestCase {
 		$competition = Mockery::mock(Competition::class);
 
 		$user->shouldReceive('isAdmin')->once()->andReturn(false);
-		$result = Mockery::mock(Collection::class);
+		$result = Mockery::mock(Paginator::class);
 		$this->wineRepository->shouldReceive('findUsersWines')->once()->with($user, $competition)->andReturn($result);
 
 		$this->assertEquals($result, $this->handler->getUsersWines($user, $competition));

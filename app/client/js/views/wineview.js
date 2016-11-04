@@ -54,7 +54,10 @@ var Weinstein = Weinstein || {};
 		'	</thead>' +
 		'	<tbody id="wine_list">' +
 		'	</tbody>' +
-		'</table>';
+		'</table>' +
+		'<div class="container-fluid"><div class="text-center">' +
+		'	<button class="btn btn-primary wine-load-more" data-loading-text="Lade...">Mehr laden</button>' +
+		'</div></div>';
 
 	var WINE_TEMPLATE = '' +
 		'<td class="text-center">{{#if nr}}<a href="/wines/{{id}}">{{nr}}</a>{{else}}-{{/if}}</td>' +
@@ -136,6 +139,12 @@ var Weinstein = Weinstein || {};
 		template: Handlebars.compile(WINE_TABLE_TEMPLATE),
 		_wines: null,
 		_tableOptions: {},
+		ui: {
+			loadMore: 'button.wine-load-more'
+		},
+		events: {
+			'click @ui.loadMore': '_loadMore'
+		},
 		/**
 		 * @param {object} options
 		 */
@@ -153,6 +162,20 @@ var Weinstein = Weinstein || {};
 				tableOptions: this._tableOptions
 			});
 			listView.render();
+		},
+		_loadMore: function () {
+			this.getUI('loadMore').button('loading');
+			var loading = this._wines.nextPage();
+
+			if (typeof loading !== 'undefined') {
+				loading.always(function () {
+					this.getUI('loadMore').button('reset');
+				}.bind(this));
+			} else {
+				this.getUI('loadMore').button('reset');
+				// TODO: find a better solution than hiding
+				this.getUI('loadMore').hide();
+			}
 		}
 	});
 

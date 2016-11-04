@@ -34,6 +34,27 @@ var Weinstein = Weinstein || {};
 
 	var WineCollection = Backbone.Collection.extend({
 		model: Wine,
+		_nextPageUrl: null,
+		parse: function (data) {
+			if (typeof data === 'string') {
+				data = JSON.parse(data);
+			}
+			this._nextPageUrl = data.next_page_url;
+			return data.data;
+		},
+		nextPage: function () {
+			if (!this._nextPageUrl) {
+				return;
+			}
+			return $.ajax(this._nextPageUrl, {
+				method: 'GET'
+			}).then(function (data) {
+				var models = this.parse(data);
+				this.add(models);
+			}.bind(this)).fail(function () {
+				console.log('could not load next wine page');
+			});
+		},
 		comparator: 'nr'
 	});
 

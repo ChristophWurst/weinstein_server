@@ -25,6 +25,7 @@ use App\MasterData\Competition;
 use App\MasterData\User;
 use App\Wine;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Pagination\Paginator;
 
 interface WineHandler {
 
@@ -95,7 +96,12 @@ interface WineHandler {
 	 */
 	public function delete(Wine $wine);
 
-	public function getAll(Competition $competition = null);
-
+	/**
+	 * Get all wines of given competition for given user
+	 *
+	 * @param User $user
+	 * @param Competition $competition
+	 * @return Paginator
+	 */
 	public function getUsersWines(User $user, Competition $competition);
 }

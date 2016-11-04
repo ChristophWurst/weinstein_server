@@ -27,13 +27,13 @@ use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
 use App\MasterData\User;
 use App\Wine;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
-use phpDocumentor\Reflection\DocBlock\Type\Collection;
 use PHPExcel_IOFactory;
 use SebastianBergmann\RecursionContext\Exception;
 
@@ -382,25 +382,6 @@ class Handler implements WineHandler {
 		//ActivityLogger::log('Wein [' . $wine->nr . '] von Bewerb [' . $wine->competition->label . '] gel&ouml;scht');
 	}
 
-	/**
-	 * Get all wines for given competition
-	 * 
-	 * if no valid competition is given, all wines are returned
-	 * 
-	 * @param Competition $competition
-	 * @return Collection
-	 */
-	public function getAll(Competition $competition = null) {
-		return $this->wineRepository->findAll($competition);
-	}
-
-	/**
-	 * Get all wines of given competition for given user
-	 * 
-	 * @param User $user
-	 * @param Competition $competition
-	 * @return Collection
-	 */
 	public function getUsersWines(User $user, Competition $competition) {
 		if ($user->isAdmin()) {
 			return $this->wineRepository->findAll($competition);

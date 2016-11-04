@@ -25,12 +25,15 @@ class WineApiController extends BaseController {
 		$competitionId = $request->get('competition_id');
 		$competition = Competition::find($competitionId);
 		if (is_null($competitionId)) {
-			return response([], 404)->json();
+			return response()->json([], 404);
 		}
 
 		$wines = $this->wineHandler->getUsersWines(Auth::user(), $competition);
+		$wines->setPath(route('wines.index', [
+			'competition_id' => $competitionId,
+		]));
 
-		return response()->json($wines);
+		return response()->json($wines->toJson());
 	}
 
 }
