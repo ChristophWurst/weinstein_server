@@ -9,14 +9,14 @@
     wurden importiert.
 </div>
 @endif
-<div class="form-inline container">
+<div class="form-inline">
     @if ($show_add_wine)
     <a class="btn btn-default"
        type="button"
        href="{!! route('enrollment.wines/create', array('competition' => $competition->id)) !!}">
         <span class="glyphicon glyphicon-plus"></span>
        Wein hinzuf&uuml;gen
-    </a></p>
+    </a>
     @endif
     @if ($competition_admin)
     <div class="btn-group">
