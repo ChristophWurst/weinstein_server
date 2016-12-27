@@ -116,7 +116,7 @@ var Weinstein = Weinstein || {};
 		initialize: function (options) {
 			this._tableOptions = options.tableOptions;
 		},
-		viewContext: function () {
+		templateContext: function () {
 			return this._tableOptions;
 		}
 	});
@@ -152,7 +152,7 @@ var Weinstein = Weinstein || {};
 			this._wines = options.wines;
 			this._tableOptions = options.tableOptions;
 		},
-		viewContext: function () {
+		templateContext: function () {
 			return this._tableOptions;
 		},
 		onRender: function () {
