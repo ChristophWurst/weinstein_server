@@ -81,7 +81,7 @@ var Weinstein = Weinstein || {};
 		'    -' +
 		'    {{/if}}' +
 		'</td>{{/if}}' +
-		'{{#if show_excluded }}<td class="text-center">' +
+		'{{#if show_excluded }}<td class="text-center edit-excluded">' +
 		'    {{#if excluded}}' +
 		'    <span class="glyphicon glyphicon-ok"></span>' +
 		'    {{else}}' +
@@ -114,10 +114,12 @@ var Weinstein = Weinstein || {};
 		template: Handlebars.compile(WINE_TEMPLATE),
 		_tableOptions: {},
 		ui: {
-			editKdb: '.edit-kdb'
+			editKdb: '.edit-kdb',
+			editExcluded: '.edit-excluded'
 		},
 		events: {
-			'click @ui.editKdb': '_editKdb'
+			'click @ui.editKdb': '_editKdb',
+			'click @ui.editExcluded': '_editExcluded'
 		},
 		modelEvents: {
 			'change': 'render'
@@ -131,8 +133,21 @@ var Weinstein = Weinstein || {};
 			return this._tableOptions;
 		},
 		_editKdb: function () {
+			if (!this._tableOptions.edit_kdb) {
+				return;
+			}
+
 			this.model.save({
 				kdb: !this.model.get('kdb')
+			});
+		},
+		_editExcluded: function () {
+			if (!this._tableOptions.edit_excluded) {
+				return;
+			}
+
+			this.model.save({
+				excluded: !this.model.get('excluded')
 			});
 		}
 	});

@@ -157,6 +157,7 @@ $(function() {
 			show_kdb: {{ $show_kdb ? 'true' : 'false' }},
 			edit_kdb: {{ $edit_kdb ? 'true' : 'false' }},
 			show_excluded: {{ $show_excluded ? 'true' : 'false' }},
+			edit_excluded: {{ $edit_excluded ? 'true' : 'false' }},
 			show_sosi: {{ $show_sosi ? 'true' : 'false' }},
 			show_chosen: {{ $show_chosen ? 'true' : 'false' }},
 			show_edit_wine: {{ $show_edit_wine ? 'true' : 'false' }}
