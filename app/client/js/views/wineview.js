@@ -88,7 +88,7 @@ var Weinstein = Weinstein || {};
 		'    -' +
 		'    {{/if}}' +
 		'</td>{{/if}}' +
-		'{{#if show_sosi }}<td class="text-center">' +
+		'{{#if show_sosi }}<td class="text-center edit-sosi">' +
 		'    {{#if sosi}}' +
 		'    <span class="glyphicon glyphicon-ok"></span>' +
 		'    {{else}}' +
@@ -115,11 +115,13 @@ var Weinstein = Weinstein || {};
 		_tableOptions: {},
 		ui: {
 			editKdb: '.edit-kdb',
-			editExcluded: '.edit-excluded'
+			editExcluded: '.edit-excluded',
+			editSosi: '.edit-sosi'
 		},
 		events: {
 			'click @ui.editKdb': '_editKdb',
-			'click @ui.editExcluded': '_editExcluded'
+			'click @ui.editExcluded': '_editExcluded',
+			'click @ui.editSosi': '_editSosi'
 		},
 		modelEvents: {
 			'change': 'render'
@@ -148,6 +150,15 @@ var Weinstein = Weinstein || {};
 
 			this.model.save({
 				excluded: !this.model.get('excluded')
+			});
+		},
+		_editSosi: function () {
+			if (!this._tableOptions.edit_sosi) {
+				return;
+			}
+
+			this.model.save({
+				sosi: !this.model.get('sosi')
 			});
 		}
 	});
