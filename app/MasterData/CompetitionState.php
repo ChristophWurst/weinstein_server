@@ -50,6 +50,11 @@ class CompetitionState extends Model {
 	protected $table = 'competition_state';
 
 	/**
+	 * @var bool
+	 */
+	public $timestamps = false;
+
+	/**
 	 * Convert competition state to german string
 	 * 
 	 * @return string
