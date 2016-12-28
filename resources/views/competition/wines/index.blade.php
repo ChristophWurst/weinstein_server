@@ -163,7 +163,11 @@ $(function() {
 		}
 	});
 	wineList.render();
-	wines.fetch();
+	wines.fetch({
+		data: {
+			'competition_id': {{ $competition->id }}
+		}
+	});
 	window.wineList = wineList;
 });
 

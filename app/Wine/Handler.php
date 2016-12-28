@@ -80,14 +80,14 @@ class Handler implements WineHandler {
 	 * @param Competition $competition
 	 * @return Wine
 	 */
-	public function update(Wine $wine, array $data, Competition $competition) {
+	public function update(Wine $wine, array $data) {
 		//allow short format for year field: YY -> 20YY
 		if (isset($data['vintage']) && ctype_digit($data['vintage']) && $data['vintage'] < 99) {
 			$data['vintage'] += 2000;
 		}
 
 		$validator = new WineValidator($data, $wine);
-		$validator->setCompetition($competition);
+		$validator->setCompetition($wine->competition);
 		$validator->setUser(Auth::user());
 		$validator->validateUpdate();
 

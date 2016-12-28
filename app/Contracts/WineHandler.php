@@ -39,13 +39,15 @@ interface WineHandler {
 	/**
 	 * @param Wine $wine
 	 * @param array $data
-	 * @param Competition $competition
+	 * @throws ValidationException
+	 * @return Wine
 	 */
-	public function update(Wine $wine, array $data, Competition $competition);
+	public function update(Wine $wine, array $data);
 
 	/**
 	 * @param Wine $wine
 	 * @param array $data
+	 * @throws ValidationException
 	 */
 	public function updateKdb(Wine $wine, array $data);
 

@@ -74,7 +74,7 @@ var Weinstein = Weinstein || {};
 		'<td class="text-center">{{ l10nFloat sugar }}</td>' +
 		'{{#if show_rating1 }}<td class="text-center">{{#if rating1}}{{ l10nFloat rating1 }}{{else}}-{{/if}}</td>{{/if}}' +
 		'{{#if show_rating2 }}<td class="text-center">{{#if rating2}}{{ l10nFloat rating2 }}{{else}}-{{/if}}</td>{{/if}}' +
-		'{{#if show_kdb }}<td class="text-center">' +
+		'{{#if show_kdb }}<td class="text-center edit-kdb">' +
 		'    {{#if kdb}}' +
 		'    <span class="glyphicon glyphicon-ok"></span>' +
 		'    {{else}}' +
@@ -113,11 +113,27 @@ var Weinstein = Weinstein || {};
 		tagName: 'tr',
 		template: Handlebars.compile(WINE_TEMPLATE),
 		_tableOptions: {},
+		ui: {
+			editKdb: '.edit-kdb'
+		},
+		events: {
+			'click @ui.editKdb': '_editKdb'
+		},
+		modelEvents: {
+			'change': 'render'
+		},
 		initialize: function (options) {
 			this._tableOptions = options.tableOptions;
+
+			this._editKdb = _.debounce(this._editKdb, 1000, true);
 		},
 		templateContext: function () {
 			return this._tableOptions;
+		},
+		_editKdb: function () {
+			this.model.save({
+				kdb: !this.model.get('kdb')
+			});
 		}
 	});
 

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\WineHandler;
+use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
+use App\Wine;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use function response;
+use function route;
 
 class WineApiController extends BaseController {
 
@@ -34,6 +37,24 @@ class WineApiController extends BaseController {
 		]));
 
 		return response()->json($wines->toJson());
+	}
+
+	public function update(Wine $wines, Request $request) {
+		$this->authorize('update-wine', $wines);
+
+		try {
+			$oldData = $wines->toArray();
+			$data = array_merge($oldData,
+				[
+				'kdb' => $request->get('kdb'),
+				'sosi' => $request->get('sosi'),
+				'excluded' => $request->get('excluded'),
+				'chosen' => $request->get('chosen'),
+			]);
+			return $this->wineHandler->update($wines, $data);
+		} catch (ValidationException $ex) {
+			return response()->json(['errors' => $ex->getErrors()], 412);
+		}
 	}
 
 }

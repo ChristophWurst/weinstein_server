@@ -80,7 +80,11 @@ class Wine extends Model implements AdministrateModel {
 		'vintage',
 		'alcohol',
 		'alcoholtot',
-		'sugar'
+		'sugar',
+		'kdb',
+		'sosi',
+		'chosen',
+		'excluded',
 	];
 
 	/**

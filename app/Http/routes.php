@@ -350,6 +350,7 @@ Route::group(array('middleware' => 'auth'), function() {
 	]);
 	Route::resource('wines', 'WineApiController', ['only' => [
 		'index',
+		'update',
 	]]);
 });
 

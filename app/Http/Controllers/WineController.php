@@ -90,7 +90,7 @@ class WineController extends BaseController {
 			'competition' => $competition,
 			'user' => Auth::user(),
 			'competition_admin' => $competitionAdmin,
-			'wine_url' => route('wines.index', ['competition_id' => $competition->id]),
+			'wine_url' => route('wines.index'),
 			'show_add_wine' => $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT,
 			'show_edit_wine' => $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT,
 			'show_rating1' => $competition->competitionState->id >= CompetitionState::STATE_TASTING1,
@@ -358,7 +358,7 @@ class WineController extends BaseController {
 				}
 			}
 
-			$this->wineHandler->update($wine, $data, $wine->competition);
+			$this->wineHandler->update($wine, $data);
 		} catch (ValidationException $ve) {
 			return Redirect::route('enrollment.wines/edit', ['wine' => $wine->id])
 					->withErrors($ve->getErrors())
