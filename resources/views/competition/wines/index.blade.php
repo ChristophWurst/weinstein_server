@@ -161,6 +161,7 @@ $(function() {
 			show_sosi: {{ $show_sosi ? 'true' : 'false' }},
 			edit_sosi: {{ $edit_sosi ? 'true' : 'false' }},
 			show_chosen: {{ $show_chosen ? 'true' : 'false' }},
+			edit_chosen: {{ $edit_chosen ? 'true' : 'false' }},
 			show_edit_wine: {{ $show_edit_wine ? 'true' : 'false' }}
 		}
 	});

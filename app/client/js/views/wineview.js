@@ -95,7 +95,7 @@ var Weinstein = Weinstein || {};
 		'    -' +
 		'    {{/if}}' +
 		'</td>{{/if}}' +
-		'{{#if show_chosen }}<td class="text-center">' +
+		'{{#if show_chosen }}<td class="text-center edit-chosen">' +
 		'    {{#if chosen}}' +
 		'    <span class="glyphicon glyphicon-ok"></span>' +
 		'    {{else}}' +
@@ -116,12 +116,14 @@ var Weinstein = Weinstein || {};
 		ui: {
 			editKdb: '.edit-kdb',
 			editExcluded: '.edit-excluded',
-			editSosi: '.edit-sosi'
+			editSosi: '.edit-sosi',
+			editChosen: '.edit-chosen'
 		},
 		events: {
 			'click @ui.editKdb': '_editKdb',
 			'click @ui.editExcluded': '_editExcluded',
-			'click @ui.editSosi': '_editSosi'
+			'click @ui.editSosi': '_editSosi',
+			'click @ui.editChosen': '_editChosen'
 		},
 		modelEvents: {
 			'change': 'render'
@@ -159,6 +161,15 @@ var Weinstein = Weinstein || {};
 
 			this.model.save({
 				sosi: !this.model.get('sosi')
+			});
+		},
+		_editChosen: function () {
+			if (!this._tableOptions.edit_chosen) {
+				return;
+			}
+
+			this.model.save({
+				chosen: !this.model.get('chosen')
 			});
 		}
 	});
