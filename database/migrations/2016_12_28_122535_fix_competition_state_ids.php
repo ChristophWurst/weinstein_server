@@ -18,14 +18,14 @@ class FixCompetitionStateIds extends Migration {
 						ADD CONSTRAINT `competition_competition_state_id_foreign`
 						FOREIGN KEY (`competition_state_id`) REFERENCES `competition_state` (`id`) ON UPDATE CASCADE;');
 		DB::table('competition_state')
-			->where('id', CompetitionState::STATE_CHOOSE)
+			->where('id', 8)
 			->update(['id' => 100]);
 		DB::table('competition_state')
-			->where('id', CompetitionState::STATE_SOSI)
-			->update(['id' => CompetitionState::STATE_SOSI]);
+			->where('id', 9)
+			->update(['id' => 8]);
 		DB::table('competition_state')
-			->where('id', CompetitionState::STATE_CHOOSE)
-			->update(['id' => CompetitionState::STATE_CHOOSE]);
+			->where('id', 100)
+			->update(['id' => 9]);
 	}
 
 	/**
@@ -41,14 +41,14 @@ class FixCompetitionStateIds extends Migration {
 						FOREIGN KEY (`competition_state_id`) REFERENCES `competition_state` (`id`) ON UPDATE CASCADE;');
 		return;
 		DB::table('competition_state')
-			->where('id', CompetitionState::STATE_CHOOSE)
+			->where('id', 8)
 			->update(['id' => 100]);
 		DB::table('competition_state')
-			->where('id', CompetitionState::STATE_SOSI)
-			->update(['id' => CompetitionState::STATE_CHOOSE]);
+			->where('id', 9)
+			->update(['id' => 8]);
 		DB::table('competition_state')
-			->where('id', CompetitionState::STATE_CHOOSE)
-			->update(['id' => CompetitionState::STATE_SOSI]);
+			->where('id', 100)
+			->update(['id' => 9]);
 	}
 
 }
