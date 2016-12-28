@@ -27,7 +27,7 @@ var Weinstein = Weinstein || {};
 	Weinstein.Views = Weinstein.Views || {};
 
 	var WINE_TABLE_TEMPLATE = '' +
-		'<table class="table table-striped table-condensed">' +
+		'<table class="table table-striped table-condensed wine-table">' +
 		'	<thead>' +
 		'		<tr>' +
 		'			<th class="text-center">Dateinummer</th>' +
@@ -74,28 +74,28 @@ var Weinstein = Weinstein || {};
 		'<td class="text-center">{{ l10nFloat sugar }}</td>' +
 		'{{#if show_rating1 }}<td class="text-center">{{#if rating1}}{{ l10nFloat rating1 }}{{else}}-{{/if}}</td>{{/if}}' +
 		'{{#if show_rating2 }}<td class="text-center">{{#if rating2}}{{ l10nFloat rating2 }}{{else}}-{{/if}}</td>{{/if}}' +
-		'{{#if show_kdb }}<td class="text-center edit-kdb">' +
+		'{{#if show_kdb }}<td class="text-center {{#if edit_kdb}}edit-kdb{{/if}}">' +
 		'    {{#if kdb}}' +
 		'    <span class="glyphicon glyphicon-ok"></span>' +
 		'    {{else}}' +
 		'    -' +
 		'    {{/if}}' +
 		'</td>{{/if}}' +
-		'{{#if show_excluded }}<td class="text-center edit-excluded">' +
+		'{{#if show_excluded }}<td class="text-center {{#if edit_excluded}}edit-excluded{{/if}}">' +
 		'    {{#if excluded}}' +
 		'    <span class="glyphicon glyphicon-ok"></span>' +
 		'    {{else}}' +
 		'    -' +
 		'    {{/if}}' +
 		'</td>{{/if}}' +
-		'{{#if show_sosi }}<td class="text-center edit-sosi">' +
+		'{{#if show_sosi }}<td class="text-center {{#if edit_sosi}}edit-sosi{{/if}}">' +
 		'    {{#if sosi}}' +
 		'    <span class="glyphicon glyphicon-ok"></span>' +
 		'    {{else}}' +
 		'    -' +
 		'    {{/if}}' +
 		'</td>{{/if}}' +
-		'{{#if show_chosen }}<td class="text-center edit-chosen">' +
+		'{{#if show_chosen }}<td class="text-center {{#if edit_chosen}}edit-chosen{{/if}}">' +
 		'    {{#if chosen}}' +
 		'    <span class="glyphicon glyphicon-ok"></span>' +
 		'    {{else}}' +
