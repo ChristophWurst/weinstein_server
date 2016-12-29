@@ -11,31 +11,35 @@ $(document).keydown(function (e) {
 	var focusable;
 
 	// Array of Indexable/Tab-able items
-	focusable = form.find('input,a,select,button,div[contenteditable=true]').filter(':visible');
+	focusable = form.find('input,a,select,button').filter(':visible');
 
-	function enterKey() {
-		if (e.which === 13 && !self.is('textarea,div[contenteditable=true]')) { // [Enter] key
-
-			if (self.is('input:submit')) {
-				form.submit();
-			}
-
-			// If not a regular hyperlink/button/textarea
-			if ($.inArray(self, focusable) && (!self.is('a,button'))) {
-				// Then prevent the default [Enter] key behaviour from submitting the form
-				e.preventDefault();
-			} // Otherwise follow the link/button as by design, or put new line in textarea
-
-			// Focus on the next item (either previous or next depending on shift)
-			focusable.eq(focusable.index(self) + (e.shiftKey ? -1 : 1)).focus();
-
-			return false;
+	if (e.which === 13) { // [Enter] key
+		if (self.is('input:submit')) {
+			form.submit();
 		}
-	}
-	// We need to capture the [Shift] key and check the [Enter] key either way.
-	if (e.shiftKey) {
-		enterKey();
-	} else {
-		enterKey();
+
+		// If not a regular hyperlink/button/textarea
+		if ($.inArray(self, focusable) && (!self.is('a,button'))) {
+			// Then prevent the default [Enter] key behaviour from submitting the form
+			e.preventDefault();
+		} // Otherwise follow the link/button as by design, or put new line in textarea
+
+		// Focus on the next item (either previous or next depending on shift)
+		var idx = focusable.index(self);
+		if (idx === -1) {
+			// Element not found, which means it's not an input
+			// -> probably s2 element, so let's find the actual select element
+			self = self.closest('div').find('select');
+			var idx = focusable.index(self);
+		}
+		var next = focusable.eq(idx + (e.shiftKey ? -1 : 1));
+		if (next.hasClass("select2-hidden-accessible")) {
+			next.select2('open');
+			next.focus();
+		} else {
+			next.focus();
+		}
+
+		return false;
 	}
 });
