@@ -51,7 +51,7 @@ use Illuminate\Support\Facades\DB;
  * @property string $approvalnr
  * @property bool $kdb
  * @property bool $sosi
- * @property bool $choosen
+ * @property bool $chosen
  * @property bool $excluded
  * @property string $comment
  */

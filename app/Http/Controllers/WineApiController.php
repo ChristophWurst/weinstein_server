@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\WineHandler;
+use App\Exceptions\InvalidCompetitionStateException;
 use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
 use App\Wine;
@@ -54,6 +55,8 @@ class WineApiController extends BaseController {
 			return $this->wineHandler->update($wines, $data);
 		} catch (ValidationException $ex) {
 			return response()->json(['errors' => $ex->getErrors()], 412);
+		} catch (InvalidCompetitionStateException $ex) {
+			return response()->json(['error' => $ex->getMessage()], 400);
 		}
 	}
 

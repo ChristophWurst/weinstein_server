@@ -23,11 +23,12 @@ namespace App\Wine;
 
 use App\Contracts\WineHandler;
 use App\Database\Repositories\WineRepository;
+use App\Exceptions\InvalidCompetitionStateException;
 use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
+use App\MasterData\CompetitionState;
 use App\MasterData\User;
 use App\Wine;
-use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -90,6 +91,20 @@ class Handler implements WineHandler {
 		$validator->setCompetition($wine->competition);
 		$validator->setUser(Auth::user());
 		$validator->validateUpdate();
+
+		$competitionState = $wine->competition->competitionState;
+		if ($wine->kdb !== $data['kdb'] && $competitionState->is(CompetitionState::STATE_KDB)) {
+			throw new InvalidCompetitionStateException();
+		}
+		if ($wine->sosi !== $data['sosi'] && $competitionState->is(CompetitionState::STATE_SOSI)) {
+			throw new InvalidCompetitionStateException();
+		}
+		if ($wine->chosen !== $data['chosen'] && $competitionState->is(CompetitionState::STATE_CHOOSE)) {
+			throw new InvalidCompetitionStateException();
+		}
+		if ($wine->excluded !== $data['excluded'] && $competitionState->is(CompetitionState::STATE_EXCLUDE)) {
+			throw new InvalidCompetitionStateException();
+		}
 
 		$this->wineRepository->update($wine, $data);
 		//ActivityLogger::log('Wein [' . $wine->nr . '] bei Bewerb [' . $competition->label . '] bearbeitet');
