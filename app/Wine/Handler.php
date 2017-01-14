@@ -93,16 +93,16 @@ class Handler implements WineHandler {
 		$validator->validateUpdate();
 
 		$competitionState = $wine->competition->competitionState;
-		if ($wine->kdb !== $data['kdb'] && $competitionState->is(CompetitionState::STATE_KDB)) {
+		if (isset($data['kdb']) && $wine->kdb !== $data['kdb'] && $competitionState->is(CompetitionState::STATE_KDB)) {
 			throw new InvalidCompetitionStateException();
 		}
-		if ($wine->sosi !== $data['sosi'] && $competitionState->is(CompetitionState::STATE_SOSI)) {
+		if (isset($data['sosi']) && $wine->sosi !== $data['sosi'] && $competitionState->is(CompetitionState::STATE_SOSI)) {
 			throw new InvalidCompetitionStateException();
 		}
-		if ($wine->chosen !== $data['chosen'] && $competitionState->is(CompetitionState::STATE_CHOOSE)) {
+		if (isset($data['chosen']) && $wine->chosen !== $data['chosen'] && $competitionState->is(CompetitionState::STATE_CHOOSE)) {
 			throw new InvalidCompetitionStateException();
 		}
-		if ($wine->excluded !== $data['excluded'] && $competitionState->is(CompetitionState::STATE_EXCLUDE)) {
+		if (isset($data['excluded']) && $wine->excluded !== $data['excluded'] && $competitionState->is(CompetitionState::STATE_EXCLUDE)) {
 			throw new InvalidCompetitionStateException();
 		}
 
