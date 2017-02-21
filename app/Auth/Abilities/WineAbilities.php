@@ -99,10 +99,10 @@ class WineAbilities {
 	 * @return boolean
 	 */
 	private function updatesSosi(Wine $wine, array $data) {
-		if (!isset($data['kdb'])) {
+		if (!isset($data['sosi'])) {
 			return false;
 		}
-		return $wine->kdb !== $data['kdb'];
+		return $wine->sosi !== $data['sosi'];
 	}
 
 	/**
@@ -111,10 +111,10 @@ class WineAbilities {
 	 * @return boolean
 	 */
 	private function updatesChosen(Wine $wine, array $data) {
-		if (!isset($data['kdb'])) {
+		if (!isset($data['chosen'])) {
 			return false;
 		}
-		return $wine->kdb !== $data['kdb'];
+		return $wine->chosen !== $data['chosen'];
 	}
 
 	/**
@@ -123,10 +123,10 @@ class WineAbilities {
 	 * @return boolean
 	 */
 	private function updatesExcluded(Wine $wine, array $data) {
-		if (!isset($data['kdb'])) {
+		if (!isset($data['excluded'])) {
 			return false;
 		}
-		return $wine->kdb !== $data['kdb'];
+		return $wine->excluded !== $data['excluded'];
 	}
 
 	/**
@@ -153,7 +153,7 @@ class WineAbilities {
 	 * @return boolean
 	 */
 	private function mayUpdateChosen(User $user, Wine $wine) {
-		return $wine->administrates($user);
+		return $wine->applicant->association->administrates($user);
 	}
 
 	/**

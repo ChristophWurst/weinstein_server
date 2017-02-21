@@ -58,9 +58,6 @@ interface WineHandler {
 	public function importKdb(UploadedFile $file, Competition $competition);
 
 	/**
-	 * @param Wine $wine
-	 * @param array $data
-	 */
 	 * @param UploadedFile $file
 	 * @param Competition $competition
 	 */

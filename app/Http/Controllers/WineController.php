@@ -451,9 +451,6 @@ class WineController extends BaseController {
 	}
 
 	/**
-	 * 
-	 * @param Wine $wine
-	 */
 	 * Show import form
 	 * 
 	 * @param Competition $competition

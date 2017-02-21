@@ -22,6 +22,8 @@
 namespace Test\Unit\Auth\Abilities;
 
 use App\Auth\Abilities\WineAbilities;
+use App\MasterData\Applicant;
+use App\MasterData\Association;
 use App\Wine;
 use Mockery;
 use Test\TestCase;
@@ -56,7 +58,7 @@ class WineAbilitiesTest extends TestCase {
 		$wine->shouldReceive('getAttribute')
 			->with('sosi')
 			->andReturn(false);
-		$wine->shouldReceive('isAdmin')
+		$wine->shouldReceive('administrates')
 			->with($user)
 			->andReturn(true);
 
@@ -90,8 +92,64 @@ class WineAbilitiesTest extends TestCase {
 		$wine->shouldReceive('getAttribute')
 			->with('excluded')
 			->andReturn(false);
-		$wine->shouldReceive('isAdmin')
+		$wine->shouldReceive('administrates')
 			->with($user)
+			->andReturn(true);
+
+		$allowed = $this->abilities->update($user, $wine, $data);
+
+		$this->assertTrue($allowed);
+	}
+
+	/**
+	 * Simulate a user updating a wine where they are not association admin
+	 */
+	public function testUpdateForbiddenIfNotAssociationAdmin() {
+		$user = $this->getUserMock();
+		$wine = Mockery::mock(Wine::class);
+		$applicant = Mockery::mock(Applicant::class);
+		$association = Mockery::mock(Association::class);
+		$data = [
+			'chosen' => true,
+		];
+		$wine->shouldReceive('getAttribute')
+			->with('chosen')
+			->andReturn(false);
+		$wine->shouldReceive('getAttribute')
+			->with('applicant')
+			->andReturn($applicant);
+		$applicant->shouldReceive('getAttribute')
+			->with('association')
+			->andReturn($association);
+		$association->shouldReceive('administrates')
+			->andReturn(false);
+
+		$allowed = $this->abilities->update($user, $wine, $data);
+
+		$this->assertFalse($allowed);
+	}
+
+	/**
+	 * Simulate a user updating a wine where they are not association admin
+	 */
+	public function testUpdateAllowedIfUserIsAssociationAdmin() {
+		$user = $this->getUserMock();
+		$wine = Mockery::mock(Wine::class);
+		$applicant = Mockery::mock(Applicant::class);
+		$association = Mockery::mock(Association::class);
+		$data = [
+			'chosen' => true,
+		];
+		$wine->shouldReceive('getAttribute')
+			->with('chosen')
+			->andReturn(false);
+		$wine->shouldReceive('getAttribute')
+			->with('applicant')
+			->andReturn($applicant);
+		$applicant->shouldReceive('getAttribute')
+			->with('association')
+			->andReturn($association);
+		$association->shouldReceive('administrates')
 			->andReturn(true);
 
 		$allowed = $this->abilities->update($user, $wine, $data);
