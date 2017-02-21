@@ -454,26 +454,6 @@ class WineController extends BaseController {
 	 * 
 	 * @param Wine $wine
 	 */
-	public function updateExcluded(Wine $wine) {
-		$this->authorize('update-wine', $wine);
-
-		try {
-			$this->wineHandler->updateExcluded($wine, Input::only('value'));
-		} catch (ValidationException $ve) {
-			return Response::json([
-					'error' => 'Fehler beim setzen von Ex',
-					'wines' => Wine::excluded()->lists('id')->all(),
-			]);
-		}
-		return Response::json([
-				'wines' => Wine::excluded()->lists('id')->all(),
-		]);
-	}
-
-	/**
-	 * 
-	 * @param Wine $wine
-	 */
 	public function updateSosi(Wine $wine) {
 		$this->authorize('update-wine', $wine);
 

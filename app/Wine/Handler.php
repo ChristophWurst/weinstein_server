@@ -28,6 +28,7 @@ use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\MasterData\User;
+use App\Validation\WineValidatorFactory;
 use App\Wine;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
@@ -36,15 +37,18 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
 use PHPExcel_IOFactory;
-use SebastianBergmann\RecursionContext\Exception;
 
 class Handler implements WineHandler {
 
 	/** @var WineRepository */
 	private $wineRepository;
 
-	public function __construct(WineRepository $wineRepository) {
+	/** @var WineValidatorFactory */
+	private $validatorFactory;
+
+	public function __construct(WineRepository $wineRepository, WineValidatorFactory $validatorFactory) {
 		$this->wineRepository = $wineRepository;
+		$this->validatorFactory = $validatorFactory;
 	}
 
 	/**
@@ -87,22 +91,22 @@ class Handler implements WineHandler {
 			$data['vintage'] += 2000;
 		}
 
-		$validator = new WineValidator($data, $wine);
+		$validator = $this->validatorFactory->newWineValidator($wine, $data);
 		$validator->setCompetition($wine->competition);
 		$validator->setUser(Auth::user());
 		$validator->validateUpdate();
 
 		$competitionState = $wine->competition->competitionState;
-		if (isset($data['kdb']) && $wine->kdb !== $data['kdb'] && $competitionState->is(CompetitionState::STATE_KDB)) {
+		if (isset($data['kdb']) && $wine->kdb !== $data['kdb'] && !$competitionState->is(CompetitionState::STATE_KDB)) {
 			throw new InvalidCompetitionStateException();
 		}
-		if (isset($data['sosi']) && $wine->sosi !== $data['sosi'] && $competitionState->is(CompetitionState::STATE_SOSI)) {
+		if (isset($data['sosi']) && $wine->sosi !== $data['sosi'] && !$competitionState->is(CompetitionState::STATE_SOSI)) {
 			throw new InvalidCompetitionStateException();
 		}
-		if (isset($data['chosen']) && $wine->chosen !== $data['chosen'] && $competitionState->is(CompetitionState::STATE_CHOOSE)) {
+		if (isset($data['chosen']) && $wine->chosen !== $data['chosen'] && !$competitionState->is(CompetitionState::STATE_CHOOSE)) {
 			throw new InvalidCompetitionStateException();
 		}
-		if (isset($data['excluded']) && $wine->excluded !== $data['excluded'] && $competitionState->is(CompetitionState::STATE_EXCLUDE)) {
+		if (isset($data['excluded']) && $wine->excluded !== $data['excluded'] && !$competitionState->is(CompetitionState::STATE_EXCLUDE)) {
 			throw new InvalidCompetitionStateException();
 		}
 
@@ -176,22 +180,6 @@ class Handler implements WineHandler {
 		DB::commit();
 		//return number of read lines
 		return $rowCount - 1;
-	}
-
-	/**
-	 * 
-	 * @param Wine $wine
-	 * @param array $data
-	 * @throws ValidationException
-	 */
-	public function updateExcluded(Wine $wine, array $data) {
-		$validator = \Validator::make($data, array('value' => 'required|boolean'));
-		if ($validator->fails()) {
-			throw new ValidationException($validator->messages());
-		}
-		$this->wineRepository->update($wine, [
-			'excluded' => $data['value'],
-		]);
 	}
 
 	/**

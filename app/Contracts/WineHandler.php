@@ -61,12 +61,6 @@ interface WineHandler {
 	 * @param Wine $wine
 	 * @param array $data
 	 */
-	public function updateExcluded(Wine $wine, array $data);
-
-	/**
-	 * @param Wine $wine
-	 * @param array $data
-	 */
 	public function updateSosi(Wine $wine, array $data);
 
 	/**
