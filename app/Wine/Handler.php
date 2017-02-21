@@ -184,6 +184,60 @@ class Handler implements WineHandler {
 	}
 
 	/**
+	 * Import excluded wines using a file
+	 * 
+	 * @param UploadedFile $file
+	 * @param Competition $competition
+	 * @return int Number of read lines
+	 */
+	public function importExcluded(UploadedFile $file, Competition $competition) {
+		//iterate over all entries and try to store them
+		//
+		//if exceptions occur, all db actions are rolled back to prevent data 
+		//inconsistency
+		try {
+			$doc = PHPExcel_IOFactory::load($file->getRealPath());
+		} catch (Exception $ex) {
+			throw new ValidationException(new MessageBag(array('Ung&uuml;ltiges Dateiformat')));
+		}
+
+		$sheet = $doc->getActiveSheet();
+
+		DB::beginTransaction();
+		$rowCount = 0;
+		try {
+			$competition->wines()->update(array('excluded' => false));
+			$rowCount = 1;
+
+			foreach ($sheet->toArray() as $row) {
+				if (!isset($row[0])) {
+					Log::error('invalid excluded import file format');
+					throw new ValidationException(new MessageBag(array('Fehler beim Lesen der Datei')));
+				}
+				$wine = $competition->wines()->where('nr', '=', $row[0])->first();
+				if (is_null($wine)) {
+					Log::error('invalid wine id while importing excluded');
+					throw new ValidationException(new MessageBag(array('Wein ' . $row[0] . ' nicht vorhanden')));
+				}
+				$this->updateExcluded($wine, array(
+					'value' => true,
+				));
+				$rowCount++;
+			}
+		} catch (ValidationException $ve) {
+			DB::rollback();
+			$messages = new MessageBag(array(
+				'row' => 'Fehler in Zeile ' . $rowCount,
+			));
+			$messages->merge($ve->getErrors());
+			throw new ValidationException($messages);
+		}
+		DB::commit();
+		//return number of read lines
+		return $rowCount - 1;
+	}
+
+	/**
 	 * @param Wine $wine
 	 * @param array $data
 	 * @throws ValidationException
@@ -268,58 +322,6 @@ class Handler implements WineHandler {
 		$this->wineRepository->update($wine, [
 			'chosen' => $data['value'],
 		]);
-	}
-
-	/**
-	 * Import chosen wines using a file
-	 * 
-	 * @param UploadedFile $file
-	 * @param Competition $competition
-	 * @return int Number of read lines
-	 */
-	public function importChosen(UploadedFile $file, Competition $competition) {
-		//iterate over all entries and try to store them
-		//if exceptions occur, all db actions are rolled back to prevent data 
-		//inconsistency
-		try {
-			$doc = PHPExcel_IOFactory::load($file->getRealPath());
-		} catch (Exception $ex) {
-			throw new ValidationException(new MessageBag(array('Ung&uuml;ltiges Dateiformat')));
-		}
-
-		$sheet = $doc->getActiveSheet();
-
-		DB::beginTransaction();
-		try {
-			$competition->wines()->update(array('chosen' => false));
-			$rowCount = 1;
-
-			foreach ($sheet->toArray() as $row) {
-				if (!isset($row[0])) {
-					Log::error('invalid tasting number import format');
-					throw new ValidationException(new MessageBag(array('Fehler beim Lesen der Datei')));
-				}
-				$wine = $competition->wines()->where('nr', '=', $row[0])->first();
-				if (is_null($wine)) {
-					Log::error('invalid wine id while importing chosen');
-					throw new ValidationException(new MessageBag(array('Wein ' . $row[0] . ' nicht vorhanden')));
-				}
-				$this->updateChosen($wine, array(
-					'value' => true,
-				));
-				$rowCount++;
-			}
-		} catch (ValidationException $ve) {
-			DB::rollback();
-			$messages = new MessageBag(array(
-				'row' => 'Fehler in Zeile ' . $rowCount,
-			));
-			$messages->merge($ve->getErrors());
-			throw new ValidationException($messages);
-		}
-		DB::commit();
-		//return number of read lines
-		return $rowCount - 1;
 	}
 
 	/**

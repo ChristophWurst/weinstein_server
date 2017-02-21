@@ -1,12 +1,7 @@
 @extends('default')
 
 @section('content')
-<h1>Ausgeschenkte Weine importieren</h1>
-<p>
-    Hier kann eine Excel-Datei mit allen Dateinummern hochgeladen werden, die ausgeschenkt
-    werden sollen. Alle Weine, die nicht in dieser hochgeladenen Datei enthalten sind,
-    werden nicht zum Ausschank ausgewählt!
-</p>
+<h1>Ausschluss importieren</h1>
 <div class="alert alert-info" role="alert">
     <button type="button" class="close" data-dismiss="alert">
         <span aria-hidden="true">
@@ -26,7 +21,7 @@
         </div>
         <div class="col-sm-4 col-md-6">
             Beispiel:<br>
-            <img src="{!! asset('img/example/kdb_sosi_chosen_import.png') !!}" alt="Ausgeschenkte Weine importieren" />
+            <img src="{!! asset('img/example/kdb_sosi_chosen_import.png') !!}" alt="Ausschluss importieren" />
         </div>
     </div>
 </div>

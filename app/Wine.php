@@ -104,7 +104,7 @@ class Wine extends Model implements AdministrateModel {
 	 * Check if the given user is authorized to administrate
 	 * 
 	 * @param User $user
-	 * @return bool
+	 * @return boolean
 	 */
 	public function administrates(User $user) {
 		if ($user->isAdmin()) {

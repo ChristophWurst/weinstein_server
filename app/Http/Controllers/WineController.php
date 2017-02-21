@@ -451,9 +451,42 @@ class WineController extends BaseController {
 	}
 
 	/**
+	 * Show import form
 	 * 
-	 * @param Wine $wine
+	 * @param Competition $competition
+	 * @return View
 	 */
+	public function importExcluded(Competition $competition) {
+		$this->authorize('import-excluded-wines', $competition);
+
+		return $this->viewFactory->make('competition/wines/import-excluded');
+	}
+
+	/**
+	 * Validate and store import files exclude wines
+	 * 
+	 * @param Competition $competition
+	 * @return type
+	 */
+	public function importExcludedStore(Competition $competition) {
+		$this->authorize('import-excluded-wines', $competition);
+
+		try {
+			$file = Input::file('xlsfile');
+			if ($file === null) {
+				return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
+			}
+			$rowsImported = $this->wineHandler->importExcluded($file, $competition);
+		} catch (ValidationException $ve) {
+			return Redirect::route('enrollment.wines/import-exclude', ['competition' => $competition->id])
+					->withErrors($ve->getErrors())
+					->withInput();
+		}
+		Session::flash('rowsImported', $rowsImported);
+		return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
+	}
+
+	/**
 	public function updateSosi(Wine $wine) {
 		$this->authorize('update-wine', $wine);
 
@@ -530,42 +563,6 @@ class WineController extends BaseController {
 		return Response::json([
 				'wines' => Wine::chosen()->lists('id')->all(),
 		]);
-	}
-
-	/**
-	 * Show import form
-	 * 
-	 * @param Competition $competition
-	 * @return View
-	 */
-	public function importChosen(Competition $competition) {
-		$this->authorize('import-chosen-wines', $competition);
-
-		return $this->viewFactory->make('competition/wines/import-chosen');
-	}
-
-	/**
-	 * Validate and store import files chosen wines
-	 * 
-	 * @param Competition $competition
-	 * @return type
-	 */
-	public function importChosenStore(Competition $competition) {
-		$this->authorize('import-chosen-wines', $competition);
-
-		try {
-			$file = Input::file('xlsfile');
-			if ($file === null) {
-				return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
-			}
-			$rowsImported = $this->wineHandler->importChosen($file, $competition);
-		} catch (ValidationException $ve) {
-			return Redirect::route('enrollment.wines/import-chosen', ['competition' => $competition->id])
-					->withErrors($ve->getErrors())
-					->withInput();
-		}
-		Session::flash('rowsImported', $rowsImported);
-		return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
 	}
 
 	/**

@@ -41,17 +41,17 @@ class WineApiController extends BaseController {
 	}
 
 	public function update(Wine $wines, Request $request) {
-		$this->authorize('update-wine', $wines);
+			$oldData = $wines->toArray();
+		$data = array_merge($oldData,
+			[
+			'kdb' => $request->get('kdb'),
+			'sosi' => $request->get('sosi'),
+			'excluded' => $request->get('excluded'),
+			'chosen' => $request->get('chosen'),
+		]);
+		$this->authorize('update-wine', $wines, $data);
 
 		try {
-			$oldData = $wines->toArray();
-			$data = array_merge($oldData,
-				[
-				'kdb' => $request->get('kdb'),
-				'sosi' => $request->get('sosi'),
-				'excluded' => $request->get('excluded'),
-				'chosen' => $request->get('chosen'),
-			]);
 			return $this->wineHandler->update($wines, $data);
 		} catch (ValidationException $ex) {
 			return response()->json(['errors' => $ex->getErrors()], 412);
