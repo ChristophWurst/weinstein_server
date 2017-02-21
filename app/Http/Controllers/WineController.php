@@ -471,42 +471,6 @@ class WineController extends BaseController {
 	}
 
 	/**
-	 * Show import form
-	 * 
-	 * @param Competition $competition
-	 * @return View
-	 */
-	public function importExcluded(Competition $competition) {
-		$this->authorize('import-excluded-wines', $competition);
-
-		return $this->viewFactory->make('competition/wines/import-excluded');
-	}
-
-	/**
-	 * Validate and store import files exclude wines
-	 * 
-	 * @param Competition $competition
-	 * @return type
-	 */
-	public function importExcludedStore(Competition $competition) {
-		$this->authorize('import-excluded-wines', $competition);
-
-		try {
-			$file = Input::file('xlsfile');
-			if ($file === null) {
-				return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
-			}
-			$rowsImported = $this->wineHandler->importExcluded($file, $competition);
-		} catch (ValidationException $ve) {
-			return Redirect::route('enrollment.wines/import-exclude', ['competition' => $competition->id])
-					->withErrors($ve->getErrors())
-					->withInput();
-		}
-		Session::flash('rowsImported', $rowsImported);
-		return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
-	}
-
-	/**
 	 * 
 	 * @param Wine $wine
 	 */
