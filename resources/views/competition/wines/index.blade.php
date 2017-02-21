@@ -47,14 +47,6 @@
        KdB Zuweisung abschlie&szlig;en
     </a>
     @endif
-    @if ($edit_excluded)
-    <a class="btn btn-default"
-       type="button"
-       href="{!! route('enrollment.wines/import-excluded', array('competition' => $competition->id)) !!}">
-        <span class="glyphicon glyphicon-import"></span>
-       Ausschluss importieren
-    </a>
-    @endif
     @if ($show_complete_exclude)
     <a class="btn btn-default"
        type="button"
