@@ -64,6 +64,9 @@ interface WineHandler {
 	public function importExcluded(UploadedFile $file, Competition $competition);
 
 	/**
+	 * @param Wine $wine
+	 * @param array $data
+	 */
 	public function updateSosi(Wine $wine, array $data);
 
 	/**
@@ -77,12 +80,6 @@ interface WineHandler {
 	 * @param array $data
 	 */
 	public function updateChosen(Wine $wine, array $data);
-
-	/**
-	 * @param UploadedFile $file
-	 * @param Competition $competition
-	 */
-	public function importChosen(UploadedFile $file, Competition $competition);
 
 	/**
 	 * @param Wine $wine
