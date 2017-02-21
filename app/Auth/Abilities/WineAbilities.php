@@ -52,20 +52,12 @@ class WineAbilities {
 		return $competition->competitionState->id === CompetitionState::STATE_KDB;
 	}
 
-	private function checkImportExcluded(Competition $competition) {
-		return $competition->competitionState->id === CompetitionState::STATE_EXCLUDE;
-	}
-
 	private function checkEditSosi(Competition $competition) {
 		return $competition->competitionState->id === CompetitionState::STATE_SOSI;
 	}
 
 	private function checkSosiImport(Competition $competition) {
 		return $competition->competitionState->id === CompetitionState::STATE_SOSI;
-	}
-
-	private function isWineAdmin(User $user, Wine $wine) {
-		return $wine->administrates($user);
 	}
 
 	private function checkEditChosen(User $user, Wine $wine, Competition $competition) {
@@ -82,7 +74,7 @@ class WineAbilities {
 
 	/**
 	 * @param User $user
-	 , Wine $wine
+	 * @param Wine $wine
 	 * @return boolean
 	 */
 	public function show(User $user, Wine $wine) {
@@ -90,8 +82,113 @@ class WineAbilities {
 	}
 
 	/**
+	 * @param Wine $wine
+	 * @param array $data
+	 * @return boolean
+	 */
+	private function updatesKdb(Wine $wine, array $data) {
+		if (!isset($data['kdb'])) {
+			return false;
+		}
+		return $wine->kdb !== $data['kdb'];
+	}
+
+	/**
+	 * @param Wine $wine
+	 * @param array $data
+	 * @return boolean
+	 */
+	private function updatesSosi(Wine $wine, array $data) {
+		if (!isset($data['kdb'])) {
+			return false;
+		}
+		return $wine->kdb !== $data['kdb'];
+	}
+
+	/**
+	 * @param Wine $wine
+	 * @param array $data
+	 * @return boolean
+	 */
+	private function updatesChosen(Wine $wine, array $data) {
+		if (!isset($data['kdb'])) {
+			return false;
+		}
+		return $wine->kdb !== $data['kdb'];
+	}
+
+	/**
+	 * @param Wine $wine
+	 * @param array $data
+	 * @return boolean
+	 */
+	private function updatesExcluded(Wine $wine, array $data) {
+		if (!isset($data['kdb'])) {
+			return false;
+		}
+		return $wine->kdb !== $data['kdb'];
+	}
+
+	/**
 	 * @param User $user
-	 , Wine $wine
+	 * @param Wine $wine
+	 * @return boolean
+	 */
+	private function mayUpdateKdb(User $user, Wine $wine) {
+		return $wine->administrates($user);
+	}
+
+	/**
+	 * @param User $user
+	 * @param Wine $wine
+	 * @return boolean
+	 */
+	private function mayUpdateSosi(User $user, Wine $wine) {
+		return $wine->administrates($user);
+	}
+
+	/**
+	 * @param User $user
+	 * @param Wine $wine
+	 * @return boolean
+	 */
+	private function mayUpdateChosen(User $user, Wine $wine) {
+		return $wine->administrates($user);
+	}
+
+	/**
+	 * @param User $user
+	 * @param Wine $wine
+	 * @return boolean
+	 */
+	private function mayUpdateExcluded(User $user, Wine $wine) {
+		return $wine->administrates($user);
+	}
+
+	/**
+	 * @param User $user
+	 * @param Wine $wine
+	 * @return boolean
+	 */
+	public function update(User $user, Wine $wine, array $data) {
+		if ($this->updatesKdb($wine, $data) && !$this->mayUpdateKdb($user, $wine)) {
+			return false;
+		}
+		if ($this->updatesSosi($wine, $data) && !$this->mayUpdateSosi($user, $wine)) {
+			return false;
+		}
+		if ($this->updatesChosen($wine, $data) && !$this->mayUpdateChosen($user, $wine)) {
+			return false;
+		}
+		if ($this->updatesExcluded($wine, $data) && !$this->mayUpdateExcluded($user, $wine)) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * @param User $user
+	 * @param Wine $wine
 	 * @return boolean
 	 */
 	public function enrollmentPdf(User $user, Wine $wine) {
