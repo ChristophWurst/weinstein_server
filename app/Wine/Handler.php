@@ -30,6 +30,7 @@ use App\MasterData\CompetitionState;
 use App\MasterData\User;
 use App\Validation\WineValidatorFactory;
 use App\Wine;
+use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
