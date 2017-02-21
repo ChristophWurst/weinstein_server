@@ -61,6 +61,12 @@ interface WineHandler {
 	 * @param Wine $wine
 	 * @param array $data
 	 */
+	 * @param UploadedFile $file
+	 * @param Competition $competition
+	 */
+	public function importExcluded(UploadedFile $file, Competition $competition);
+
+	/**
 	public function updateSosi(Wine $wine, array $data);
 
 	/**

@@ -87,6 +87,13 @@ Route::group(array('prefix' => 'competition/{competition}', 'middleware' => 'aut
 			'as' => 'enrollment.wines/excluded',
 			'uses' => 'WineController@excluded'
 		));
+		Route::get('import-excluded', array(
+			'as' => 'enrollment.wines/import-excluded',
+			'uses' => 'WineController@importExcluded'
+		));
+		Route::post('import-excluded', array(
+			'uses' => 'WineController@importExcludedStore'
+		));
 		Route::get('sosi', array(
 			'as' => 'enrollment.wines/sosi',
 			'uses' => 'WineController@sosi'
