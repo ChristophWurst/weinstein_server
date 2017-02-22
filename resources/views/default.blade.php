@@ -173,6 +173,24 @@ use App\MasterData\CompetitionState;
             @yield('content')
         </div><!--/ .container -->
 
+		<!-- Modal -->
+		<div class="modal fade" id="error-modal" tabindex="-1" role="dialog">
+				<div class="modal-dialog" role="document">
+						<div class="modal-content">
+								<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+										<h4 class="modal-title">Entschuldigung, das hätte nicht passieren sollen.</h4>
+								</div>
+								<div class="modal-body">
+								</div>
+								<div class="modal-footer">
+										<button type="button" class="btn btn-warning" onclick="location.reload();" data-dismiss="modal">Seite neu laden</button>
+										<button type="button" class="btn btn-default" data-dismiss="modal">Schlie&szlig;en</button>
+								</div>
+						</div>
+				</div>
+		</div>
+
         <script src="{!! asset('js/vendor/jquery/dist/jquery.min.js') !!}"></script>
         <script src="{!! asset('js/vendor/bootstrap/dist/js/bootstrap.min.js') !!}"></script>
 		<script src="{!! asset('js/vendor/underscore/underscore.js') !!}"></script>
