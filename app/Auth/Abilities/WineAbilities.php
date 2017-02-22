@@ -82,6 +82,15 @@ class WineAbilities {
 	}
 
 	/**
+	 * @param User $user
+	 * @param Competition $competition
+	 * @return boolean
+	 */
+	public function create(User $user, Competition $competition) {
+		return $competition->competitionState->is(CompetitionState::STATE_ENROLLMENT);
+	}
+
+	/**
 	 * @param Wine $wine
 	 * @param array $data
 	 * @return boolean

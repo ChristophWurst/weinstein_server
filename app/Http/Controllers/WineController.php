@@ -209,6 +209,8 @@ class WineController extends BaseController {
 	 * @return View
 	 */
 	public function create(Competition $competition, Request $request) {
+		$this->authorize('create-wine', $competition);
+
 		$user = Auth::user();
 		$applicants = $competition->administrates($user) ? Applicant::all() : $user->applicants;
 		return $this->viewFactory->make('competition/wines/form', [
@@ -232,6 +234,8 @@ class WineController extends BaseController {
 	 * @return Resp
 	 */
 	public function store(Competition $competition, Request $request) {
+		$this->authorize('create-wine', $competition);
+
 		try {
 			$data = Input::all();
 			if (isset($data['alcohol'])) {
