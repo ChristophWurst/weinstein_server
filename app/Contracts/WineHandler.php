@@ -21,11 +21,13 @@
 
 namespace App\Contracts;
 
+use App\Exceptions\InvalidCompetitionStateException;
 use App\MasterData\Competition;
 use App\MasterData\User;
 use App\Wine;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Validation\ValidationException;
 
 interface WineHandler {
 
@@ -40,6 +42,7 @@ interface WineHandler {
 	 * @param Wine $wine
 	 * @param array $data
 	 * @throws ValidationException
+	 * @throws InvalidCompetitionStateException if the user (non admin) is not allowed to edit wines in that state
 	 * @return Wine
 	 */
 	public function update(Wine $wine, array $data);

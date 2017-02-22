@@ -24,6 +24,7 @@ namespace Test\Unit\Wine;
 use App\Database\Repositories\WineRepository;
 use App\Exceptions\InvalidCompetitionStateException;
 use App\Exceptions\ValidationException;
+use App\Exceptions\WineLockedException;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\MasterData\User;
@@ -96,7 +97,10 @@ class HandlerTest extends TestCase {
 		$competitionState->shouldReceive('is')
 			->never()
 			->andReturn(false);
-
+		$wine->shouldReceive('fill')
+			->with($data);
+		$wine->shouldReceive('isDirty')
+			->andReturn(false);
 		$this->wineRepository->shouldReceive('update')
 			->once()
 			->with($wine, $data);
@@ -318,6 +322,151 @@ class HandlerTest extends TestCase {
 
 		$this->setExpectedException(InvalidCompetitionStateException::class);
 		$this->handler->update($wine, $data);
+	}
+
+	public function testUpdateAsNonAdminInLaterComptitionState() {
+		$user = Mockery::mock(User::class);
+		$competition = Mockery::mock(Competition::class);
+		$competitionState = Mockery::mock(CompetitionState::class);
+		$wine = Mockery::mock(Wine::class);
+		$data = [
+			'label' => 'test',
+		];
+		$wine->shouldReceive('getAttribute')
+			->with('competition')
+			->andReturn($competition);
+		Auth::shouldReceive('user')
+			->andReturn($user);
+		$validator = Mockery::mock(WineValidator::class);
+		$this->validatorFactory->shouldReceive('newWineValidator')
+			->once()
+			->andReturn($validator);
+		$validator->shouldReceive('setCompetition')
+			->once()
+			->with($competition);
+		$validator->shouldReceive('setUser')
+			->once()
+			->with($user);
+		$validator->shouldReceive('validateUpdate')
+			->once();
+
+		$competition->shouldReceive('getAttribute')
+			->with('competitionState')
+			->andReturn($competitionState);
+		$wine->shouldReceive('fill')
+			->with($data);
+		$wine->shouldReceive('isDirty')
+			->andReturn(true);
+		$competitionState->shouldReceive('is')
+			->once()
+			->andReturn(false);
+		$user->shouldReceive('isAdmin')
+			->andReturn(false);
+		$this->wineRepository->shouldReceive('update')
+			->never();
+		$this->setExpectedException(WineLockedException::class);
+
+		$this->handler->update($wine, $data);
+	}
+
+	public function testUpdateAsNonAdminInWhenNrIsAlreadySet() {
+		$user = Mockery::mock(User::class);
+		$competition = Mockery::mock(Competition::class);
+		$competitionState = Mockery::mock(CompetitionState::class);
+		$wine = Mockery::mock(Wine::class);
+		$data = [
+			'label' => 'test',
+		];
+		$wine->shouldReceive('getAttribute')
+			->with('competition')
+			->andReturn($competition);
+		Auth::shouldReceive('user')
+			->andReturn($user);
+		$validator = Mockery::mock(WineValidator::class);
+		$this->validatorFactory->shouldReceive('newWineValidator')
+			->once()
+			->andReturn($validator);
+		$validator->shouldReceive('setCompetition')
+			->once()
+			->with($competition);
+		$validator->shouldReceive('setUser')
+			->once()
+			->with($user);
+		$validator->shouldReceive('validateUpdate')
+			->once();
+
+		$competition->shouldReceive('getAttribute')
+			->with('competitionState')
+			->andReturn($competitionState);
+		$wine->shouldReceive('fill')
+			->with($data);
+		$wine->shouldReceive('isDirty')
+			->andReturn(true);
+		$competitionState->shouldReceive('is')
+			->with(CompetitionState::STATE_ENROLLMENT)
+			->andReturn(true);
+		$wine->shouldReceive('getAttribute')
+			->with('nr')
+			->once()
+			->andReturn(1234);
+		$user->shouldReceive('isAdmin')
+			->andReturn(false);
+		$this->wineRepository->shouldReceive('update')
+			->never();
+		$this->setExpectedException(WineLockedException::class);
+
+		$this->handler->update($wine, $data);
+	}
+
+	public function testUpdateAsAdminInWhenNrIsAlreadySet() {
+		$user = Mockery::mock(User::class);
+		$competition = Mockery::mock(Competition::class);
+		$competitionState = Mockery::mock(CompetitionState::class);
+		$wine = Mockery::mock(Wine::class);
+		$data = [
+			'label' => 'test',
+		];
+		$wine->shouldReceive('getAttribute')
+			->with('competition')
+			->andReturn($competition);
+		Auth::shouldReceive('user')
+			->andReturn($user);
+		$validator = Mockery::mock(WineValidator::class);
+		$this->validatorFactory->shouldReceive('newWineValidator')
+			->once()
+			->andReturn($validator);
+		$validator->shouldReceive('setCompetition')
+			->once()
+			->with($competition);
+		$validator->shouldReceive('setUser')
+			->once()
+			->with($user);
+		$validator->shouldReceive('validateUpdate')
+			->once();
+
+		$competition->shouldReceive('getAttribute')
+			->with('competitionState')
+			->andReturn($competitionState);
+		$wine->shouldReceive('fill')
+			->with($data);
+		$wine->shouldReceive('isDirty')
+			->andReturn(true);
+		$competitionState->shouldReceive('is')
+			->with(CompetitionState::STATE_ENROLLMENT)
+			->andReturn(true);
+		$wine->shouldReceive('getAttribute')
+			->with('nr')
+			->once()
+			->andReturn(1234);
+		$user->shouldReceive('isAdmin')
+			->andReturn(true);
+		$this->wineRepository->shouldReceive('update')
+			->once()
+			->with($wine, $data);
+
+		$result = $this->handler->update($wine, $data);
+
+		$this->assertEquals($wine, $result);
 	}
 
 	public function testUpdateKdb() {
