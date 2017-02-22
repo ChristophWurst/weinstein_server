@@ -1,4 +1,4 @@
-/* global Marionette, Handlebars */
+/* global Marionette, Handlebars, Promise */
 
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
@@ -109,6 +109,17 @@ var Weinstein = Weinstein || {};
 		'</td>' +
 		'{{/if}}';
 
+	function handleAPIErrors(e) {
+		console.error(e);
+		var errorMsg = 'Die Änderung konnte nicht gespeichert werden.';
+		if (e && e.responseJSON && e.responseJSON.error) {
+			errorMsg += ' Fehler: ' + e.responseJSON.error;
+		}
+		Weinstein.Views.showError({
+			text: errorMsg
+		});
+	}
+
 	var WineView = Marionette.View.extend({
 		tagName: 'tr',
 		template: Handlebars.compile(WINE_TEMPLATE),
@@ -141,36 +152,52 @@ var Weinstein = Weinstein || {};
 				return;
 			}
 
-			this.model.save({
-				kdb: !this.model.get('kdb')
-			});
+			var oldState = this.model.get('kdb');
+			Promise.resolve(this.model.save({
+				kdb: !oldState
+			})).catch(function (e) {
+				handleAPIErrors(e);
+				this.model.set('kdb', oldState);
+			}.bind(this));
 		},
 		_editExcluded: function () {
 			if (!this._tableOptions.edit_excluded) {
 				return;
 			}
 
-			this.model.save({
-				excluded: !this.model.get('excluded')
-			});
+			var oldState = this.model.get('excluded');
+			Promise.resolve(this.model.save({
+				excluded: !oldState,
+			})).catch(function (e) {
+				handleAPIErrors(e);
+				this.model.set('excluded', oldState);
+			}.bind(this));
 		},
 		_editSosi: function () {
 			if (!this._tableOptions.edit_sosi) {
 				return;
 			}
 
-			this.model.save({
-				sosi: !this.model.get('sosi')
-			});
+			var oldState = this.model.get('sosi');
+			Promise.resolve(this.model.save({
+				sosi: !oldState
+			})).catch(function (e) {
+				handleAPIErrors(e);
+				this.model.set('sosi', oldState);
+			}.bind(this));
 		},
 		_editChosen: function () {
 			if (!this._tableOptions.edit_chosen) {
 				return;
 			}
 
-			this.model.save({
-				chosen: !this.model.get('chosen')
-			});
+			var oldState = this.model.get('chosen');
+			Promise.resolve(this.model.save({
+				chosen: !oldState
+			})).catch(function (e) {
+				handleAPIErrors(e);
+				this.model.set('chosen', oldState);
+			}.bind(this));
 		}
 	});
 

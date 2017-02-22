@@ -41,7 +41,7 @@ class WineApiController extends BaseController {
 	}
 
 	public function update(Wine $wines, Request $request) {
-			$oldData = $wines->toArray();
+		$oldData = $wines->toArray();
 		$data = array_merge($oldData,
 			[
 			'kdb' => $request->get('kdb'),
