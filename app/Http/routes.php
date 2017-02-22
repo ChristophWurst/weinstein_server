@@ -72,20 +72,12 @@ Route::group(array('prefix' => 'competition/{competition}', 'middleware' => 'aut
 			'as' => 'enrollment.wines/redirect',
 			'uses' => 'WineController@redirect'
 		));
-		Route::get('kdb', array(
-			'as' => 'enrollment.wines/kdb',
-			'uses' => 'WineController@kdb'
-		));
 		Route::get('import-kdb', array(
 			'as' => 'enrollment.wines/import-kdb',
 			'uses' => 'WineController@importKdb'
 		));
 		Route::post('import-kdb', array(
 			'uses' => 'WineController@importKdbStore'
-		));
-		Route::get('excluded', array(
-			'as' => 'enrollment.wines/excluded',
-			'uses' => 'WineController@excluded'
 		));
 		Route::get('import-excluded', array(
 			'as' => 'enrollment.wines/import-excluded',
@@ -94,20 +86,12 @@ Route::group(array('prefix' => 'competition/{competition}', 'middleware' => 'aut
 		Route::post('import-excluded', array(
 			'uses' => 'WineController@importExcludedStore'
 		));
-		Route::get('sosi', array(
-			'as' => 'enrollment.wines/sosi',
-			'uses' => 'WineController@sosi'
-		));
 		Route::get('import-sosi', array(
 			'as' => 'enrollment.wines/import-sosi',
 			'uses' => 'WineController@importSosi'
 		));
 		Route::post('import-sosi', array(
 			'uses' => 'WineController@importSosiStore'
-		));
-		Route::get('chosen', array(
-			'as' => 'enrollment.wines/chosen',
-			'uses' => 'WineController@chosen'
 		));
 
 		Route::get('create', array(
