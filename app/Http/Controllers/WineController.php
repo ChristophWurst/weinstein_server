@@ -150,58 +150,6 @@ class WineController extends BaseController {
 	}
 
 	/**
-	 * Get lists of all kdb wines
-	 * 
-	 * @param Competition $competition
-	 */
-	public function kdb(Competition $competition) {
-		$this->authorize('kdb-wines', $competition);
-
-		return Response::json([
-				'wines' => Wine::kdb()->lists('id')->all(),
-		]);
-	}
-
-	/**
-	 * Get lists of all excluded wines
-	 * 
-	 * @param Competition $competition
-	 */
-	public function excluded(Competition $competition) {
-		$this->authorize('excluded-wines', $competition);
-
-		return Response::json([
-				'wines' => Wine::excluded()->lists('id')->all(),
-		]);
-	}
-
-	/**
-	 * Get lists of all sosi wines
-	 * 
-	 * @param Competition $competition
-	 */
-	public function sosi(Competition $competition) {
-		$this->authorize('sosi-wines', $competition);
-
-		return Response::json([
-				'wines' => Wine::sosi()->lists('id')->all(),
-		]);
-	}
-
-	/**
-	 * Get lists of all chosen wines
-	 * 
-	 * @param Competition $competition
-	 */
-	public function chosen(Competition $competition) {
-		$this->authorize('chosen-wines', $competition);
-
-		return Response::json([
-				'wines' => Wine::chosen()->lists('id')->all(),
-		]);
-	}
-
-	/**
 	 * Create a new wine
 	 * 
 	 * @param Competition $competition
