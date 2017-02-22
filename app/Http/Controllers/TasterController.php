@@ -15,6 +15,9 @@ class TasterController extends BaseController {
 	/** @var TastingHandler */
 	private $handler;
 
+	/**
+	 * @param TastingHandler $handler
+	 */
 	public function __construct(TastingHandler $handler) {
 		$this->handler = $handler;
 	}
