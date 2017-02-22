@@ -19,7 +19,7 @@
  *
  */
 
-namespace App\Exception;
+namespace App\Exceptions;
 
 use Exception;
 
