@@ -24,6 +24,8 @@ namespace Test\Unit\Auth\Abilities;
 use App\Auth\Abilities\WineAbilities;
 use App\MasterData\Applicant;
 use App\MasterData\Association;
+use App\MasterData\Competition;
+use App\MasterData\CompetitionState;
 use App\Wine;
 use Mockery;
 use Test\TestCase;
@@ -39,6 +41,38 @@ class WineAbilitiesTest extends TestCase {
 		parent::setUp();
 
 		$this->abilities = new WineAbilities();
+	}
+
+	public function testCreate() {
+		$user = $this->getUserMock();
+		$competition = Mockery::mock(Competition::class);
+		$competitionState = Mockery::mock(CompetitionState::class);
+		$competition->shouldReceive('getAttribute')
+			->with('competitionState')
+			->andReturn($competitionState);
+		$competitionState->shouldReceive('is')
+			->with(CompetitionState::STATE_ENROLLMENT)
+			->andReturn(true);
+
+		$allowed = $this->abilities->create($user, $competition);
+
+		$this->assertTrue($allowed);
+	}
+
+	public function testCreateWithWrongCompetitionState() {
+		$user = $this->getUserMock();
+		$competition = Mockery::mock(Competition::class);
+		$competitionState = Mockery::mock(CompetitionState::class);
+		$competition->shouldReceive('getAttribute')
+			->with('competitionState')
+			->andReturn($competitionState);
+		$competitionState->shouldReceive('is')
+			->with(CompetitionState::STATE_ENROLLMENT)
+			->andReturn(false);
+
+		$allowed = $this->abilities->create($user, $competition);
+
+		$this->assertFalse($allowed);
 	}
 
 	/**
