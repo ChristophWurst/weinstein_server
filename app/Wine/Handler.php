@@ -84,7 +84,6 @@ class Handler implements WineHandler {
 	 * 
 	 * @param Wine $wine
 	 * @param array $data
-	 * @param Competition $competition
 	 * @throws ValidationException
 	 * @throws InvalidCompetitionStateException if the user (non admin) is not allowed to edit wines in that state
 	 * @return Wine
