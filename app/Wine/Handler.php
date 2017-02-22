@@ -25,6 +25,7 @@ use App\Contracts\WineHandler;
 use App\Database\Repositories\WineRepository;
 use App\Exceptions\InvalidCompetitionStateException;
 use App\Exceptions\ValidationException;
+use App\Exceptions\WineLockedException;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\MasterData\User;
@@ -83,7 +84,8 @@ class Handler implements WineHandler {
 	 * 
 	 * @param Wine $wine
 	 * @param array $data
-	 * @param Competition $competition
+	 * @throws ValidationException
+	 * @throws InvalidCompetitionStateException if the user (non admin) is not allowed to edit wines in that state
 	 * @return Wine
 	 */
 	public function update(Wine $wine, array $data) {
@@ -109,6 +111,23 @@ class Handler implements WineHandler {
 		}
 		if (isset($data['excluded']) && $wine->excluded !== $data['excluded'] && !$competitionState->is(CompetitionState::STATE_EXCLUDE)) {
 			throw new InvalidCompetitionStateException();
+		}
+
+		$wine->fill($data);
+		$enrollmentAttributes = array_diff(array_keys($data), [
+			'kdb',
+			'sosi',
+			'chosen',
+			'excluded',
+		]);
+		if ($wine->isDirty($enrollmentAttributes)) {
+			// These attributes may only be changed via enrollment while 'nr' is not set or by an admin
+			if (!$competitionState->is(CompetitionState::STATE_ENROLLMENT) && !Auth::user()->isAdmin()) {
+				throw new WineLockedException();
+			}
+			if ($competitionState->is(CompetitionState::STATE_ENROLLMENT) && !is_null($wine->nr) && !Auth::user()->isAdmin()) {
+				throw new WineLockedException();
+			}
 		}
 
 		$this->wineRepository->update($wine, $data);
