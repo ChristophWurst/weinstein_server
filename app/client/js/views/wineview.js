@@ -153,6 +153,7 @@ var Weinstein = Weinstein || {};
 			if (applicant && applicant.association) {
 				return applicant.association.wuser_username;
 			}
+			return;
 		},
 
 		templateContext: function () {
