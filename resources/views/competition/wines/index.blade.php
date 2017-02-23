@@ -79,14 +79,6 @@
        SoSi Zuweisung abschlie&szlig;en
     </a>
     @endif
-    @if ($edit_chosen && $competition_admin)
-    <a class="btn btn-default"
-       type="button"
-       href="{!! route('enrollment.wines/import-chosen', array('competition' => $competition->id)) !!}">
-        <span class="glyphicon glyphicon-import"></span>
-       Auszuschenkende Weine importieren
-    </a>
-    @endif
     @if ($show_complete_choosing && $competition_admin)
     <a class="btn btn-default"
        type="button"

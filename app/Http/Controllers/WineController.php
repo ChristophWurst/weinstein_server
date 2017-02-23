@@ -26,7 +26,6 @@ use App\Exceptions\ValidationException;
 use App\FlawExport;
 use App\Http\Controllers\BaseController;
 use App\MasterData\Applicant;
-use App\MasterData\Association;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\MasterData\WineSort;
