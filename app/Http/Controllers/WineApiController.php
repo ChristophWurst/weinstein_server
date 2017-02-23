@@ -37,7 +37,7 @@ class WineApiController extends BaseController {
 			'competition_id' => $competitionId,
 		]));
 
-		return response()->json($wines);
+		return $wines;
 	}
 
 	public function update(Wine $wines, Request $request) {

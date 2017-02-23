@@ -88,6 +88,16 @@ class Wine extends Model implements AdministrateModel {
 	];
 
 	/**
+	 * The attributes that should be hidden for arrays/json.
+	 *
+	 * @var array
+	 */
+	protected $hidden = [
+		'created_at',
+		'updated_at',
+	];
+
+	/**
 	 * Get next possible id for insert
 	 * 
 	 * @param Competition $competition
