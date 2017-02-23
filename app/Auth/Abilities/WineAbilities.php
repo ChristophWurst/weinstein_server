@@ -157,12 +157,15 @@ class WineAbilities {
 	}
 
 	/**
+	 * Only competition admins and association admins may
+	 * perform a 'chosen' state change
+	 *
 	 * @param User $user
 	 * @param Wine $wine
 	 * @return boolean
 	 */
 	private function mayUpdateChosen(User $user, Wine $wine) {
-		return $wine->applicant->association->administrates($user);
+		return $wine->competition->administrates($user) || $wine->applicant->association->administrates($user);
 	}
 
 	/**
