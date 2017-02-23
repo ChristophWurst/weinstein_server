@@ -114,7 +114,10 @@ class Applicant extends Model implements AdministrateModel {
 			. ' '
 			. $this->attributes['firstname']
 			. ' - '
-			. $this->address->city);
+			. $this->address->city
+			. ' ('
+			. $this->association->name
+			. ')');
 	}
 
 	/**
