@@ -114,6 +114,15 @@
 <div id="wines-container" class="table-responsive">
 </div>
 <!-- /.table-responsive -->
+
+<script type="text/javascript">
+	Weinstein.currentCompetition = {};
+
+	@if (!is_null($competition->wuser_username))
+	Weinstein.currentCompetition.adminUsername = '{{ $competition->wuser_username }}'
+	@endif
+</script>
+
 @stop
 
 @section ('script')

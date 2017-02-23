@@ -95,7 +95,7 @@ var Weinstein = Weinstein || {};
 		'    -' +
 		'    {{/if}}' +
 		'</td>{{/if}}' +
-		'{{#if show_chosen }}<td class="text-center {{#if edit_chosen}}edit-chosen{{/if}}">' +
+		'{{#if show_chosen }}<td class="text-center {{#if canEditChosen}}edit-chosen{{/if}}">' +
 		'    {{#if chosen}}' +
 		'    <span class="glyphicon glyphicon-ok"></span>' +
 		'    {{else}}' +
@@ -144,8 +144,23 @@ var Weinstein = Weinstein || {};
 
 			this._editKdb = _.debounce(this._editKdb, 1000, true);
 		},
+
+		/**
+		 * @returns {string|undefined}
+		 */
+		_getAssociationUsername: function () {
+			var applicant = this.model.get('applicant');
+			if (applicant && applicant.association) {
+				return applicant.association.wuser_username;
+			}
+		},
+
 		templateContext: function () {
-			return this._tableOptions;
+			var ctx = this._tableOptions;
+			ctx.canEditChosen = ctx.edit_chosen && (Weinstein.currentUser.isAdmin
+				|| Weinstein.currentUser.username === Weinstein.currentCompetition.adminUsername
+				|| Weinstein.currentUser.username === this._getAssociationUsername());
+			return ctx;
 		},
 		_editKdb: function () {
 			if (!this._tableOptions.edit_kdb) {
@@ -167,7 +182,7 @@ var Weinstein = Weinstein || {};
 
 			var oldState = this.model.get('excluded');
 			Promise.resolve(this.model.save({
-				excluded: !oldState,
+				excluded: !oldState
 			})).catch(function (e) {
 				handleAPIErrors(e);
 				this.model.set('excluded', oldState);
