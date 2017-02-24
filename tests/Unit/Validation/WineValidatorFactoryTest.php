@@ -19,20 +19,35 @@
  *
  */
 
-namespace App\Validation;
+namespace Test\Unit\Validation;
 
+use App\Validation\WineValidatorFactory;
 use App\Wine;
 use App\Wine\WineValidator;
+use Mockery;
+use Test\TestCase;
 
-class WineValidatorFactory {
+class WineValidatorFactoryTest extends TestCase {
 
-	/**
-	 * @param Wine $wine
-	 * @param array $data
-	 * @return WineValidator
-	 */
-	public function newWineValidator(Wine $wine, array $data): WineValidator {
-		return new WineValidator($data, $wine);
+	/** @var WineValidatorFactory */
+	private $factory;
+
+	protected function setUp() {
+		parent::setUp();
+
+		$this->factory = new WineValidatorFactory();
+	}
+
+	public function testNewWineValidator() {
+		$wine = Mockery::mock(Wine::class);
+		$data = [
+			'label' => 'Superwein',
+			'sugar' => 12.3,
+		];
+
+		$validator = $this->factory->newWineValidator($wine, $data);
+
+		$this->assertInstanceOf(WineValidator::class, $validator);
 	}
 
 }
