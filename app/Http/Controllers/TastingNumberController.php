@@ -27,8 +27,10 @@ use App\Http\Controllers\BaseController;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\Tasting\TastingNumber;
+use App\Wine;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
@@ -42,6 +44,10 @@ class TastingNumberController extends BaseController {
 	/** @var Factory */
 	private $viewFactory;
 
+	/**
+	 * @param TastingHandler $tastingHandler
+	 * @param Factory $viewFactory
+	 */
 	public function __construct(TastingHandler $tastingHandler, Factory $viewFactory) {
 		$this->tastingHandler = $tastingHandler;
 		$this->viewFactory = $viewFactory;
@@ -59,12 +65,14 @@ class TastingNumberController extends BaseController {
 		$showAdd = false;
 		$showComplete = false;
 		$left = -1;
+		$showReset = false;
 		if ($competition->competitionState->id === CompetitionState::STATE_ENROLLMENT) {
 			$showAdd = true;
 		} else if ($competition->competitionState->id === CompetitionState::STATE_TASTINGNUMBERS1) {
 			$left = $competition->wines()->count() - $competition->wines()->withTastingNumber($competition->getTastingStage())->count();
 			$showComplete = $left === 0;
 			$showAdd = !$showComplete; //show add if not all wines are assigned
+			$showReset = true;
 		} else if ($competition->competitionState->id === CompetitionState::STATE_TASTINGNUMBERS2) {
 			// there is no check (for now)
 			// kdb wines do not have to be tasted a second time
@@ -72,12 +80,14 @@ class TastingNumberController extends BaseController {
 			$tastingNumber2 = $competition->wines()->withTastingNumber($competition->getTastingStage())->count();
 			$showAdd = $kdbWines !== $tastingNumber2; //show add as long as not all wines are assigned
 			$showComplete = true;
+			$showReset = true;
 		}
 
 		return $this->viewFactory->make('competition/tasting/tasting-number/index', [
 			'competition' => $competition,
 			'numbers' => $this->tastingHandler->getAllTastingNumbers($competition, $competition->getTastingStage()),
 			'show_add' => $showAdd,
+			'show_reset' => $showReset,
 			'left' => $left,
 			'finished' => $showComplete,
 		]);
@@ -130,6 +140,29 @@ class TastingNumberController extends BaseController {
 	}
 
 	/**
+	 * @param Competition $competition
+	 * @return View
+	 */
+	public function resetForm(Competition $competition) {
+		$this->authorize('unassign-tastingnumber', $competition);
+
+		return $this->viewFactory->make('competition/tasting/tasting-number/reset');
+	}
+
+	/**
+	 * @param Competition $competition
+	 * @return RedirectResponse
+	 */
+	public function reset(Competition $competition) {
+		$this->authorize('unassign-tastingnumber', $competition);
+
+		if (Input::get('reset') == 'Ja') {
+			$this->tastingHandler->resetTastingNumbers($competition);
+		}
+		return Redirect::route('tasting.numbers', ['competition' => $competition->id]);
+	}
+
+	/**
 	 * Ask user about deallocating the specified tasting number
 	 * 
 	 * @param TastingNumber $tastingNumber
@@ -139,7 +172,7 @@ class TastingNumberController extends BaseController {
 		$this->authorize('unassign-tastingnumber');
 
 		return $this->viewFactory->make('competition/tasting/tasting-number/deallocate', [
-			'data' => $tastingNumber
+				'data' => $tastingNumber
 		]);
 	}
 
@@ -174,7 +207,7 @@ class TastingNumberController extends BaseController {
 	 * Validate and store import files tasting numbers
 	 * 
 	 * @param Competition $competition
-	 * @return type
+	 * @return RedirectResponse
 	 */
 	public function importStore(Competition $competition) {
 		$this->authorize('import-tastingnumbers');

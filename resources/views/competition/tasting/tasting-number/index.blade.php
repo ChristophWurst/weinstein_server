@@ -29,6 +29,14 @@
     <span class="glyphicon glyphicon-import"></span>
    Zuweisung importieren
 </a>
+@if ($show_reset)
+<a class="btn btn-default"
+   type="button"
+   href="{!! route('tasting.numbers/reset', array('competition' => $competition->id)) !!}">
+    <span class="glyphicon glyphicon-remove-circle"></span>
+	Zuweisung zur&uuml;cksetzen
+</a>
+@endif
 @if ($finished)
 <a class="btn btn-default"
    type="button"

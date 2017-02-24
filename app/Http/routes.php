@@ -138,6 +138,13 @@ Route::group(array('prefix' => 'competition/{competition}', 'middleware' => 'aut
 		Route::post('assign', array(
 			'uses' => 'TastingNumberController@store'
 		));
+		Route::get('reset', array(
+			'as' => 'tasting.numbers/reset',
+			'uses' => 'TastingNumberController@resetForm'
+		));
+		Route::post('reset', array(
+			'uses' => 'TastingNumberController@reset'
+		));
 		Route::get('import', array(
 			'as' => 'tasting.numbers/import',
 			'uses' => 'TastingNumberController@import'

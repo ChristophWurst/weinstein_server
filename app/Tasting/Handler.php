@@ -151,7 +151,11 @@ class Handler implements TastingHandler {
 	}
 
 	public function isTastingFinished(Competition $competition) {
-		return $this->getUntastedTastingNumbers($competition, $competition->getTastingStage())->count() === 0;
+		$tastingStage = $competition->getTastingStage();
+		if (is_null($tastingStage)) {
+			throw new Exception('invalid applicaton/competition/tasting stage');
+		}
+		return $this->getUntastedTastingNumbers($competition, $tastingStage)->count() === 0;
 	}
 
 	public function createTastingNumber(array $data, Competition $competition) {
@@ -212,6 +216,14 @@ class Handler implements TastingHandler {
 		DB::commit();
 		//return number of read lines
 		return $rowCount - 1;
+	}
+
+	public function resetTastingNumbers(Competition $competition) {
+		$tastingStage = $competition->getTastingStage();
+		if (is_null($tastingStage)) {
+			throw new Exception('invalid applicaton/competition/tasting stage');
+		}
+		$this->tastingNumberRepository->deleteAll($competition, $tastingStage);
 	}
 
 	public function deleteTastingNumber(TastingNumber $tastingNumber) {

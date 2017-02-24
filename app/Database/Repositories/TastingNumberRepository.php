@@ -26,18 +26,23 @@ use App\Tasting\TastedWine;
 use App\Tasting\TastingNumber;
 use App\Tasting\TastingStage;
 use App\Wine;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 
 class TastingNumberRepository {
 
-	public function findAll() {
-		return TastingNumber::all();
-	}
-
+	/**
+	 * @param type $id
+	 * @return TastingNumber|null
+	 */
 	public function find($id) {
 		return TastingNumber::find($id);
 	}
 
+	/**
+	 * @param Competition $competition
+	 * @param TastingStage $tastingStage
+	 * @return Collection
+	 */
 	public function findAllForCompetitionTastingStage(Competition $competition, TastingStage $tastingStage) {
 		$query = $competition->tastingnumbers();
 		$query = $query->where('tastingstage_id', '=', $tastingStage->id);
@@ -62,6 +67,12 @@ class TastingNumberRepository {
 		return $query->take($limit)->get();
 	}
 
+	/**
+	 * @param array $data
+	 * @param Wine $wine
+	 * @param TastingStage $tastingStage
+	 * @return TastingNumber
+	 */
 	public function create(array $data, Wine $wine, TastingStage $tastingStage) {
 		$tastingNumber = new TastingNumber($data);
 
@@ -72,10 +83,24 @@ class TastingNumberRepository {
 		return $tastingNumber;
 	}
 
+	/**
+	 * @param Competition $competition
+	 */
+	public function deleteAll(Competition $competition, TastingStage $tastingStage) {
+		$competition->tastingnumbers()->tastingStage($tastingStage)->delete();
+	}
+
+	/**
+	 * @param TastingNumber $tastingNumber
+	 */
 	public function delete(TastingNumber $tastingNumber) {
 		$tastingNumber->delete();
 	}
 
+	/**
+	 * @param TastingNumber $tastingNumber
+	 * @return boolean
+	 */
 	public function isTasted(TastingNumber $tastingNumber) {
 		return TastedWine::where('tastingnumber_id', $tastingNumber->id)->count() > 0;
 	}
