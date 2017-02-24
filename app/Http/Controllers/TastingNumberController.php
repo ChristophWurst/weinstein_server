@@ -65,9 +65,9 @@ class TastingNumberController extends BaseController {
 		$showAdd = false;
 		$showComplete = false;
 		$left = -1;
+		$showReset = false;
 		if ($competition->competitionState->id === CompetitionState::STATE_ENROLLMENT) {
 			$showAdd = true;
-			$showReset = false;
 		} else if ($competition->competitionState->id === CompetitionState::STATE_TASTINGNUMBERS1) {
 			$left = $competition->wines()->count() - $competition->wines()->withTastingNumber($competition->getTastingStage())->count();
 			$showComplete = $left === 0;

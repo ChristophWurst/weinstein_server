@@ -334,6 +334,17 @@ class HandlerTest extends TestCase {
 		$this->handler->resetTastingNumbers($competition);
 	}
 
+	public function testResetTastingNumbersWithInvalidState() {
+		$competition = Mockery::mock(Competition::class);
+		$competition->shouldReceive('getTastingStage')
+			->andReturn(null);
+		$this->tastingNumberRepository->shouldReceive('deleteAll')
+			->never();
+		$this->setExpectedException(Exception::class);
+
+		$this->handler->resetTastingNumbers($competition);
+	}
+
 	public function testDeleteTastingNumber() {
 		$tastingNumber = new TastingNumber();
 
