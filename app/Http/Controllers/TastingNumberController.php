@@ -144,7 +144,7 @@ class TastingNumberController extends BaseController {
 	 * @return View
 	 */
 	public function resetForm(Competition $competition) {
-		$this->authorize('reset-tastingnumbers', $competition);
+		$this->authorize('unassign-tastingnumber', $competition);
 
 		return $this->viewFactory->make('competition/tasting/tasting-number/reset');
 	}
@@ -154,7 +154,7 @@ class TastingNumberController extends BaseController {
 	 * @return RedirectResponse
 	 */
 	public function reset(Competition $competition) {
-		$this->authorize('reset-tastingnumbers', $competition);
+		$this->authorize('unassign-tastingnumber', $competition);
 
 		if (Input::get('reset') == 'Ja') {
 			$this->tastingHandler->resetTastingNumbers($competition);
