@@ -49,7 +49,10 @@ class WineApiController extends BaseController {
 			'excluded' => $request->get('excluded'),
 			'chosen' => $request->get('chosen'),
 		]);
-		$this->authorize('update-wine', $wines, $data);
+		$this->authorize('update-wine', [
+			$wines,
+			$data,
+		]);
 
 		try {
 			return $this->wineHandler->update($wines, $data);

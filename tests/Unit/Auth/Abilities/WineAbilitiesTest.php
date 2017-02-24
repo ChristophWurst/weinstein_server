@@ -141,6 +141,7 @@ class WineAbilitiesTest extends TestCase {
 	public function testUpdateForbiddenIfNotAssociationAdmin() {
 		$user = $this->getUserMock();
 		$wine = Mockery::mock(Wine::class);
+		$competition = Mockery::mock(Competition::class);
 		$applicant = Mockery::mock(Applicant::class);
 		$association = Mockery::mock(Association::class);
 		$data = [
@@ -148,6 +149,13 @@ class WineAbilitiesTest extends TestCase {
 		];
 		$wine->shouldReceive('getAttribute')
 			->with('chosen')
+			->andReturn(false);
+		$wine->shouldReceive('getAttribute')
+			->with('competition')
+			->andReturn($competition);
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
 			->andReturn(false);
 		$wine->shouldReceive('getAttribute')
 			->with('applicant')
@@ -164,11 +172,12 @@ class WineAbilitiesTest extends TestCase {
 	}
 
 	/**
-	 * Simulate a user updating a wine where they are not association admin
+	 * Simulate a user updating a wine where they are association admin
 	 */
 	public function testUpdateAllowedIfUserIsAssociationAdmin() {
 		$user = $this->getUserMock();
 		$wine = Mockery::mock(Wine::class);
+		$competition = Mockery::mock(Competition::class);
 		$applicant = Mockery::mock(Applicant::class);
 		$association = Mockery::mock(Association::class);
 		$data = [
@@ -177,6 +186,48 @@ class WineAbilitiesTest extends TestCase {
 		$wine->shouldReceive('getAttribute')
 			->with('chosen')
 			->andReturn(false);
+		$wine->shouldReceive('getAttribute')
+			->with('competition')
+			->andReturn($competition);
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(false);
+		$wine->shouldReceive('getAttribute')
+			->with('applicant')
+			->andReturn($applicant);
+		$applicant->shouldReceive('getAttribute')
+			->with('association')
+			->andReturn($association);
+		$association->shouldReceive('administrates')
+			->andReturn(true);
+
+		$allowed = $this->abilities->update($user, $wine, $data);
+
+		$this->assertTrue($allowed);
+	}
+
+	/**
+	 * Simulate a user updating a wine where they are competition admin
+	 */
+	public function testUpdateAllowedIfUserIsCompetitionAdmin() {
+		$user = $this->getUserMock();
+		$wine = Mockery::mock(Wine::class);
+		$competition = Mockery::mock(Competition::class);
+		$applicant = Mockery::mock(Applicant::class);
+		$association = Mockery::mock(Association::class);
+		$data = [
+			'chosen' => true,
+		];
+		$wine->shouldReceive('getAttribute')
+			->with('chosen')
+			->andReturn(false);
+		$wine->shouldReceive('getAttribute')
+			->with('competition')
+			->andReturn($competition);
+		$competition->shouldReceive('administrates')
+			->with($user)
+			->andReturn(true);
 		$wine->shouldReceive('getAttribute')
 			->with('applicant')
 			->andReturn($applicant);

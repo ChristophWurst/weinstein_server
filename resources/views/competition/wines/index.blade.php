@@ -79,14 +79,6 @@
        SoSi Zuweisung abschlie&szlig;en
     </a>
     @endif
-    @if ($edit_chosen && $competition_admin)
-    <a class="btn btn-default"
-       type="button"
-       href="{!! route('enrollment.wines/import-chosen', array('competition' => $competition->id)) !!}">
-        <span class="glyphicon glyphicon-import"></span>
-       Auszuschenkende Weine importieren
-    </a>
-    @endif
     @if ($show_complete_choosing && $competition_admin)
     <a class="btn btn-default"
        type="button"
@@ -122,6 +114,15 @@
 <div id="wines-container" class="table-responsive">
 </div>
 <!-- /.table-responsive -->
+
+<script type="text/javascript">
+	Weinstein.currentCompetition = {};
+
+	@if (!is_null($competition->wuser_username))
+	Weinstein.currentCompetition.adminUsername = '{{ $competition->wuser_username }}'
+	@endif
+</script>
+
 @stop
 
 @section ('script')

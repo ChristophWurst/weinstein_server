@@ -29,6 +29,14 @@ use App\MasterData\CompetitionState;
               <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
               <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
             <![endif]-->
+		<script type="text/javascript">
+			var Weinstein = {};
+			Weinstein.currentUser = {};
+			@if (Auth::check())
+			Weinstein.currentUser.username = '{{ Auth::user()->username }}';
+			Weinstein.currentUser.isAdmin = {{ Auth::user()->isAdmin() ? 'true' : 'false' }};
+			@endif
+		</script>
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">

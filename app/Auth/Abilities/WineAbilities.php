@@ -30,48 +30,6 @@ class WineAbilities {
 
 	use CommonAbilities;
 
-	private function checkAddWine(Competition $competition) {
-		return $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT;
-	}
-
-	private function checkEditWine(User $user, Wine $wine) {
-		$competition = $wine->competition;
-
-		if (!$user->isAdmin() && !is_null($wine->nr)) {
-			// Once ID is set, only admin may edit the wine
-			return false;
-		}
-
-		if ($competition->competitionState->id !== CompetitionState::where('description', '=', 'ENROLLMENT')->first()->id) {
-			return false;
-		}
-		return true;
-	}
-
-	private function checkImportKdb(Competition $competition) {
-		return $competition->competitionState->id === CompetitionState::STATE_KDB;
-	}
-
-	private function checkEditSosi(Competition $competition) {
-		return $competition->competitionState->id === CompetitionState::STATE_SOSI;
-	}
-
-	private function checkSosiImport(Competition $competition) {
-		return $competition->competitionState->id === CompetitionState::STATE_SOSI;
-	}
-
-	private function checkEditChosen(User $user, Wine $wine, Competition $competition) {
-		return !$wine->applicant->association->administrates($user) && $competition->competitionState->id === CompetitionState::STATE_CHOOSE;
-	}
-
-	private function checkImportChosen(Competition $competition) {
-		return $competition->competitionState->id === CompetitionState::STATE_CHOOSE;
-	}
-
-	private function checkExportFlaws(Competition $competition) {
-		return $competition->competitionState->id >= CompetitionState::STATE_KDB;
-	}
-
 	/**
 	 * @param User $user
 	 * @param Wine $wine
@@ -157,12 +115,15 @@ class WineAbilities {
 	}
 
 	/**
+	 * Only competition admins and association admins may
+	 * perform a 'chosen' state change
+	 *
 	 * @param User $user
 	 * @param Wine $wine
 	 * @return boolean
 	 */
 	private function mayUpdateChosen(User $user, Wine $wine) {
-		return $wine->applicant->association->administrates($user);
+		return $wine->competition->administrates($user) || $wine->applicant->association->administrates($user);
 	}
 
 	/**
