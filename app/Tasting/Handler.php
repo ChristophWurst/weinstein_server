@@ -181,7 +181,7 @@ class Handler implements TastingHandler {
 					'nr' => $row[0],
 					'wine_nr' => $row[1],
 				);
-				$this->create($data, $competition);
+				$this->createTastingNumber($data, $competition);
 				$rowCount++;
 			}
 		} catch (ValidationException $ve) {
