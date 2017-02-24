@@ -34,36 +34,42 @@ use App\MasterData\User;
 use App\Tasting\Commission;
 use App\Tasting\Handler;
 use App\Tasting\TastingNumber;
+use App\Tasting\TastingNumberValidator;
 use App\Tasting\TastingSession;
 use App\Tasting\TastingStage;
+use App\Validation\TastingNumberValidatorFactory;
+use App\Wine;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Mockery;
-use PHPUnit_Framework_MockObject_MockObject;
+use Mockery\MockInterface;
 use Test\TestCase;
 
 class HandlerTest extends TestCase {
 
-	/** @var CommissionRepository|PHPUnit_Framework_MockObject_MockObject */
+	/** @var CommissionRepository|MockInterface */
 	private $commissionRepository;
 
-	/** @var CompetitionRepository|PHPUnit_Framework_MockObject_MockObject */
+	/** @var CompetitionRepository|MockInterface */
 	private $competitionRepository;
 
-	/** @var TasterRepository|PHPUnit_Framework_MockObject_MockObject */
+	/** @var TasterRepository|MockInterface */
 	private $tasterRepository;
 
-	/** @var TastingRepository|PHPUnit_Framework_MockObject_MockObject */
+	/** @var TastingRepository|MockInterface */
 	private $tastingRepository;
 
-	/** @var TastingNumberRepository|PHPUnit_Framework_MockObject_MockObject */
+	/** @var TastingNumberRepository|MockInterface */
 	private $tastingNumberRepository;
 
-	/** @var TastingSessionRepository|PHPUnit_Framework_MockObject_MockObject */
+	/** @var TastingSessionRepository|MockInterface */
 	private $tastingSessionRepository;
 
-	/** @var WineRepository|PHPUnit_Framework_MockObject_MockObject */
+	/** @var WineRepository|MockInterface */
 	private $wineRepository;
+
+	/** @var TastingNumberValidatorFactory|MockInterface */
+	private $tastingNumberValidatorFactory;
 
 	/** @var Handler */
 	private $handler;
@@ -71,16 +77,18 @@ class HandlerTest extends TestCase {
 	protected function setUp() {
 		parent::setUp();
 
-		$this->commissionRepository = $this->getSimpleClassMock(CommissionRepository::class);
-		$this->competitionRepository = $this->getSimpleClassMock(CompetitionRepository::class);
-		$this->tasterRepository = $this->getSimpleClassMock(TasterRepository::class);
-		$this->tastingRepository = $this->getSimpleClassMock(TastingRepository::class);
-		$this->tastingNumberRepository = $this->getSimpleClassMock(TastingNumberRepository::class);
-		$this->tastingSessionRepository = $this->getSimpleClassMock(TastingSessionRepository::class);
-		$this->wineRepository = $this->getSimpleClassMock(WineRepository::class);
+		$this->commissionRepository = Mockery::mock(CommissionRepository::class);
+		$this->competitionRepository = Mockery::mock(CompetitionRepository::class);
+		$this->tasterRepository = Mockery::mock(TasterRepository::class);
+		$this->tastingRepository = Mockery::mock(TastingRepository::class);
+		$this->tastingNumberRepository = Mockery::mock(TastingNumberRepository::class);
+		$this->tastingSessionRepository = Mockery::mock(TastingSessionRepository::class);
+		$this->wineRepository = Mockery::mock(WineRepository::class);
+		$this->tastingNumberValidatorFactory = Mockery::mock(TastingNumberValidatorFactory::class);
 
 		$this->handler = new Handler($this->commissionRepository, $this->competitionRepository, $this->tasterRepository,
-			$this->tastingRepository, $this->tastingNumberRepository, $this->tastingSessionRepository, $this->wineRepository);
+			$this->tastingRepository, $this->tastingNumberRepository, $this->tastingSessionRepository, $this->wineRepository,
+			$this->tastingNumberValidatorFactory);
 	}
 
 	public function testLockTastingNumbersInvalidTastingStage() {
@@ -107,8 +115,7 @@ class HandlerTest extends TestCase {
 		$competitionState->description = 'TASTINGNUMBERS1';
 		$competition->competitionstate()->associate($competitionState);
 
-		$this->competitionRepository->expects($this->once())
-			->method('update')
+		$this->competitionRepository->shouldReceive('update')
 			->with($competition);
 
 		$this->handler->lockTastingNumbers($competition);
@@ -125,13 +132,13 @@ class HandlerTest extends TestCase {
 		$tastingSession->locked = false;
 		$competition->tastingsessions->add($tastingSession);
 
-		$this->competitionRepository->expects($this->once())
-			->method('update')
+		$this->competitionRepository->shouldReceive('update')
 			->with($competition);
 
-		$this->tastingSessionRepository->expects($this->once())
-			->method('update')
-			->with($tastingSession);
+		$this->tastingSessionRepository->shouldReceive('update')
+			->with($tastingSession, [
+				'locked' => true,
+		]);
 
 		$this->handler->lockTasting($competition);
 	}
@@ -147,13 +154,13 @@ class HandlerTest extends TestCase {
 		$tastingSession->locked = false;
 		$competition->tastingsessions->add($tastingSession);
 
-		$this->competitionRepository->expects($this->once())
-			->method('update')
+		$this->competitionRepository->shouldReceive('update')
 			->with($competition);
 
-		$this->tastingSessionRepository->expects($this->once())
-			->method('update')
-			->with($tastingSession);
+		$this->tastingSessionRepository->shouldReceive('update')
+			->with($tastingSession, [
+				'locked' => true,
+		]);
 
 		$this->handler->lockTasting($competition);
 	}
@@ -172,8 +179,7 @@ class HandlerTest extends TestCase {
 	public function testLockKdb() {
 		$competition = new Competition();
 		$competition->competition_state_id = CompetitionState::STATE_KDB;
-		$this->competitionRepository->expects($this->once())
-			->method('update')
+		$this->competitionRepository->shouldReceive('update')
 			->with($competition);
 
 		$this->handler->lockKdb($competition);
@@ -182,8 +188,7 @@ class HandlerTest extends TestCase {
 	public function testLockExcluded() {
 		$competition = new Competition();
 		$competition->competition_state_id = CompetitionState::STATE_EXCLUDE;
-		$this->competitionRepository->expects($this->once())
-			->method('update')
+		$this->competitionRepository->shouldReceive('update')
 			->with($competition);
 
 		$this->handler->lockKdb($competition);
@@ -192,8 +197,7 @@ class HandlerTest extends TestCase {
 	public function testLockSosi() {
 		$competition = new Competition();
 		$competition->competition_state_id = CompetitionState::STATE_SOSI;
-		$this->competitionRepository->expects($this->once())
-			->method('update')
+		$this->competitionRepository->shouldReceive('update')
 			->with($competition);
 
 		$this->handler->lockKdb($competition);
@@ -202,8 +206,7 @@ class HandlerTest extends TestCase {
 	public function testLockChoosing() {
 		$competition = new Competition();
 		$competition->competition_state_id = CompetitionState::STATE_CHOOSE;
-		$this->competitionRepository->expects($this->once())
-			->method('update')
+		$this->competitionRepository->shouldReceive('update')
 			->with($competition);
 
 		$this->handler->lockKdb($competition);
@@ -214,10 +217,9 @@ class HandlerTest extends TestCase {
 		$tastingStage = new TastingStage();
 		$competition->shouldReceive('getTastingStage')->once()->andReturn($tastingStage);
 
-		$this->tastingNumberRepository->expects($this->once())
-			->method('findUntasted')
+		$this->tastingNumberRepository->shouldReceive('findUntasted')
 			->with($competition, $tastingStage, null)
-			->will($this->returnValue(new Collection()));
+			->andReturn(new Collection());
 
 		$this->assertTrue($this->handler->isTastingFinished($competition));
 	}
@@ -227,18 +229,93 @@ class HandlerTest extends TestCase {
 		$tastingStage = new TastingStage();
 		$competition->shouldReceive('getTastingStage')->once()->andReturn($tastingStage);
 
-		$this->tastingNumberRepository->expects($this->once())
-			->method('findUntasted')
+		$this->tastingNumberRepository->shouldReceive('findUntasted')
 			->with($competition, $tastingStage, null)
-			->will($this->returnValue(new Collection([
-					new TastingNumber()
-		])));
+			->andReturn(new Collection([
+				new TastingNumber()
+		]));
 
 		$this->assertFalse($this->handler->isTastingFinished($competition));
 	}
 
 	public function testCreateTastingNumber() {
-		// TODO: mock validator somehow
+		$competition = Mockery::mock(Competition::class);
+		$data = [
+			'wine_nr' => '123',
+			'nr' => '3',
+		];
+		$wine = Mockery::mock(Wine::class);
+		$tastingStage = Mockery::mock(TastingStage::class);
+		$tastingNumber = Mockery::mock(TastingNumber::class);
+		$competitionState = Mockery::mock(CompetitionState::class);
+		$validator = Mockery::mock(TastingNumberValidator::class);
+		$this->tastingNumberValidatorFactory->shouldReceive('newValidator')
+			->with($competition, $data)
+			->andReturn($validator);
+		$validator->shouldReceive('validateCreate')
+			->once();
+
+		$this->wineRepository->shouldReceive('findByNr')
+			->with($competition, '123')
+			->andReturn($wine);
+		$competition->shouldReceive('getTastingStage')
+			->andReturn($tastingStage);
+		$this->tastingNumberRepository->shouldReceive('create')
+			->with($data, $wine, $tastingStage)
+			->andReturn($tastingNumber);
+		$competition->shouldReceive('getAttribute')
+			->with('competitionState')
+			->andReturn($competitionState);
+		$competitionState->shouldReceive('is')
+			->with(CompetitionState::STATE_ENROLLMENT)
+			->andReturn(false);
+
+		$result = $this->handler->createTastingNumber($data, $competition);
+
+		$this->assertEquals($tastingNumber, $result);
+	}
+
+	public function testCreateTastingNumberAndBumpCompetitionState() {
+		$competition = Mockery::mock(Competition::class);
+		$data = [
+			'wine_nr' => '123',
+			'nr' => '3',
+		];
+		$wine = Mockery::mock(Wine::class);
+		$tastingStage = Mockery::mock(TastingStage::class);
+		$tastingNumber = Mockery::mock(TastingNumber::class);
+		$competitionState = Mockery::mock(CompetitionState::class);
+		$validator = Mockery::mock(TastingNumberValidator::class);
+		$this->tastingNumberValidatorFactory->shouldReceive('newValidator')
+			->with($competition, $data)
+			->andReturn($validator);
+		$validator->shouldReceive('validateCreate')
+			->once();
+
+		$this->wineRepository->shouldReceive('findByNr')
+			->with($competition, '123')
+			->andReturn($wine);
+		$competition->shouldReceive('getTastingStage')
+			->andReturn($tastingStage);
+		$this->tastingNumberRepository->shouldReceive('create')
+			->with($data, $wine, $tastingStage)
+			->andReturn($tastingNumber);
+		$competition->shouldReceive('getAttribute')
+			->with('competitionState')
+			->andReturn($competitionState);
+		$competitionState->shouldReceive('is')
+			->with(CompetitionState::STATE_ENROLLMENT)
+			->andReturn(true);
+		$competition->shouldReceive('setAttribute')
+			->with('competition_state_id', CompetitionState::STATE_TASTINGNUMBERS1)
+			->once();
+		$this->competitionRepository->shouldReceive('update')
+			->once()
+			->with($competition);
+
+		$result = $this->handler->createTastingNumber($data, $competition);
+
+		$this->assertEquals($tastingNumber, $result);
 	}
 
 	public function testImportTastingNumbers() {
@@ -248,8 +325,7 @@ class HandlerTest extends TestCase {
 	public function testDeleteTastingNumber() {
 		$tastingNumber = new TastingNumber();
 
-		$this->tastingNumberRepository->expects($this->once())
-			->method('delete')
+		$this->tastingNumberRepository->shouldReceive('delete')
 			->with($tastingNumber);
 
 		$this->handler->deleteTastingNumber($tastingNumber);
@@ -260,10 +336,9 @@ class HandlerTest extends TestCase {
 		$tastingStage = new TastingStage();
 		$tastingNumber = new TastingNumber();
 
-		$this->tastingNumberRepository->expects($this->once())
-			->method('findUntasted')
+		$this->tastingNumberRepository->shouldReceive('findUntasted')
 			->with($competition, $tastingStage, null)
-			->will($this->returnValue([$tastingNumber]));
+			->andReturn([$tastingNumber]);
 
 		$this->assertEquals([$tastingNumber], $this->handler->getUntastedTastingNumbers($competition, $tastingStage));
 	}
@@ -273,10 +348,9 @@ class HandlerTest extends TestCase {
 		$tastingStage = new TastingStage();
 		$tastingNumber = new TastingNumber();
 
-		$this->tastingNumberRepository->expects($this->once())
-			->method('findAllForCompetitionTastingStage')
+		$this->tastingNumberRepository->shouldReceive('findAllForCompetitionTastingStage')
 			->with($competition, $tastingStage)
-			->will($this->returnValue([$tastingNumber]));
+			->andReturn([$tastingNumber]);
 
 		$this->assertEquals([$tastingNumber], $this->handler->getAllTastingNumbers($competition, $tastingStage));
 	}
@@ -287,10 +361,9 @@ class HandlerTest extends TestCase {
 		$user = Mockery::mock(User::class);
 		$user->shouldReceive('isAdmin')->once()->andReturn(true);
 
-		$this->tastingSessionRepository->expects($this->once())
-			->method('findAll')
+		$this->tastingSessionRepository->shouldReceive('findAll')
 			->with($competition, $tastingStage)
-			->will($this->returnValue([]));
+			->andReturn([]);
 
 		$this->assertEquals([], $this->handler->getAllTastingSessions($competition, $tastingStage, $user));
 	}
@@ -299,10 +372,9 @@ class HandlerTest extends TestCase {
 		$competition = new Competition();
 		$tastingStage = new TastingStage();
 
-		$this->tastingSessionRepository->expects($this->once())
-			->method('findAll')
+		$this->tastingSessionRepository->shouldReceive('findAll')
 			->with($competition, $tastingStage)
-			->will($this->returnValue([]));
+			->andReturn([]);
 
 		$this->assertEquals([], $this->handler->getAllTastingSessions($competition, $tastingStage, null));
 	}
@@ -313,10 +385,9 @@ class HandlerTest extends TestCase {
 		$user = Mockery::mock(User::class);
 		$user->shouldReceive('isAdmin')->once()->andReturn(false);
 
-		$this->tastingSessionRepository->expects($this->once())
-			->method('findForUser')
+		$this->tastingSessionRepository->shouldReceive('findForUser')
 			->with($competition, $tastingStage, $user)
-			->will($this->returnValue([]));
+			->andReturn([]);
 
 		$this->assertEquals([], $this->handler->getAllTastingSessions($competition, $tastingStage, $user));
 	}
@@ -332,8 +403,7 @@ class HandlerTest extends TestCase {
 	public function testLockTastingSession() {
 		$tastingSession = new TastingSession();
 
-		$this->tastingSessionRepository->expects($this->once())
-			->method('update')
+		$this->tastingSessionRepository->shouldReceive('update')
 			->with($tastingSession, [
 				'locked' => true,
 		]);
@@ -344,8 +414,7 @@ class HandlerTest extends TestCase {
 	public function testDeleteTastingSession() {
 		$tastingSession = new TastingSession();
 
-		$this->tastingSessionRepository->expects($this->once())
-			->method('delete')
+		$this->tastingSessionRepository->shouldReceive('delete')
 			->with($tastingSession);
 
 		$this->handler->deleteTastingSession($tastingSession);
@@ -358,8 +427,8 @@ class HandlerTest extends TestCase {
 	public function testGetTastingSessionTasters() {
 		$commission = new Commission();
 
-		$this->tasterRepository->expects($this->once())
-			->method('findForCommission')
+		$this->tasterRepository->shouldReceive('findForCommission')
+			->once()
 			->with($commission);
 
 		$this->handler->getCommissionTasters($commission);
@@ -380,10 +449,9 @@ class HandlerTest extends TestCase {
 		$tastingStage = new TastingStage();
 		$competition->shouldReceive('getTastingStage')->once()->andReturn($tastingStage);
 
-		$this->tastingNumberRepository->expects($this->once())
-			->method('findUntasted')
+		$this->tastingNumberRepository->shouldReceive('findUntasted')
 			->with($competition, $tastingStage, 2)
-			->will($this->returnValue(new Collection()));
+			->andReturn(new Collection());
 
 		$this->assertEquals([], $this->handler->getNextTastingNumbers($tastingSession));
 	}
@@ -396,12 +464,11 @@ class HandlerTest extends TestCase {
 		$competition->shouldReceive('getTastingStage')->once()->andReturn($tastingStage);
 		$tastingNumber1 = new TastingNumber();
 
-		$this->tastingNumberRepository->expects($this->once())
-			->method('findUntasted')
+		$this->tastingNumberRepository->shouldReceive('findUntasted')
 			->with($competition, $tastingStage, 2)
-			->will($this->returnValue(new Collection([
-					$tastingNumber1
-		])));
+			->andReturn(new Collection([
+				$tastingNumber1
+		]));
 
 		$expected = [
 			'a' => $tastingNumber1,
@@ -422,13 +489,12 @@ class HandlerTest extends TestCase {
 		$tastingSession->commissions->add(new Commission(['id' => 2]));
 		$x = $tastingSession->commissions->count();
 
-		$this->tastingNumberRepository->expects($this->once())
-			->method('findUntasted')
+		$this->tastingNumberRepository->shouldReceive('findUntasted')
 			->with($competition, $tastingStage, 2)
-			->will($this->returnValue(new Collection([
-					$tastingNumber1,
-					$tastingNumber2,
-		])));
+			->andReturn(new Collection([
+				$tastingNumber1,
+				$tastingNumber2,
+		]));
 
 		$expected = [
 			'a' => $tastingNumber1,
@@ -440,10 +506,9 @@ class HandlerTest extends TestCase {
 	public function testIsTastingNumberTasted() {
 		$tastingNumber = new TastingNumber();
 
-		$this->tastingNumberRepository->expects($this->once())
-			->method('isTasted')
+		$this->tastingNumberRepository->shouldReceive('isTasted')
 			->with($tastingNumber)
-			->will($this->returnValue(false));
+			->andReturn(false);
 
 		$this->assertFalse($this->handler->isTastingNumberTasted($tastingNumber));
 	}

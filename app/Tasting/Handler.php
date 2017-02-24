@@ -33,6 +33,7 @@ use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\MasterData\User;
+use App\Validation\TastingNumberValidatorFactory;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\App;
@@ -64,10 +65,23 @@ class Handler implements TastingHandler {
 	/** @var WineRepository */
 	private $wineRepository;
 
+	/** @var TastingNumberValidatorFactory */
+	private $tastingNumberValidatorFactory;
+
+	/**
+	 * @param CommissionRepository $commissionRepository
+	 * @param CompetitionRepository $competitionRepository
+	 * @param TasterRepository $tasterRepository
+	 * @param TastingRepository $tastingRepository
+	 * @param TastingNumberRepository $tastingNumberRepository
+	 * @param TastingSessionRepository $tastingSessionRepository
+	 * @param WineRepository $wineRepository
+	 * @param TastingNumberValidatorFactory $tastingNumberValidatorFactory
+	 */
 	public function __construct(CommissionRepository $commissionRepository, CompetitionRepository $competitionRepository,
 		TasterRepository $tasterRepository, TastingRepository $tastingRepository,
 		TastingNumberRepository $tastingNumberRepository, TastingSessionRepository $tastingSessionRepository,
-		WineRepository $wineRepository) {
+		WineRepository $wineRepository, TastingNumberValidatorFactory $tastingNumberValidatorFactory) {
 		$this->competitionRepository = $competitionRepository;
 		$this->tasterRepository = $tasterRepository;
 		$this->tastingRepository = $tastingRepository;
@@ -75,6 +89,7 @@ class Handler implements TastingHandler {
 		$this->tastingSessionRepository = $tastingSessionRepository;
 		$this->wineRepository = $wineRepository;
 		$this->commissionRepository = $commissionRepository;
+		$this->tastingNumberValidatorFactory = $tastingNumberValidatorFactory;
 	}
 
 	public function lockTastingNumbers(Competition $competition) {
@@ -140,16 +155,14 @@ class Handler implements TastingHandler {
 	}
 
 	public function createTastingNumber(array $data, Competition $competition) {
-		$validator = new TastingNumberValidator($data);
-		$validator->setCompetition($competition);
-		$validator->validateCreate();
+		$this->tastingNumberValidatorFactory->newValidator($competition, $data)->validateCreate();
 
 		$wine = $this->wineRepository->findByNr($competition, $data['wine_nr']);
 		//competition's tasting stage is choosen by default
 		$tastingStage = $competition->getTastingStage();
 
 		$tastingNumber = $this->tastingNumberRepository->create($data, $wine, $tastingStage);
-		if ($competition->competition_state_id === CompetitionState::STATE_ENROLLMENT) {
+		if ($competition->competitionState->is(CompetitionState::STATE_ENROLLMENT)) {
 			$competition->competition_state_id = CompetitionState::STATE_TASTINGNUMBERS1;
 			$this->competitionRepository->update($competition);
 		}
