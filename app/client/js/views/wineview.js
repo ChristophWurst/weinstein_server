@@ -153,14 +153,14 @@ var Weinstein = Weinstein || {};
 			if (applicant && applicant.association) {
 				return applicant.association.wuser_username;
 			}
-			return;
+			return undefined;
 		},
 
 		templateContext: function () {
 			var ctx = this._tableOptions;
-			ctx.canEditChosen = ctx.edit_chosen && (Weinstein.currentUser.isAdmin
-				|| Weinstein.currentUser.username === Weinstein.currentCompetition.adminUsername
-				|| Weinstein.currentUser.username === this._getAssociationUsername());
+			ctx.canEditChosen = ctx.edit_chosen && (Weinstein.currentUser.isAdmin ||
+				Weinstein.currentUser.username === Weinstein.currentCompetition.adminUsername ||
+				Weinstein.currentUser.username === this._getAssociationUsername());
 			return ctx;
 		},
 		_editKdb: function () {
