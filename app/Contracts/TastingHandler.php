@@ -90,6 +90,11 @@ interface TastingHandler {
 	public function importTastingNumbers(UploadedFile $file, Competition $competition);
 
 	/**
+	 * @param Competition $competition
+	 */
+	public function resetTastingNumbers(Competition $competition);
+
+	/**
 	 * @param TastingNumber $tastingNumber
 	 * @return void
 	 */

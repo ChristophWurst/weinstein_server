@@ -214,6 +214,10 @@ class Handler implements TastingHandler {
 		return $rowCount - 1;
 	}
 
+	public function resetTastingNumbers(Competition $competition) {
+		$this->tastingNumberRepository->deleteAll($competition, $competition->getTastingStage());
+	}
+
 	public function deleteTastingNumber(TastingNumber $tastingNumber) {
 		// TODO: check competition state
 		return $this->tastingNumberRepository->delete($tastingNumber);
