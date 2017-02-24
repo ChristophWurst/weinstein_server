@@ -31,13 +31,6 @@ use Illuminate\Database\Eloquent\Collection;
 class TastingNumberRepository {
 
 	/**
-	 * @return Collection
-	 */
-	public function findAll() {
-		return TastingNumber::all();
-	}
-
-	/**
 	 * @param type $id
 	 * @return TastingNumber|null
 	 */
