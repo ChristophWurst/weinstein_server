@@ -35,6 +35,7 @@ use App\WineExport;
 use App\WineQuality;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as Resp;
 use Illuminate\Support\Facades\App;
@@ -43,6 +44,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
+use function route;
 
 class WineController extends BaseController {
 
@@ -74,6 +76,18 @@ class WineController extends BaseController {
 	}
 
 	/**
+	 * Tasting results of the first tasting round should be shown if the user is either the competition admin
+	 * and the competition state is at least tasting, or first tasting round has been finished
+	 *
+	 * @param Competition $comeptition
+	 * @param bool $isCompetitionAdmin
+	 * @return bool
+	 */
+	private function showRating1(Competition $comeptition, bool $isCompetitionAdmin): bool {
+		return ($competition->competitionState->id >= CompetitionState::STATE_TASTING1 && $isCompetitionAdmin) || $competition->competitionState->id > CompetitionState::STATE_TASTING1;
+	}
+
+	/**
 	 * List all wines
 	 * 
 	 * admin sees all
@@ -83,32 +97,33 @@ class WineController extends BaseController {
 	 * @return View
 	 */
 	public function index(Competition $competition) {
-		$competitionAdmin = $competition->administrates(Auth::user());
+		$competitionAdmin = $competition->administrates();
 
-		return $this->viewFactory->make('competition/wines/index', [
-			'competition' => $competition,
-			'user' => Auth::user(),
-			'competition_admin' => $competitionAdmin,
-			'wine_url' => route('wines.index'),
-			'show_add_wine' => $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT,
-			'show_edit_wine' => $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT,
-			'show_rating1' => $competition->competitionState->id >= CompetitionState::STATE_TASTING1,
-			'show_rating2' => $competitionAdmin && $competition->competitionState->id >= CompetitionState::STATE_TASTING2,
-			'edit_kdb' => $competition->competitionState->id === CompetitionState::STATE_KDB,
-			'show_kdb' => $competition->competitionState->id >= CompetitionState::STATE_KDB,
-			'show_complete_kdb' => $competition->competitionState->id === CompetitionState::STATE_KDB,
-			'edit_excluded' => $competition->competitionState->id === CompetitionState::STATE_EXCLUDE,
-			'show_excluded' => $competition->competitionState->id >= CompetitionState::STATE_EXCLUDE,
-			'show_complete_exclude' => $competition->competitionState->id === CompetitionState::STATE_EXCLUDE,
-			'edit_sosi' => $competition->competitionState->id === CompetitionState::STATE_SOSI,
-			'show_sosi' => $competition->competitionState->id >= CompetitionState::STATE_SOSI,
-			'show_complete_sosi' => $competition->competitionState->id === CompetitionState::STATE_SOSI,
-			'show_edit_chosen' => $competition->competitionState->id === CompetitionState::STATE_CHOOSE,
-			'show_chosen' => $competition->competitionState->id >= CompetitionState::STATE_CHOOSE,
-			'edit_chosen' => $competition->competitionState->id === CompetitionState::STATE_CHOOSE,
-			'show_complete_choosing' => $competition->competitionState->id === CompetitionState::STATE_CHOOSE,
-			'export_flaws' => $competition->competitionState->id >= CompetitionState::STATE_KDB,
-			'show_enrollment_pdf_export'=> $competition->competitionState->is(CompetitionState::STATE_ENROLLMENT),
+		return $this->viewFactory->make('competition/wines/index',
+				[
+				'competition' => $competition,
+				'user' => Auth::user(),
+				'competition_admin' => $competitionAdmin,
+				'wine_url' => route('wines.index'),
+				'show_add_wine' => $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT,
+				'show_edit_wine' => $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT,
+				'show_rating1' => $this->showRating1($competition, $competitionAdmin),
+				'show_rating2' => $competitionAdmin && $competition->competitionState->id >= CompetitionState::STATE_TASTING2,
+				'edit_kdb' => $competition->competitionState->id === CompetitionState::STATE_KDB,
+				'show_kdb' => $competition->competitionState->id >= CompetitionState::STATE_KDB,
+				'show_complete_kdb' => $competition->competitionState->id === CompetitionState::STATE_KDB,
+				'edit_excluded' => $competition->competitionState->id === CompetitionState::STATE_EXCLUDE,
+				'show_excluded' => $competition->competitionState->id >= CompetitionState::STATE_EXCLUDE,
+				'show_complete_exclude' => $competition->competitionState->id === CompetitionState::STATE_EXCLUDE,
+				'edit_sosi' => $competition->competitionState->id === CompetitionState::STATE_SOSI,
+				'show_sosi' => $competition->competitionState->id >= CompetitionState::STATE_SOSI,
+				'show_complete_sosi' => $competition->competitionState->id === CompetitionState::STATE_SOSI,
+				'show_edit_chosen' => $competition->competitionState->id === CompetitionState::STATE_CHOOSE,
+				'show_chosen' => $competition->competitionState->id >= CompetitionState::STATE_CHOOSE,
+				'edit_chosen' => $competition->competitionState->id === CompetitionState::STATE_CHOOSE,
+				'show_complete_choosing' => $competition->competitionState->id === CompetitionState::STATE_CHOOSE,
+				'export_flaws' => $competition->competitionState->id >= CompetitionState::STATE_KDB,
+				'show_enrollment_pdf_export' => $competition->competitionState->is(CompetitionState::STATE_ENROLLMENT),
 		]);
 	}
 
@@ -131,10 +146,11 @@ class WineController extends BaseController {
 			$showEdit = false;
 		}
 
-		return $this->viewFactory->make('competition/wines/show', [
-			'wine' => $wine,
-			'show_edit_wine' => $showEdit,
-			'show_rating2' => $competitionAdmin,
+		return $this->viewFactory->make('competition/wines/show',
+				[
+				'wine' => $wine,
+				'show_edit_wine' => $showEdit,
+				'show_rating2' => $competitionAdmin,
 		]);
 	}
 
@@ -160,15 +176,16 @@ class WineController extends BaseController {
 
 		$user = Auth::user();
 		$applicants = $competition->administrates($user) ? Applicant::all() : $user->applicants;
-		return $this->viewFactory->make('competition/wines/form', [
-			'competition' => $competition,
-			'competition_admin' => $competition->administrates($user),
-			'id' => Wine::maxId($competition) + 1,
-			'applicants' => $applicants->lists('select_label', 'id')->all(),
-			'winesorts' => WineSort::all()->lists('select_label', 'id')->all(),
-			'winequalities' => ['none' => '0 - keine'] + WineQuality::get()->lists('select_label', 'id')->all(),
-			'show_nr' => $competition->administrates(Auth::user()),
-			'success' => $request->session()->has('wine_added_successfully'),
+		return $this->viewFactory->make('competition/wines/form',
+				[
+				'competition' => $competition,
+				'competition_admin' => $competition->administrates($user),
+				'id' => Wine::maxId($competition) + 1,
+				'applicants' => $applicants->lists('select_label', 'id')->all(),
+				'winesorts' => WineSort::all()->lists('select_label', 'id')->all(),
+				'winequalities' => ['none' => '0 - keine'] + WineQuality::get()->lists('select_label', 'id')->all(),
+				'show_nr' => $competition->administrates(Auth::user()),
+				'success' => $request->session()->has('wine_added_successfully'),
 		]);
 	}
 
@@ -253,13 +270,14 @@ class WineController extends BaseController {
 
 		$user = Auth::user();
 		$applicants = $wine->competition->administrates($user) ? Applicant::all() : $user->applicants;
-		return $this->viewFactory->make('competition/wines/form', [
-			'success' => false,
-			'wine' => $wine,
-			'applicants' => $applicants->lists('select_label', 'id')->all(),
-			'winesorts' => WineSort::all()->lists('select_label', 'id')->all(),
-			'winequalities' => ['none' => '0 - keine'] + WineQuality::get()->lists('select_label', 'id')->all(),
-			'show_nr' => $wine->competition->administrates(Auth::user()),
+		return $this->viewFactory->make('competition/wines/form',
+				[
+				'success' => false,
+				'wine' => $wine,
+				'applicants' => $applicants->lists('select_label', 'id')->all(),
+				'winesorts' => WineSort::all()->lists('select_label', 'id')->all(),
+				'winequalities' => ['none' => '0 - keine'] + WineQuality::get()->lists('select_label', 'id')->all(),
+				'show_nr' => $wine->competition->administrates(Auth::user()),
 		]);
 	}
 
@@ -436,6 +454,9 @@ class WineController extends BaseController {
 	}
 
 	/**
+	 * @param Wine $wine
+	 * @return JsonResponse
+	 */
 	public function updateSosi(Wine $wine) {
 		$this->authorize('update-wine', $wine);
 
