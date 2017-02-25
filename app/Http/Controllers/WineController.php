@@ -79,11 +79,11 @@ class WineController extends BaseController {
 	 * Tasting results of the first tasting round should be shown if the user is either the competition admin
 	 * and the competition state is at least tasting, or first tasting round has been finished
 	 *
-	 * @param Competition $comeptition
+	 * @param Competition $competition
 	 * @param bool $isCompetitionAdmin
 	 * @return bool
 	 */
-	private function showRating1(Competition $comeptition, bool $isCompetitionAdmin): bool {
+	private function showRating1(Competition $competition, bool $isCompetitionAdmin): bool {
 		return ($competition->competitionState->id >= CompetitionState::STATE_TASTING1 && $isCompetitionAdmin) || $competition->competitionState->id > CompetitionState::STATE_TASTING1;
 	}
 
