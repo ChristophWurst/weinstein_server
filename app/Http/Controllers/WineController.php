@@ -97,7 +97,7 @@ class WineController extends BaseController {
 	 * @return View
 	 */
 	public function index(Competition $competition) {
-		$competitionAdmin = $competition->administrates();
+		$competitionAdmin = $competition->administrates(Auth::user());
 
 		return $this->viewFactory->make('competition/wines/index',
 				[
