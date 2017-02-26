@@ -115,7 +115,7 @@ class WineController extends BaseController {
 				'edit_excluded' => $competition->competitionState->id === CompetitionState::STATE_EXCLUDE,
 				'show_excluded' => $competition->competitionState->id >= CompetitionState::STATE_EXCLUDE,
 				'show_complete_exclude' => $competition->competitionState->id === CompetitionState::STATE_EXCLUDE,
-				'edit_sosi' => $competition->competitionState->id === CompetitionState::STATE_SOSI,
+				'edit_sosi' => $competitionAdmin && $competition->competitionState->id === CompetitionState::STATE_SOSI,
 				'show_sosi' => $competition->competitionState->id >= CompetitionState::STATE_SOSI,
 				'show_complete_sosi' => $competition->competitionState->id === CompetitionState::STATE_SOSI,
 				'show_edit_chosen' => $competition->competitionState->id === CompetitionState::STATE_CHOOSE,
