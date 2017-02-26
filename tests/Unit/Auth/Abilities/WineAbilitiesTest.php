@@ -26,6 +26,7 @@ use App\MasterData\Applicant;
 use App\MasterData\Association;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
+use App\MasterData\User;
 use App\Wine;
 use Mockery;
 use Test\TestCase;
@@ -238,6 +239,18 @@ class WineAbilitiesTest extends TestCase {
 			->andReturn(true);
 
 		$allowed = $this->abilities->update($user, $wine, $data);
+
+		$this->assertTrue($allowed);
+	}
+
+	public function testImportSosi() {
+		$user = Mockery::mock(User::class);
+		$competition = Mockery::mock(Competition::class);
+		$competition->shouldReceive('administrates')
+			->with($user)
+			->andReturn(true);
+
+		$allowed = $this->abilities->importSosi($user, $competition);
 
 		$this->assertTrue($allowed);
 	}

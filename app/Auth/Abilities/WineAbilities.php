@@ -239,11 +239,11 @@ class WineAbilities {
 
 	/**
 	 * @param User $user
-	 * @param Wine $wine
-	 * @return boolean|null
+	 * @param Competition $competition
+	 * @return bool
 	 */
-	public function importSosi(User $user, Wine $wine) {
-		
+	public function importSosi(User $user, Competition $competition) {
+		return $competition->administrates($user);
 	}
 
 	/**
