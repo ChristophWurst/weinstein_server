@@ -44,6 +44,19 @@ class WineAbilitiesTest extends TestCase {
 		$this->abilities = new WineAbilities();
 	}
 
+	public function testShow() {
+		$user = Mockery::mock(User::class);
+		$wine = Mockery::mock(Wine::class);
+		$wine->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(false);
+
+		$allowed = $this->abilities->show($user, $wine);
+
+		$this->assertFalse($allowed);
+	}
+
 	public function testCreate() {
 		$user = $this->getUserMock();
 		$competition = Mockery::mock(Competition::class);
@@ -243,6 +256,57 @@ class WineAbilitiesTest extends TestCase {
 		$this->assertTrue($allowed);
 	}
 
+	public function testEnrollmentPdf() {
+		$user = Mockery::mock(User::class);
+		$wine = Mockery::mock(Wine::class);
+		$wine->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(true);
+
+		$allowed = $this->abilities->enrollmentPdf($user, $wine);
+
+		$this->assertTrue($allowed);
+	}
+
+	public function testDelete() {
+		$user = Mockery::mock(User::class);
+		$wine = Mockery::mock(Wine::class);
+		$wine->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(true);
+
+		$allowed = $this->abilities->delete($user, $wine);
+
+		$this->assertTrue($allowed);
+	}
+
+	public function testRedirect() {
+		$user = Mockery::mock(User::class);
+		$competition = Mockery::mock(Competition::class);
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(true);
+
+		$allowed = $this->abilities->redirect($user, $competition);
+
+		$this->assertTrue($allowed);
+	}
+
+	public function testImportKdb() {
+		$user = Mockery::mock(User::class);
+		$competition = Mockery::mock(Competition::class);
+		$competition->shouldReceive('administrates')
+			->with($user)
+			->andReturn(false);
+
+		$allowed = $this->abilities->importKdb($user, $competition);
+
+		$this->assertFalse($allowed);
+	}
+
 	public function testImportSosi() {
 		$user = Mockery::mock(User::class);
 		$competition = Mockery::mock(Competition::class);
@@ -251,6 +315,18 @@ class WineAbilitiesTest extends TestCase {
 			->andReturn(true);
 
 		$allowed = $this->abilities->importSosi($user, $competition);
+
+		$this->assertTrue($allowed);
+	}
+
+	public function testImportExcluded() {
+		$user = Mockery::mock(User::class);
+		$competition = Mockery::mock(Competition::class);
+		$competition->shouldReceive('administrates')
+			->with($user)
+			->andReturn(true);
+
+		$allowed = $this->abilities->importExcluded($user, $competition);
 
 		$this->assertTrue($allowed);
 	}
