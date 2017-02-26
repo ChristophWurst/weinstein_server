@@ -35,7 +35,7 @@ class WineAbilities {
 	 * @param Wine $wine
 	 * @return boolean
 	 */
-	public function show(User $user, Wine $wine) {
+	public function show(User $user, Wine $wine): bool {
 		return $wine->administrates($user);
 	}
 
@@ -167,74 +167,29 @@ class WineAbilities {
 
 	/**
 	 * @param User $user
-	 * @param Competition $competition
-	 * @return boolean|null
-	 */
-	public function edit(User $user, Competition $competition) {
-		
-	}
-
-	/**
-	 * @param User $user
-	 * @param Competition $competition
-	 * @return boolean|null
-	 */
-	public function delete(User $user, Competition $competition) {
-		
-	}
-
-	/**
-	 * @param User $user
-	 * @param Competition $competition
-	 * @return boolean|null
-	 */
-	public function redirect(User $user, Competition $competition) {
-		
-	}
-
-	/**
-	 * @param User $user
-	 * @param Competition $competition
-	 * @return boolean|null
-	 */
-	public function kdb(User $user, Competition $competition) {
-		
-	}
-
-	/**
-	 * @param User $user
 	 * @param Wine $wine
-	 * @return boolean|null
+	 * @return bool
 	 */
-	public function updateKdb(User $user, Wine $wine) {
-		
+	public function delete(User $user, Wine $wine): bool {
+		return $wine->administrates($user);
 	}
 
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return boolean|null
+	 * @return bool
 	 */
-	public function importKdb(User $user, Competition $competition) {
-		
+	public function redirect(User $user, Competition $competition): bool {
+		return $competition->administrates($user);
 	}
 
 	/**
 	 * @param User $user
 	 * @param Competition $competition
-	 * @return boolean|null
+	 * @return bool
 	 */
-	public function importExcluded(User $user, Competition $competition) {
-		
-	}
-
-	/**
-	 * @param User $user
-	 * @param Wine $wine
-	 * @return boolean|null
-	 */
-	public function updateSosi(User $user, Wine $wine) {
-		
+	public function importKdb(User $user, Competition $competition): bool {
+		return $competition->administrates($user);
 	}
 
 	/**
@@ -248,92 +203,11 @@ class WineAbilities {
 
 	/**
 	 * @param User $user
-	 * @param Wine $wine
-	 * @return boolean|null
-	 */
-	public function updateChosen(User $user, Wine $wine) {
-		
-	}
-
-	/**
-	 * @param User $user
 	 * @param Competition $competition
-	 * @return boolean|null
+	 * @return bool
 	 */
-	public function importChosen(User $user, Competition $competition) {
-		
-	}
-
-	/**
-	 * @param User $user
-	 * @param Competition $competition
-	 * @return boolean|null
-	 */
-	public function excluded(User $user, Competition $competition) {
-		
-	}
-
-	/**
-	 * @param User $user
-	 * @param Competition $competition
-	 * @return boolean|null
-	 */
-	public function sosi(User $user, Competition $competition) {
-		
-	}
-
-	/**
-	 * @param User $user
-	 * @param Competition $competition
-	 * @return boolean|null
-	 */
-	public function chosen(User $user, Competition $competition) {
-		
-	}
-
-	/**
-	 * @param User $user
-	 * @param Competition $competition
-	 * @return boolean|null
-	 */
-	public function exportAll(User $user, Competition $competition) {
-		
-	}
-
-	/**
-	 * @param User $user
-	 * @param Competition $competition
-	 * @return boolean|null
-	 */
-	public function exportKdb(User $user, Competition $competition) {
-		
-	}
-
-	/**
-	 * @param User $user
-	 * @param Competition $competition
-	 * @return boolean|null
-	 */
-	public function exportSosi(User $user, Competition $competition) {
-		
-	}
-
-	/**
-	 * @param User $user
-	 * @param Competition $competition
-	 * @return boolean|null
-	 */
-	public function exportChosen(User $user, Competition $competition) {
-		
-	}
-
-	/**
-	 * @param User $user
-	 * @param Competition $competition
-	 * @return boolean|null
-	 */
-	public function exportFlaws(User $user, Competition $competition) {
-		
+	public function importExcluded(User $user, Competition $competition): bool {
+		return $competition->administrates($user);
 	}
 
 }

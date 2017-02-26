@@ -125,7 +125,11 @@ class AuthServiceProvider extends ServiceProvider {
 		$gate->define('show-wine', WineAbilities::class . '@show');
 		$gate->define('create-wine', WineAbilities::class . '@create');
 		$gate->define('update-wine', WineAbilities::class . '@update');
+		$gate->define('delete-wine', WineAbilities::class . '@delete');
+		$gate->define('redirect-wine', WineAbilities::class . '@redirect');
+		$gate->define('import-kdb-wines', WineAbilities::class . '@importKdb');
 		$gate->define('import-sosi-wines', WineAbilities::class . '@importSosi');
+		$gate->define('import-excluded-wines', WineAbilities::class . '@importExcluded');
 		$gate->define('print-wine-enrollment-pdf', WineAbilities::class . '@enrollmentPdf');
 	}
 
