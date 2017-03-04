@@ -18,10 +18,7 @@ matrix:
     fast_finish: true
 
 before_script:
-    - npm install
-    - ./node_modules/bower/bin/bower install
-
-    - composer install
+    - make install-deps
 
     # Set up DB
     - mysql -u root -e 'create database weinstein_test;'
@@ -37,7 +34,7 @@ after_script:
     - cat storage/logs/laravel.log
 
 script:
-    - grunt
+    - make build
 
     # Check PHP syntax
     - find . -name \*.php -not -path './vendor/*' -exec php -l "{}" \;
