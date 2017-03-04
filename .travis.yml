@@ -49,7 +49,9 @@ script:
     - php artisan key:generate --no-interaction
     - cat .env
 
-    # Prepare DB
+    # Prepare DB - rollback once to catch potential migration/rollback errors
+    - php artisan migrate --no-interaction
+    - php artisan migrate:rollback --no-interaction
     - php artisan migrate --no-interaction
 
     # Test PHP
