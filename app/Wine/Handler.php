@@ -238,9 +238,9 @@ class Handler implements WineHandler {
 					Log::error('invalid wine id while importing excluded');
 					throw new ValidationException(new MessageBag(array('Wein ' . $row[0] . ' nicht vorhanden')));
 				}
-				$this->updateExcluded($wine, array(
-					'value' => true,
-				));
+				$this->update($wine, [
+					'excluded' => true,
+				]);
 				$rowCount++;
 			}
 		} catch (ValidationException $ve) {
