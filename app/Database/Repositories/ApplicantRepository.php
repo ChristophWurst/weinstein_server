@@ -69,7 +69,7 @@ class ApplicantRepository {
 	public function update(Applicant $applicant, array $data) {
 		$applicant->update($data);
 		$applicant->address->update($data);
-		return Applicant;
+		return $applicant;
 	}
 
 }
