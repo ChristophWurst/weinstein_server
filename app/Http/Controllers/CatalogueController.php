@@ -31,7 +31,7 @@ class CatalogueController extends BaseController {
 	 * Download address catalogue
 	 * 
 	 * @param Competition $competition
-	 * @return type
+	 * @return \Illuminate\Http\Response
 	 */
 	public function addressCatalogue(Competition $competition) {
 		$this->authorize('create-catalogue');
@@ -49,7 +49,7 @@ class CatalogueController extends BaseController {
 	 * Download web catalogue
 	 * 
 	 * @param Competition $competition
-	 * @return type
+	 * @return \Illuminate\Http\Response
 	 */
 	public function webCatalogue(Competition $competition) {
 		$this->authorize('create-catalogue');
@@ -73,7 +73,7 @@ class CatalogueController extends BaseController {
 	 * Download tasting catalogue
 	 * 
 	 * @param Competition $competition
-	 * @return type
+	 * @return \Illuminate\Http\Response
 	 */
 	public function tastingCatalogue(Competition $competition) {
 		$this->authorize('create-catalogue');

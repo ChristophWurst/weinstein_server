@@ -44,7 +44,7 @@ class FileValidator {
 	/**
 	 * Files title for validation error messages
 	 * 
-	 * @var type 
+	 * @var string 
 	 */
 	protected $fileTitle = 'Datei';
 

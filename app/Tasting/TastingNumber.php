@@ -47,7 +47,7 @@ class TastingNumber extends Model {
 	/**
 	 * Attributes for mass assignment
 	 * 
-	 * @var type 
+	 * @var array 
 	 */
 	protected $fillable = [
 		'wine_id',

@@ -22,6 +22,7 @@
 namespace App\MasterData;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
  * @property int $id
@@ -54,7 +55,7 @@ class Address extends Model {
 	/**
 	 * 1 address : 1 applicant
 	 * 
-	 * @return type
+	 * @return Relation
 	 */
 	public function Applicant() {
 		return $this->hasOne('Applicant');

@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Collection;
 class TastingNumberRepository {
 
 	/**
-	 * @param type $id
+	 * @param int $id
 	 * @return TastingNumber|null
 	 */
 	public function find($id) {

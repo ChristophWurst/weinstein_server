@@ -44,7 +44,7 @@ class Tasting extends Model {
 	/**
 	 * Attributes for mass assignment
 	 * 
-	 * @var type 
+	 * @var array 
 	 */
 	protected $fillable = [
 		'tastingnumber_id',

@@ -28,6 +28,7 @@ use App\MasterData\User;
 use App\MasterData\WineSort;
 use App\Tasting\TastingNumber;
 use App\Tasting\TastingStage;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
@@ -180,8 +181,8 @@ class Wine extends Model implements AdministrateModel {
 	/**
 	 * Scope kdb wines
 	 * 
-	 * @param type $query
-	 * @return type
+	 * @param Builder $query
+	 * @return Builder
 	 */
 	public function scopeKdb($query) {
 		return $query->whereKdb(true);
@@ -190,8 +191,8 @@ class Wine extends Model implements AdministrateModel {
 	/**
 	 * Scope excluded wines
 	 * 
-	 * @param type $query
-	 * @return type
+	 * @param Builder $query
+	 * @return Builder
 	 */
 	public function scopeExcluded($query) {
 		return $query->whereExcluded(true);
@@ -200,8 +201,8 @@ class Wine extends Model implements AdministrateModel {
 	/**
 	 * Scope sosi wines
 	 * 
-	 * @param type $query
-	 * @return type
+	 * @param Builder $query
+	 * @return Builder
 	 */
 	public function scopeSosi($query) {
 		return $query->whereSosi(true);
@@ -210,18 +211,17 @@ class Wine extends Model implements AdministrateModel {
 	/**
 	 * Scope chosen wines
 	 * 
-	 * @param type $query
-	 * @return type
+	 * @param Builder $query
+	 * @return Builder
 	 */
 	public function scopeChosen($query) {
 		return $query->whereChosen(true);
 	}
 
 	/**
-	 * 
-	 * @param Query $query
+	 * @param Builder $query
 	 * @param User $user
-	 * @return Query
+	 * @return Builder
 	 */
 	public function scopeAdmin($query, User $user) {
 		if ($user->isAdmin()) {
@@ -234,9 +234,8 @@ class Wine extends Model implements AdministrateModel {
 	}
 
 	/**
-	 * 
-	 * @param Query $query
-	 * @return Query
+	 * @param Builder $query
+	 * @return Builder
 	 */
 	public function scopeWithFlaws($query) {
 		return $query->whereNotNull('comment');
@@ -245,9 +244,9 @@ class Wine extends Model implements AdministrateModel {
 	/**
 	 * scope wines with tasting number of specified tasting stage
 	 * 
-	 * @param type $query
+	 * @param Builder $query
 	 * @param TastingStage $ts
-	 * @return type
+	 * @return Builder
 	 */
 	public function scopeWithTastingNumber($query, TastingStage $ts) {
 		return $query->whereExists(function($query) use($ts) {

@@ -36,6 +36,7 @@ use App\WineQuality;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as Resp;
 use Illuminate\Support\Facades\App;
@@ -350,7 +351,7 @@ class WineController extends BaseController {
 	 * Delete the wine
 	 * 
 	 * @param Wine $wine
-	 * @return type
+	 * @return RedirectResponse
 	 */
 	public function destroy(Wine $wine) {
 		$this->authorize('delete-wine', $wine);
@@ -397,7 +398,7 @@ class WineController extends BaseController {
 	 * Validate and store import files kdb wines
 	 * 
 	 * @param Competition $competition
-	 * @return type
+	 * @return RedirectResponse
 	 */
 	public function importKdbStore(Competition $competition) {
 		$this->authorize('import-kdb-wines', $competition);
@@ -433,7 +434,7 @@ class WineController extends BaseController {
 	 * Validate and store import files exclude wines
 	 * 
 	 * @param Competition $competition
-	 * @return type
+	 * @return RedirectResponse
 	 */
 	public function importExcludedStore(Competition $competition) {
 		$this->authorize('import-excluded-wines', $competition);
@@ -495,7 +496,7 @@ class WineController extends BaseController {
 	 * Validate and store import files sosi wines
 	 * 
 	 * @param Competition $competition
-	 * @return type
+	 * @return RedirectResponse
 	 */
 	public function importSosiStore(Competition $competition) {
 		$this->authorize('import-sosi-wines', $competition);
