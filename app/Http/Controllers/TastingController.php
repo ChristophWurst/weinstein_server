@@ -28,6 +28,7 @@ use App\Tasting\Commission;
 use App\Tasting\TastingNumber;
 use App\Tasting\TastingSession;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
@@ -119,7 +120,7 @@ class TastingController extends BaseController {
 	 * @param TastingNumber $tastingNumber
 	 * @param Commission $commission
 	 * @param Request $request
-	 * @return type
+	 * @return RedirectResponse
 	 */
 	public function update(TastingSession $tastingSession, TastingNumber $tastingNumber, Commission $commission, Request $request) {
 		$this->authorize('edit-tasting', [$tastingSession, $commission, $tastingNumber]);

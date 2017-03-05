@@ -23,6 +23,7 @@ namespace App\Validation;
 
 use App\Exception\ValidationException;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Validator as BaseValidator;
 
 class FileValidator {
 
@@ -43,7 +44,7 @@ class FileValidator {
 	/**
 	 * Files title for validation error messages
 	 * 
-	 * @var type 
+	 * @var string 
 	 */
 	protected $fileTitle = 'Datei';
 
@@ -82,7 +83,7 @@ class FileValidator {
 		$names = array(
 			'file' => $this->fileTitle,
 		);
-		$validator = Validator::make($data, $rules, $this->getErrorMessages(), $names);
+		$validator = BaseValidator::make($data, $rules, $this->getErrorMessages(), $names);
 		if ($validator->fails()) {
 			throw new ValidationException($validator->messages());
 		}

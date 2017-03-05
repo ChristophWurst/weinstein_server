@@ -156,7 +156,6 @@ interface TastingHandler {
 	 * Add a new taster
 	 * 
 	 * @param array $data
-	 * @param Commission $commission
 	 * @return Taster
 	 */
 	public function createTaster(array $data);

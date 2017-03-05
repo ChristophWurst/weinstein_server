@@ -42,6 +42,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @property int $competition_state_id
  * @property CompetitionState $competitionState
  * @property Collection $wines
+ * @property Collection $winesorts
  */
 class Competition extends Model implements AdministrateModel {
 
