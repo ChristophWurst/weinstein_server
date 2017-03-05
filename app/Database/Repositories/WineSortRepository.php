@@ -35,7 +35,7 @@ class WineSortRepository {
 
 	/**
 	 * @param array $data
-	 * @return type
+	 * @return WineSort
 	 */
 	public function create(array $data) {
 		return WineSort::create($data);
