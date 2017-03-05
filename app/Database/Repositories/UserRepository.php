@@ -22,24 +22,40 @@
 namespace App\Database\Repositories;
 
 use App\MasterData\User;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserRepository {
 
+	/**
+	 * @return Collection
+	 */
 	public function findAll() {
 		return User::all();
 	}
 
+	/**
+	 * @param array $data
+	 * @return User
+	 */
 	public function create(array $data) {
 		$user = new User($data);
 		$user->save();
 		return $user;
 	}
 
+	/**
+	 * @param User $user
+	 * @param array $data
+	 * @return User
+	 */
 	public function update(User $user, array $data) {
 		$user->update($data);
 		return $user;
 	}
 
+	/**
+	 * @param User $user
+	 */
 	public function delete(User $user) {
 		$user->delete();
 	}

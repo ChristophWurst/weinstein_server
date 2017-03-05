@@ -22,17 +22,29 @@
 namespace App\Database\Repositories;
 
 use App\MasterData\WineSort;
+use Illuminate\Database\Eloquent\Collection;
 
 class WineSortRepository {
 
+	/**
+	 * @return Collection
+	 */
 	public function findAll() {
 		return WineSort::all();
 	}
 
+	/**
+	 * @param array $data
+	 * @return type
+	 */
 	public function create(array $data) {
 		return WineSort::create($data);
 	}
 
+	/**
+	 * @param WineSort $wineSort
+	 * @param array $data
+	 */
 	public function update(WineSort $wineSort, array $data) {
 		$wineSort->update($data);
 	}

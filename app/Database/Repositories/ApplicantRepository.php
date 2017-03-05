@@ -24,13 +24,21 @@ namespace App\Database\Repositories;
 use App\MasterData\Address;
 use App\MasterData\Applicant;
 use App\MasterData\User;
+use Illuminate\Database\Eloquent\Collection;
 
 class ApplicantRepository {
 
+	/**
+	 * @return Collection
+	 */
 	public function findAll() {
 		return Applicant::all();
 	}
 
+	/**
+	 * @param User $user
+	 * @return Collection
+	 */
 	public function findForUser(User $user) {
 		$direct = $user->applicants()->get();
 		$indirect = $user->associationApplicants()->get();
@@ -40,6 +48,10 @@ class ApplicantRepository {
 		return $all;
 	}
 
+	/**
+	 * @param array $data
+	 * @return Applicant
+	 */
 	public function create(array $data) {
 		$applicant = new Applicant($data);
 		$address = new Address($data);
@@ -49,9 +61,15 @@ class ApplicantRepository {
 		return $applicant;
 	}
 
+	/**
+	 * @param Applicant $applicant
+	 * @param array $data
+	 * @return Applicant
+	 */
 	public function update(Applicant $applicant, array $data) {
 		$applicant->update($data);
 		$applicant->address->update($data);
+		return Applicant;
 	}
 
 }
