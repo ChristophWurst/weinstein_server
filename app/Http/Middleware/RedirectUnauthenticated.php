@@ -1,7 +1,5 @@
 <?php
 
-namespace App\Http\Middleware;
-
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -21,27 +19,24 @@ namespace App\Http\Middleware;
  *
  */
 
+namespace App\Http\Middleware;
+
 use Closure;
-use Illuminate\Http\Request;
-use Illuminate\Contracts\Logging\Log;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\Logging\Log;
+use Illuminate\Http\Request;
+use function redirect;
+use function response;
 
 class RedirectUnauthenticated {
 
-	/**
-	 *
-	 * @var \Illuminate\Contracts\Auth
-	 */
+	/** @var Guard */
 	private $auth;
 
-	/**
-	 *
-	 * @var \Illuminate\Contracts\Logging\Log
-	 */
+	/** @var Log */
 	private $log;
 
 	/**
-	 * 
 	 * @param Guard $auth
 	 * @param Log $log
 	 */
@@ -53,7 +48,7 @@ class RedirectUnauthenticated {
 	/**
 	 * Handle an incoming request.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  Request  $request
 	 * @param  \Closure  $next
 	 * @return mixed
 	 */
