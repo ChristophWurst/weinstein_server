@@ -23,6 +23,7 @@ namespace App\Validation;
 
 use App\Exception\ValidationException;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Validator;
 
 class FileValidator {
 
