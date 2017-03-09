@@ -66,7 +66,7 @@ class CatalogueHandlerTest extends TestCase {
 	public function testImportCatalogueNumbersWithIncompleteData() {
 		$file = Mockery::mock(UploadedFile::class);
 		$competition = Mockery::mock(Competition::class);
-		$doc = Mockery::mock(PHPExcel::class);
+		$doc = $this->getMockBuilder(PHPExcel::class)->disableOriginalConstructor()->getMock();
 		$sheet = Mockery::mock(PHPExcel_Worksheet::class);
 		$dbConnection = Mockery::mock(Connection::class);
 		$this->db->shouldReceive('connection')
@@ -81,9 +81,9 @@ class CatalogueHandlerTest extends TestCase {
 			->once()
 			->with($file)
 			->andReturn($doc);
-		$doc->shouldReceive('getActiveSheet')
-			->once()
-			->andReturn($sheet);
+		$doc->expects($this->once())
+			->method('getActiveSheet')
+			->willReturn($sheet);
 		$sheet->shouldReceive('toArray')
 			->once()
 			->andReturn([]);
@@ -100,7 +100,7 @@ class CatalogueHandlerTest extends TestCase {
 	public function testImportNoCatalogueNumbers() {
 		$file = Mockery::mock(UploadedFile::class);
 		$competition = Mockery::mock(Competition::class);
-		$doc = Mockery::mock(PHPExcel::class);
+		$doc = $this->getMockBuilder(PHPExcel::class)->disableOriginalConstructor()->getMock();
 		$sheet = Mockery::mock(PHPExcel_Worksheet::class);
 		$dbConnection = Mockery::mock(Connection::class);
 		$this->db->shouldReceive('connection')
@@ -115,9 +115,9 @@ class CatalogueHandlerTest extends TestCase {
 			->once()
 			->with($file)
 			->andReturn($doc);
-		$doc->shouldReceive('getActiveSheet')
-			->once()
-			->andReturn($sheet);
+		$doc->expects($this->once())
+			->method('getActiveSheet')
+			->willReturn($sheet);
 		$sheet->shouldReceive('toArray')
 			->once()
 			->andReturn([]);
@@ -135,7 +135,7 @@ class CatalogueHandlerTest extends TestCase {
 	public function testImportCatalogueNumbersWithNonExistingWine() {
 		$file = Mockery::mock(UploadedFile::class);
 		$competition = Mockery::mock(Competition::class);
-		$doc = Mockery::mock(PHPExcel::class);
+		$doc = $this->getMockBuilder(PHPExcel::class)->disableOriginalConstructor()->getMock();
 		$sheet = Mockery::mock(PHPExcel_Worksheet::class);
 		$wine1 = Mockery::mock(Wine::class);
 		$dbConnection = Mockery::mock(Connection::class);
@@ -151,9 +151,9 @@ class CatalogueHandlerTest extends TestCase {
 			->once()
 			->with($file)
 			->andReturn($doc);
-		$doc->shouldReceive('getActiveSheet')
-			->once()
-			->andReturn($sheet);
+		$doc->expects($this->once())
+			->method('getActiveSheet')
+			->willReturn($sheet);
 		$sheet->shouldReceive('toArray')
 			->once()
 			->andReturn([
@@ -179,7 +179,7 @@ class CatalogueHandlerTest extends TestCase {
 	public function testImportCatalogueNumbersWithIncompleteSpreadSheetData() {
 		$file = Mockery::mock(UploadedFile::class);
 		$competition = Mockery::mock(Competition::class);
-		$doc = Mockery::mock(PHPExcel::class);
+		$doc = $this->getMockBuilder(PHPExcel::class)->disableOriginalConstructor()->getMock();
 		$sheet = Mockery::mock(PHPExcel_Worksheet::class);
 		$wine1 = Mockery::mock(Wine::class);
 		$dbConnection = Mockery::mock(Connection::class);
@@ -195,9 +195,9 @@ class CatalogueHandlerTest extends TestCase {
 			->once()
 			->with($file)
 			->andReturn($doc);
-		$doc->shouldReceive('getActiveSheet')
-			->once()
-			->andReturn($sheet);
+		$doc->expects($this->once())
+			->method('getActiveSheet')
+			->willReturn($sheet);
 		$sheet->shouldReceive('toArray')
 			->once()
 			->andReturn([
@@ -217,7 +217,7 @@ class CatalogueHandlerTest extends TestCase {
 	public function testImportCatalogueNumbers() {
 		$file = Mockery::mock(UploadedFile::class);
 		$competition = Mockery::mock(Competition::class);
-		$doc = Mockery::mock(PHPExcel::class);
+		$doc = $this->getMockBuilder(PHPExcel::class)->disableOriginalConstructor()->getMock();
 		$sheet = Mockery::mock(PHPExcel_Worksheet::class);
 		$wine1 = Mockery::mock(Wine::class);
 		$wine2 = Mockery::mock(Wine::class);
@@ -234,9 +234,9 @@ class CatalogueHandlerTest extends TestCase {
 			->once()
 			->with($file)
 			->andReturn($doc);
-		$doc->shouldReceive('getActiveSheet')
-			->once()
-			->andReturn($sheet);
+		$doc->expects($this->once())
+			->method('getActiveSheet')
+			->willReturn($sheet);
 		$sheet->shouldReceive('toArray')
 			->once()
 			->andReturn([

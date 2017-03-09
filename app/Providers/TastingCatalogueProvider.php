@@ -23,8 +23,9 @@ namespace App\Providers;
 
 use App\Contracts\TastingCatalogueHandler;
 use App\TastingCatalogue\CatalogueHandler;
+use Illuminate\Support\ServiceProvider;
 
-class TastingCatalogueProvider {
+class TastingCatalogueProvider extends ServiceProvider {
 
 	protected $defer = true;
 
