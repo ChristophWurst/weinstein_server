@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler {
@@ -33,6 +34,9 @@ class Handler extends ExceptionHandler {
 	 * @return void
 	 */
 	public function report(Exception $e) {
+		if ($this->shouldReport($e)) {
+			app('sentry')->captureException($e);
+		}
 		parent::report($e);
 	}
 
