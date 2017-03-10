@@ -35,6 +35,12 @@ class Handler extends ExceptionHandler {
 	 */
 	public function report(Exception $e) {
 		if ($this->shouldReport($e)) {
+			app('sentry')->setRelease(config('app.version', 'unknown'));
+			if (app('auth')->check()) {
+				app('sentry')->set_user_data(app('auth')->user()->username);
+			} else {
+				app('sentry')->set_user_data('anonymous');
+			}
 			app('sentry')->captureException($e);
 		}
 		parent::report($e);
