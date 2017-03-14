@@ -87,6 +87,14 @@
        Auswahl abschlie&szlig;en
     </a>
     @endif
+	@if ($show_import_catalogue_numbers && $competition_admin)
+    <a class="btn btn-default"
+       type="button"
+       href="{!! route('cataloguenumbers.import', array('competition' => $competition->id)) !!}">
+        <span class="glyphicon glyphicon-import"></span>
+       Katalognummern importieren
+    </a>
+    @endif
     @if ($export_flaws)
     <a class="btn btn-default"
        type="button"

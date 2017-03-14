@@ -77,9 +77,13 @@ class AuthServiceProvider extends ServiceProvider {
 		$gate->define('complete-competition-tasting-choosing', CompetitionAbilities::class . '@completeTastingChoosing');
 
 		/**
+		 * Catalogue Numbers
+		 */
+		$gate->define('import-catalogue-numbers', CatalogueNumberAbilities::class . '@import');
+		/**
 		 * Evaluation
 		 */
-		$gate->define('show-evaluations', EvaluationAbilities::class . '@show');
+		$gate->define('show-evaluations', CatalogueAbilities::class . '@importNumbers');
 
 		/**
 		 * Tasting

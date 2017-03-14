@@ -123,6 +123,7 @@ class WineController extends BaseController {
 				'show_chosen' => $competition->competitionState->id >= CompetitionState::STATE_CHOOSE,
 				'edit_chosen' => $competition->competitionState->id === CompetitionState::STATE_CHOOSE,
 				'show_complete_choosing' => $competition->competitionState->id === CompetitionState::STATE_CHOOSE,
+				'show_import_catalogue_numbers' => $competition->competitionState->id === CompetitionState::STATE_CATALOGUE_NUMBERS,
 				'export_flaws' => $competition->competitionState->id >= CompetitionState::STATE_KDB,
 				'show_enrollment_pdf_export' => $competition->competitionState->is(CompetitionState::STATE_ENROLLMENT),
 		]);

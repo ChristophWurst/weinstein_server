@@ -174,6 +174,19 @@ Route::group(array('prefix' => 'competition/{competition}', 'middleware' => 'aut
 		));
 	});
 
+	/**
+	 * Catalogue Number assignment
+	 */
+	Route::group(['prefix' => 'cataloguenumbers',], function() {
+		Route::get('import', [
+			'as' => 'cataloguenumbers.import',
+			'uses' => 'CatalogueNumberController@import',
+		]);
+		Route::post('import', [
+			'uses' => 'CatalogueNumberController@store',
+		]);
+	});
+
 	Route::get('evaluations', array(
 		'as' => 'evaluation',
 		'uses' => 'EvaluationController@index'

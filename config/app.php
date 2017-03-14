@@ -152,6 +152,7 @@ return [
 		App\Providers\EventServiceProvider::class,
 		App\Providers\MasterDataServiceProvider::class,
 		App\Providers\RouteServiceProvider::class,
+		App\Providers\TastingCatalogueProvider::class,
 		App\Providers\TastingServiceProvider::class,
 		App\Providers\WineServiceProvider::class,
 	],

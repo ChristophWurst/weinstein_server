@@ -100,9 +100,8 @@ class WineRepository {
 	 * @return void
 	 */
 	public function resetCatalogueNumbers(Competition $competition) {
-		$competition->wines
-			->update([
-				'catalogue_number' => null,
+		$competition->wines()->update([
+			'catalogue_number' => null,
 		]);
 	}
 
