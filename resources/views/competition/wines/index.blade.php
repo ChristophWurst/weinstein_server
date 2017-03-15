@@ -95,6 +95,14 @@
        Katalognummern importieren
     </a>
     @endif
+	@if ($show_complete_catalogue_numbers && $competition_admin)
+    <a class="btn btn-default"
+       type="button"
+       href="{!! route('competition/complete-catalogue-numbers', array('competition' => $competition)) !!}">
+        <span class="glyphicon glyphicon-ok"></span>
+       Katalognummernzuweisung abschlie&szlig;en
+    </a>
+    @endif
     @if ($export_flaws)
     <a class="btn btn-default"
        type="button"

@@ -21,6 +21,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\TastingCatalogueHandler;
 use App\Contracts\WineHandler;
 use App\Exceptions\ValidationException;
 use App\FlawExport;
@@ -55,12 +56,18 @@ class WineController extends BaseController {
 	/** @var WineHandler */
 	private $wineHandler;
 
+	/** @var TastingCatalogueHandler */
+	private $tastingCatalogueHandler;
+
 	/**
 	 * @param WineHandler $wineHandler
+	 * @param TastingCatalogueHandler $tastingCatalogueHandler
 	 * @param Factory $viewFactory
 	 */
-	public function __construct(WineHandler $wineHandler, Factory $viewFactory) {
+	public function __construct(WineHandler $wineHandler, TastingCatalogueHandler $tastingCatalogueHandler,
+		Factory $viewFactory) {
 		$this->wineHandler = $wineHandler;
+		$this->tastingCatalogueHandler = $tastingCatalogueHandler;
 		$this->viewFactory = $viewFactory;
 	}
 
@@ -124,6 +131,7 @@ class WineController extends BaseController {
 				'edit_chosen' => $competition->competitionState->id === CompetitionState::STATE_CHOOSE,
 				'show_complete_choosing' => $competition->competitionState->id === CompetitionState::STATE_CHOOSE,
 				'show_import_catalogue_numbers' => $competition->competitionState->id === CompetitionState::STATE_CATALOGUE_NUMBERS,
+				'show_complete_catalogue_numbers' => $this->tastingCatalogueHandler->allWinesHaveBeenAssigned($competition),
 				'export_flaws' => $competition->competitionState->id >= CompetitionState::STATE_KDB,
 				'show_enrollment_pdf_export' => $competition->competitionState->is(CompetitionState::STATE_ENROLLMENT),
 		]);

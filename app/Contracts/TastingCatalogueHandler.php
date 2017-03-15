@@ -21,6 +21,7 @@
 
 namespace App\Contracts;
 
+use App\Exceptions\InvalidCompetitionStateException;
 use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
 use Illuminate\Http\UploadedFile;
@@ -28,12 +29,32 @@ use Illuminate\Http\UploadedFile;
 interface TastingCatalogueHandler {
 
 	/**
+	 * Check whether there are any unassigned wines left
+	 *
+	 * @param Competition $competition
+	 */
+	public function allWinesHaveBeenAssigned(Competition $competition): bool;
+
+	/**
+	 * @param Competition $competition
+	 * @return int
+	 */
+	public function getNrOfWinesWithoutCatalogueNumber(Competition $competition): int;
+
+	/**
 	 * Import assigned catalogue numbers of all chosen wines
 	 *
 	 * @param UploadedFile $file
 	 * @param Competition $competition
 	 * @throws ValidationException if data is invalid or incomplete (all wines have to be assigned a number)
+	 * @throws InvalidCompetitionStateException
 	 * @return int number of read lines
 	 */
 	public function importCatalogueNumbers(UploadedFile $file, Competition $competition): int;
+
+	/**
+	 * @param Competition $competition
+	 * @return void
+	 */
+	public function finishAssignment(Competition $competition): void;
 }

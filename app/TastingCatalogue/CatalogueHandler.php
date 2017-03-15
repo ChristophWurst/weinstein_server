@@ -22,9 +22,12 @@
 namespace App\TastingCatalogue;
 
 use App\Contracts\TastingCatalogueHandler;
+use App\Database\Repositories\CompetitionRepository;
 use App\Database\Repositories\WineRepository;
+use App\Exceptions\InvalidCompetitionStateException;
 use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
+use App\MasterData\CompetitionState;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
@@ -41,13 +44,31 @@ class CatalogueHandler implements TastingCatalogueHandler {
 	/** @var WineRepository */
 	private $wineRepository;
 
+	/** @var CompetitionRepository */
+	private $competitionRepository;
+
 	/**
 	 * @param DatabaseManager $db
 	 * @param WineRepository $wineRepository
+	 * @param CompetitionRepository $competitionRepository
 	 */
-	public function __construct(DatabaseManager $db, WineRepository $wineRepository) {
+	public function __construct(DatabaseManager $db, WineRepository $wineRepository,
+		CompetitionRepository $competitionRepository) {
 		$this->db = $db;
 		$this->wineRepository = $wineRepository;
+		$this->competitionRepository = $competitionRepository;
+	}
+
+	/**
+	 * @param Competition $competition
+	 * @return bool
+	 */
+	public function allWinesHaveBeenAssigned(Competition $competition): bool {
+		return true || $this->allWinesHaveACatalogueNumber($competition);
+	}
+	
+	public function getNrOfWinesWithoutCatalogueNumber(Competition $competition): int {
+		return $this->wineRepository->getNumberOfWinesWithoutCatalogueNumber($competition);
 	}
 
 	protected function loadExcelFile(UploadedFile $file): PHPExcel {
@@ -112,8 +133,13 @@ class CatalogueHandler implements TastingCatalogueHandler {
 	 * @param Competition $competition
 	 * @return int number of read lines
 	 * @throws ValidationException
+	 * @throws InvalidCompetitionStateException
 	 */
 	public function importCatalogueNumbers(UploadedFile $file, Competition $competition): int {
+		if (!$competition->competitionState->is(CompetitionState::STATE_CATALOGUE_NUMBERS)) {
+			throw new InvalidCompetitionStateException();
+		}
+
 		$dbConnection = $this->db->connection();
 		$dbConnection->beginTransaction();
 
@@ -132,6 +158,19 @@ class CatalogueHandler implements TastingCatalogueHandler {
 
 		$dbConnection->commit();
 		return $rowsImported;
+	}
+
+	/**
+	 * @param Competition $competition
+	 * @return void
+	 */
+	public function finishAssignment(Competition $competition): void {
+		if (!$this->allWinesHaveACatalogueNumber($competition)) {
+			throw new \Exception('Invalid state. Not all wines have been assigned a catalogue number');
+		}
+
+		$competition->competition_state_id++;
+		$this->competitionRepository->update($competition);
 	}
 
 }
