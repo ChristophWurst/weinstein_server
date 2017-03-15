@@ -22,6 +22,7 @@
 namespace Test\Unit\Http\Controllers;
 
 use App\Contracts\MasterDataStore;
+use App\Contracts\TastingCatalogueHandler;
 use App\Contracts\TastingHandler;
 use App\Http\Controllers\CompetitionController;
 use App\MasterData\Competition;
@@ -44,6 +45,9 @@ class CompetitionControllerTest extends TestCase {
 	/** @var TastingHandler|MockInterface */
 	private $tastingHandler;
 
+	/** @var TastingHandler|MockInterface */
+	private $tastingCatalogueHandler;
+
 	/** @var AuthManager|MockInterface */
 	private $auth;
 
@@ -58,6 +62,7 @@ class CompetitionControllerTest extends TestCase {
 
 		$this->masterDataStore = Mockery::mock(MasterDataStore::class);
 		$this->tastingHandler = Mockery::mock(TastingHandler::class);
+		$this->tastingCatalogueHandler = Mockery::mock(TastingCatalogueHandler::class);
 		$this->auth = Mockery::mock(AuthManager::class);
 		$this->view = Mockery::mock(Factory::class);
 
@@ -65,6 +70,7 @@ class CompetitionControllerTest extends TestCase {
 				[
 				$this->masterDataStore,
 				$this->tastingHandler,
+				$this->tastingCatalogueHandler,
 				$this->auth,
 				$this->view
 			])->makePartial();

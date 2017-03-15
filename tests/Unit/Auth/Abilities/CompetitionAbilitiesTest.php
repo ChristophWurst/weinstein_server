@@ -42,6 +42,10 @@ class CompetitionAbilitiesTest extends TestCase {
 	public function testShow() {
 		$user = $this->getUserMock();
 		$competition = $this->getCompetitionMock();
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(true);
 
 		$this->assertTrue($this->abilities->show($user, $competition));
 	}
@@ -56,6 +60,10 @@ class CompetitionAbilitiesTest extends TestCase {
 	public function testCompleteTastingNumbersNoAdmin() {
 		$user = $this->getUserMock();
 		$competition = $this->getCompetitionMock();
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(false);
 
 		$this->assertFalse($this->abilities->completeTasingNumbers($user, $competition));
 	}
@@ -64,7 +72,10 @@ class CompetitionAbilitiesTest extends TestCase {
 		$user = $this->getAdminMock();
 		$competition = $this->getCompetitionMock();
 		$competitionState = Mockery::mock(CompetitionState::class);
-
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(true);
 		$competition->shouldReceive('getAttribute')
 			->twice()
 			->with('competitionState')
@@ -85,7 +96,10 @@ class CompetitionAbilitiesTest extends TestCase {
 		$user = $this->getAdminMock();
 		$competition = $this->getCompetitionMock();
 		$competitionState = Mockery::mock(CompetitionState::class);
-
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(true);
 		$competition->shouldReceive('getAttribute')
 			->twice()
 			->with('competitionState')
@@ -101,6 +115,10 @@ class CompetitionAbilitiesTest extends TestCase {
 	public function testCompleteTastingNoAdmin() {
 		$user = $this->getUserMock();
 		$competition = $this->getCompetitionMock();
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(false);
 
 		$this->assertFalse($this->abilities->completeTasting($user, $competition));
 	}
@@ -113,7 +131,10 @@ class CompetitionAbilitiesTest extends TestCase {
 		$user = $this->getAdminMock();
 		$competition = $this->getCompetitionMock();
 		$competitionState = Mockery::mock(CompetitionState::class);
-
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(true);
 		$competition->shouldReceive('getAttribute')
 			->twice()
 			->with('competitionState')
@@ -130,7 +151,10 @@ class CompetitionAbilitiesTest extends TestCase {
 		$user = $this->getAdminMock();
 		$competition = $this->getCompetitionMock();
 		$competitionState = Mockery::mock(CompetitionState::class);
-
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(true);
 		$competition->shouldReceive('getAttribute')
 			->twice()
 			->with('competitionState')
@@ -146,6 +170,10 @@ class CompetitionAbilitiesTest extends TestCase {
 	public function testCompleteKdbNonAdmin() {
 		$user = $this->getUserMock();
 		$competition = $this->getCompetitionMock();
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(false);
 
 		$this->assertFalse($this->abilities->completeKdb($user, $competition));
 	}
@@ -154,7 +182,10 @@ class CompetitionAbilitiesTest extends TestCase {
 		$user = $this->getAdminMock();
 		$competition = $this->getCompetitionMock();
 		$competitionState = Mockery::mock(CompetitionState::class);
-
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(true);
 		$competition->shouldReceive('getAttribute')
 			->once()
 			->with('competitionState')
@@ -171,7 +202,10 @@ class CompetitionAbilitiesTest extends TestCase {
 		$user = $this->getAdminMock();
 		$competition = $this->getCompetitionMock();
 		$competitionState = Mockery::mock(CompetitionState::class);
-
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(true);
 		$competition->shouldReceive('getAttribute')
 			->once()
 			->with('competitionState')
@@ -187,6 +221,10 @@ class CompetitionAbilitiesTest extends TestCase {
 	public function testCompleteExcludedNonAdmin() {
 		$user = $this->getUserMock();
 		$competition = $this->getCompetitionMock();
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(false);
 
 		$this->assertFalse($this->abilities->completeKdb($user, $competition));
 	}
@@ -195,7 +233,10 @@ class CompetitionAbilitiesTest extends TestCase {
 		$user = $this->getAdminMock();
 		$competition = $this->getCompetitionMock();
 		$competitionState = Mockery::mock(CompetitionState::class);
-
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(true);
 		$competition->shouldReceive('getAttribute')
 			->once()
 			->with('competitionState')
@@ -212,7 +253,10 @@ class CompetitionAbilitiesTest extends TestCase {
 		$user = $this->getAdminMock();
 		$competition = $this->getCompetitionMock();
 		$competitionState = Mockery::mock(CompetitionState::class);
-
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(true);
 		$competition->shouldReceive('getAttribute')
 			->once()
 			->with('competitionState')
@@ -228,6 +272,10 @@ class CompetitionAbilitiesTest extends TestCase {
 	public function testCompleteSosiNonAdmin() {
 		$user = $this->getUserMock();
 		$competition = $this->getCompetitionMock();
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(false);
 
 		$this->assertFalse($this->abilities->completeKdb($user, $competition));
 	}
@@ -236,7 +284,10 @@ class CompetitionAbilitiesTest extends TestCase {
 		$user = $this->getAdminMock();
 		$competition = $this->getCompetitionMock();
 		$competitionState = Mockery::mock(CompetitionState::class);
-
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(true);
 		$competition->shouldReceive('getAttribute')
 			->once()
 			->with('competitionState')
@@ -253,7 +304,10 @@ class CompetitionAbilitiesTest extends TestCase {
 		$user = $this->getAdminMock();
 		$competition = $this->getCompetitionMock();
 		$competitionState = Mockery::mock(CompetitionState::class);
-
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(true);
 		$competition->shouldReceive('getAttribute')
 			->once()
 			->with('competitionState')
@@ -269,6 +323,10 @@ class CompetitionAbilitiesTest extends TestCase {
 	public function testCompleteChoosingNonAdmin() {
 		$user = $this->getUserMock();
 		$competition = $this->getCompetitionMock();
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(false);
 
 		$this->assertFalse($this->abilities->completeKdb($user, $competition));
 	}
@@ -277,7 +335,10 @@ class CompetitionAbilitiesTest extends TestCase {
 		$user = $this->getAdminMock();
 		$competition = $this->getCompetitionMock();
 		$competitionState = Mockery::mock(CompetitionState::class);
-
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(true);
 		$competition->shouldReceive('getAttribute')
 			->once()
 			->with('competitionState')
@@ -294,7 +355,10 @@ class CompetitionAbilitiesTest extends TestCase {
 		$user = $this->getAdminMock();
 		$competition = $this->getCompetitionMock();
 		$competitionState = Mockery::mock(CompetitionState::class);
-
+		$competition->shouldReceive('administrates')
+			->once()
+			->with($user)
+			->andReturn(true);
 		$competition->shouldReceive('getAttribute')
 			->once()
 			->with('competitionState')

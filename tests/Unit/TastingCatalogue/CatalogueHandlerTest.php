@@ -21,28 +21,35 @@
 
 namespace Test\Unit\TastingCatalogue;
 
+use App\Database\Repositories\CompetitionRepository;
 use App\Database\Repositories\WineRepository;
+use App\Exceptions\InvalidCompetitionStateException;
 use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
+use App\MasterData\CompetitionState;
 use App\TastingCatalogue\CatalogueHandler;
 use App\Wine;
 use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Http\UploadedFile;
 use Mockery;
+use Mockery\MockInterface;
 use PHPExcel;
 use PHPExcel_Worksheet;
 use Test\TestCase;
 
 class CatalogueHandlerTest extends TestCase {
 
-	/** @var DatabaseManager|Mockery\MockInterface */
+	/** @var DatabaseManager|MockInterface */
 	private $db;
 
-	/** @var WineRepository|Mockery\MockInterface */
+	/** @var WineRepository|MockInterface */
 	private $wineRepo;
 
-	/** @var CatalogueHandler|Mockery\MockInterface */
+	/** @var CompetitionRepository|MockInterface */
+	private $competitionRepo;
+
+	/** @var CatalogueHandler|MockInterface */
 	private $handler;
 
 	protected function setUp() {
@@ -50,10 +57,13 @@ class CatalogueHandlerTest extends TestCase {
 
 		$this->db = Mockery::mock(DatabaseManager::class);
 		$this->wineRepo = Mockery::mock(WineRepository::class);
+		$this->competitionRepo = Mockery::mock(CompetitionRepository::class);
 
-		$this->handler = Mockery::mock(CatalogueHandler::class, [
+		$this->handler = Mockery::mock(CatalogueHandler::class,
+				[
 				$this->db,
 				$this->wineRepo,
+				$this->competitionRepo,
 			])
 			->shouldAllowMockingProtectedMethods()
 			->makePartial();
@@ -66,9 +76,16 @@ class CatalogueHandlerTest extends TestCase {
 	public function testImportCatalogueNumbersWithIncompleteData() {
 		$file = Mockery::mock(UploadedFile::class);
 		$competition = Mockery::mock(Competition::class);
+		$competitionState = Mockery::mock(CompetitionState::class);
 		$doc = $this->getMockBuilder(PHPExcel::class)->disableOriginalConstructor()->getMock();
-		$sheet = Mockery::mock(PHPExcel_Worksheet::class);
+		$sheet = $this->getMockBuilder(PHPExcel_Worksheet::class)->disableOriginalConstructor()->getMock();
 		$dbConnection = Mockery::mock(Connection::class);
+		$competition->shouldReceive('getAttribute')
+			->with('competitionState')
+			->andReturn($competitionState);
+		$competitionState->shouldReceive('is')
+			->with(CompetitionState::STATE_CATALOGUE_NUMBERS)
+			->andReturn(true);
 		$this->db->shouldReceive('connection')
 			->once()
 			->andReturn($dbConnection);
@@ -84,9 +101,9 @@ class CatalogueHandlerTest extends TestCase {
 		$doc->expects($this->once())
 			->method('getActiveSheet')
 			->willReturn($sheet);
-		$sheet->shouldReceive('toArray')
-			->once()
-			->andReturn([]);
+		$sheet->expects($this->once())
+			->method('toArray')
+			->willReturn([]);
 		$this->wineRepo->shouldReceive('getNumberOfWinesWithoutCatalogueNumber')
 			->once()
 			->andReturn(1);
@@ -97,12 +114,34 @@ class CatalogueHandlerTest extends TestCase {
 		$this->handler->importCatalogueNumbers($file, $competition);
 	}
 
+	public function testImportWrongCompetitionState() {
+		$file = Mockery::mock(UploadedFile::class);
+		$competition = Mockery::mock(Competition::class);
+		$competitionState = Mockery::mock(CompetitionState::class);
+		$competition->shouldReceive('getAttribute')
+			->with('competitionState')
+			->andReturn($competitionState);
+		$competitionState->shouldReceive('is')
+			->with(CompetitionState::STATE_CATALOGUE_NUMBERS)
+			->andReturn(false);
+		$this->setExpectedException(InvalidCompetitionStateException::class);
+
+		$this->handler->importCatalogueNumbers($file, $competition);
+	}
+
 	public function testImportNoCatalogueNumbers() {
 		$file = Mockery::mock(UploadedFile::class);
 		$competition = Mockery::mock(Competition::class);
+		$competitionState = Mockery::mock(CompetitionState::class);
 		$doc = $this->getMockBuilder(PHPExcel::class)->disableOriginalConstructor()->getMock();
-		$sheet = Mockery::mock(PHPExcel_Worksheet::class);
+		$sheet = $this->getMockBuilder(PHPExcel_Worksheet::class)->disableOriginalConstructor()->getMock();
 		$dbConnection = Mockery::mock(Connection::class);
+		$competition->shouldReceive('getAttribute')
+			->with('competitionState')
+			->andReturn($competitionState);
+		$competitionState->shouldReceive('is')
+			->with(CompetitionState::STATE_CATALOGUE_NUMBERS)
+			->andReturn(true);
 		$this->db->shouldReceive('connection')
 			->once()
 			->andReturn($dbConnection);
@@ -118,9 +157,9 @@ class CatalogueHandlerTest extends TestCase {
 		$doc->expects($this->once())
 			->method('getActiveSheet')
 			->willReturn($sheet);
-		$sheet->shouldReceive('toArray')
-			->once()
-			->andReturn([]);
+		$sheet->expects($this->once())
+			->method('toArray')
+			->willReturn([]);
 		$this->wineRepo->shouldReceive('getNumberOfWinesWithoutCatalogueNumber')
 			->once()
 			->andReturn(0);
@@ -135,9 +174,16 @@ class CatalogueHandlerTest extends TestCase {
 	public function testImportCatalogueNumbersWithNonExistingWine() {
 		$file = Mockery::mock(UploadedFile::class);
 		$competition = Mockery::mock(Competition::class);
+		$competitionState = Mockery::mock(CompetitionState::class);
 		$doc = $this->getMockBuilder(PHPExcel::class)->disableOriginalConstructor()->getMock();
-		$sheet = Mockery::mock(PHPExcel_Worksheet::class);
+		$sheet = $this->getMockBuilder(PHPExcel_Worksheet::class)->disableOriginalConstructor()->getMock();
 		$wine1 = Mockery::mock(Wine::class);
+		$competition->shouldReceive('getAttribute')
+			->with('competitionState')
+			->andReturn($competitionState);
+		$competitionState->shouldReceive('is')
+			->with(CompetitionState::STATE_CATALOGUE_NUMBERS)
+			->andReturn(true);
 		$dbConnection = Mockery::mock(Connection::class);
 		$this->db->shouldReceive('connection')
 			->once()
@@ -154,9 +200,9 @@ class CatalogueHandlerTest extends TestCase {
 		$doc->expects($this->once())
 			->method('getActiveSheet')
 			->willReturn($sheet);
-		$sheet->shouldReceive('toArray')
-			->once()
-			->andReturn([
+		$sheet->expects($this->once())
+			->method('toArray')
+			->willReturn([
 				[100, 1],
 				[101, 2],
 		]);
@@ -179,9 +225,16 @@ class CatalogueHandlerTest extends TestCase {
 	public function testImportCatalogueNumbersWithIncompleteSpreadSheetData() {
 		$file = Mockery::mock(UploadedFile::class);
 		$competition = Mockery::mock(Competition::class);
+		$competitionState = Mockery::mock(CompetitionState::class);
 		$doc = $this->getMockBuilder(PHPExcel::class)->disableOriginalConstructor()->getMock();
-		$sheet = Mockery::mock(PHPExcel_Worksheet::class);
+		$sheet = $this->getMockBuilder(PHPExcel_Worksheet::class)->disableOriginalConstructor()->getMock();
 		$wine1 = Mockery::mock(Wine::class);
+		$competition->shouldReceive('getAttribute')
+			->with('competitionState')
+			->andReturn($competitionState);
+		$competitionState->shouldReceive('is')
+			->with(CompetitionState::STATE_CATALOGUE_NUMBERS)
+			->andReturn(true);
 		$dbConnection = Mockery::mock(Connection::class);
 		$this->db->shouldReceive('connection')
 			->once()
@@ -198,9 +251,9 @@ class CatalogueHandlerTest extends TestCase {
 		$doc->expects($this->once())
 			->method('getActiveSheet')
 			->willReturn($sheet);
-		$sheet->shouldReceive('toArray')
-			->once()
-			->andReturn([
+		$sheet->expects($this->once())
+			->method('toArray')
+			->willReturn([
 				[100],
 				[101],
 		]);
@@ -217,10 +270,17 @@ class CatalogueHandlerTest extends TestCase {
 	public function testImportCatalogueNumbers() {
 		$file = Mockery::mock(UploadedFile::class);
 		$competition = Mockery::mock(Competition::class);
+		$competitionState = Mockery::mock(CompetitionState::class);
 		$doc = $this->getMockBuilder(PHPExcel::class)->disableOriginalConstructor()->getMock();
-		$sheet = Mockery::mock(PHPExcel_Worksheet::class);
+		$sheet = $this->getMockBuilder(PHPExcel_Worksheet::class)->disableOriginalConstructor()->getMock();
 		$wine1 = Mockery::mock(Wine::class);
 		$wine2 = Mockery::mock(Wine::class);
+		$competition->shouldReceive('getAttribute')
+			->with('competitionState')
+			->andReturn($competitionState);
+		$competitionState->shouldReceive('is')
+			->with(CompetitionState::STATE_CATALOGUE_NUMBERS)
+			->andReturn(true);
 		$dbConnection = Mockery::mock(Connection::class);
 		$this->db->shouldReceive('connection')
 			->once()
@@ -237,9 +297,9 @@ class CatalogueHandlerTest extends TestCase {
 		$doc->expects($this->once())
 			->method('getActiveSheet')
 			->willReturn($sheet);
-		$sheet->shouldReceive('toArray')
-			->once()
-			->andReturn([
+		$sheet->expects($this->once())
+			->method('toArray')
+			->willReturn([
 				[100, 1],
 				[101, 2],
 		]);
@@ -269,7 +329,14 @@ class CatalogueHandlerTest extends TestCase {
 	public function testImportCatalogueNumbersWithRealFile() {
 		$file = Mockery::mock(UploadedFile::class);
 		$competition = Mockery::mock(Competition::class);
+		$competitionState = Mockery::mock(CompetitionState::class);
 		$wine1 = Mockery::mock(Wine::class);
+		$competition->shouldReceive('getAttribute')
+			->with('competitionState')
+			->andReturn($competitionState);
+		$competitionState->shouldReceive('is')
+			->with(CompetitionState::STATE_CATALOGUE_NUMBERS)
+			->andReturn(true);
 		$dbConnection = Mockery::mock(Connection::class);
 		$this->db->shouldReceive('connection')
 			->once()
@@ -302,7 +369,14 @@ class CatalogueHandlerTest extends TestCase {
 	public function testImportCatalogueNumbersWithInvalidFile() {
 		$file = Mockery::mock(UploadedFile::class);
 		$competition = Mockery::mock(Competition::class);
+		$competitionState = Mockery::mock(CompetitionState::class);
 		$wine1 = Mockery::mock(Wine::class);
+		$competition->shouldReceive('getAttribute')
+			->with('competitionState')
+			->andReturn($competitionState);
+		$competitionState->shouldReceive('is')
+			->with(CompetitionState::STATE_CATALOGUE_NUMBERS)
+			->andReturn(true);
 		$dbConnection = Mockery::mock(Connection::class);
 		$this->db->shouldReceive('connection')
 			->once()

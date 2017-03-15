@@ -279,7 +279,7 @@ class CompetitionController extends BaseController {
 	 * @return Response
 	 * @throws InvalidArgumentException
 	 */
-	public function lockTastingNumbers(Competition $competition, $tasting): Response {
+	public function lockTastingNumbers(Competition $competition, $tasting): RedirectResponse {
 		$this->authorize('complete-competition-tasting-numbers');
 
 		if (Input::has('del') && Input::get('del') == 'Ja') {
