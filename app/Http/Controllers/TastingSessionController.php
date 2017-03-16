@@ -23,6 +23,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\TastingHandler;
 use App\Exceptions\IllegalTastingStageException;
+use App\Exceptions\InvalidCompetitionStateException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\MasterData\Competition;
@@ -63,10 +64,15 @@ class TastingSessionController extends BaseController {
 	 * @param Competition $competition
 	 */
 	private function shareCommonViewData(Competition $competition) {
+		$tastingStage = $competition->getTastingStage();
+		if (is_null($tastingStage)) {
+			throw new InvalidCompetitionStateException();
+		}
+
 		$this->viewFactory->share('competition', $competition);
-		$this->viewFactory->share('tastingstage', $competition->getTastingStage());
+		$this->viewFactory->share('tastingstage', $tastingStage);
 		$this->viewFactory->share('tastingsessions',
-			$this->tastingHandler->getAllTastingSessions($competition, $competition->getTastingStage(), Auth::user()));
+			$this->tastingHandler->getAllTastingSessions($competition, $tastingStage, Auth::user()));
 		$tasting1 = $competition->competitionState->id === CompetitionState::STATE_TASTING1;
 		$tasting2 = $competition->competitionState->id === CompetitionState::STATE_TASTING2;
 		$this->viewFactory->share('show_finish1',
