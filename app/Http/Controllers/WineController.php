@@ -191,9 +191,9 @@ class WineController extends BaseController {
 				'competition' => $competition,
 				'competition_admin' => $competition->administrates($user),
 				'id' => Wine::maxId($competition) + 1,
-				'applicants' => $applicants->lists('select_label', 'id')->all(),
-				'winesorts' => WineSort::all()->lists('select_label', 'id')->all(),
-				'winequalities' => ['none' => '0 - keine'] + WineQuality::get()->lists('select_label', 'id')->all(),
+				'applicants' => $applicants->pluck('select_label', 'id')->all(),
+				'winesorts' => WineSort::all()->pluck('select_label', 'id')->all(),
+				'winequalities' => ['none' => '0 - keine'] + WineQuality::get()->pluck('select_label', 'id')->all(),
 				'show_nr' => $competition->administrates(Auth::user()),
 				'success' => $request->session()->has('wine_added_successfully'),
 		]);
@@ -284,9 +284,9 @@ class WineController extends BaseController {
 				[
 				'success' => false,
 				'wine' => $wine,
-				'applicants' => $applicants->lists('select_label', 'id')->all(),
-				'winesorts' => WineSort::all()->lists('select_label', 'id')->all(),
-				'winequalities' => ['none' => '0 - keine'] + WineQuality::get()->lists('select_label', 'id')->all(),
+				'applicants' => $applicants->pluck('select_label', 'id')->all(),
+				'winesorts' => WineSort::all()->pluck('select_label', 'id')->all(),
+				'winequalities' => ['none' => '0 - keine'] + WineQuality::get()->pluck('select_label', 'id')->all(),
 				'show_nr' => $wine->competition->administrates(Auth::user()),
 		]);
 	}
@@ -383,11 +383,11 @@ class WineController extends BaseController {
 		} catch (ValidationException $ve) {
 			return Response::json([
 					'error' => 'Fehler beim setzen von KdB',
-					'wines' => Wine::kdb()->lists('id')->all(),
+					'wines' => Wine::kdb()->pluck('id')->all(),
 			]);
 		}
 		return Response::json([
-				'wines' => Wine::kdb()->lists('id')->all(),
+				'wines' => Wine::kdb()->pluck('id')->all(),
 		]);
 	}
 
@@ -473,7 +473,7 @@ class WineController extends BaseController {
 		if (!$wine->kdb) {
 			return Response::json([
 					'error' => 'Fehler: Dieser Wein ist nicht im KdB',
-					'wines' => Wine::sosi()->lists('id')->all(),
+					'wines' => Wine::sosi()->pluck('id')->all(),
 			]);
 		}
 		try {
@@ -481,11 +481,11 @@ class WineController extends BaseController {
 		} catch (ValidationException $ve) {
 			return Response::json([
 					'error' => 'Fehler beim setzen von SoSi',
-					'wines' => Wine::sosi()->lists('id')->all(),
+					'wines' => Wine::sosi()->pluck('id')->all(),
 			]);
 		}
 		return Response::json([
-				'wines' => Wine::sosi()->lists('id')->all(),
+				'wines' => Wine::sosi()->pluck('id')->all(),
 		]);
 	}
 
@@ -537,11 +537,11 @@ class WineController extends BaseController {
 		} catch (ValidationException $ve) {
 			return Response::json([
 					'error' => 'Fehler beim setzen von SoSi',
-					'wines' => Wine::chosen()->lists('id')->all(),
+					'wines' => Wine::chosen()->pluck('id')->all(),
 			]);
 		}
 		return Response::json([
-				'wines' => Wine::chosen()->lists('id')->all(),
+				'wines' => Wine::chosen()->pluck('id')->all(),
 		]);
 	}
 
