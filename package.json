@@ -23,6 +23,7 @@
   "dependencies": {
     "bower": "^1.7.9",
     "grunt-cli": "^1.2.0",
-    "grunt-contrib-watch": "^0.6.1"
+    "grunt-contrib-watch": "^0.6.1",
+    "webpack": "^2.2.1"
   }
 }

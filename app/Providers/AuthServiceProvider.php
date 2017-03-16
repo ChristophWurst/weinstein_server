@@ -7,7 +7,6 @@ use App\Auth\Abilities\ApplicantAbilities;
 use App\Auth\Abilities\AssociationAbilities;
 use App\Auth\Abilities\CatalogueAbilities;
 use App\Auth\Abilities\CompetitionAbilities;
-use App\Auth\Abilities\EvaluationAbilities;
 use App\Auth\Abilities\TastingAbilities;
 use App\Auth\Abilities\TastingNumberAbilities;
 use App\Auth\Abilities\TastingSessionAbilities;
@@ -75,11 +74,16 @@ class AuthServiceProvider extends ServiceProvider {
 		$gate->define('complete-competition-tasting-excluded', CompetitionAbilities::class . '@completeTastingExcluded');
 		$gate->define('complete-competition-tasting-sosi', CompetitionAbilities::class . '@completeTastingSosi');
 		$gate->define('complete-competition-tasting-choosing', CompetitionAbilities::class . '@completeTastingChoosing');
+		$gate->define('complete-competition-catalogue-numbers', CompetitionAbilities::class . '@completeCatalogueNumbers');
 
+		/**
+		 * Catalogue Numbers
+		 */
+		$gate->define('import-catalogue-numbers', CatalogueNumberAbilities::class . '@import');
 		/**
 		 * Evaluation
 		 */
-		$gate->define('show-evaluations', EvaluationAbilities::class . '@show');
+		$gate->define('show-evaluations', CatalogueAbilities::class . '@importNumbers');
 
 		/**
 		 * Tasting

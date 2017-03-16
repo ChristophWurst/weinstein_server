@@ -52,6 +52,13 @@ Route::group(array('prefix' => 'competition/{competition}', 'middleware' => 'aut
 	Route::post('complete-choosing', array(
 		'uses' => 'CompetitionController@lockChoosing'
 	));
+	Route::get('complete-catalogue-numbers', [
+		'as' => 'competition/complete-catalogue-numbers',
+		'uses' => 'CompetitionController@completeCatalogueNumbers',
+	]);
+	Route::post('complete-catalogue-numbers', [
+		'uses' => 'CompetitionController@lockCatalogueNumbers',
+	]);
 	Route::get('reset', array(
 		'as' => 'competition/reset',
 		'uses' => 'CompetitionController@getReset',
@@ -172,6 +179,19 @@ Route::group(array('prefix' => 'competition/{competition}', 'middleware' => 'aut
 		Route::post('add', array(
 			'uses' => 'TastingSessionController@store'
 		));
+	});
+
+	/**
+	 * Catalogue Number assignment
+	 */
+	Route::group(['prefix' => 'cataloguenumbers',], function() {
+		Route::get('import', [
+			'as' => 'cataloguenumbers.import',
+			'uses' => 'CatalogueNumberController@import',
+		]);
+		Route::post('import', [
+			'uses' => 'CatalogueNumberController@store',
+		]);
 	});
 
 	Route::get('evaluations', array(

@@ -22,6 +22,7 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\MasterDataStore;
+use App\Contracts\TastingCatalogueHandler;
 use App\Contracts\TastingHandler;
 use App\Http\Controllers\BaseController;
 use App\MasterData\Competition;
@@ -30,6 +31,7 @@ use App\Tasting\TastingStage;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
@@ -44,6 +46,9 @@ class CompetitionController extends BaseController {
 	/** @var TastingHandler */
 	private $tastingHandler;
 
+	/** @var TastingCatalogueHandler */
+	private $tastingCatalogueHandler;
+
 	/** @var AuthManager */
 	private $auth;
 
@@ -53,13 +58,15 @@ class CompetitionController extends BaseController {
 	/**
 	 * @param MasterDataStore $masterDataStore
 	 * @param TastingHandler $tastingHandler
+	 * @param TastingCatalogueHandler $tastingCatalogueHandler
 	 * @param AuthManager $auth
 	 * @param Factory $view
 	 */
-	public function __construct(MasterDataStore $masterDataStore, TastingHandler $tastingHandler, AuthManager $auth,
-		Factory $view) {
+	public function __construct(MasterDataStore $masterDataStore, TastingHandler $tastingHandler,
+		TastingCatalogueHandler $tastingCatalogueHandler, AuthManager $auth, Factory $view) {
 		$this->masterDataStore = $masterDataStore;
 		$this->tastingHandler = $tastingHandler;
+		$this->tastingCatalogueHandler = $tastingCatalogueHandler;
 		$this->auth = $auth;
 		$this->view = $view;
 	}
@@ -85,20 +92,22 @@ class CompetitionController extends BaseController {
 	 * @return View
 	 */
 	public function show(Competition $competition) {
-		return $this->view->make('competition/show', [
-			'isCompetitionAdmin' => $competition->administrates($this->auth->user()),
-			'competition' => $competition,
-			'competition_states' => CompetitionState::all(),
-			'wines' => $competition->wines()->count(),
-			'wines_with_nr' => $competition->wines()->whereNotNull('nr')->count(),
-			'wines_tasted1' => $competition->wine_details()->whereNotNull('rating1')->count(),
-			'wines_tasted2' => $competition->wine_details()->kdb()->whereNotNull('rating2')->count(),
-			'wines_kdb' => $competition->wines()->kdb()->count(),
-			'wines_excluded' => $competition->wines()->excluded()->count(),
-			'wines_tasting_number1' => $competition->wines()->withTastingNumber(TastingStage::find(1))->count(),
-			'wines_tasting_number2' => $competition->wines()->withTastingNumber(TastingStage::find(2))->count(),
-			'wines_sosi' => $competition->wines()->sosi()->count(),
-			'wines_chosen' => $competition->wines()->chosen()->count(),
+		return $this->view->make('competition/show',
+				[
+				'isCompetitionAdmin' => $competition->administrates($this->auth->user()),
+				'competition' => $competition,
+				'competition_states' => CompetitionState::all(),
+				'wines' => $competition->wines()->count(),
+				'wines_with_nr' => $competition->wines()->whereNotNull('nr')->count(),
+				'wines_tasted1' => $competition->wine_details()->whereNotNull('rating1')->count(),
+				'wines_tasted2' => $competition->wine_details()->kdb()->whereNotNull('rating2')->count(),
+				'wines_kdb' => $competition->wines()->kdb()->count(),
+				'wines_excluded' => $competition->wines()->excluded()->count(),
+				'wines_tasting_number1' => $competition->wines()->withTastingNumber(TastingStage::find(1))->count(),
+				'wines_tasting_number2' => $competition->wines()->withTastingNumber(TastingStage::find(2))->count(),
+				'wines_sosi' => $competition->wines()->sosi()->count(),
+				'wines_chosen' => $competition->wines()->chosen()->count(),
+				'wines_without_catalogue_number' => $this->tastingCatalogueHandler->getNrOfWinesWithoutCatalogueNumber($competition),
 		]);
 	}
 
@@ -117,8 +126,8 @@ class CompetitionController extends BaseController {
 			throw new InvalidArgumentException();
 		}
 		return $this->view->make('competition/complete-tasting', [
-			'data' => $competition,
-			'tasting' => $tasting,
+				'data' => $competition,
+				'tasting' => $tasting,
 		]);
 	}
 
@@ -138,7 +147,7 @@ class CompetitionController extends BaseController {
 			$this->tastingHandler->lockTasting($competition, $tasting);
 		}
 		return Redirect::route('competition/show', [
-			'competition' => $competition->id
+				'competition' => $competition->id
 		]);
 	}
 
@@ -150,7 +159,7 @@ class CompetitionController extends BaseController {
 		$this->authorize('complete-competition-kdb');
 
 		return $this->view->make('competition/complete-kdb', [
-			'data' => $competition,
+				'data' => $competition,
 		]);
 	}
 
@@ -175,7 +184,7 @@ class CompetitionController extends BaseController {
 		$this->authorize('complete-competition-excluded');
 
 		return $this->view->make('competition/complete-excluded', [
-			'data' => $competition,
+				'data' => $competition,
 		]);
 	}
 
@@ -200,7 +209,7 @@ class CompetitionController extends BaseController {
 		$this->authorize('complete-competition-sosi');
 
 		return $this->view->make('competition/complete-sosi', [
-			'competition' => $competition,
+				'competition' => $competition,
 		]);
 	}
 
@@ -225,7 +234,7 @@ class CompetitionController extends BaseController {
 		$this->authorize('complete-competition-choosing');
 
 		return $this->view->make('competition/complete-choosing', [
-			'data' => $competition,
+				'data' => $competition,
 		]);
 	}
 
@@ -257,9 +266,10 @@ class CompetitionController extends BaseController {
 			throw new InvalidArgumentException();
 		}
 
-		return $this->view->make('competition/complete-tastingnumbers', [
-			'data' => $competition,
-			'tasting' => $tasting,
+		return $this->view->make('competition/complete-tastingnumbers',
+				[
+				'data' => $competition,
+				'tasting' => $tasting,
 		]);
 	}
 
@@ -269,7 +279,7 @@ class CompetitionController extends BaseController {
 	 * @return Response
 	 * @throws InvalidArgumentException
 	 */
-	public function lockTastingNumbers(Competition $competition, $tasting) {
+	public function lockTastingNumbers(Competition $competition, $tasting): RedirectResponse {
 		$this->authorize('complete-competition-tasting-numbers');
 
 		if (Input::has('del') && Input::get('del') == 'Ja') {
@@ -282,10 +292,44 @@ class CompetitionController extends BaseController {
 	}
 
 	/**
+	 * Show complete/lock confirmation page for specified tasting
+	 * 
 	 * @param Competition $competition
 	 * @return View
 	 */
-	public function getReset(Competition $competition) {
+	public function completeCatalogueNumbers(Competition $competition): View {
+		$this->authorize('complete-competition-catalogue-numbers');
+
+		return $this->view->make('competition/complete-catalogue-numbers',
+				[
+				'data' => $competition,
+		]);
+	}
+
+	/**
+	 * @throws InvalidArgumentException
+	 * @param Competition $competition
+	 * @return RedirectResponse
+	 */
+	public function lockCatalogueNumbers(Competition $competition, Request $request): RedirectResponse {
+		$this->authorize('complete-competition-catalogue-numbers');
+
+		if ($request->has('del') && $request->get('del') === 'Ja') {
+			$this->tastingCatalogueHandler->finishAssignment($competition);
+			return Redirect::route('competition/show', [
+					'competition' => $competition,
+			]);
+		}
+		return Redirect::route('enrollment.wines', [
+				'competition' => $competition,
+		]);
+	}
+
+	/**
+	 * @param Competition $competition
+	 * @return View
+	 */
+	public function getReset(Competition $competition): View {
 		$this->authorize('reset-competition', $competition);
 
 		return $this->view->make('settings/competition/reset');

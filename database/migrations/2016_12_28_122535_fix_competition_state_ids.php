@@ -1,6 +1,5 @@
 <?php
 
-use App\MasterData\CompetitionState;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
@@ -39,7 +38,6 @@ class FixCompetitionStateIds extends Migration {
 		DB::unprepared('ALTER TABLE `competition`
 						ADD CONSTRAINT `competition_competition_state_id_foreign`
 						FOREIGN KEY (`competition_state_id`) REFERENCES `competition_state` (`id`) ON UPDATE CASCADE;');
-		return;
 		DB::table('competition_state')
 			->where('id', 8)
 			->update(['id' => 100]);

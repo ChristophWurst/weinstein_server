@@ -19,28 +19,24 @@
  *
  */
 
-namespace App\Auth\Abilities;
+namespace App\Providers;
 
-use App\MasterData\Competition;
-use App\MasterData\CompetitionState;
-use App\MasterData\User;
+use App\Contracts\TastingCatalogueHandler;
+use App\TastingCatalogue\CatalogueHandler;
+use Illuminate\Support\ServiceProvider;
 
-class CatalogueAbilities {
+class TastingCatalogueProvider extends ServiceProvider {
 
-	private function administratesCompetition(User $user, Competition $competition) {
-		return $competition->administrates($user);
+	protected $defer = true;
+
+	public function register() {
+		$this->app->bind(TastingCatalogueHandler::class, CatalogueHandler::class);
 	}
 
-	private function checkCompetitionState(Competition $competition) {
-		return $competition->competition_state_id === CompetitionState::STATE_FINISHED;
-	}
-
-	public function create(User $user, Competition $competition) {
-		return $this->administratesCompetition($user, $competition) && $this->checkCompetitionState($competition);
-	}
-
-	public function importNumbers(User $user, Competition $competition) {
-		return $competition->administrates($user);
+	public function provides() {
+		return [
+			TastingCatalogueHandler::class,
+		];
 	}
 
 }

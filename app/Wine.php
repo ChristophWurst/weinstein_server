@@ -86,6 +86,7 @@ class Wine extends Model implements AdministrateModel {
 		'sosi',
 		'chosen',
 		'excluded',
+		'catalogue_number',
 	];
 
 	/**

@@ -55,6 +55,8 @@ use App\MasterData\CompetitionState;
                                 {{ $wines_sosi }} zugewiesen
                             @elseif ($currentState == CompetitionState::STATE_CHOOSE)
                                 {{ $wines_chosen }} ausgew&auml;hlt
+							@elseif ($currentState == CompetitionState::STATE_CATALOGUE_NUMBERS)
+                                {{ $wines_without_catalogue_number }}/{{ $wines }} Weinen ohne Katalognummer
                             @endif
                         @endif
                     @endif
@@ -114,6 +116,13 @@ use App\MasterData\CompetitionState;
                            href="{!! route('competition/complete-choosing', array('competition' => $competition->id)) !!}">
                             <span class="glyphicon glyphicon-ok"></span>
                            Auswahl abschlie&szlig;en
+                        </a>
+						@elseif ($currentState === CompetitionState::STATE_CATALOGUE_NUMBERS && $wines_without_catalogue_number === 0)
+                        <a class="btn btn-default"
+                           type="button"
+                           href="{!! route('competition/complete-catalogue-numbers', array('competition' => $competition)) !!}">
+                            <span class="glyphicon glyphicon-ok"></span>
+                           Katalognummernzuweisung abschlie&szlig;en
                         </a>
                         @endif
                     @endif

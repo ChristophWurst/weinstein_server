@@ -40,7 +40,8 @@ class CompetitionState extends Model {
 	const STATE_TASTING2 = 7;
 	const STATE_SOSI = 8;
 	const STATE_CHOOSE = 9;
-	const STATE_FINISHED = 10;
+	const STATE_CATALOGUE_NUMBERS = 10;
+	const STATE_FINISHED = 11;
 
 	/**
 	 * Table name
@@ -70,6 +71,7 @@ class CompetitionState extends Model {
 			case 'TASTING2': return '2. Verkostung';
 			case 'SOSI': return 'SoSi Vergabe';
 			case 'CHOOSE': return 'Auswahl';
+			case 'CATALOGUE_NUMBERS': return 'Katalognummern';
 			case 'FINISHED': return 'abgeschlossen';
 			default: {
 					Log::error('unknown competition state ' . $this->description);

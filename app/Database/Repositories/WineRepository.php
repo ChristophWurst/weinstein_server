@@ -28,15 +28,26 @@ use Illuminate\Contracts\Pagination\Paginator;
 
 class WineRepository {
 
-	public function findByNr(Competition $competition, $nr) {
+	/**
+	 * @param Competition $competition
+	 * @param type $nr
+	 * @return Wine|null
+	 */
+	public function findByNr(Competition $competition, int $nr) {
 		return Wine::where('competition_id', $competition->id)
-			->where('nr', $nr)
-			->first();
+				->where('nr', $nr)
+				->first();
 	}
 
-	public function addComment(Wine $wine, $comment) {
+	/**
+	 * @param Wine $wine
+	 * @param string $comment
+	 * @return Wine
+	 */
+	public function addComment(Wine $wine, string $comment): Wine {
 		$wine->comment = $comment;
 		$wine->save();
+		return $wine;
 	}
 
 	/**
@@ -47,8 +58,8 @@ class WineRepository {
 	 */
 	public function findAll(Competition $competition) {
 		return $competition->wine_details()
-			->with('applicant', 'applicant.association', 'winesort', 'winequality')
-			->paginate(200);
+				->with('applicant', 'applicant.association', 'winesort', 'winequality')
+				->paginate(200);
 	}
 
 	/**
@@ -60,18 +71,48 @@ class WineRepository {
 	 */
 	public function findUsersWines(User $user, Competition $competition) {
 		return $competition->wine_details()
-			->where('applicant_username', $user->username)
-			->orWhere('association_username', $user->username)
-			->with('applicant', 'applicant.association', 'winesort', 'winequality')
-			->paginate(200);
+				->where('applicant_username', $user->username)
+				->orWhere('association_username', $user->username)
+				->with('applicant', 'applicant.association', 'winesort', 'winequality')
+				->paginate(200);
 	}
 
-	public function update(Wine $wine, array $data) {
+	/**
+	 * @param Wine $wine
+	 * @param array $data
+	 * @return Wine
+	 */
+	public function update(Wine $wine, array $data): Wine {
 		$wine->update($data);
+		return $wine;
 	}
 
+	/**
+	 * @param Wine $wine
+	 * @return void
+	 */
 	public function delete(Wine $wine) {
 		$wine->delete();
+	}
+
+	/**
+	 * @param Competition $competition
+	 * @return void
+	 */
+	public function resetCatalogueNumbers(Competition $competition) {
+		$competition->wines()->update([
+			'catalogue_number' => null,
+		]);
+	}
+
+	/**
+	 * @param Competition $competition
+	 * @return int
+	 */
+	public function getNumberOfWinesWithoutCatalogueNumber(Competition $competition): int {
+		return $competition->wines()
+				->where('catalogue_number', null)
+				->count();
 	}
 
 }

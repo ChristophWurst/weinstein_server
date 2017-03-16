@@ -31,17 +31,17 @@ class CompetitionAbilities {
 
 	use CommonAbilities;
 
-	public function show(User $user, Competition $competition) {
-		return true; // TODO: ?
+	public function show(User $user, Competition $competition): bool {
+		return $competition->administrates($user);
 	}
 
-	public function reset(User $user, Competition $competition) {
-		return false;
+	public function reset(User $user, Competition $competition): bool {
+		return false; // Admin only
 	}
 
-	public function completeTasingNumbers(User $user, Competition $competition) {
+	public function completeTasingNumbers(User $user, Competition $competition): bool {
 		// TODO: what about the competition admin???
-		if (!$user->isAdmin()) {
+		if (!$competition->administrates($user)) {
 			return false;
 		}
 
@@ -61,8 +61,8 @@ class CompetitionAbilities {
 		}
 	}
 
-	public function completeTasting(User $user, Competition $competition) {
-		if (!$user->isAdmin()) {
+	public function completeTasting(User $user, Competition $competition): bool {
+		if (!$competition->administrates($user)) {
 			return false;
 		}
 
@@ -82,20 +82,24 @@ class CompetitionAbilities {
 		}
 	}
 
-	public function completeKdb(User $user, Competition $competition) {
-		return $user->isAdmin() && $competition->competitionState->is(CompetitionState::STATE_KDB);
+	public function completeKdb(User $user, Competition $competition): bool {
+		return $competition->administrates($user) && $competition->competitionState->is(CompetitionState::STATE_KDB);
 	}
 
-	public function completeExcluded(User $user, Competition $competition) {
-		return $user->isAdmin() && $competition->competitionState->is(CompetitionState::STATE_EXCLUDE);
+	public function completeExcluded(User $user, Competition $competition): bool {
+		return $competition->administrates($user) && $competition->competitionState->is(CompetitionState::STATE_EXCLUDE);
 	}
 
-	public function completeSosi(User $user, Competition $competition) {
-		return $user->isAdmin() && $competition->competitionState->is(CompetitionState::STATE_SOSI);
+	public function completeSosi(User $user, Competition $competition): bool {
+		return $competition->administrates($user) && $competition->competitionState->is(CompetitionState::STATE_SOSI);
 	}
 
-	public function completeChoosing(User $user, Competition $competition) {
-		return $user->isAdmin() && $competition->competitionState->is(CompetitionState::STATE_CHOOSE);
+	public function completeChoosing(User $user, Competition $competition): bool {
+		return $competition->administrates($user) && $competition->competitionState->is(CompetitionState::STATE_CHOOSE);
+	}
+
+	public function completeCatalogueNumbers(User $user, Competition $competition): bool {
+		return $competition->administrates($user);
 	}
 
 }
