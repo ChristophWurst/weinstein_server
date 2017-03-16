@@ -24,7 +24,6 @@ namespace App\Http\Controllers;
 use App\Contracts\TastingCatalogueHandler;
 use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
-use App\TastingCatalogue\CatalogueHandler;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -40,7 +39,7 @@ class CatalogueNumberController extends BaseController {
 	/** @var Redirector */
 	private $redirector;
 
-	/** @var CatalogueHandler */
+	/** @var TastingCatalogueHandler */
 	private $catalogueHandler;
 
 	/**
