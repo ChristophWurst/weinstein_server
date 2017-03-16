@@ -56,27 +56,37 @@ class CompetitionState extends Model {
 	public $timestamps = false;
 
 	/**
-	 * Convert competition state to german string
+	 * Convert competition state to German string
 	 * 
 	 * @return string
 	 */
 	public function getDescription() {
 		switch ($this->description) {
-			case 'ENROLLMENT': return '&Uuml;bernahme';
-			case 'TASTINGNUMBERS1': return 'Kostnummern 1';
-			case 'TASTING1': return '1. Verkostung';
-			case 'KDB': return 'KdB Vergabe';
-			case 'EXCLUDE' : return 'Ausschluss';
-			case 'TASTINGNUMBERS2': return 'Kostnummern 2';
-			case 'TASTING2': return '2. Verkostung';
-			case 'SOSI': return 'SoSi Vergabe';
-			case 'CHOOSE': return 'Auswahl';
-			case 'CATALOGUE_NUMBERS': return 'Katalognummern';
-			case 'FINISHED': return 'abgeschlossen';
-			default: {
-					Log::error('unknown competition state ' . $this->description);
-					App::abort(500);
-				}
+			case 'ENROLLMENT':
+				return '&Uuml;bernahme';
+			case 'TASTINGNUMBERS1':
+				return 'Kostnummern 1';
+			case 'TASTING1':
+				return '1. Verkostung';
+			case 'KDB':
+				return 'KdB Vergabe';
+			case 'EXCLUDE':
+				return 'Ausschluss';
+			case 'TASTINGNUMBERS2':
+				return 'Kostnummern 2';
+			case 'TASTING2':
+				return '2. Verkostung';
+			case 'SOSI':
+				return 'SoSi Vergabe';
+			case 'CHOOSE':
+				return 'Auswahl';
+			case 'CATALOGUE_NUMBERS':
+				return 'Katalognummern';
+			case 'FINISHED':
+				return 'abgeschlossen';
+			default:
+				Log::error('unknown competition state ' . $this->description);
+				App::abort(500);
 		}
 	}
 
