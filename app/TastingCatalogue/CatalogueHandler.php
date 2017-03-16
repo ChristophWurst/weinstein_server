@@ -164,7 +164,7 @@ class CatalogueHandler implements TastingCatalogueHandler {
 	 * @param Competition $competition
 	 * @return void
 	 */
-	public function finishAssignment(Competition $competition): void {
+	public function finishAssignment(Competition $competition) {
 		if (!$this->allWinesHaveACatalogueNumber($competition)) {
 			throw new \Exception('Invalid state. Not all wines have been assigned a catalogue number');
 		}

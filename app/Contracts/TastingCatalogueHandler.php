@@ -56,5 +56,5 @@ interface TastingCatalogueHandler {
 	 * @param Competition $competition
 	 * @return void
 	 */
-	public function finishAssignment(Competition $competition): void;
+	public function finishAssignment(Competition $competition);
 }
