@@ -24,11 +24,11 @@ namespace App\Http\Controllers;
 use App\Contracts\TastingCatalogueHandler;
 use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
-use App\TastingCatalogue\CatalogueHandler;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Session;
 
@@ -40,7 +40,7 @@ class CatalogueNumberController extends BaseController {
 	/** @var Redirector */
 	private $redirector;
 
-	/** @var CatalogueHandler */
+	/** @var TastingCatalogueHandler */
 	private $catalogueHandler;
 
 	/**
@@ -72,7 +72,7 @@ class CatalogueNumberController extends BaseController {
 		$this->authorize('import-catalogue-numbers', $competition);
 		$file = $request->file('xlsfile');
 
-		if (is_null($file)) {
+		if (is_null($file) || !$file instanceof UploadedFile) {
 			return $this->redirector->route('cataloguenumbers.import', [
 					'competition' => $competition,
 			]);

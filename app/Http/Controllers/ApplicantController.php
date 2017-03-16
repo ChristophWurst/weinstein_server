@@ -30,6 +30,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -149,6 +150,9 @@ class ApplicantController extends BaseController {
 
 		try {
 			$file = $request->file('xlsfile');
+			if (is_null($file) || !$file instanceof UploadedFile) {
+				throw new ValidationException();
+			}
 			$rowsImported = $this->masterDataStore->importApplicants($file);
 		} catch (ValidationException $ve) {
 			return Redirect::route('settings.applicants/import')->withErrors($ve->getErrors());

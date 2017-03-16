@@ -22,12 +22,12 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\TastingHandler;
+use App\Exceptions\InvalidCompetitionStateException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\Tasting\TastingNumber;
-use App\Wine;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -62,6 +62,11 @@ class TastingNumberController extends BaseController {
 	public function index(Competition $competition) {
 		$this->authorize('show-tastingnumbers', $competition);
 
+		$tastingStage = $competition->getTastingStage();
+		if (is_null($tastingStage)) {
+			throw new InvalidCompetitionStateException();
+		}
+
 		$showAdd = false;
 		$showComplete = false;
 		$left = -1;
@@ -69,7 +74,7 @@ class TastingNumberController extends BaseController {
 		if ($competition->competitionState->id === CompetitionState::STATE_ENROLLMENT) {
 			$showAdd = true;
 		} else if ($competition->competitionState->id === CompetitionState::STATE_TASTINGNUMBERS1) {
-			$left = $competition->wines()->count() - $competition->wines()->withTastingNumber($competition->getTastingStage())->count();
+			$left = $competition->wines()->count() - $competition->wines()->withTastingNumber($tastingStage)->count();
 			$showComplete = $left === 0;
 			$showAdd = !$showComplete; //show add if not all wines are assigned
 			$showReset = true;
@@ -77,19 +82,20 @@ class TastingNumberController extends BaseController {
 			// there is no check (for now)
 			// kdb wines do not have to be tasted a second time
 			$kdbWines = $competition->wines()->kdb()->count();
-			$tastingNumber2 = $competition->wines()->withTastingNumber($competition->getTastingStage())->count();
+			$tastingNumber2 = $competition->wines()->withTastingNumber($tastingStage)->count();
 			$showAdd = $kdbWines !== $tastingNumber2; //show add as long as not all wines are assigned
 			$showComplete = true;
 			$showReset = true;
 		}
 
-		return $this->viewFactory->make('competition/tasting/tasting-number/index', [
-			'competition' => $competition,
-			'numbers' => $this->tastingHandler->getAllTastingNumbers($competition, $competition->getTastingStage()),
-			'show_add' => $showAdd,
-			'show_reset' => $showReset,
-			'left' => $left,
-			'finished' => $showComplete,
+		return $this->viewFactory->make('competition/tasting/tasting-number/index',
+				[
+				'competition' => $competition,
+				'numbers' => $this->tastingHandler->getAllTastingNumbers($competition, $tastingStage),
+				'show_add' => $showAdd,
+				'show_reset' => $showReset,
+				'left' => $left,
+				'finished' => $showComplete,
 		]);
 	}
 
@@ -114,6 +120,11 @@ class TastingNumberController extends BaseController {
 	public function store(Competition $competition) {
 		$this->authorize('assign-tastingnumber');
 
+		$tastingStage = $competition->getTastingStage();
+		if (is_null($tastingStage)) {
+			throw new InvalidCompetitionStateException();
+		}
+
 		try {
 			$data = Input::all();
 			$this->tastingHandler->createTastingNumber($data, $competition);
@@ -126,10 +137,10 @@ class TastingNumberController extends BaseController {
 		if (in_array($competition->competitionState->id,
 				[CompetitionState::STATE_ENROLLMENT, CompetitionState::STATE_TASTINGNUMBERS1])) {
 			$allWines = $competition->wines()->count();
-			$assigned = $competition->wines()->withTastingNumber($competition->getTastingStage())->count();
+			$assigned = $competition->wines()->withTastingNumber($tastingStage)->count();
 		} elseif ($competition->competitionState->id === CompetitionState::STATE_TASTINGNUMBERS2) {
 			$allWines = $competition->wines()->kdb()->count();
-			$assigned = $competition->wines()->kdb()->withTastingNumber($competition->getTastingStage())->count();
+			$assigned = $competition->wines()->kdb()->withTastingNumber($tastingStage)->count();
 		} else {
 			throw Exception('invalid application state, should be TASTINGNUMBERS1 or TASTINGNUMBERS2');
 		}
@@ -236,10 +247,15 @@ class TastingNumberController extends BaseController {
 	public function translate(Competition $competition, $id) {
 		$this->authorize('translate-tastingnumber', $competition);
 
+		$tastingStage = $competition->getTastingStage();
+		if (is_null($tastingStage)) {
+			throw new InvalidCompetitionStateException();
+		}
+
 		$tastingNumber = $competition
 			->tastingnumbers()
 			->where('tastingnumber.nr', '=', $id)
-			->where('tastingstage_id', '=', $competition->getTastingStage()->id)
+			->where('tastingstage_id', '=', $tastingStage->id)
 			->select('tastingnumber.id')
 			->first();
 

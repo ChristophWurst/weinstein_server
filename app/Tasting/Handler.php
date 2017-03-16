@@ -164,6 +164,9 @@ class Handler implements TastingHandler {
 		$wine = $this->wineRepository->findByNr($competition, $data['wine_nr']);
 		//competition's tasting stage is choosen by default
 		$tastingStage = $competition->getTastingStage();
+		if (is_null($tastingStage)) {
+			throw new Exception('invalid applicaton/competition/tasting stage');
+		}
 
 		$tastingNumber = $this->tastingNumberRepository->create($data, $wine, $tastingStage);
 		if ($competition->competitionState->is(CompetitionState::STATE_ENROLLMENT)) {
@@ -255,8 +258,11 @@ class Handler implements TastingHandler {
 		$validator->validateCreate();
 
 		$tastingStage = $competition->getTastingStage();
+		if (is_null($tastingStage)) {
+			throw new Exception('invalid applicaton/competition/tasting stage');
+		}
 		$data['nr'] = $competition->tastingsessions()->ofTastingStage($tastingStage)->max('nr') + 1;
-		$tastingSession = $this->tastingSessionRepository->create($data, $competition, $competition->getTastingStage());
+		$tastingSession = $this->tastingSessionRepository->create($data, $competition, $tastingStage);
 
 		$this->createCommissions($tastingSession, (int) $data['commissions']);
 
@@ -409,8 +415,11 @@ class Handler implements TastingHandler {
 	}
 
 	public function getNextTastingNumbers(TastingSession $tastingSession) {
-		$tastingNumbers = $this->getUntastedTastingNumbers($tastingSession->competition,
-			$tastingSession->competition->getTastingStage(), 2);
+		$tastingStage = $tastingSession->competition->getTastingStage();
+		if (is_null($tastingStage)) {
+			throw new Exception('invalid applicaton/competition/tasting stage');
+		}
+		$tastingNumbers = $this->getUntastedTastingNumbers($tastingSession->competition, $tastingStage, 2);
 		$data = [];
 		if ($tastingNumbers->count() > 0) {
 			$data['a'] = $tastingNumbers->get(0);

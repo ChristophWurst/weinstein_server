@@ -18,10 +18,6 @@ matrix:
     fast_finish: true
 
 before_script:
-    # Download phpunit 5.7
-    - wget https://phar.phpunit.de/phpunit-5.7.phar -O phpunit
-    - chmod u+x phpunit
-
     # Install dependencies
     - make install-deps
 
@@ -55,7 +51,7 @@ script:
     - php artisan migrate --no-interaction
 
     # Test PHP
-    - ./phpunit -c tests/phpunit.xml
+    - make test
 
     # Upload coverage results to scrutinizer
     - wget https://scrutinizer-ci.com/ocular.phar
