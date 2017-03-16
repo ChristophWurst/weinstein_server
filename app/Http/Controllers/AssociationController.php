@@ -78,7 +78,7 @@ class AssociationController extends BaseController {
 	public function create() {
 		$this->authorize('create-association');
 
-		$users = $this->masterDataStore->getUsers()->lists('username', 'username')->all();
+		$users = $this->masterDataStore->getUsers()->pluck('username', 'username')->all();
 		return $this->view->make('settings/association/form', [
 				'users' => $this->selectNone + $users,
 		]);
@@ -136,9 +136,9 @@ class AssociationController extends BaseController {
 
 		$user = $this->auth->user();
 		if ($user->isAdmin()) {
-			$users = $this->selectNone + $this->masterDataStore->getUsers()->lists('username', 'username')->all();
+			$users = $this->selectNone + $this->masterDataStore->getUsers()->pluck('username', 'username')->all();
 		} else {
-			$users = $user->lists('username', 'username')->all();
+			$users = $user->pluck('username', 'username')->all();
 		}
 		return $this->view->make('settings/association/form', [
 				'data' => $association,

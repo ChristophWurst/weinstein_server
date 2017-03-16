@@ -228,8 +228,8 @@ class Wine extends Model implements AdministrateModel {
 		if ($user->isAdmin()) {
 			return $query;
 		}
-		$applicants = $user->applicants->lists('id');
-		$associations = $user->associations->lists('id');
+		$applicants = $user->applicants->pluck('id');
+		$associations = $user->associations->pluck('id');
 		return $query->whereIn('applicant_id', $applicants)
 				->OrWhereIn('association_id', $associations);
 	}

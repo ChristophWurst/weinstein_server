@@ -78,8 +78,8 @@ class ApplicantController extends BaseController {
 	public function create() {
 		$this->authorize('create-applicant');
 
-		$associations = $this->masterDataStore->getAssociations()->lists('select_label', 'id')->all();
-		$users = $this->selectNone + $this->masterDataStore->getUsers()->lists('username', 'username')->all();
+		$associations = $this->masterDataStore->getAssociations()->pluck('select_label', 'id')->all();
+		$users = $this->selectNone + $this->masterDataStore->getUsers()->pluck('username', 'username')->all();
 
 		return $this->viewFactory->make('settings/applicant/form', [
 				'associations' => $associations,
@@ -171,8 +171,8 @@ class ApplicantController extends BaseController {
 		$this->authorize('edit-applicant', $applicant);
 
 		$editId = $applicant->association->administrates($this->auth->user());
-		$associations = $this->masterDataStore->getAssociations()->lists('select_label', 'id')->all();
-		$users = $this->selectNone + $this->masterDataStore->getUsers()->lists('username', 'username')->all();
+		$associations = $this->masterDataStore->getAssociations()->pluck('select_label', 'id')->all();
+		$users = $this->selectNone + $this->masterDataStore->getUsers()->pluck('username', 'username')->all();
 		return $this->viewFactory->make('settings/applicant/form',
 				[
 				'applicant' => $applicant,

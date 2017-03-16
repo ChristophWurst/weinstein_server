@@ -121,7 +121,7 @@ class TastingSessionController extends BaseController {
 		$this->shareCommonViewData($competition);
 		return $this->viewFactory->make('competition/tasting/tasting-session/form',
 				[
-				'users' => $this->selectNone + User::all()->lists('username', 'username')->all(),
+				'users' => $this->selectNone + User::all()->pluck('username', 'username')->all(),
 		]);
 	}
 
@@ -230,7 +230,7 @@ class TastingSessionController extends BaseController {
 		return $this->viewFactory->make('competition/tasting/tasting-session/form',
 				[
 				'data' => $tastingSession,
-				'users' => $this->selectNone + User::all()->lists('username', 'username')->all(),
+				'users' => $this->selectNone + User::all()->pluck('username', 'username')->all(),
 		]);
 	}
 
