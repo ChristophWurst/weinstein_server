@@ -23,7 +23,6 @@ namespace App\Database\Repositories;
 
 use App\Tasting\Commission;
 use App\Tasting\Taster;
-use App\Tasting\TastingSession;
 
 class TasterRepository {
 

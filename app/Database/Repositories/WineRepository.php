@@ -30,7 +30,7 @@ class WineRepository {
 
 	/**
 	 * @param Competition $competition
-	 * @param type $nr
+	 * @param integer $nr
 	 * @return Wine|null
 	 */
 	public function findByNr(Competition $competition, int $nr) {
