@@ -28,6 +28,7 @@ use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Session;
 
@@ -71,7 +72,7 @@ class CatalogueNumberController extends BaseController {
 		$this->authorize('import-catalogue-numbers', $competition);
 		$file = $request->file('xlsfile');
 
-		if (is_null($file)) {
+		if (is_null($file) || !$file instanceof UploadedFile) {
 			return $this->redirector->route('cataloguenumbers.import', [
 					'competition' => $competition,
 			]);
