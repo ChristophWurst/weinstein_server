@@ -4,9 +4,11 @@ checks:
 
 filter:
     excluded_paths:
-        - 'vendor/*'
-        - 'config/*'
+        - 'bootstrap/'
+        - 'config/'
+        - 'database/'
         - 'tests/'
+        - 'vendor/'
 
 imports:
     - javascript
