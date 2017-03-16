@@ -25,7 +25,7 @@ class TasterController extends BaseController {
 	/**
 	 * Display a listing of the resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function index(Request $request) {
 		$commission_id = $request->get('commission_id');
@@ -44,7 +44,7 @@ class TasterController extends BaseController {
 	 * Store a newly created resource in storage.
 	 *
 	 * @param  Request  $request
-	 * @return Response
+	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function store(Request $request) {
 		$commission_id = $request->get('commission_id');
@@ -71,7 +71,7 @@ class TasterController extends BaseController {
 	/**
 	 * @param Request $request
 	 * @param Taster $taster
-	 * @return Response
+	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function update(Request $request, Taster $taster) {
 		$this->authorize('edit-tastingsession-taster', $taster);
