@@ -71,19 +71,6 @@ class WineSort extends Model {
 	}
 
 	/**
-	 * Duplicate this sort into another competition
-	 * 
-	 * @param Competition $competition
-	 */
-	public function duplicate(Competition $competition) {
-		$sort = new WineSort([
-			'order' => $this->order,
-			'name' => $this->name,
-		]);
-		$competition->winesorts()->save($sort);
-	}
-
-	/**
 	 * 1 sort : n wines
 	 * 
 	 * @return Relation
