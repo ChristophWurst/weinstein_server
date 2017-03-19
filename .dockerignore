@@ -1,0 +1,9 @@
+# NPM deps
+
+*.git/*
+./coverage
+./node_modules
+./nbproject
+./Makefile
+./.env
+./tests
