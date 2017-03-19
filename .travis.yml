@@ -18,6 +18,9 @@ matrix:
     fast_finish: true
 
 before_script:
+    # Install yarn
+    - npm install -g yarn
+
     # Install dependencies
     - make install-deps
 

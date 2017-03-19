@@ -4,7 +4,7 @@ build:
 	./node_modules/grunt-cli/bin/grunt uglify
 
 install-deps:
-	npm install
+	yarn install
 	./node_modules/bower/bin/bower install
 	composer install
 
