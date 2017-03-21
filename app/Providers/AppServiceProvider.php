@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use App\MasterData\Competition;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
-use App\MasterData\Competition;
+use function env;
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -14,6 +18,10 @@ class AppServiceProvider extends ServiceProvider {
 	 * @return void
 	 */
 	public function boot() {
+		if (env('APP_ENV', 'production') === 'production') {
+			URL::forceSchema("https"); //force HTTPS schema in production
+		}
+
 		Validator::extend('tastingnumber_nr_unique', function($attribute, $value, array $parameters) {
 			$competition_id = $parameters[0];
 
