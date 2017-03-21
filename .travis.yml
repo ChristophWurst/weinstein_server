@@ -38,7 +38,7 @@ after_script:
     - cat storage/logs/laravel.log
 
 script:
-    - make build
+    - ./node_modules/grunt-cli/bin/grunt
 
     # Check PHP syntax
     - find . -name \*.php -not -path './vendor/*' -exec php -l "{}" \;
