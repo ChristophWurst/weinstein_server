@@ -1,9 +1,14 @@
 # NPM deps
 
 *.git/*
-./coverage
-./node_modules
-./nbproject
-./Makefile
-./.env
-./tests
+.env
+coverage
+Makefile
+nbproject
+node_modules
+storage/app/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+tests
