@@ -4,7 +4,7 @@ RUN pwd
 RUN apt-get update && apt-get install -y libmcrypt-dev mysql-client \
     && docker-php-ext-install mcrypt pdo_mysql
 
-VOLUME /var/www/storage
 COPY ./ /var/www
 RUN chown -R www-data:www-data /var/www && chmod u+rw /var/www/storage
+VOLUME /var/www/storage
 WORKDIR /var/www
