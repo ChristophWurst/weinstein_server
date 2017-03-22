@@ -6,5 +6,4 @@ RUN apt-get update && apt-get install -y libmcrypt-dev mysql-client \
 
 COPY ./ /var/www
 RUN chown -R www-data:www-data /var/www && chmod u+rw /var/www/storage
-VOLUME /var/www/storage
 WORKDIR /var/www
