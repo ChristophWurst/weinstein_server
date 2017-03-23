@@ -16,7 +16,7 @@
             <a href="{!! route('login') !!}" class="btn btn-primary btn-lg" role="button">Anmelden</a>
         </p>
         @else
-        Entwickelt von Christoph Wurst, 2013 - 2016
+        Entwickelt von Christoph Wurst, 2013 - 2017
         @endif
     </div>
 </div>
