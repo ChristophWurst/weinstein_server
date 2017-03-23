@@ -17,6 +17,11 @@ cache:
 matrix:
     fast_finish: true
 
+branches:
+   only:
+   - master
+   - production
+
 before_script:
     # Install yarn
     - npm install -g yarn
@@ -33,9 +38,6 @@ before_script:
     # Copy environment file
     - cp tests/test.env .env
     - cat .env
-
-after_script:
-    - cat storage/logs/laravel.log
 
 script:
     - ./node_modules/grunt-cli/bin/grunt
@@ -60,5 +62,9 @@ script:
     - wget https://scrutinizer-ci.com/ocular.phar
     - php ocular.phar code-coverage:upload --format=php-clover tests/clover.xml
 
+after_script:
+    - cat storage/logs/laravel.log
+
 after_success:
     - ./build/docker-images.sh
+
