@@ -8,7 +8,7 @@ if [ "$TRAVIS_PHP_VERSION" != "7.1" ]; then
 fi
 
 BRANCH=${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}
-TAG=`if [ "$BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_COMMIT ; fi`
+TAG=`if [ "$BRANCH" == "master" ]; then echo "latest"; else echo $BRANCH ; fi`
 
 docker build -t weinstein/app:$TAG -f deploy/app.docker .
 docker build -t weinstein/web:$TAG -f deploy/web.docker .
