@@ -108,7 +108,8 @@ class TastingNumberController extends BaseController {
 	public function assign(Competition $competition) {
 		$this->authorize('assign-tastingnumber');
 
-		return $this->viewFactory->make('competition/tasting/tasting-number/form');
+		return $this->viewFactory->make('competition/tasting/tasting-number/form')
+				->with('competition', $competition);
 	}
 
 	/**
@@ -157,7 +158,8 @@ class TastingNumberController extends BaseController {
 	public function resetForm(Competition $competition) {
 		$this->authorize('unassign-tastingnumber', $competition);
 
-		return $this->viewFactory->make('competition/tasting/tasting-number/reset');
+		return $this->viewFactory->make('competition/tasting/tasting-number/reset')
+				->with('competition', $competition);
 	}
 
 	/**
@@ -184,7 +186,7 @@ class TastingNumberController extends BaseController {
 
 		return $this->viewFactory->make('competition/tasting/tasting-number/deallocate', [
 				'data' => $tastingNumber
-		]);
+			])->with('competition', $tastingNumber->wine->competition);
 	}
 
 	/**
@@ -211,7 +213,8 @@ class TastingNumberController extends BaseController {
 	public function import(Competition $competition) {
 		$this->authorize('import-tastingnumbers');
 
-		return $this->viewFactory->make('competition/tasting/tasting-number/import');
+		return $this->viewFactory->make('competition/tasting/tasting-number/import')
+				->with('competition', $competition);
 	}
 
 	/**
