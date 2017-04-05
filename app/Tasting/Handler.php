@@ -291,6 +291,9 @@ class Handler implements TastingHandler {
 	}
 
 	public function updateTastingSession(TastingSession $tastingSession, array $data) {
+		if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
+			$data['wuser_username'] = null;
+		}
 		$validator = new TastingSessionValidator($data, $tastingSession);
 		$validator->setCompetition($tastingSession->competition);
 		$validator->validateUpdate();
