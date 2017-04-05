@@ -186,7 +186,7 @@ class TastingNumberController extends BaseController {
 
 		return $this->viewFactory->make('competition/tasting/tasting-number/deallocate', [
 				'data' => $tastingNumber
-			])->with('competition', $competition);
+			])->with('competition', $tastingNumber->wine->competition);
 	}
 
 	/**
