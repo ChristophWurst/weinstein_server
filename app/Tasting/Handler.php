@@ -377,7 +377,9 @@ class Handler implements TastingHandler {
 			/*
 			 * Store comment
 			 */
-			$this->wineRepository->addComment($tastingNumber->wine, $data['comment-' . $commission->side]);
+			$commentKey = 'comment-' . $commission->side;
+			$comment = isset($data[$commentKey]) ? $data[$commentKey] : null;
+			$this->wineRepository->addComment($tastingNumber->wine, $comment);
 		}
 	}
 
@@ -409,7 +411,7 @@ class Handler implements TastingHandler {
 		 * Store comment
 		 */
 		$wine = $tastingNumber->wine;
-		$wine->comment = $data['comment'];
+		$wine->comment = isset($data['comment']) ? $data['comment'] : null;
 		$wine->save();
 		DB::commit();
 	}
