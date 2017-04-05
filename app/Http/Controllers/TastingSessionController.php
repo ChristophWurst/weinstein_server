@@ -246,10 +246,6 @@ class TastingSessionController extends BaseController {
 		$this->checkTastingSessionLocked($tastingSession);
 
 		$data = Input::all();
-		//unset user if set to 'none'
-		if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
-			unset($data['wuser_username']);
-		}
 		try {
 			$this->tastingHandler->updateTastingSession($tastingSession, $data);
 		} catch (ValidationException $ve) {
