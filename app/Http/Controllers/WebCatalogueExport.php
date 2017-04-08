@@ -21,7 +21,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Wine;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use PHPExcel;
 use PHPExcel_Cell_DataType;
@@ -116,21 +118,14 @@ class WebCatalogueExport {
 	private function setExcelData(PHPExcel_Worksheet $sheet) {
 		//data
 		$row = 2;
-		$association = null;
-		$assCnt = -1;
-
 		// Sort data
 		$this->wines = $this->wines->sort(function($wine1, $wine2) {
 			return $wine1->applicant->association->id - $wine2->applicant->association->id;
 		});
 
 		foreach ($this->wines as $w) {
-			if ($w->applicant->association_id != $association) {
-				$association = $w->applicant->association_id;
-				$assCnt = 1;
-			}
 			$sheet->setCellValue("A$row", $w->nr);
-			$sheet->setCellValue("B$row", $assCnt);
+			$sheet->setCellValue("B$row", $w->catalogue_number);
 			$sheet->setCellValue("C$row", $w->applicant->id);
 			$sheet->setCellValue("D$row", $w->applicant->label);
 			$sheet->setCellValue("E$row", $w->applicant->title);
@@ -159,7 +154,6 @@ class WebCatalogueExport {
 			$sheet->setCellValue("Z$row", $w->sosi ? 1 : 0);
 
 			$row++;
-			$assCnt++;
 		}
 	}
 
