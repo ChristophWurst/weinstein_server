@@ -45,6 +45,7 @@ class TastingCatalogueExport {
 	 */
 	private $headers = [
 		'DateiNr',
+		'KatNr',
 		'SortenNr',
 		'Sorte',
 		'QualNr',
@@ -81,6 +82,7 @@ class TastingCatalogueExport {
 		$sheet->setCellValue("L1", $this->headers[11]);
 		$sheet->setCellValue("M1", $this->headers[12]);
 		$sheet->setCellValue("N1", $this->headers[13]);
+		$sheet->setCellValue("O1", $this->headers[14]);
 	}
 
 	/**
@@ -97,24 +99,25 @@ class TastingCatalogueExport {
 		$row = 2;
 		foreach ($this->wines as $w) {
 			$sheet->setCellValue("A$row", $w->nr);
-			$sheet->setCellValue("B$row", $w->winesort_order);
-			$sheet->setCellValue("C$row", $w->winesort_name);
-			$sheet->setCellValue("D$row", $w->quality_id);
-			$sheet->setCellValue("E$row", $w->quality_label);
-			$sheet->setCellValue("F$row", $w->label);
-			$sheet->setCellValue("G$row", $w->vintage);
-			$sheet->setCellValue("H$row", $w->applicant->id);
-			$sheet->setCellValue("I$row", $w->applicant->lastname . ' ' . $w->applicant->firstname);
-			$sheet->setCellValue("J$row", $w->applicant->association->id);
-			$sheet->setCellValue("K$row", $w->applicant->association->name);
+			$sheet->setCellValue("B$row", $w->catalogue_number);
+			$sheet->setCellValue("C$row", $w->winesort_order);
+			$sheet->setCellValue("D$row", $w->winesort_name);
+			$sheet->setCellValue("E$row", $w->quality_id);
+			$sheet->setCellValue("F$row", $w->quality_label);
+			$sheet->setCellValue("G$row", $w->label);
+			$sheet->setCellValue("H$row", $w->vintage);
+			$sheet->setCellValue("I$row", $w->applicant->id);
+			$sheet->setCellValue("J$row", $w->applicant->lastname . ' ' . $w->applicant->firstname);
+			$sheet->setCellValue("K$row", $w->applicant->association->id);
+			$sheet->setCellValue("L$row", $w->applicant->association->name);
 			if ($w->rating1) {
-				$sheet->setCellValue("L$row", floor($w->rating1 * 10) / 10);
+				$sheet->setCellValue("M$row", floor($w->rating1 * 10) / 10);
 			}
 			if ($w->kdb) {
-				$sheet->setCellValue("M$row", "ja");
+				$sheet->setCellValue("N$row", "ja");
 			}
 			if ($w->sosi) {
-				$sheet->setCellValue("N$row", "ja");
+				$sheet->setCellValue("O$row", "ja");
 			}
 			$row++;
 		}
