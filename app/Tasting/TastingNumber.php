@@ -23,6 +23,7 @@ namespace App\Tasting;
 
 use App\Tasting\TastingStage;
 use App\Wine;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Query;
@@ -34,6 +35,7 @@ use Illuminate\Database\Query;
  * @property int $wine_id
  * @property Wine $wine
  * @property int $nr
+ * @property Collection $tastings
  */
 class TastingNumber extends Model {
 
