@@ -47,8 +47,8 @@ class EvaluationController extends BaseController {
 
 		return $this->view->make('competition/evaluation/index', [
 			'competition' => $competition,
-			'tastingSession1' => $competition->tastingsessions()->whereTastingstage_id(1)->get(),
-			'tastingSession2' => $competition->tastingsessions()->whereTastingstage_id(2)->get(),
+			'tasting_sessions1' => $competition->tastingsessions()->whereTastingstage_id(1)->get(),
+			'tasting_sessions2' => $competition->tastingsessions()->whereTastingstage_id(2)->get(),
 		]);
 	}
 
