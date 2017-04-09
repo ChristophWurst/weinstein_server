@@ -218,7 +218,7 @@ class HandlerTest extends TestCase {
 		$competition->shouldReceive('getTastingStage')->once()->andReturn($tastingStage);
 
 		$this->tastingNumberRepository->shouldReceive('findUntasted')
-			->with($competition, $tastingStage, null)
+			->with($competition, $tastingStage, 2)
 			->andReturn(new Collection());
 
 		$this->assertTrue($this->handler->isTastingFinished($competition));
@@ -230,7 +230,7 @@ class HandlerTest extends TestCase {
 		$competition->shouldReceive('getTastingStage')->once()->andReturn($tastingStage);
 
 		$this->tastingNumberRepository->shouldReceive('findUntasted')
-			->with($competition, $tastingStage, null)
+			->with($competition, $tastingStage, 2)
 			->andReturn(new Collection([
 				new TastingNumber()
 		]));
@@ -360,7 +360,7 @@ class HandlerTest extends TestCase {
 		$tastingNumber = new TastingNumber();
 
 		$this->tastingNumberRepository->shouldReceive('findUntasted')
-			->with($competition, $tastingStage, null)
+			->with($competition, $tastingStage, 2)
 			->andReturn([$tastingNumber]);
 
 		$this->assertEquals([$tastingNumber], $this->handler->getUntastedTastingNumbers($competition, $tastingStage));
