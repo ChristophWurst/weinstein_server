@@ -16,14 +16,14 @@ cache:
 
 env:
     global:
-    - WSTEST=php
+    - WS_TEST=php
 
 matrix:
     include:
     - php: 7.1
-      env: WSTEST=js
+      env: WS_TEST=js
     - php: 7.1
-      env: WSTEST=docker
+      env: WS_TEST=docker
     fast_finish: true
 
 branches:
