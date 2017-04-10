@@ -20,7 +20,7 @@ env:
 
 matrix:
     include:
-    - language: node_js
+    - php: 7.1
       env: WSTEST=js
     - php: 7.1
       env: WSTEST=docker
@@ -49,7 +49,7 @@ before_script:
     - cat .env
 
 script:
-    - echo "test suite: $WS_TEST"
+    - echo "test suite $WS_TEST"
 
     # PHP
     - if [[ "$WS_TEST" = "php" ]]; then ./build/test_php.sh; fi
