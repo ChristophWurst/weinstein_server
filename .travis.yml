@@ -62,7 +62,7 @@ script:
     - if [[ "$WS_TEST" = "php" ]]; then ./build/test_php.sh; fi
 
     # Check PHP syntax
-    - if [[ "$WS_TEST" = "php_lint" ]]; then find . -name \*.php -not -path './vendor/*' -exec php -l "{}" \; fi
+    - if [[ "$WS_TEST" = "php_lint" ]]; then find . -name \*.php -not -path './vendor/*' -exec php -l "{}" \;; fi
 
     # JS
     - if [[ "$WS_TEST" = "js" ]]; then ./node_modules/grunt-cli/bin/grunt; fi
