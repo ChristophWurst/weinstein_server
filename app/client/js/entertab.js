@@ -17,6 +17,9 @@ $(document).keydown(function (e) {
 		if (self.is('input:submit')) {
 			form.submit();
 		}
+		if (self.is('button')) {
+			return true;
+		}
 
 		// If not a regular hyperlink/button/textarea
 		if ($.inArray(self, focusable) && (!self.is('a,button'))) {
