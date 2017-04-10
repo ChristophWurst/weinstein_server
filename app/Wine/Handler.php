@@ -225,8 +225,8 @@ class Handler implements WineHandler {
 		DB::beginTransaction();
 		$rowCount = 0;
 		try {
-			$competition->wines()->update(array('excluded' => false));
-			$rowCount = 1;
+			$competition->wines()->update(['excluded' => false]);
+			$rowCount++;
 
 			foreach ($sheet->toArray() as $row) {
 				if (!isset($row[0])) {
@@ -238,7 +238,7 @@ class Handler implements WineHandler {
 					Log::error('invalid wine id while importing excluded');
 					throw new ValidationException(new MessageBag(array('Wein ' . $row[0] . ' nicht vorhanden')));
 				}
-				$this->update($wine, [
+				$this->wineRepository->update($wine, [
 					'excluded' => true,
 				]);
 				$rowCount++;
