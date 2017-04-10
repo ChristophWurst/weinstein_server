@@ -14,7 +14,16 @@ cache:
     - "$HOME/.npm"
     - "$HOME/.cache/bower"
 
+env:
+    global:
+    - WSTEST=php
+
 matrix:
+    include:
+    - language: node_js
+      env: WSTEST=js
+    - php: 7.1
+      env: WSTEST=docker
     fast_finish: true
 
 branches:
@@ -40,31 +49,14 @@ before_script:
     - cat .env
 
 script:
-    - ./node_modules/grunt-cli/bin/grunt
+    # PHP
+    - if [[ "$WS_TEST" = "php" ]]; then ./build/test_php.sh; fi
 
-    # Check PHP syntax
-    - find . -name \*.php -not -path './vendor/*' -exec php -l "{}" \;
+    # JS
+    - if [[ "$WS_TEST" = "js" ]]; then ./node_modules/grunt-cli/bin/grunt; fi
 
-    # Generate secure key
-    - rm bootstrap/cache/compiled.php
-    - php artisan key:generate --no-interaction
-    - cat .env
-
-    # Prepare DB - rollback once to catch potential migration/rollback errors
-    - php artisan migrate --no-interaction
-    - php artisan migrate:rollback --no-interaction
-    - php artisan migrate --no-interaction
-
-    # Test PHP
-    - make test
-
-    # Upload coverage results to scrutinizer
-    - wget https://scrutinizer-ci.com/ocular.phar
-    - php ocular.phar code-coverage:upload --format=php-clover tests/clover.xml
+    # Docker
+    - if [[ "$WS_TEST" = "docker" ]]; then ./build/docker-images.sh; fi
 
 after_script:
-    - cat storage/logs/laravel.log
-
-after_success:
-    - ./build/docker-images.sh
-
+    - if [[ "$WS_TEST" = "php" ]]; then cat storage/logs/laravel.log; fi
