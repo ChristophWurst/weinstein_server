@@ -455,7 +455,7 @@ class WineController extends BaseController {
 			}
 			$rowsImported = $this->wineHandler->importExcluded($file, $competition);
 		} catch (ValidationException $ve) {
-			return Redirect::route('enrollment.wines/import-exclude', ['competition' => $competition->id])
+			return Redirect::route('enrollment.wines/import-excluded', ['competition' => $competition->id])
 					->withErrors($ve->getErrors())
 					->withInput();
 		}
