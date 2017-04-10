@@ -49,13 +49,17 @@ before_script:
     - cat .env
 
 script:
+    - echo "test suite: $WS_TEST"
+
     # PHP
     - if [[ "$WS_TEST" = "php" ]]; then ./build/test_php.sh; fi
 
     # JS
     - if [[ "$WS_TEST" = "js" ]]; then ./node_modules/grunt-cli/bin/grunt; fi
+    - if [[ "$WS_TEST" = "js" ]]; then ./node_modules/grunt-cli/bin/grunt karma:continuous; fi
 
     # Docker
+    - if [[ "$WS_TEST" = "js" ]]; then ./node_modules/grunt-cli/bin/grunt; fi
     - if [[ "$WS_TEST" = "docker" ]]; then ./build/docker-images.sh; fi
 
 after_script:
