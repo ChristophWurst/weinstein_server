@@ -59,7 +59,7 @@ script:
     - if [[ "$WS_TEST" = "js" ]]; then ./node_modules/grunt-cli/bin/grunt karma:continuous; fi
 
     # Docker
-    - if [[ "$WS_TEST" = "js" ]]; then ./node_modules/grunt-cli/bin/grunt; fi
+    - if [[ "$WS_TEST" = "docker" ]]; then ./node_modules/grunt-cli/bin/grunt; fi
     - if [[ "$WS_TEST" = "docker" ]]; then ./build/docker-images.sh; fi
 
 after_script:
