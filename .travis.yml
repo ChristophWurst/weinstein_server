@@ -20,6 +20,10 @@ env:
 
 matrix:
     include:
+    - php: 7
+      env: WS_TEST=lint_php
+    - php: 7.1
+      env: WS_TEST=lint_php
     - php: 7.1
       env: WS_TEST=js
     - php: 7.1
@@ -32,6 +36,9 @@ branches:
    - production
 
 before_script:
+    # Faster builds if we don't need xdebug
+    - if [[ "$WS_TEST" != "php" ]]; then phpenv config-rm xdebug.ini; fi
+
     # Install yarn
     - npm install -g yarn
 
@@ -53,6 +60,9 @@ script:
 
     # PHP
     - if [[ "$WS_TEST" = "php" ]]; then ./build/test_php.sh; fi
+
+    # Check PHP syntax
+    - if [[ "$WS_TEST" = "php_lint" ]]; then find . -name \*.php -not -path './vendor/*' -exec php -l "{}" \; fi
 
     # JS
     - if [[ "$WS_TEST" = "js" ]]; then ./node_modules/grunt-cli/bin/grunt; fi

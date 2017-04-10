@@ -2,9 +2,6 @@
 
 set -ev
 
-# Check PHP syntax
-find . -name \*.php -not -path './vendor/*' -exec php -l "{}" \;
-
 # Generate secure key
 rm bootstrap/cache/compiled.php
 php artisan key:generate --no-interaction
