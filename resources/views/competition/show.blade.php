@@ -50,13 +50,13 @@ use App\MasterData\CompetitionState;
                             @elseif ($currentState == CompetitionState::STATE_TASTINGNUMBERS2)
                                 {{ $wines_tasting_number2 }} zugewiesen
                             @elseif ($currentState == CompetitionState::STATE_TASTING2)
-                                {{ $wines_tasted2 }}/{{ $wines_tasting_number2 }} Weine verkostet
+                                {{ $wines_tasted2 }}/{{ $wines_tasting_number2 }} Weinen verkostet
                             @elseif ($currentState == CompetitionState::STATE_SOSI)
                                 {{ $wines_sosi }} zugewiesen
                             @elseif ($currentState == CompetitionState::STATE_CHOOSE)
                                 {{ $wines_chosen }} ausgew&auml;hlt
 							@elseif ($currentState == CompetitionState::STATE_CATALOGUE_NUMBERS)
-                                {{ $wines_without_catalogue_number }}/{{ $wines }} Weinen ohne Katalognummer
+                                {{ $wines_without_catalogue_number }}/{{ $wines }} Weine ohne Katalognummer
                             @endif
                         @endif
                     @endif

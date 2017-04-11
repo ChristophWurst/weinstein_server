@@ -22,7 +22,8 @@ class AppServiceProvider extends ServiceProvider {
 			URL::forceSchema("https"); //force HTTPS schema in production
 		}
 
-		Validator::extend('tastingnumber_nr_unique', function($attribute, $value, array $parameters) {
+		Validator::extend('tastingnumber_nr_unique',
+			function($attribute, $value, array $parameters) {
 			$competition_id = $parameters[0];
 
 			$competition = Competition::find($competition_id);
@@ -33,30 +34,19 @@ class AppServiceProvider extends ServiceProvider {
 					->count() == 0;
 		});
 
-		Validator::extend('tastingnumber_wine_exists', function($attribute, $value, array $parameters) {
+		Validator::extend('tastingnumber_wine_exists',
+			function($attribute, $value, array $parameters) {
 			$competition_id = $parameters[0];
 			$competition = Competition::find($competition_id);
 
-			$stage = $competition->getTastingStage();
-
-			if ($stage->id === 1) {
-				return $competition
-						->wines()
-						->where('nr', '=', $value)
-						->count() >= 1;
-			} elseif ($stage->id === 2) {
-				return $competition
-						->wines()
-						->where('nr', '=', $value)
-						->where('kdb', '=', 1)
-						->count() >= 1;
-			} else {
-				Log::error('something strange happened...');
-				App::abort(500);
-			}
+			return $competition
+					->wines()
+					->where('nr', '=', $value)
+					->count() >= 1;
 		});
 
-		Validator::extend('tastingnumber_wine_unique', function($attribute, $value, array $parameters) {
+		Validator::extend('tastingnumber_wine_unique',
+			function($attribute, $value, array $parameters) {
 			$competition_id = $parameters[0];
 
 			$competition = Competition::find($competition_id);

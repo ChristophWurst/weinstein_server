@@ -83,7 +83,7 @@ class TastingNumberController extends BaseController {
 			// kdb wines do not have to be tasted a second time
 			$kdbWines = $competition->wines()->kdb()->count();
 			$tastingNumber2 = $competition->wines()->withTastingNumber($tastingStage)->count();
-			$showAdd = $kdbWines !== $tastingNumber2; //show add as long as not all wines are assigned
+			$showAdd = true; // always show, because even non-kdb wines can be tasted a second time
 			$showComplete = true;
 			$showReset = true;
 		}
