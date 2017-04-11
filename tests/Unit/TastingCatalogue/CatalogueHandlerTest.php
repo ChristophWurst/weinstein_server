@@ -219,6 +219,57 @@ class CatalogueHandlerTest extends TestCase {
 		$this->handler->importCatalogueNumbers($file, $competition);
 	}
 
+	public function testImportCatalogueNumbersWithNonChosenWine() {
+		$file = Mockery::mock(UploadedFile::class);
+		$competition = Mockery::mock(Competition::class);
+		$competitionState = Mockery::mock(CompetitionState::class);
+		$doc = $this->getMockBuilder(PHPExcel::class)->disableOriginalConstructor()->getMock();
+		$sheet = $this->getMockBuilder(PHPExcel_Worksheet::class)->disableOriginalConstructor()->getMock();
+		$wine1 = Mockery::mock(Wine::class);
+		$competition->shouldReceive('getAttribute')
+			->with('competitionState')
+			->andReturn($competitionState);
+		$competitionState->shouldReceive('is')
+			->with(CompetitionState::STATE_CATALOGUE_NUMBERS)
+			->andReturn(true);
+		$dbConnection = Mockery::mock(Connection::class);
+		$this->db->shouldReceive('connection')
+			->once()
+			->andReturn($dbConnection);
+		$dbConnection->shouldReceive('beginTransaction')
+			->once();
+		$this->wineRepo->shouldReceive('resetCatalogueNumbers')
+			->once()
+			->with($competition);
+		$this->handler->shouldReceive('loadExcelFile')
+			->once()
+			->with($file)
+			->andReturn($doc);
+		$doc->expects($this->once())
+			->method('getActiveSheet')
+			->willReturn($sheet);
+		$sheet->expects($this->once())
+			->method('toArray')
+			->willReturn([
+				[100, 1],
+				[101, 2],
+		]);
+		$this->wineRepo->shouldReceive('findByNr')
+			->with($competition, 100)
+			->andReturn($wine1);
+		$wine1->shouldReceive('getAttribute')
+			->with('chosen')
+			->andReturn(false);
+		$this->wineRepo->shouldReceive('update')
+			->never()
+			->with($wine1, ['catalogue_number' => 1]);
+		$dbConnection->shouldReceive('rollBack')
+			->once();
+		$this->setExpectedException(ValidationException::class);
+
+		$this->handler->importCatalogueNumbers($file, $competition);
+	}
+
 	/**
 	 * Simulate only one column is given -> import is invalid
 	 */
@@ -306,12 +357,18 @@ class CatalogueHandlerTest extends TestCase {
 		$this->wineRepo->shouldReceive('findByNr')
 			->with($competition, 100)
 			->andReturn($wine1);
+		$wine1->shouldReceive('getAttribute')
+			->with('chosen')
+			->andReturn(true);
 		$this->wineRepo->shouldReceive('update')
 			->once()
 			->with($wine1, ['catalogue_number' => 1]);
 		$this->wineRepo->shouldReceive('findByNr')
 			->with($competition, 101)
 			->andReturn($wine2);
+		$wine2->shouldReceive('getAttribute')
+			->with('chosen')
+			->andReturn(true);
 		$this->wineRepo->shouldReceive('update')
 			->once()
 			->with($wine2, ['catalogue_number' => 2]);
@@ -352,6 +409,9 @@ class CatalogueHandlerTest extends TestCase {
 		$this->wineRepo->shouldReceive('findByNr')
 			->with($competition, 100)
 			->andReturn($wine1);
+		$wine1->shouldReceive('getAttribute')
+			->with('chosen')
+			->andReturn(true);
 		$this->wineRepo->shouldReceive('update')
 			->once()
 			->with($wine1, ['catalogue_number' => 1]);

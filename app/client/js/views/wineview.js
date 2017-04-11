@@ -30,7 +30,8 @@ var Weinstein = Weinstein || {};
 		'<table class="table table-striped table-condensed wine-table">' +
 		'	<thead>' +
 		'		<tr>' +
-		'			<th class="text-center">Dateinummer</th>' +
+		'			<th class="text-center">DateiNr</th>' +
+		'			{{#if show_catalogue_number}}<th class="text-center">KatNr</th>{{/if}}' +
 		'			<th>Betrieb</th>' +
 		'			<th>Verein</th>' +
 		'			<th>Marke</th>' +
@@ -61,6 +62,13 @@ var Weinstein = Weinstein || {};
 
 	var WINE_TEMPLATE = '' +
 		'<td class="text-center">{{#if nr}}<a href="/wines/{{id}}">{{nr}}</a>{{else}}-{{/if}}</td>' +
+		'{{#if show_catalogue_number }}<td class="text-center">' +
+		'    {{#if catalogue_number}}' +
+		'    {{ catalogue_number }}' +
+		'    {{else}}' +
+		'    -' +
+		'    {{/if}}' +
+		'</td>{{/if}}' +
 		'<td><a href="/settings/applicant/{{applicant.id}}">{{applicant.label}} {{applicant.lastname}}</a></td>' +
 		'<td><a href="/settings/association/{{applicant.association.id}}">{{applicant.association.name}}</a></td>' +
 		'<td>{{ label }}</td>' +

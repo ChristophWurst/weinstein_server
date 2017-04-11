@@ -111,6 +111,7 @@ class WineRepository {
 	 */
 	public function getNumberOfWinesWithoutCatalogueNumber(Competition $competition): int {
 		return $competition->wines()
+				->where('chosen', true)
 				->where('catalogue_number', null)
 				->count();
 	}
