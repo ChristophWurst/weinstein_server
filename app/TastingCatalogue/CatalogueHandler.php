@@ -89,7 +89,7 @@ class CatalogueHandler implements TastingCatalogueHandler {
 			Log::error('invalid wine id while importing kdb');
 			throw new ValidationException(new MessageBag(array('Wein ' . $wineNr . ' nicht vorhanden')));
 		}
-		if ($wine->excluded) {
+		if (!$wine->chosen) {
 			throw new ValidationException(new MessageBag(array('Nur ausgeschenkte Weine werden in den Katalog aufgenommen')));
 		}
 		$this->wineRepository->update($wine, [
