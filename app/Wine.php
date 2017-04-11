@@ -253,7 +253,7 @@ class Wine extends Model implements AdministrateModel {
 		return $query->whereExists(function($query) use($ts) {
 				$query->select(DB::raw(1))
 					->from('tastingnumber')
-					->where('wine_id', '=', DB::raw('wine.id'))
+					->where('wine_id', '=', DB::raw($this->table . '.id'))
 					->where('tastingstage_id', '=', $ts->id);
 			});
 	}

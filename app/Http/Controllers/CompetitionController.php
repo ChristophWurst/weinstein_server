@@ -100,7 +100,7 @@ class CompetitionController extends BaseController {
 				'wines' => $competition->wines()->count(),
 				'wines_with_nr' => $competition->wines()->whereNotNull('nr')->count(),
 				'wines_tasted1' => $competition->wine_details()->whereNotNull('rating1')->count(),
-				'wines_tasted2' => $competition->wine_details()->kdb()->whereNotNull('rating2')->count(),
+				'wines_tasted2' => $competition->wine_details()->whereNotNull('rating2')->count(),
 				'wines_kdb' => $competition->wines()->kdb()->count(),
 				'wines_excluded' => $competition->wines()->excluded()->count(),
 				'wines_tasting_number1' => $competition->wines()->withTastingNumber(TastingStage::find(1))->count(),

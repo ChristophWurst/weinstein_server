@@ -78,7 +78,7 @@ class TastingSessionController extends BaseController {
 		$this->viewFactory->share('show_finish1',
 			$tasting1 && $competition->wine_details()->count() === $competition->wine_details()->whereNotNull('rating1')->count());
 		$this->viewFactory->share('show_finish2',
-			$tasting2 && $competition->wines()->withTastingNumber(TastingStage::find(2))->count() === $competition->wine_details()->kdb()->whereNotNull('rating2')->count());
+			$tasting2 && $competition->wines()->withTastingNumber(TastingStage::find(2))->count() === $competition->wine_details()->withTastingNumber(TastingStage::find(2))->whereNotNull('rating2')->count());
 	}
 
 	private function checkCompetitionState(Competition $competition) {
