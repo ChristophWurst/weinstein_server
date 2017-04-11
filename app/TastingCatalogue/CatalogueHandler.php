@@ -64,9 +64,9 @@ class CatalogueHandler implements TastingCatalogueHandler {
 	 * @return bool
 	 */
 	public function allWinesHaveBeenAssigned(Competition $competition): bool {
-		return true || $this->allWinesHaveACatalogueNumber($competition);
+		return $this->allWinesHaveACatalogueNumber($competition);
 	}
-	
+
 	public function getNrOfWinesWithoutCatalogueNumber(Competition $competition): int {
 		return $this->wineRepository->getNumberOfWinesWithoutCatalogueNumber($competition);
 	}
@@ -88,6 +88,9 @@ class CatalogueHandler implements TastingCatalogueHandler {
 		if (is_null($wine)) {
 			Log::error('invalid wine id while importing kdb');
 			throw new ValidationException(new MessageBag(array('Wein ' . $wineNr . ' nicht vorhanden')));
+		}
+		if ($wine->excluded) {
+			throw new ValidationException(new MessageBag(array('Nur ausgeschenkte Weine werden in den Katalog aufgenommen')));
 		}
 		$this->wineRepository->update($wine, [
 			'catalogue_number' => $tastingNumber,
