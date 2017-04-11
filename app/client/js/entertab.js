@@ -17,7 +17,7 @@ $(document).keydown(function (e) {
 		if (self.is('input:submit')) {
 			form.submit();
 		}
-		if (self.is('button')) {
+		if (self.is('button') || self.is('a.btn')) {
 			return true;
 		}
 
