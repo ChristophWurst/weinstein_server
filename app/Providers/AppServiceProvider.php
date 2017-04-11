@@ -39,8 +39,6 @@ class AppServiceProvider extends ServiceProvider {
 			$competition_id = $parameters[0];
 			$competition = Competition::find($competition_id);
 
-			$stage = $competition->getTastingStage();
-
 			return $competition
 					->wines()
 					->where('nr', '=', $value)
