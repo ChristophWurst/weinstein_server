@@ -120,7 +120,7 @@ $factory->define(WineQuality::class,
 
 $factory->define(WineSort::class, function() {
 	return [
-		'order' => rand(1, 5000),
+		'order' => rand(1, 50000),
 		'name' => str_random(10),
 	];
 });

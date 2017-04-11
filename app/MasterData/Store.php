@@ -231,26 +231,27 @@ class Store implements MasterDataStore {
 	public function resetCompetition(Competition $competition) {
 		// TODO: refactor to non-static
 		DB::transaction(function() use ($competition) {
-			$competition->tastingsessions()->chunk(100,
-				function($sessions) {
-				foreach ($sessions as $session) {
-					foreach ($session->commissions as $commission) {
-						foreach ($commission->tasters as $taster) {
-							$taster->tastings()->delete();
-							$taster->delete();
-						}
-						$commission->delete();
+			foreach ($competition->tastingsessions as $session) {
+				foreach ($session->commissions as $commission) {
+					foreach ($commission->tasters as $taster) {
+						$taster->tastings()->delete();
+						$taster->delete();
 					}
-					$session->delete();
+					$commission->delete();
 				}
-			});
-			$competition->wines()->chunk(100,
-				function($wines) {
+				$session->delete();
+			}
+			while (true) {
+				$wines = $competition->wines()->take(100)->get();
+				if ($wines->isEmpty()) {
+					break;
+				}
+
 				foreach ($wines as $wine) {
 					$wine->tastingnumbers()->delete();
 					$wine->delete();
 				}
-			});
+			}
 
 			//$competition->user()->associate(null);
 			$competition->competitionState()->associate(CompetitionState::find(CompetitionState::STATE_ENROLLMENT));
