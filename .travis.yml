@@ -14,7 +14,20 @@ cache:
     - "$HOME/.npm"
     - "$HOME/.cache/bower"
 
+env:
+    global:
+    - WS_TEST=php
+
 matrix:
+    include:
+    - php: 7
+      env: WS_TEST=lint_php
+    - php: 7.1
+      env: WS_TEST=lint_php
+    - php: 7.1
+      env: WS_TEST=js
+    - php: 7.1
+      env: WS_TEST=docker
     fast_finish: true
 
 branches:
@@ -23,6 +36,9 @@ branches:
    - production
 
 before_script:
+    # Faster builds if we don't need xdebug
+    - if [[ "$WS_TEST" != "php" ]]; then phpenv config-rm xdebug.ini; fi
+
     # Install yarn
     - npm install -g yarn
 
@@ -40,31 +56,21 @@ before_script:
     - cat .env
 
 script:
-    - ./node_modules/grunt-cli/bin/grunt
+    - echo "test suite $WS_TEST"
+
+    # PHP
+    - if [[ "$WS_TEST" = "php" ]]; then ./build/test_php.sh; fi
 
     # Check PHP syntax
-    - find . -name \*.php -not -path './vendor/*' -exec php -l "{}" \;
+    - if [[ "$WS_TEST" = "php_lint" ]]; then find . -name \*.php -not -path './vendor/*' -exec php -l "{}" \;; fi
 
-    # Generate secure key
-    - rm bootstrap/cache/compiled.php
-    - php artisan key:generate --no-interaction
-    - cat .env
+    # JS
+    - if [[ "$WS_TEST" = "js" ]]; then ./node_modules/grunt-cli/bin/grunt; fi
+    - if [[ "$WS_TEST" = "js" ]]; then ./node_modules/grunt-cli/bin/grunt karma:continuous; fi
 
-    # Prepare DB - rollback once to catch potential migration/rollback errors
-    - php artisan migrate --no-interaction
-    - php artisan migrate:rollback --no-interaction
-    - php artisan migrate --no-interaction
-
-    # Test PHP
-    - make test
-
-    # Upload coverage results to scrutinizer
-    - wget https://scrutinizer-ci.com/ocular.phar
-    - php ocular.phar code-coverage:upload --format=php-clover tests/clover.xml
+    # Docker
+    - if [[ "$WS_TEST" = "docker" ]]; then ./node_modules/grunt-cli/bin/grunt; fi
+    - if [[ "$WS_TEST" = "docker" ]]; then ./build/docker-images.sh; fi
 
 after_script:
-    - cat storage/logs/laravel.log
-
-after_success:
-    - ./build/docker-images.sh
-
+    - if [[ "$WS_TEST" = "php" ]]; then cat storage/logs/laravel.log; fi
