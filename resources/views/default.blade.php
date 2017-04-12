@@ -199,6 +199,7 @@ use App\MasterData\CompetitionState;
 				</div>
 		</div>
 
+        <script src="{!! asset('js/vendor/es6-promise/es6-promise.js') !!}"></script>
         <script src="{!! asset('js/vendor/jquery/dist/jquery.min.js') !!}"></script>
         <script src="{!! asset('js/vendor/bootstrap/dist/js/bootstrap.min.js') !!}"></script>
 		<script src="{!! asset('js/vendor/underscore/underscore.js') !!}"></script>
@@ -211,6 +212,7 @@ use App\MasterData\CompetitionState;
         <script src="{!! asset('js/weinstein.js') !!}"></script>
 
         <script>
+			ES6Promise.polyfill();
 			$(function(){ 
 				$.ajaxSetup({
 					headers: {'X-CSRF-TOKEN': '<?php echo csrf_token(); ?>'}
