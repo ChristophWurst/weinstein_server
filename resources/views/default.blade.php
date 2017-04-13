@@ -199,6 +199,7 @@ use App\MasterData\CompetitionState;
 				</div>
 		</div>
 
+		<script src="https://cdn.ravenjs.com/3.14.1/raven.min.js" crossorigin="anonymous"></script>
         <script src="{!! asset('js/vendor/es6-promise/es6-promise.js') !!}"></script>
         <script src="{!! asset('js/vendor/jquery/dist/jquery.min.js') !!}"></script>
         <script src="{!! asset('js/vendor/bootstrap/dist/js/bootstrap.min.js') !!}"></script>
@@ -218,6 +219,10 @@ use App\MasterData\CompetitionState;
 					headers: {'X-CSRF-TOKEN': '<?php echo csrf_token(); ?>'}
 				});
 			});
+			Raven.config('<?php echo config('sentry.dsn'); ?>', {
+				release: '<?php echo config('app.version'); ?>',
+				environment: '<?php echo config('app.env'); ?>'
+			}).install()
             @yield('script')
         </script>
     </body>
