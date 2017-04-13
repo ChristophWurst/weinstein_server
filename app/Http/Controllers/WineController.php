@@ -645,7 +645,6 @@ class WineController extends BaseController {
 			->wine_details()
 			->admin($user)
 			->withFlaws()
-			->Chosen()
 			->orderBy('nr')
 			->get();
 		$export = new FlawExport($wines);
