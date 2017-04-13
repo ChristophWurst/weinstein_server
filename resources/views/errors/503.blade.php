@@ -40,7 +40,7 @@
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">Be right back.</div>
+                <div class="title">Weinstein befindet sich im Wartungsmodus und wird in Kürze wieder verfügbar sein.</div>
             </div>
         </div>
     </body>
