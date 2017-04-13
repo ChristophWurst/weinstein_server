@@ -219,7 +219,7 @@ use App\MasterData\CompetitionState;
 					headers: {'X-CSRF-TOKEN': '<?php echo csrf_token(); ?>'}
 				});
 			});
-			Raven.config('<?php echo config('sentry.dsn'); ?>', {
+			Raven.config('<?php echo config('sentry.dsn_pub'); ?>', {
 				release: '<?php echo config('app.version'); ?>',
 				environment: '<?php echo config('app.env'); ?>'
 			}).install()
