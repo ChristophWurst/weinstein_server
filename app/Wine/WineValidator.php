@@ -22,6 +22,7 @@
 namespace App\Wine;
 
 use App\MasterData\Competition;
+use App\MasterData\CompetitionState;
 use App\MasterData\User;
 use App\Validation\Validator;
 use App\Wine;
@@ -80,6 +81,11 @@ class WineValidator extends Validator {
 		);
 	}
 
+	private function requiresApprovalNr() {
+		return !$this->competition->administrates($this->user)
+			&& $this->competition->competitionState->is(CompetitionState::STATE_ENROLLMENT);
+	}
+
 	/**
 	 * Get create rules
 	 * 
@@ -100,7 +106,7 @@ class WineValidator extends Validator {
 			'alcohol' => 'required|numeric|between:0.1,30.0',
 			'alcoholtot' => 'numeric|between:0.1,99.9',
 			'sugar' => 'required|numeric|between:0.1,300.0',
-			'approvalnr' => ($this->competition->administrates($this->user) ? 'sometimes' : 'required')
+			'approvalnr' => ($this->requiresApprovalNr() ? 'required' : 'sometimes' )
 			. '|alpha_num|max:20',
 		);
 	}
@@ -127,7 +133,7 @@ class WineValidator extends Validator {
 			'alcohol' => 'required|numeric|between:0.1,30.0',
 			'alcoholtot' => 'numeric|between:0.1,99.9',
 			'sugar' => 'required|numeric|between:0.1,300.0',
-			'approvalnr' => ($this->competition->administrates($this->user) ? 'sometimes' : 'required')
+			'approvalnr' => ($this->requiresApprovalNr() ? 'required' : 'sometimes')
 			. '|alpha_num|max:20',
 		);
 	}
