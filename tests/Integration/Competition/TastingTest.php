@@ -186,7 +186,7 @@ class TastingTest extends TestCase {
 		$this->dontSee('1. Verkostung abschließen');
 		$this->seeInDatabase('wine', [
 			'id' => $tastingNumber2->wine->id,
-			'comment' => '',
+			'comment' => null,
 		]);
 
 		// Still one tasting number left …
@@ -205,7 +205,7 @@ class TastingTest extends TestCase {
 		$this->see('1. Verkostung abschließen');
 		$this->seeInDatabase('wine', [
 			'id' => $tastingNumber3->wine->id,
-			'comment' => '',
+			'comment' => null,
 		]);
 
 		// Let's take a look at the statistics …
