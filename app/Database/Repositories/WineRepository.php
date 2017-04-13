@@ -45,7 +45,7 @@ class WineRepository {
 	 * @return Wine
 	 */
 	public function addComment(Wine $wine, string $comment): Wine {
-		$wine->comment = $comment;
+		$wine->comment = empty($comment) ? null : $comment;
 		$wine->save();
 		return $wine;
 	}
