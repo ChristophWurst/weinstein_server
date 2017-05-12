@@ -84,8 +84,9 @@ interface WineHandler {
 	/**
 	 * @param UploadedFile $file
 	 * @param Competition $competition
+	 * @return int Number of read lines
 	 */
-	public function importChosen(UploadedFile $file, Competition $competition);
+	public function importChosen(UploadedFile $file, Competition $competition): int;
 
 	/**
 	 * @param Wine $wine

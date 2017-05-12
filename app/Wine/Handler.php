@@ -333,7 +333,7 @@ class Handler implements WineHandler {
 	 * @throws ValidationException
 	 */
 	public function updateChosen(Wine $wine, array $data) {
-		$validator = Validator::make($data, array('value' => 'required|boolean'));
+		$validator = Validator::make($data, ['value' => 'required|boolean']);
 		if ($validator->fails()) {
 			throw new ValidationException($validator->messages());
 		}
@@ -350,7 +350,7 @@ class Handler implements WineHandler {
 	 * @param Competition $competition
 	 * @return int Number of read lines
 	 */
-	public function importChosen(UploadedFile $file, Competition $competition) {
+	public function importChosen(UploadedFile $file, Competition $competition): int {
 		//iterate over all entries and try to store them
 		//if exceptions occur, all db actions are rolled back to prevent data 
 		//inconsistency
