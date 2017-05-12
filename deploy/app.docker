@@ -1,7 +1,7 @@
 FROM php:7-fpm
 
 RUN pwd
-RUN apt-get update && apt-get install -y libmcrypt-dev mysql-client zlib1g-dev \
+RUN apt-get update && apt-get install -y libpcre3-dev libmcrypt-dev mysql-client zlib1g-dev \
     && docker-php-ext-install mcrypt pdo_mysql zip
 
 COPY ./ /var/www
