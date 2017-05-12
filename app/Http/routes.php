@@ -100,6 +100,13 @@ Route::group(array('prefix' => 'competition/{competition}', 'middleware' => 'aut
 		Route::post('import-sosi', array(
 			'uses' => 'WineController@importSosiStore'
 		));
+		Route::get('import-chosen', array(
+			'as' => 'enrollment.wines/import-chosen',
+			'uses' => 'WineController@importChosen'
+		));
+		Route::post('import-chosen', array(
+			'uses' => 'WineController@importChosenStore'
+		));
 
 		Route::get('create', array(
 			'as' => 'enrollment.wines/create',
