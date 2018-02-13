@@ -13,12 +13,9 @@ cache:
     - "$HOME/.npm"
     - "$HOME/.cache/bower"
 
-env:
-    global:
-    - WS_TEST=php
-
 matrix:
     include:
+    - env: WS_TEST=php
     - env: WS_TEST=lint_php
     - env: WS_TEST=js
     fast_finish: true
