@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "99e0f4e19240a932fababb6acee20d17",
+    "content-hash": "32a1e1d435fe9faa4718a87a1c24737a",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -311,16 +311,16 @@
         },
         {
             "name": "itbz/fpdf",
-            "version": "1.7.2",
+            "version": "1.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mreg-archive/fpdf.git",
-                "reference": "06d02a7bf227a62d37691a4e7e9c3a35efcb41c3"
+                "reference": "63340096907ef7525a9002d1ae3d0fd1ff376a6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mreg-archive/fpdf/zipball/06d02a7bf227a62d37691a4e7e9c3a35efcb41c3",
-                "reference": "06d02a7bf227a62d37691a4e7e9c3a35efcb41c3",
+                "url": "https://api.github.com/repos/mreg-archive/fpdf/zipball/63340096907ef7525a9002d1ae3d0fd1ff376a6d",
+                "reference": "63340096907ef7525a9002d1ae3d0fd1ff376a6d",
                 "shasum": ""
             },
             "require": {
@@ -339,7 +339,7 @@
             "description": "Unofficial PSR-0 compliant version of the FPDF library",
             "homepage": "http://www.fpdf.org/",
             "abandoned": "setasign/fpdf",
-            "time": "2013-12-27T14:18:15+00:00"
+            "time": "2016-05-27T09:02:54+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -1330,8 +1330,7 @@
             "authors": [
                 {
                     "name": "Chris Boulton",
-                    "homepage": "http://github.com/chrisboulton",
-                    "role": "Original developer"
+                    "homepage": "http://github.com/chrisboulton"
                 }
             ],
             "description": "A comprehensive library for generating differences between two hashable objects (strings or arrays).",

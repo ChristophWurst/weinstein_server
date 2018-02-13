@@ -7,7 +7,7 @@
     "require": {
         "php": ">=7.2.0",
         "laravel/framework": "5.2.*",
-        "itbz/fpdf": "1.7.2",
+        "itbz/fpdf": "1.7.3",
         "laravelcollective/html": "^5.2",
         "phpoffice/phpexcel": "^1.8",
         "lib-openssl": "1.1.*",
