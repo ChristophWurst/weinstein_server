@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "32a1e1d435fe9faa4718a87a1c24737a",
+    "content-hash": "d2f68582a112244bfc6f84d4a67c9d15",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -1330,7 +1330,8 @@
             "authors": [
                 {
                     "name": "Chris Boulton",
-                    "homepage": "http://github.com/chrisboulton"
+                    "homepage": "http://github.com/chrisboulton",
+                    "role": "Original developer"
                 }
             ],
             "description": "A comprehensive library for generating differences between two hashable objects (strings or arrays).",
@@ -3662,7 +3663,6 @@
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.2.0",
-        "lib-openssl": "1.1.*",
         "ext-zip": "1.*",
         "ext-zlib": "*"
     },
