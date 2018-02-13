@@ -17,7 +17,7 @@
     "karma-jasmine": "^1.1.1",
     "karma-jasmine-ajax": "^0.1.13",
     "karma-phantomjs-launcher": "^1.0.2",
-    "phantomjs-prebuilt": "^2.1.12"
+    "phantomjs-prebuilt": "^2.1.16"
   },
   "dependencies": {
     "bower": "^1.7.9"
