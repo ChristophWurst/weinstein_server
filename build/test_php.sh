@@ -13,7 +13,7 @@ php artisan migrate:rollback --no-interaction
 php artisan migrate --no-interaction
 
 # Test PHP
-make test
+./vendor/phpunit/phpunit/phpunit --config tests/phpunit.xml
 
 # Upload coverage results to scrutinizer
 wget https://scrutinizer-ci.com/ocular.phar
