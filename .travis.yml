@@ -2,8 +2,7 @@ sudo: required
 dist: trusty
 language: php
 php:
-    - 7
-    - 7.1
+    - 7.2
 
 addons:
     mariadb: "10.0"
@@ -20,14 +19,8 @@ env:
 
 matrix:
     include:
-    - php: 7
-      env: WS_TEST=lint_php
-    - php: 7.1
-      env: WS_TEST=lint_php
-    - php: 7.1
-      env: WS_TEST=js
-    - php: 7.1
-      env: WS_TEST=docker
+    - env: WS_TEST=lint_php
+    - env: WS_TEST=js
     fast_finish: true
 
 branches:
@@ -43,7 +36,9 @@ before_script:
     - npm install -g yarn
 
     # Install dependencies
-    - make install-deps
+    - if [[ "$WS_TEST" = "js" ]]; then npm install; fi
+    - if [[ "$WS_TEST" = "js" ]]; then ./node_modules/bower/bin/bower install; fi
+    - if [[ "$WS_TEST" = "php" ]]; then composer install; fi
 
     # Set up DB
     - mysql -u root -e 'create database weinstein_test;'
@@ -67,10 +62,6 @@ script:
     # JS
     - if [[ "$WS_TEST" = "js" ]]; then ./node_modules/grunt-cli/bin/grunt; fi
     - if [[ "$WS_TEST" = "js" ]]; then ./node_modules/grunt-cli/bin/grunt karma:continuous; fi
-
-    # Docker
-    - if [[ "$WS_TEST" = "docker" ]]; then ./node_modules/grunt-cli/bin/grunt; fi
-    - if [[ "$WS_TEST" = "docker" ]]; then ./build/docker-images.sh; fi
 
 after_script:
     - if [[ "$WS_TEST" = "php" ]]; then cat storage/logs/laravel.log; fi

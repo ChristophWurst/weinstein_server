@@ -16,6 +16,6 @@ imports:
 
 tools:
     external_code_coverage:
-        runs: 2
-        timeout: 1800
+        runs: 1
+        timeout: 150
 
