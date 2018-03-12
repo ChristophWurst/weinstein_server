@@ -6,8 +6,9 @@ RUN php -f composer.phar install \
     --no-interaction
 COPY . .
 RUN php -f composer.phar install --no-dev -o
-FROM node:9.5.0 as js-builder
+RUN pwd && ls
 
+FROM node:9.5.0 as js-builder
 WORKDIR /app
 COPY package*.json /app/
 RUN npm install
