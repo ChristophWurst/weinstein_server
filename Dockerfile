@@ -6,7 +6,6 @@ RUN php -f composer.phar install \
     --no-interaction
 COPY . .
 RUN php -f composer.phar install --no-dev -o
-RUN pwd && ls
 
 FROM node:9.5.0 as js-builder
 WORKDIR /app
@@ -19,7 +18,7 @@ RUN ./node_modules/grunt-cli/bin/grunt
 
 FROM weinstein/webserver:latest
 COPY . /var/www
-COPY --from=php-builder /var/www/vendor /var/www/vendor
+COPY --from=php-builder /var/www/public/vendor /var/www/vendor
 COPY --from=js-builder /app/public/css/*.css /var/www/public/css/
 COPY --from=js-builder /app/public/js /var/www/public/js
 USER root
