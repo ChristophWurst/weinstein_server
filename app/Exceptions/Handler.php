@@ -34,7 +34,7 @@ class Handler extends ExceptionHandler {
 	 * @return void
 	 */
 	public function report(Exception $e) {
-		if ($this->shouldReport($e)) {
+		if (app()->bound('sentry') && $this->shouldReport($e)) {
 			app('sentry')->setRelease(config('app.version', 'unknown'));
 			if (app('auth')->check()) {
 				app('sentry')->set_user_data(app('auth')->user()->username);
