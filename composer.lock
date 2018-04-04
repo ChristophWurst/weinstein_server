@@ -3611,16 +3611,16 @@
         },
         {
             "name": "symfony/css-selector",
-            "version": "v4.0.6",
+            "version": "v4.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/css-selector.git",
-                "reference": "c69f1e93aa898fd9fec627ebef467188151c8dc2"
+                "reference": "03f965583147957f1ecbad7ea1c9d6fd5e525ec2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/css-selector/zipball/c69f1e93aa898fd9fec627ebef467188151c8dc2",
-                "reference": "c69f1e93aa898fd9fec627ebef467188151c8dc2",
+                "url": "https://api.github.com/repos/symfony/css-selector/zipball/03f965583147957f1ecbad7ea1c9d6fd5e525ec2",
+                "reference": "03f965583147957f1ecbad7ea1c9d6fd5e525ec2",
                 "shasum": ""
             },
             "require": {
@@ -3660,7 +3660,7 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "https://symfony.com",
-            "time": "2018-02-03T14:58:37+00:00"
+            "time": "2018-03-19T22:35:49+00:00"
         },
         {
             "name": "symfony/dom-crawler",
