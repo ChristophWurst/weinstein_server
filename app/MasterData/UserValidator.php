@@ -54,8 +54,8 @@ class UserValidator extends Validator {
 	 */
 	protected function getCreateRules(array $data) {
 		return array(
-			'username' => 'Required|Min:5|Max:80|alpha_dash|Unique:wuser',
-			'password' => 'Min:4|Max:80'
+			'username' => 'Required|Min:4|Max:80|alpha_dash|Unique:wuser',
+			'password' => 'Min:5|Max:80'
 		);
 	}
 
@@ -68,8 +68,8 @@ class UserValidator extends Validator {
 	protected function getUpdateRules(array $data, Model $model = null) {
 		$usernameUnchanged = isset($data['username']) && $model->username === $data['username'];
 		return array(
-			'username' => 'Required|Min:5|Max:80|alpha_dash' . ($usernameUnchanged ? '' : '|Unique:wuser'),
-			'password' => 'Min:4|Max:80'
+			'username' => 'Required|Min:4|Max:80|alpha_dash' . ($usernameUnchanged ? '' : '|Unique:wuser'),
+			'password' => 'Min:5|Max:80'
 		);
 	}
 
