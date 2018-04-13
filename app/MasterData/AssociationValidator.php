@@ -55,7 +55,7 @@ class AssociationValidator extends Validator {
 	protected function getCreateRules(array $data) {
 		return array(
 			'id' => 'Required|integer|min:1|unique:association,id',
-			'name' => 'Required|between:4,80|unique:association,name',
+			'name' => 'Required|between:3,80|unique:association,name',
 			'wuser_username' => 'Exists:wuser,username',
 		);
 	}
