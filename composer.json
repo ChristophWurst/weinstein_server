@@ -16,7 +16,7 @@
 		"fzaninotto/faker": "~1.4",
 		"phpoffice/phpexcel": "^1.8",
 		"predis/predis": "^1.1",
-		"sentry/sentry-laravel": "^0.8.0"
+		"sentry/sentry-laravel": "^0.10.0"
 	},
 	"require-dev": {
 		"mockery/mockery": "0.9.*",
