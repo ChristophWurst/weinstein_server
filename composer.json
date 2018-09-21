@@ -21,7 +21,7 @@
 	"require-dev": {
 		"mockery/mockery": "0.9.*",
 		"phpspec/phpspec": "~2.1",
-		"phpunit/phpunit": "~5.0",
+		"phpunit/phpunit": "~7.3",
 		"symfony/css-selector": "4.1.*",
 		"symfony/dom-crawler": "4.1.*",
 		"way/laravel-test-helpers": "dev-master"
