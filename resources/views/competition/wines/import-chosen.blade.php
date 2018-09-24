@@ -5,7 +5,8 @@
 <p>
     Hier kann eine Excel-Datei mit allen Dateinummern hochgeladen werden, die ausgeschenkt
     werden sollen. Alle Weine, die nicht in dieser hochgeladenen Datei enthalten sind,
-    werden nicht zum Ausschank ausgewählt!
+    werden nicht zum Ausschank ausgewählt!<br>
+    <i>KdB</i> und <i>SoSi</i> werden immer ausgeschenkt. <i>Ex</i>-Weine dürfen nicht ausgeschenkt werden.
 </p>
 <div class="alert alert-info" role="alert">
     <button type="button" class="close" data-dismiss="alert">

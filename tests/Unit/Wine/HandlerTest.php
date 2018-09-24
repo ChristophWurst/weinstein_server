@@ -531,33 +531,6 @@ class HandlerTest extends TestCase {
 		// TODO
 	}
 
-	public function testUpdateChosen() {
-		$wine = Mockery::mock(Wine::class);
-		$data = [
-			'value' => true,
-		];
-
-		$this->wineRepository->shouldReceive('update')
-			->once()
-			->with($wine, [
-				'chosen' => true,
-		]);
-
-		$this->handler->updateChosen($wine, $data);
-	}
-
-	public function testUpdateChosenValidationException() {
-		$wine = Mockery::mock(Wine::class);
-		$data = [
-			'value' => 'hello',
-		];
-
-		$this->wineRepository->shouldNotReceive('update');
-
-		$this->setExpectedException(ValidationException::class);
-		$this->handler->updateChosen($wine, $data);
-	}
-
 	public function testImportChosen() {
 		// TODO
 	}

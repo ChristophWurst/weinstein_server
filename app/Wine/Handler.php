@@ -32,6 +32,7 @@ use App\MasterData\User;
 use App\Validation\WineValidatorFactory;
 use App\Wine;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -128,6 +129,16 @@ class Handler implements WineHandler {
 			if ($competitionState->is(CompetitionState::STATE_ENROLLMENT) && !is_null($wine->nr) && !Auth::user()->isAdmin()) {
 				throw new WineLockedException();
 			}
+		}
+		if ($competitionState->is(CompetitionState::STATE_CHOOSE) &&
+			($wine->kdb || $wine->sosi) &&
+			isset($data['chosen']) && !$data['chosen']) {
+			throw new AuthorizationException();
+		}
+		if ($competitionState->is(CompetitionState::STATE_CHOOSE) &&
+			$wine->excluded &&
+			isset($data['chosen']) && $data['chosen']) {
+			throw new AuthorizationException();
 		}
 
 		$this->wineRepository->update($wine, $data);
@@ -329,17 +340,16 @@ class Handler implements WineHandler {
 
 	/**
 	 * @param Wine $wine
-	 * @param array $data
+	 * @param array $chosen
 	 * @throws ValidationException
 	 */
-	public function updateChosen(Wine $wine, array $data) {
-		$validator = Validator::make($data, ['value' => 'required|boolean']);
-		if ($validator->fails()) {
-			throw new ValidationException($validator->messages());
+	private function updateChosen(Wine $wine, bool $chosen) {
+		if (($wine->kdb || $wine->sosi) && !$chosen) {
+			throw new AuthorizationException();
 		}
 
 		$this->wineRepository->update($wine, [
-			'chosen' => $data['value'],
+			'chosen' => $chosen,
 		]);
 	}
 
@@ -365,6 +375,7 @@ class Handler implements WineHandler {
 		DB::beginTransaction();
 		try {
 			$competition->wines()->update(array('chosen' => false));
+			$competition->wines()->where('kdb', 1)->orWhere('sosi', 1)->update(array('chosen' => true));
 			$rowCount = 1;
 
 			foreach ($sheet->toArray() as $row) {
@@ -377,9 +388,15 @@ class Handler implements WineHandler {
 					Log::error('invalid wine id while importing chosen');
 					throw new ValidationException(new MessageBag(array('Wein ' . $row[0] . ' nicht vorhanden')));
 				}
-				$this->updateChosen($wine, array(
-					'value' => true,
-				));
+				if ($wine->excluded) {
+					Log::error('ex wine while importing chosen');
+					throw new ValidationException(new MessageBag(array('Wein ' . $row[0] . ' darf nicht ausgeschenkt werden (Ex)')));
+				}
+				try {
+					$this->updateChosen($wine, true);
+				} catch (AuthorizationException $ex) {
+					throw new ValidationException(new MessageBag(array('Änderung an Wein ' . $row[0] . ' nicht zulässig')));
+				}
 				$rowCount++;
 			}
 		} catch (ValidationException $ve) {

@@ -7,6 +7,7 @@ use App\Exceptions\InvalidCompetitionStateException;
 use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
 use App\Wine;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -58,6 +59,8 @@ class WineApiController extends BaseController {
 			return $this->wineHandler->update($wines, $data);
 		} catch (ValidationException $ex) {
 			return response()->json(['errors' => $ex->getErrors()], 412);
+		} catch (AuthorizationException $ex) {
+			return response()->json(['error' => "Änderung nicht erlaubt"], 400);
 		} catch (InvalidCompetitionStateException $ex) {
 			return response()->json(['error' => "Diese Änderung ist in diesem Abschnitt der Verkostung nicht erlaubt."], 400);
 		}
