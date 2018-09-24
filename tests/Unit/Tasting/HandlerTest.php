@@ -266,9 +266,9 @@ class HandlerTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->with(CompetitionState::STATE_ENROLLMENT)
-			->andReturn(false);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_TASTINGNUMBERS1);
 
 		$result = $this->handler->createTastingNumber($data, $competition);
 
@@ -303,9 +303,9 @@ class HandlerTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->with(CompetitionState::STATE_ENROLLMENT)
-			->andReturn(true);
+		$competitionState->->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_ENROLLMENT);
 		$competition->shouldReceive('setAttribute')
 			->with('competition_state_id', CompetitionState::STATE_TASTINGNUMBERS1)
 			->once();

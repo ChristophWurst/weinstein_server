@@ -64,9 +64,9 @@ class WineAbilitiesTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->with(CompetitionState::STATE_ENROLLMENT)
-			->andReturn(true);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_ENROLLMENT);
 
 		$allowed = $this->abilities->create($user, $competition);
 
@@ -80,9 +80,9 @@ class WineAbilitiesTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->with(CompetitionState::STATE_ENROLLMENT)
-			->andReturn(false);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 
 		$allowed = $this->abilities->create($user, $competition);
 

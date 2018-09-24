@@ -139,7 +139,7 @@ class CatalogueHandler implements TastingCatalogueHandler {
 	 * @throws InvalidCompetitionStateException
 	 */
 	public function importCatalogueNumbers(UploadedFile $file, Competition $competition): int {
-		if (!$competition->competitionState->is(CompetitionState::STATE_CATALOGUE_NUMBERS)) {
+		if (!$competition->competitionState->id === CompetitionState::STATE_CATALOGUE_NUMBERS) {
 			throw new InvalidCompetitionStateException();
 		}
 

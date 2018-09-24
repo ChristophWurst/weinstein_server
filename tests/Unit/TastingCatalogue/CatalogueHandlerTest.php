@@ -83,9 +83,9 @@ class CatalogueHandlerTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->with(CompetitionState::STATE_CATALOGUE_NUMBERS)
-			->andReturn(true);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 		$this->db->shouldReceive('connection')
 			->once()
 			->andReturn($dbConnection);
@@ -121,9 +121,9 @@ class CatalogueHandlerTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->with(CompetitionState::STATE_CATALOGUE_NUMBERS)
-			->andReturn(false);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_ENROLLMENT);
 		$this->setExpectedException(InvalidCompetitionStateException::class);
 
 		$this->handler->importCatalogueNumbers($file, $competition);
@@ -139,9 +139,9 @@ class CatalogueHandlerTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->with(CompetitionState::STATE_CATALOGUE_NUMBERS)
-			->andReturn(true);
+		$competitionState->->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 		$this->db->shouldReceive('connection')
 			->once()
 			->andReturn($dbConnection);
@@ -181,9 +181,9 @@ class CatalogueHandlerTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->with(CompetitionState::STATE_CATALOGUE_NUMBERS)
-			->andReturn(true);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 		$dbConnection = Mockery::mock(Connection::class);
 		$this->db->shouldReceive('connection')
 			->once()
@@ -229,9 +229,9 @@ class CatalogueHandlerTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->with(CompetitionState::STATE_CATALOGUE_NUMBERS)
-			->andReturn(true);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 		$dbConnection = Mockery::mock(Connection::class);
 		$this->db->shouldReceive('connection')
 			->once()
@@ -283,9 +283,9 @@ class CatalogueHandlerTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->with(CompetitionState::STATE_CATALOGUE_NUMBERS)
-			->andReturn(true);
+		$competitionState->->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 		$dbConnection = Mockery::mock(Connection::class);
 		$this->db->shouldReceive('connection')
 			->once()
@@ -329,9 +329,9 @@ class CatalogueHandlerTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->with(CompetitionState::STATE_CATALOGUE_NUMBERS)
-			->andReturn(true);
+		$competitionState->->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 		$dbConnection = Mockery::mock(Connection::class);
 		$this->db->shouldReceive('connection')
 			->once()
@@ -391,9 +391,9 @@ class CatalogueHandlerTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->with(CompetitionState::STATE_CATALOGUE_NUMBERS)
-			->andReturn(true);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 		$dbConnection = Mockery::mock(Connection::class);
 		$this->db->shouldReceive('connection')
 			->once()
@@ -434,9 +434,9 @@ class CatalogueHandlerTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->with(CompetitionState::STATE_CATALOGUE_NUMBERS)
-			->andReturn(true);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 		$dbConnection = Mockery::mock(Connection::class);
 		$this->db->shouldReceive('connection')
 			->once()

@@ -169,7 +169,7 @@ class Handler implements TastingHandler {
 		}
 
 		$tastingNumber = $this->tastingNumberRepository->create($data, $wine, $tastingStage);
-		if ($competition->competitionState->is(CompetitionState::STATE_ENROLLMENT)) {
+		if ($competition->competitionState->id === CompetitionState::STATE_ENROLLMENT) {
 			$competition->competition_state_id = CompetitionState::STATE_TASTINGNUMBERS1;
 			$this->competitionRepository->update($competition);
 		}

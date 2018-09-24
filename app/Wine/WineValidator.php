@@ -83,7 +83,7 @@ class WineValidator extends Validator {
 
 	private function requiresApprovalNr() {
 		return !$this->competition->administrates($this->user)
-			&& $this->competition->competitionState->is(CompetitionState::STATE_ENROLLMENT);
+			&& $this->competition->competitionState->id === CompetitionState::STATE_ENROLLMENT;
 	}
 
 	/**

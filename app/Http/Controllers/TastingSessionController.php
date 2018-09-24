@@ -83,7 +83,7 @@ class TastingSessionController extends BaseController {
 
 	private function checkCompetitionState(Competition $competition) {
 		// TODO: might make sense to move to BL layer
-		if (!$competition->competitionState->is(CompetitionState::STATE_TASTING1) && !$competition->competitionState->is(CompetitionState::STATE_TASTING2)) {
+		if (!$competition->competitionState->id === CompetitionState::STATE_TASTING1 && !$competition->competitionState->id === CompetitionState::STATE_TASTING2) {
 			throw new IllegalTastingStageException();
 		}
 	}

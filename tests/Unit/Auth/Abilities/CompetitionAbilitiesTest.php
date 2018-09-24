@@ -190,10 +190,9 @@ class CompetitionAbilitiesTest extends TestCase {
 			->once()
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->once()
-			->with(CompetitionState::STATE_KDB)
-			->andReturn(false);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 
 		$this->assertFalse($this->abilities->completeKdb($user, $competition));
 	}
@@ -210,10 +209,9 @@ class CompetitionAbilitiesTest extends TestCase {
 			->once()
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->once()
-			->with(CompetitionState::STATE_KDB)
-			->andReturn(true);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_KDB);
 
 		$this->assertTrue($this->abilities->completeKdb($user, $competition));
 	}
@@ -241,10 +239,9 @@ class CompetitionAbilitiesTest extends TestCase {
 			->once()
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->once()
-			->with(CompetitionState::STATE_EXCLUDE)
-			->andReturn(false);
+		$competitionState->->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_KDB);
 
 		$this->assertFalse($this->abilities->completeExcluded($user, $competition));
 	}
@@ -261,10 +258,9 @@ class CompetitionAbilitiesTest extends TestCase {
 			->once()
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->once()
-			->with(CompetitionState::STATE_EXCLUDE)
-			->andReturn(true);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_EXCLUDE);
 
 		$this->assertTrue($this->abilities->completeExcluded($user, $competition));
 	}
@@ -292,10 +288,9 @@ class CompetitionAbilitiesTest extends TestCase {
 			->once()
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->once()
-			->with(CompetitionState::STATE_SOSI)
-			->andReturn(false);
+		$competitionState->->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 
 		$this->assertFalse($this->abilities->completeSosi($user, $competition));
 	}
@@ -312,10 +307,9 @@ class CompetitionAbilitiesTest extends TestCase {
 			->once()
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->once()
-			->with(CompetitionState::STATE_SOSI)
-			->andReturn(true);
+		$competitionState->->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_SOSI);
 
 		$this->assertTrue($this->abilities->completeSosi($user, $competition));
 	}
@@ -343,10 +337,9 @@ class CompetitionAbilitiesTest extends TestCase {
 			->once()
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->once()
-			->with(CompetitionState::STATE_CHOOSE)
-			->andReturn(false);
+		$competitionState->->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 
 		$this->assertFalse($this->abilities->completeChoosing($user, $competition));
 	}
@@ -363,10 +356,9 @@ class CompetitionAbilitiesTest extends TestCase {
 			->once()
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->once()
-			->with(CompetitionState::STATE_CHOOSE)
-			->andReturn(true);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CHOOSE);
 
 		$this->assertTrue($this->abilities->completeChoosing($user, $competition));
 	}

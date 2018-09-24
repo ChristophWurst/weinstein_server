@@ -45,7 +45,7 @@ class WineAbilities {
 	 * @return boolean
 	 */
 	public function create(User $user, Competition $competition) {
-		return $competition->competitionState->is(CompetitionState::STATE_ENROLLMENT);
+		return $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT;
 	}
 
 	/**
