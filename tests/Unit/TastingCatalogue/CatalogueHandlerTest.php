@@ -139,7 +139,7 @@ class CatalogueHandlerTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->->shouldReceive('getAttribute')
+		$competitionState->shouldReceive('getAttribute')
 			->with('id')
 			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 		$this->db->shouldReceive('connection')
@@ -283,7 +283,7 @@ class CatalogueHandlerTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->->shouldReceive('getAttribute')
+		$competitionState->shouldReceive('getAttribute')
 			->with('id')
 			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 		$dbConnection = Mockery::mock(Connection::class);
@@ -329,7 +329,7 @@ class CatalogueHandlerTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->->shouldReceive('getAttribute')
+		$competitionState->shouldReceive('getAttribute')
 			->with('id')
 			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 		$dbConnection = Mockery::mock(Connection::class);

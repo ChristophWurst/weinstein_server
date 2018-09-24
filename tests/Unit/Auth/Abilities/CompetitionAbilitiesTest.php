@@ -239,7 +239,7 @@ class CompetitionAbilitiesTest extends TestCase {
 			->once()
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->->shouldReceive('getAttribute')
+		$competitionState->shouldReceive('getAttribute')
 			->with('id')
 			->andReturn(CompetitionState::STATE_KDB);
 
@@ -288,7 +288,7 @@ class CompetitionAbilitiesTest extends TestCase {
 			->once()
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->->shouldReceive('getAttribute')
+		$competitionState->shouldReceive('getAttribute')
 			->with('id')
 			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 
@@ -307,7 +307,7 @@ class CompetitionAbilitiesTest extends TestCase {
 			->once()
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->->shouldReceive('getAttribute')
+		$competitionState->shouldReceive('getAttribute')
 			->with('id')
 			->andReturn(CompetitionState::STATE_SOSI);
 
@@ -337,7 +337,7 @@ class CompetitionAbilitiesTest extends TestCase {
 			->once()
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->->shouldReceive('getAttribute')
+		$competitionState->shouldReceive('getAttribute')
 			->with('id')
 			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 

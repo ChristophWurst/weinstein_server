@@ -303,7 +303,7 @@ class HandlerTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->->shouldReceive('getAttribute')
+		$competitionState->shouldReceive('getAttribute')
 			->with('id')
 			->andReturn(CompetitionState::STATE_ENROLLMENT);
 		$competition->shouldReceive('setAttribute')
