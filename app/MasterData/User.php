@@ -24,6 +24,7 @@ namespace App\MasterData;
 use App\Support\Activity\Log;
 use App\Tasting\TastingSession;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
@@ -34,18 +35,19 @@ use Illuminate\Support\Facades\Hash;
  * @property bool $admin
  * @property string $remember_token
  */
-class User extends Authenticatable {
+class User extends Authenticatable
+{
 
 	/**
 	 * table name
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $table = 'wuser';
 
 	/**
 	 * primary key of table user
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $primaryKey = 'username';
@@ -65,7 +67,7 @@ class User extends Authenticatable {
 
 	/**
 	 * attributes allowed for mass assignment
-	 * 
+	 *
 	 * @var array of string
 	 */
 	protected $fillable = [
@@ -90,7 +92,8 @@ class User extends Authenticatable {
 		'admin' => 'boolean',
 	];
 
-	public function administrates(User $user) {
+	public function administrates(User $user)
+	{
 		if ($user->isAdmin()) {
 			return true;
 		}
@@ -99,65 +102,72 @@ class User extends Authenticatable {
 
 	/**
 	 * Password mutator
-	 * 
+	 *
 	 * @param string $password
 	 */
-	public function setPasswordAttribute($password) {
+	public function setPasswordAttribute($password)
+	{
 		$this->attributes['password'] = Hash::make($password);
 	}
 
 	/**
 	 * 1 user : n activity logs
-	 * 
+	 *
 	 * @return Relation
 	 */
-	public function logs() {
+	public function logs()
+	{
 		return $this->hasMany(Log::class, 'wuser_username', 'username');
 	}
 
 	/**
 	 * 1 user : n applicants
-	 * 
+	 *
 	 * @return Relation
 	 */
-	public function applicants() {
+	public function applicants()
+	{
 		return $this->hasMany(Applicant::class, 'wuser_username', 'username');
 	}
 
 	/**
 	 * 1 user : n associations : m applicants
 	 * => 1 user : n*m applicants
-	 * 
+	 *
 	 * @return Relation
 	 */
-	public function associationApplicants() {
+	public function associationApplicants()
+	{
 		return $this->hasManyThrough(Applicant::class, Association::class, 'wuser_username');
 	}
 
 	/**
 	 * 1 user : n associations relation
-	 * 
+	 *
 	 * @return Relation
 	 */
-	public function associations() {
+	public function associations()
+	{
 		return $this->hasMany(Association::class, 'wuser_username', 'username');
 	}
 
 	/**
 	 * 1 user : n competitions
-	 * 
+	 *
 	 * @return Relation
 	 */
-	public function competitions() {
+	public function competitions()
+	{
 		return $this->hasMany(Competition::class, 'wuser_username', 'username');
 	}
 
 	/**
 	 * 1 user : n tasting sessions
-	 * 
+	 *
 	 * @return Relation
 	 */
-	public function tastingsessions() {
+	public function tastingsessions()
+	{
 		return $this->hasMany(TastingSession::class, 'wuser_username', 'username');
 	}
 
@@ -166,7 +176,8 @@ class User extends Authenticatable {
 	 *
 	 * @return mixed
 	 */
-	public function getAuthIdentifier() {
+	public function getAuthIdentifier()
+	{
 		return $this->getKey();
 	}
 
@@ -175,34 +186,38 @@ class User extends Authenticatable {
 	 *
 	 * @return string
 	 */
-	public function getAuthPassword() {
+	public function getAuthPassword()
+	{
 		return $this->password;
 	}
 
 	/**
 	 * Get token value
-	 * 
+	 *
 	 * @return string
 	 */
-	public function getRememberToken() {
+	public function getRememberToken()
+	{
 		return $this->remember_token;
 	}
 
 	/**
 	 * Set token value
-	 * 
+	 *
 	 * @param string $value
 	 */
-	public function setRememberToken($value) {
+	public function setRememberToken($value)
+	{
 		$this->remember_token = $value;
 	}
 
 	/**
 	 * Get token attribute name
-	 * 
+	 *
 	 * @return string
 	 */
-	public function getRememberTokenName() {
+	public function getRememberTokenName()
+	{
 		return 'remember_token';
 	}
 
@@ -211,22 +226,25 @@ class User extends Authenticatable {
 	 *
 	 * @return string
 	 */
-	public function getReminderEmail() {
+	public function getReminderEmail()
+	{
 		return $this->email;
 	}
 
-	public function getEmailForPasswordReset() {
+	public function getEmailForPasswordReset()
+	{
 		throw new Exception("method not implemented");
 	}
 
 	/**
 	 * Save way to determine if a user is admin
-	 * 
+	 *
 	 * Catches null values (result in non-admin user state)
-	 * 
+	 *
 	 * @return boolean
 	 */
-	public function isAdmin() {
+	public function isAdmin()
+	{
 		return $this->admin === true;
 	}
 
@@ -236,8 +254,9 @@ class User extends Authenticatable {
 	 * @param User $other
 	 * @return boolean
 	 */
-	public function is(User $other) {
-		return $this->username === $other->username;
+	public function is(Model $other)
+	{
+		return $other instanceof User && $this->username === $other->username;
 	}
 
 }

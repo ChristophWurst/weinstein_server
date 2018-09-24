@@ -10,7 +10,7 @@
 		"php": ">=7.1.0",
 		"ext-zip": "1.*",
 		"ext-zlib": "*",
-		"laravel/framework": "5.2.*",
+		"laravel/framework": "5.3.*",
 		"itbz/fpdf": "1.7.3",
 		"laravelcollective/html": "^5.2",
 		"fzaninotto/faker": "~1.4",
@@ -22,8 +22,8 @@
 		"mockery/mockery": "0.9.*",
 		"phpspec/phpspec": "~2.1",
 		"phpunit/phpunit": "~5.0",
-		"symfony/css-selector": "4.1.*",
-		"symfony/dom-crawler": "4.1.*",
+		"symfony/css-selector": "3.1.*",
+		"symfony/dom-crawler": "3.1.*",
 		"way/laravel-test-helpers": "dev-master"
 	},
 	"autoload": {
