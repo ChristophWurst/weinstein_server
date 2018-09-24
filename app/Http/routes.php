@@ -274,10 +274,6 @@ Route::group(array('middleware' => 'auth'), function() {
 			'as' => 'enrollment.wines/update-sosi',
 			'uses' => 'WineController@updateSosi',
 		));
-		Route::post('update-chosen', array(
-			'as' => 'enrollment.wines/update-chosen',
-			'uses' => 'WineController@updateChosen',
-		));
 	});
 
 	/*

@@ -95,7 +95,7 @@ class HandlerTest extends TestCase {
 			->once()
 			->andReturn(true);
 		$competitionState->shouldReceive('is')
-			->never()
+			->times(2)
 			->andReturn(false);
 		$wine->shouldReceive('fill')
 			->with($data);
@@ -447,6 +447,10 @@ class HandlerTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
+		$competitionState->shouldReceive('is')
+			->times(2)
+			->with(CompetitionState::STATE_CHOOSE)
+			->andReturn(false);
 		$wine->shouldReceive('fill')
 			->with($data);
 		$wine->shouldReceive('isDirty')
@@ -529,33 +533,6 @@ class HandlerTest extends TestCase {
 
 	public function testImportSosi() {
 		// TODO
-	}
-
-	public function testUpdateChosen() {
-		$wine = Mockery::mock(Wine::class);
-		$data = [
-			'value' => true,
-		];
-
-		$this->wineRepository->shouldReceive('update')
-			->once()
-			->with($wine, [
-				'chosen' => true,
-		]);
-
-		$this->handler->updateChosen($wine, $data);
-	}
-
-	public function testUpdateChosenValidationException() {
-		$wine = Mockery::mock(Wine::class);
-		$data = [
-			'value' => 'hello',
-		];
-
-		$this->wineRepository->shouldNotReceive('update');
-
-		$this->setExpectedException(ValidationException::class);
-		$this->handler->updateChosen($wine, $data);
 	}
 
 	public function testImportChosen() {

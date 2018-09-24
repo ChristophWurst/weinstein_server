@@ -527,26 +527,6 @@ class WineController extends BaseController {
 	}
 
 	/**
-	 * 
-	 * @param Wine $wine
-	 */
-	public function updateChosen(Wine $wine) {
-		$this->authorize('update-wine', $wine);
-
-		try {
-			$this->wineHandler->updateChosen($wine, Input::only('value'));
-		} catch (ValidationException $ve) {
-			return Response::json([
-					'error' => 'Fehler beim setzen von SoSi',
-					'wines' => Wine::chosen()->pluck('id')->all(),
-			]);
-		}
-		return Response::json([
-				'wines' => Wine::chosen()->pluck('id')->all(),
-		]);
-	}
-
-	/**
 	 * Show import form
 	 * 
 	 * @param Competition $competition
