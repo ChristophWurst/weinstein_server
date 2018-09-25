@@ -101,16 +101,16 @@ class Handler implements WineHandler {
 		$validator->validateUpdate();
 
 		$competitionState = $wine->competition->competitionState;
-		if (isset($data['kdb']) && $wine->kdb !== $data['kdb'] && !$competitionState->is(CompetitionState::STATE_KDB)) {
+		if (isset($data['kdb']) && $wine->kdb !== $data['kdb'] && $competitionState->id !== CompetitionState::STATE_KDB) {
 			throw new InvalidCompetitionStateException();
 		}
-		if (isset($data['sosi']) && $wine->sosi !== $data['sosi'] && !$competitionState->is(CompetitionState::STATE_SOSI)) {
+		if (isset($data['sosi']) && $wine->sosi !== $data['sosi'] && $competitionState->id !== CompetitionState::STATE_SOSI) {
 			throw new InvalidCompetitionStateException();
 		}
-		if (isset($data['chosen']) && $wine->chosen !== $data['chosen'] && !$competitionState->is(CompetitionState::STATE_CHOOSE)) {
+		if (isset($data['chosen']) && $wine->chosen !== $data['chosen'] && $competitionState->id !== CompetitionState::STATE_CHOOSE) {
 			throw new InvalidCompetitionStateException();
 		}
-		if (isset($data['excluded']) && $wine->excluded !== $data['excluded'] && !$competitionState->is(CompetitionState::STATE_EXCLUDE)) {
+		if (isset($data['excluded']) && $wine->excluded !== $data['excluded'] && $competitionState->id !== CompetitionState::STATE_EXCLUDE) {
 			throw new InvalidCompetitionStateException();
 		}
 
@@ -123,19 +123,19 @@ class Handler implements WineHandler {
 		]);
 		if ($wine->isDirty($enrollmentAttributes)) {
 			// These attributes may only be changed via enrollment while 'nr' is not set or by an admin
-			if (!$competitionState->is(CompetitionState::STATE_ENROLLMENT) && !Auth::user()->isAdmin()) {
+			if ($competitionState->id !== CompetitionState::STATE_ENROLLMENT && !Auth::user()->isAdmin()) {
 				throw new WineLockedException();
 			}
-			if ($competitionState->is(CompetitionState::STATE_ENROLLMENT) && !is_null($wine->nr) && !Auth::user()->isAdmin()) {
+			if ($competitionState->id === CompetitionState::STATE_ENROLLMENT && !is_null($wine->nr) && !Auth::user()->isAdmin()) {
 				throw new WineLockedException();
 			}
 		}
-		if ($competitionState->is(CompetitionState::STATE_CHOOSE) &&
+		if ($competitionState->id === CompetitionState::STATE_CHOOSE &&
 			($wine->kdb || $wine->sosi) &&
 			isset($data['chosen']) && !$data['chosen']) {
 			throw new AuthorizationException();
 		}
-		if ($competitionState->is(CompetitionState::STATE_CHOOSE) &&
+		if ($competitionState->id === CompetitionState::STATE_CHOOSE &&
 			$wine->excluded &&
 			isset($data['chosen']) && $data['chosen']) {
 			throw new AuthorizationException();

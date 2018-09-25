@@ -72,7 +72,7 @@ class ApplicantValidator extends Validator {
 			'mobile' => 'max:20',
 			'email' => 'email|max:50',
 			'web' => 'max:50',
-			'wuser_username' => 'Exists:wuser,username',
+			'wuser_username' => 'nullable|eists:wuser,username',
 		);
 	}
 
@@ -100,7 +100,7 @@ class ApplicantValidator extends Validator {
 			'mobile' => 'max:20',
 			'email' => 'email|max:50',
 			'web' => 'max:50',
-			'wuser_username' => 'Exists:wuser,username',
+			'wuser_username' => 'nullable|exists:wuser,username',
 		));
 	}
 

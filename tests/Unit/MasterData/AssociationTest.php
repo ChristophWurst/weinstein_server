@@ -27,8 +27,6 @@ use Test\TestCase;
 
 class AssociationTest extends TestCase {
 
-	use \Way\Tests\ModelHelpers;
-
 	public function testNoAdmin() {
 		$user = new User(array(
 			'username' => 'test123',
@@ -61,14 +59,6 @@ class AssociationTest extends TestCase {
 		));
 
 		$this->assertSame(true, $association->administrates($user));
-	}
-
-	public function testBelongsToUser() {
-		$this->assertBelongsTo('user', Association::class);
-	}
-
-	public function testHasManyApplicants() {
-		$this->assertHasMany('applicants', Association::class);
 	}
 
 }

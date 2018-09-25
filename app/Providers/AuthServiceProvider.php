@@ -13,8 +13,8 @@ use App\Auth\Abilities\TastingSessionAbilities;
 use App\Auth\Abilities\UserAbilities;
 use App\Auth\Abilities\WineAbilities;
 use App\MasterData\User;
-use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider {
 
@@ -28,113 +28,112 @@ class AuthServiceProvider extends ServiceProvider {
 	/**
 	 * Register any application authentication / authorization services.
 	 *
-	 * @param  Gate  $gate
 	 * @return void
 	 */
-	public function boot(Gate $gate) {
-		$this->registerPolicies($gate);
+	public function boot() {
+		$this->registerPolicies();
 
-		$gate->before(function (User $user) {
+		Gate::before(function (User $user) {
 			return $user->isAdmin() ? true : null;
 		});
 
 		/**
 		 * ActivityLog
 		 */
-		$gate->define('view-activitylog', ActivityLogAbilities::class . '@view');
+		Gate::define('view-activitylog', ActivityLogAbilities::class . '@view');
 
 		/**
 		 * Applicant
 		 */
-		$gate->define('show-applicant', ApplicantAbilities::class . '@show');
-		$gate->define('create-applicant', ApplicantAbilities::class . '@create');
-		$gate->define('import-applicant', ApplicantAbilities::class . '@import');
-		$gate->define('edit-applicant', ApplicantAbilities::class . '@edit');
+		Gate::define('show-applicant', ApplicantAbilities::class . '@show');
+		Gate::define('create-applicant', ApplicantAbilities::class . '@create');
+		Gate::define('import-applicant', ApplicantAbilities::class . '@import');
+		Gate::define('edit-applicant', ApplicantAbilities::class . '@edit');
 
 		/**
 		 * Association
 		 */
-		$gate->define('show-association', AssociationAbilities::class . '@show');
-		$gate->define('create-association', AssociationAbilities::class . '@create');
-		$gate->define('edit-association', AssociationAbilities::class . '@edit');
+		Gate::define('show-association', AssociationAbilities::class . '@show');
+		Gate::define('create-association', AssociationAbilities::class . '@create');
+		Gate::define('edit-association', AssociationAbilities::class . '@edit');
 
 		/**
 		 * Catalogue
 		 */
-		$gate->define('create-catalogue', CatalogueAbilities::class . '@create');
+		Gate::define('create-catalogue', CatalogueAbilities::class . '@create');
 
 		/**
 		 * Competition
 		 */
-		$gate->define('show-competition', CompetitionAbilities::class . '@show');
-		$gate->define('reset-competition', CompetitionAbilities::class . '@reset');
-		$gate->define('complete-competition-tasting-numbers', CompetitionAbilities::class . '@completeTastingNumbers');
-		$gate->define('complete-competition-tasting', CompetitionAbilities::class . '@completeTasting');
-		$gate->define('complete-competition-tasting-kdb', CompetitionAbilities::class . '@completeTastingKdb');
-		$gate->define('complete-competition-tasting-excluded', CompetitionAbilities::class . '@completeTastingExcluded');
-		$gate->define('complete-competition-tasting-sosi', CompetitionAbilities::class . '@completeTastingSosi');
-		$gate->define('complete-competition-tasting-choosing', CompetitionAbilities::class . '@completeTastingChoosing');
-		$gate->define('complete-competition-catalogue-numbers', CompetitionAbilities::class . '@completeCatalogueNumbers');
+		Gate::define('show-competition', CompetitionAbilities::class . '@show');
+		Gate::define('reset-competition', CompetitionAbilities::class . '@reset');
+		Gate::define('complete-competition-tasting-numbers', CompetitionAbilities::class . '@completeTastingNumbers');
+		Gate::define('complete-competition-tasting', CompetitionAbilities::class . '@completeTasting');
+		Gate::define('complete-competition-tasting-kdb', CompetitionAbilities::class . '@completeTastingKdb');
+		Gate::define('complete-competition-tasting-excluded', CompetitionAbilities::class . '@completeTastingExcluded');
+		Gate::define('complete-competition-tasting-sosi', CompetitionAbilities::class . '@completeTastingSosi');
+		Gate::define('complete-competition-tasting-choosing', CompetitionAbilities::class . '@completeTastingChoosing');
+		Gate::define('complete-competition-catalogue-numbers', CompetitionAbilities::class . '@completeCatalogueNumbers');
 
 		/**
 		 * Catalogue Numbers
 		 */
-		$gate->define('import-catalogue-numbers', CatalogueNumberAbilities::class . '@import');
+		Gate::define('import-catalogue-numbers', CatalogueNumberAbilities::class . '@import');
 		/**
 		 * Evaluation
 		 */
-		$gate->define('show-evaluations', CatalogueAbilities::class . '@importNumbers');
+		Gate::define('show-evaluations', CatalogueAbilities::class . '@importNumbers');
 
 		/**
 		 * Tasting
 		 */
-		$gate->define('create-tasting', TastingAbilities::class . '@create');
-		$gate->define('edit-tasting', TastingAbilities::class . '@edit');
+		Gate::define('create-tasting', TastingAbilities::class . '@create');
+		Gate::define('edit-tasting', TastingAbilities::class . '@edit');
 
 		/**
 		 * TastingNumber
 		 */
-		$gate->define('show-tastingnumbers', TastingNumberAbilities::class . '@show');
-		$gate->define('assign-tastingnumber', TastingNumberAbilities::class . '@assign');
-		$gate->define('unassign-tastingnumber', TastingNumberAbilities::class . '@unassign');
-		$gate->define('import-tastingnumbers', TastingNumberAbilities::class . '@unsign');
-		$gate->define('translate-tastingnumber', TastingNumberAbilities::class . '@assign');
+		Gate::define('show-tastingnumbers', TastingNumberAbilities::class . '@show');
+		Gate::define('assign-tastingnumber', TastingNumberAbilities::class . '@assign');
+		Gate::define('unassign-tastingnumber', TastingNumberAbilities::class . '@unassign');
+		Gate::define('import-tastingnumbers', TastingNumberAbilities::class . '@unsign');
+		Gate::define('translate-tastingnumber', TastingNumberAbilities::class . '@assign');
 
 		/**
 		 * TastingSession
 		 */
-		$gate->define('show-tastingsessions', TastingSessionAbilities::class . '@showAll');
-		$gate->define('create-tastingsession', TastingSessionAbilities::class . '@create');
-		$gate->define('show-tastingsession', TastingSessionAbilities::class . '@show');
-		$gate->define('export-tastingsession-result', TastingSessionAbilities::class . '@exportResult');
-		$gate->define('edit-tastingsession', TastingSessionAbilities::class . '@edit');
-		$gate->define('list-tastingsession-tasters', TastingSessionAbilities::class . '@tasters');
-		$gate->define('add-tastingsession-taster', TastingSessionAbilities::class . '@addTaster');
-		$gate->define('edit-tastingsession-taster', TastingSessionAbilities::class . '@editTaster');
-		$gate->define('show-tastingsession-statistics', TastingSessionAbilities::class . '@showStatistics');
-		$gate->define('lock-tastingsession', TastingSessionAbilities::class . '@lock');
-		$gate->define('delete-tastingsession', TastingSessionAbilities::class . '@delete');
+		Gate::define('show-tastingsessions', TastingSessionAbilities::class . '@showAll');
+		Gate::define('create-tastingsession', TastingSessionAbilities::class . '@create');
+		Gate::define('show-tastingsession', TastingSessionAbilities::class . '@show');
+		Gate::define('export-tastingsession-result', TastingSessionAbilities::class . '@exportResult');
+		Gate::define('edit-tastingsession', TastingSessionAbilities::class . '@edit');
+		Gate::define('list-tastingsession-tasters', TastingSessionAbilities::class . '@tasters');
+		Gate::define('add-tastingsession-taster', TastingSessionAbilities::class . '@addTaster');
+		Gate::define('edit-tastingsession-taster', TastingSessionAbilities::class . '@editTaster');
+		Gate::define('show-tastingsession-statistics', TastingSessionAbilities::class . '@showStatistics');
+		Gate::define('lock-tastingsession', TastingSessionAbilities::class . '@lock');
+		Gate::define('delete-tastingsession', TastingSessionAbilities::class . '@delete');
 
 		/**
 		 * User
 		 */
-		$gate->define('create-user', UserAbilities::class . '@create');
-		$gate->define('show-user', UserAbilities::class . '@show');
-		$gate->define('edit-user', UserAbilities::class . '@edit');
-		$gate->define('delete-user', UserAbilities::class . '@delete');
+		Gate::define('create-user', UserAbilities::class . '@create');
+		Gate::define('show-user', UserAbilities::class . '@show');
+		Gate::define('edit-user', UserAbilities::class . '@edit');
+		Gate::define('delete-user', UserAbilities::class . '@delete');
 
 		/**
 		 * Wine
 		 */
-		$gate->define('show-wine', WineAbilities::class . '@show');
-		$gate->define('create-wine', WineAbilities::class . '@create');
-		$gate->define('update-wine', WineAbilities::class . '@update');
-		$gate->define('delete-wine', WineAbilities::class . '@delete');
-		$gate->define('redirect-wine', WineAbilities::class . '@redirect');
-		$gate->define('import-kdb-wines', WineAbilities::class . '@importKdb');
-		$gate->define('import-sosi-wines', WineAbilities::class . '@importSosi');
-		$gate->define('import-excluded-wines', WineAbilities::class . '@importExcluded');
-		$gate->define('print-wine-enrollment-pdf', WineAbilities::class . '@enrollmentPdf');
+		Gate::define('show-wine', WineAbilities::class . '@show');
+		Gate::define('create-wine', WineAbilities::class . '@create');
+		Gate::define('update-wine', WineAbilities::class . '@update');
+		Gate::define('delete-wine', WineAbilities::class . '@delete');
+		Gate::define('redirect-wine', WineAbilities::class . '@redirect');
+		Gate::define('import-kdb-wines', WineAbilities::class . '@importKdb');
+		Gate::define('import-sosi-wines', WineAbilities::class . '@importSosi');
+		Gate::define('import-excluded-wines', WineAbilities::class . '@importExcluded');
+		Gate::define('print-wine-enrollment-pdf', WineAbilities::class . '@enrollmentPdf');
 	}
 
 }

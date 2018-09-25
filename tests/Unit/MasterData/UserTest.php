@@ -27,8 +27,6 @@ use Test\TestCase;
 
 class UserTest extends TestCase {
 
-	use \Way\Tests\ModelHelpers;
-
 	public function testNoAdmin() {
 		$user1 = new User(array(
 			'username' => 'user1',
@@ -82,26 +80,6 @@ class UserTest extends TestCase {
 	public function testGetRememberTokenName() {
 		$user = new User();
 		$this->assertSame('remember_token', $user->getRememberTokenName());
-	}
-
-	public function testHasActivityLog() {
-		$this->assertHasMany('logs', User::class);
-	}
-
-	public function testHasApplicants() {
-		$this->assertHasMany('applicants', User::class);
-	}
-
-	public function testHasAssociations() {
-		$this->assertHasMany('associations', User::class);
-	}
-
-	public function testHasCompetitions() {
-		$this->assertHasMany('competitions', User::class);
-	}
-
-	public function testHasTastingSessions() {
-		$this->assertHasMany('tastingsessions', User::class);
 	}
 
 }

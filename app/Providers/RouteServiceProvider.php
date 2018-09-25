@@ -15,6 +15,7 @@ use App\Wine;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Routing\Router;
 use function app_path;
+use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider {
 
@@ -30,25 +31,22 @@ class RouteServiceProvider extends ServiceProvider {
 	/**
 	 * Define your route model bindings, pattern filters, etc.
 	 *
-	 * @param  Router  $router
 	 * @return void
 	 */
-	public function boot(Router $router) {
-		//
+	public function boot() {
+		parent::boot();
 
-		parent::boot($router);
-
-		$router->model('applicant', Applicant::class);
-		$router->model('competition', Competition::class);
-		$router->model('commission', Commission::class);
-		$router->model('association', Association::class);
-		$router->model('competition', Competition::class);
-		$router->model('tasters', Taster::class);
-		$router->model('tastingnumber', TastingNumber::class);
-		$router->model('tastingsession', TastingSession::class);
-		$router->model('user', User::class);
-		$router->model('wine', Wine::class);
-		$router->model('winesort', WineSort::class);
+		Route::model('applicant', Applicant::class);
+		Route::model('competition', Competition::class);
+		Route::model('commission', Commission::class);
+		Route::model('association', Association::class);
+		Route::model('competition', Competition::class);
+		Route::model('tasters', Taster::class);
+		Route::model('tastingnumber', TastingNumber::class);
+		Route::model('tastingsession', TastingSession::class);
+		Route::model('user', User::class);
+		Route::model('wine', Wine::class);
+		Route::model('winesort', WineSort::class);
 	}
 
 	/**
@@ -72,7 +70,7 @@ class RouteServiceProvider extends ServiceProvider {
 	 * @return void
 	 */
 	protected function mapWebRoutes(Router $router) {
-		$router->group([
+		Route::group([
 			'namespace' => $this->namespace, 'middleware' => 'web',
 			], function ($router) {
 			require app_path('Http/routes.php');

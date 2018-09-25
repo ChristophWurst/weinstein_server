@@ -94,9 +94,9 @@ class HandlerTest extends TestCase {
 			->with('chosen')
 			->once()
 			->andReturn(true);
-		$competitionState->shouldReceive('is')
-			->times(2)
-			->andReturn(false);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 		$wine->shouldReceive('fill')
 			->with($data);
 		$wine->shouldReceive('isDirty')
@@ -173,10 +173,9 @@ class HandlerTest extends TestCase {
 			->with('kdb')
 			->once()
 			->andReturn(false);
-		$competitionState->shouldReceive('is')
-			->once()
-			->with(CompetitionState::STATE_KDB)
-			->andReturn(false);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 
 		$this->wineRepository->shouldReceive('update')
 			->never()
@@ -219,10 +218,9 @@ class HandlerTest extends TestCase {
 			->with('sosi')
 			->once()
 			->andReturn(true);
-		$competitionState->shouldReceive('is')
-			->once()
-			->with(CompetitionState::STATE_SOSI)
-			->andReturn(false);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 
 		$this->wineRepository->shouldReceive('update')
 			->never()
@@ -265,10 +263,9 @@ class HandlerTest extends TestCase {
 			->with('chosen')
 			->once()
 			->andReturn(false);
-		$competitionState->shouldReceive('is')
-			->once()
-			->with(CompetitionState::STATE_CHOOSE)
-			->andReturn(false);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 
 		$this->wineRepository->shouldReceive('update')
 			->never()
@@ -311,10 +308,9 @@ class HandlerTest extends TestCase {
 			->with('excluded')
 			->once()
 			->andReturn(true);
-		$competitionState->shouldReceive('is')
-			->once()
-			->with(CompetitionState::STATE_EXCLUDE)
-			->andReturn(false);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 
 		$this->wineRepository->shouldReceive('update')
 			->never()
@@ -357,9 +353,9 @@ class HandlerTest extends TestCase {
 			->with($data);
 		$wine->shouldReceive('isDirty')
 			->andReturn(true);
-		$competitionState->shouldReceive('is')
-			->once()
-			->andReturn(false);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 		$user->shouldReceive('isAdmin')
 			->andReturn(false);
 		$this->wineRepository->shouldReceive('update')
@@ -402,9 +398,9 @@ class HandlerTest extends TestCase {
 			->with($data);
 		$wine->shouldReceive('isDirty')
 			->andReturn(true);
-		$competitionState->shouldReceive('is')
-			->with(CompetitionState::STATE_ENROLLMENT)
-			->andReturn(true);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_ENROLLMENT);
 		$wine->shouldReceive('getAttribute')
 			->with('nr')
 			->once()
@@ -447,17 +443,16 @@ class HandlerTest extends TestCase {
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
 			->andReturn($competitionState);
-		$competitionState->shouldReceive('is')
-			->times(2)
-			->with(CompetitionState::STATE_CHOOSE)
-			->andReturn(false);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_ENROLLMENT);
 		$wine->shouldReceive('fill')
 			->with($data);
 		$wine->shouldReceive('isDirty')
 			->andReturn(true);
-		$competitionState->shouldReceive('is')
-			->with(CompetitionState::STATE_ENROLLMENT)
-			->andReturn(true);
+		$competitionState->shouldReceive('getAttribute')
+			->with('id')
+			->andReturn(CompetitionState::STATE_ENROLLMENT);
 		$wine->shouldReceive('getAttribute')
 			->with('nr')
 			->once()

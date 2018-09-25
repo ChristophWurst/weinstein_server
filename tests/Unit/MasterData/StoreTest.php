@@ -60,9 +60,6 @@ class StoreTest extends TestCase {
 
 	public function testGetAllAssociationsAsAdmin() {
 		$collection = new Collection();
-		$user = new User([
-			'admin' => true,
-		]);
 
 		$this->associationRepository->expects($this->once())
 			->method('findAll')

@@ -525,19 +525,19 @@ Route::group(array('prefix' => 'settings', 'middleware' => 'auth'), function() {
 
 Route::get('account', array(
 	'as' => 'account',
-	'uses' => 'AuthenticationController@account',
+	'uses' => 'Auth\LoginController@account',
 	'middleware' => 'auth'
 ));
 Route::get('login', array(
 	'as' => 'login',
-	'uses' => 'AuthenticationController@login',
+	'uses' => 'Auth\LoginController@login',
 ));
 Route::post('login', array(
 	'as' => 'postLogin',
-	'uses' => 'AuthenticationController@auth',
+	'uses' => 'Auth\LoginController@auth',
 ));
 Route::get('logout', array(
 	'as' => 'logout',
-	'uses' => 'AuthenticationController@logout',
+	'uses' => 'Auth\LoginController@logout',
 	'middleware' => 'auth'
 ));

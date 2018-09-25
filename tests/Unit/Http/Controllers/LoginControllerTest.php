@@ -22,6 +22,7 @@
 namespace Test\Unit\Http\Controllers;
 
 use App\Contracts\ActivityLogger;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AuthenticationController;
 use App\MasterData\User;
 use Illuminate\Auth\AuthManager;
@@ -32,7 +33,7 @@ use Mockery;
 use Mockery\MockInterface;
 use Test\TestCase;
 
-class AuthenticationControllerTest extends TestCase {
+class LoginControllerTest extends TestCase {
 
 	/** @var AuthManager|MockInterface */
 	private $auth;
@@ -53,7 +54,7 @@ class AuthenticationControllerTest extends TestCase {
 		$this->activityLogger = Mockery::mock(ActivityLogger::class);
 		$this->view = Mockery::mock(Factory::class);
 
-		$this->controller = new AuthenticationController($this->auth, $this->activityLogger, $this->view);
+		$this->controller = new LoginController($this->auth, $this->activityLogger, $this->view);
 	}
 
 	public function testAccount() {
