@@ -24,10 +24,10 @@ namespace Test\Integration\Settings;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\MasterData\User;
-use Test\TestCase;
 use function factory;
+use Test\BrowserKitTestCase;
 
-class CompetitionTest extends TestCase {
+class CompetitionTest extends BrowserKitTestCase {
 
 	use \Illuminate\Foundation\Testing\DatabaseTransactions;
 

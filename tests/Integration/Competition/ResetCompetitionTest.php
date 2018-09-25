@@ -27,10 +27,10 @@ use App\MasterData\CompetitionState;
 use App\MasterData\User;
 use App\MasterData\WineSort;
 use App\Wine;
-use Test\TestCase;
+use Test\BrowserKitTestCase;
 use function factory;
 
-class ResetCompetitionTest extends TestCase {
+class ResetCompetitionTest extends BrowserKitTestCase {
 
 	private function prepareCompetition(): Competition {
 		$applicant = factory(Applicant::class)->create();

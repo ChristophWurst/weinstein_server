@@ -22,10 +22,10 @@
 namespace Test\Integration;
 
 use App\MasterData\User;
-use Test\TestCase;
+use Test\BrowserKitTestCase;
 use function factory;
 
-class StartPageTest extends TestCase {
+class StartPageTest extends BrowserKitTestCase {
 	
 	use \Illuminate\Foundation\Testing\DatabaseTransactions;
 

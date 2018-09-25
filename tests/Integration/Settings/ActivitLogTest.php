@@ -22,10 +22,10 @@
 namespace Test\Integration\Settings;
 
 use App\MasterData\User;
-use Test\TestCase;
+use Test\BrowserKitTestCase;
 use function factory;
 
-class ActivitLogTest extends TestCase {
+class ActivitLogTest extends BrowserKitTestCase {
 
 	use \Illuminate\Foundation\Testing\DatabaseTransactions;
 

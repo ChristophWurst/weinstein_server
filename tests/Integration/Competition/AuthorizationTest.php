@@ -22,10 +22,10 @@
 namespace Test\Integration\Competition;
 
 use App\MasterData\Competition;
-use Test\TestCase;
+use Test\BrowserKitTestCase;
 use function factory;
 
-class AuthorizationTest extends TestCase {
+class AuthorizationTest extends BrowserKitTestCase {
 
 	use \Illuminate\Foundation\Testing\DatabaseTransactions;
 

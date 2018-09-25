@@ -21,16 +21,15 @@
 
 namespace Test\Integration\Settings;
 
-use App\MasterData\Address;
 use App\MasterData\Applicant;
 use App\MasterData\Association;
 use App\MasterData\User;
 use Faker\Factory;
-use Test\TestCase;
+use Test\BrowserKitTestCase;
 use function factory;
 use function str_random;
 
-class ApplicantsTest extends TestCase {
+class ApplicantsTest extends BrowserKitTestCase {
 
 	use \Illuminate\Foundation\Testing\DatabaseTransactions;
 

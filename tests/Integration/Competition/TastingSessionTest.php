@@ -26,10 +26,10 @@ use App\MasterData\CompetitionState;
 use App\MasterData\User;
 use App\Tasting\TastingSession;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Test\TestCase;
 use function factory;
+use Test\BrowserKitTestCase;
 
-class TastingSessionTest extends TestCase {
+class TastingSessionTest extends BrowserKitTestCase {
 
 	use DatabaseTransactions;
 

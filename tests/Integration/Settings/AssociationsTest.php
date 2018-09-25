@@ -23,11 +23,11 @@ namespace Test\Integration\Settings;
 
 use App\MasterData\Association;
 use App\MasterData\User;
-use Test\TestCase;
+use Test\BrowserKitTestCase;
 use function factory;
 use function str_random;
 
-class AssociationsTest extends TestCase {
+class AssociationsTest extends BrowserKitTestCase {
 
 	use \Illuminate\Foundation\Testing\DatabaseTransactions;
 
