@@ -59,7 +59,7 @@ class TastingSessionValidator extends Validator {
 	 */
 	protected function getCreateRules(array $data) {
 		return array(
-			'wuser_username' => 'exists:wuser,username',
+			'wuser_username' => 'nullable|exists:wuser,username',
 			'commissions' => 'required|integer|in:1,2',
 		);
 	}
@@ -73,7 +73,7 @@ class TastingSessionValidator extends Validator {
 	 */
 	protected function getUpdateRules(array $data, Model $model = null) {
 		return array(
-			'wuser_username' => 'exists:wuser,username',
+			'wuser_username' => 'nullable|exists:wuser,username',
 		);
 	}
 
