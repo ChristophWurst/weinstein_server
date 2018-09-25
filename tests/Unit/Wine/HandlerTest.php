@@ -445,7 +445,7 @@ class HandlerTest extends TestCase {
 			->andReturn($competitionState);
 		$competitionState->shouldReceive('getAttribute')
 			->with('id')
-			->andReturn(CompetitionState::STATE_KDB);
+			->andReturn(CompetitionState::STATE_ENROLLMENT);
 		$wine->shouldReceive('fill')
 			->with($data);
 		$wine->shouldReceive('isDirty')

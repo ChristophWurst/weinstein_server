@@ -19,12 +19,11 @@
 		"sentry/sentry-laravel": "^0.10.0"
 	},
 	"require-dev": {
-		"mockery/mockery": "0.9.*",
+		"mockery/mockery": "1.1.0",
 		"phpspec/phpspec": "~2.1",
 		"phpunit/phpunit": "~5.0",
 		"symfony/css-selector": "3.1.*",
-		"symfony/dom-crawler": "3.1.*",
-		"way/laravel-test-helpers": "dev-master"
+		"symfony/dom-crawler": "3.1.*"
 	},
 	"autoload": {
 		"classmap": [

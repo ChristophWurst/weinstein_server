@@ -123,7 +123,7 @@ class Handler implements WineHandler {
 		]);
 		if ($wine->isDirty($enrollmentAttributes)) {
 			// These attributes may only be changed via enrollment while 'nr' is not set or by an admin
-			if (!$competitionState->id === CompetitionState::STATE_ENROLLMENT && !Auth::user()->isAdmin()) {
+			if ($competitionState->id !== CompetitionState::STATE_ENROLLMENT && !Auth::user()->isAdmin()) {
 				throw new WineLockedException();
 			}
 			if ($competitionState->id === CompetitionState::STATE_ENROLLMENT && !is_null($wine->nr) && !Auth::user()->isAdmin()) {

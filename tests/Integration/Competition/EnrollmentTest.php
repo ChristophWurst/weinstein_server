@@ -39,7 +39,7 @@ class EnrollmentTest extends TestCase {
 		$this->get('competition/' . $competition->id);
 		$this->assertResponseOk();
 		$this->see('Bewerb');
-		$this->dontSee('0/0 Weinen übernommen');
+		$this->dontSee('0/0 Weinen &uuml;bernommen');
 	}
 
 	public function testFreshCompetitionAsAdmin() {
@@ -52,7 +52,7 @@ class EnrollmentTest extends TestCase {
 		$this->get('competition/' . $competition->id);
 		$this->assertResponseOk();
 		$this->see('Bewerb');
-		$this->see('0/0 Weinen übernommen');
+		$this->see('0/0 Weinen &uuml;bernommen');
 	}
 
 	public function testAddWinesToACompetitionAsApplicantAdmin() {

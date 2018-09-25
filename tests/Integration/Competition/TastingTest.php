@@ -202,7 +202,7 @@ class TastingTest extends TestCase {
 		$this->assertRedirectedTo('session/' . $session->id);
 		$this->get('session/' . $session->id);
 		$this->assertResponseOk();
-		$this->see('1. Verkostung abschließen');
+		$this->see('1. Verkostung abschlie&szlig;en');
 		$this->seeInDatabase('wine', [
 			'id' => $tastingNumber3->wine->id,
 			'comment' => null,
