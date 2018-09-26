@@ -33,9 +33,10 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Mockery;
 use Mockery\MockInterface;
+use Test\BrowserKitTestCase;
 use Test\TestCase;
 
-class AssociationControllerTest extends TestCase {
+class AssociationControllerTest extends BrowserKitTestCase {
 
 	/** @var MasterDataStore|MockInterface */
 	private $masterDataStore;

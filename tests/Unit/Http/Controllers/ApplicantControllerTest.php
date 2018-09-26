@@ -34,9 +34,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Mockery;
 use Mockery\MockInterface;
-use Test\TestCase;
+use Test\BrowserKitTestCase;
 
-class ApplicantControllerTest extends TestCase {
+class ApplicantControllerTest extends BrowserKitTestCase {
 
 	use AuthorizationHelper;
 

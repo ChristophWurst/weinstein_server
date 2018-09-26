@@ -27,9 +27,9 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Collection;
 use Mockery;
 use Mockery\MockInterface;
-use Test\TestCase;
+use Test\BrowserKitTestCase;
 
-class ActivityLogControllerTest extends TestCase {
+class ActivityLogControllerTest extends BrowserKitTestCase {
 
 	use AuthorizationHelper;
 

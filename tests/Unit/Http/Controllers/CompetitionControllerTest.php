@@ -35,9 +35,9 @@ use Illuminate\Http\Request;
 use InvalidArgumentException;
 use Mockery;
 use Mockery\MockInterface;
-use Test\TestCase;
+use Test\BrowserKitTestCase;
 
-class CompetitionControllerTest extends TestCase {
+class CompetitionControllerTest extends BrowserKitTestCase {
 
 	/** @var MasterDataStore|MockInterface */
 	private $masterDataStore;

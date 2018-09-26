@@ -34,9 +34,9 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Mockery;
 use Mockery\MockInterface;
-use Test\TestCase;
+use Test\BrowserKitTestCase;
 
-class TastingControllerTest extends TestCase {
+class TastingControllerTest extends BrowserKitTestCase {
 
 	/** @var TastingHandler|MockInterface */
 	private $tastingHandler;
