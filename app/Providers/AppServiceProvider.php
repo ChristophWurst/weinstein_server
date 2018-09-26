@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	public function boot() {
 		if (env('APP_ENV', 'production') === 'production') {
-			URL::forceSchema("https"); //force HTTPS schema in production
+			URL::forceScheme("https"); //force HTTPS schema in production
 		}
 
 		Validator::extend('tastingnumber_nr_unique',

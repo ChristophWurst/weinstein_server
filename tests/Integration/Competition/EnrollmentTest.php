@@ -26,10 +26,10 @@ use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\MasterData\User;
 use App\Wine;
-use Test\TestCase;
+use Test\BrowserKitTestCase;
 use function factory;
 
-class EnrollmentTest extends TestCase {
+class EnrollmentTest extends BrowserKitTestCase {
 
 	public function testFreshCompettionAsUser() {
 		$user = factory(User::class)->create();

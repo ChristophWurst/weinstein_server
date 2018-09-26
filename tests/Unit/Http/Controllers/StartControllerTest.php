@@ -26,9 +26,9 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Mockery;
 use Mockery\MockInterface;
-use Test\TestCase;
+use Test\BrowserKitTestCase;
 
-class StartControllerTest extends TestCase {
+class StartControllerTest extends BrowserKitTestCase {
 
 	/** @var Factory|MockInterface */
 	private $view;

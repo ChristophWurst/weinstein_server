@@ -26,10 +26,10 @@ use App\MasterData\CompetitionState;
 use App\MasterData\User;
 use App\Tasting\TastingNumber;
 use App\Wine;
-use Test\TestCase;
+use Test\BrowserKitTestCase;
 use function factory;
 
-class TastingNumbersTest extends TestCase {
+class TastingNumbersTest extends BrowserKitTestCase {
 
 	use \Illuminate\Foundation\Testing\DatabaseTransactions;
 

@@ -22,9 +22,9 @@
 namespace Test\Integration;
 
 use App\MasterData\User;
-use Test\TestCase;
+use Test\BrowserKitTestCase;
 
-class AuthTest extends TestCase {
+class AuthTest extends BrowserKitTestCase {
 
 	use \Illuminate\Foundation\Testing\DatabaseTransactions;
 

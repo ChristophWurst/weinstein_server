@@ -30,10 +30,10 @@ use App\Tasting\TastingNumber;
 use App\Tasting\TastingSession;
 use App\Wine;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Test\TestCase;
+use Test\BrowserKitTestCase;
 use function factory;
 
-class TastingTest extends TestCase {
+class TastingTest extends BrowserKitTestCase {
 
 	use DatabaseTransactions;
 

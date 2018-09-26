@@ -31,9 +31,9 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Mockery;
 use Mockery\MockInterface;
-use Test\TestCase;
+use Test\BrowserKitTestCase;
 
-class LoginControllerTest extends TestCase {
+class LoginControllerTest extends BrowserKitTestCase {
 
 	/** @var AuthManager|MockInterface */
 	private $auth;

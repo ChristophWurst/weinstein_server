@@ -29,10 +29,10 @@ use App\Tasting\Taster;
 use App\Tasting\TastingSession;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\JsonResponse;
-use Test\TestCase;
+use Test\BrowserKitTestCase;
 use function factory;
 
-class TasterTest extends TestCase {
+class TasterTest extends BrowserKitTestCase {
 
 	use DatabaseTransactions;
 

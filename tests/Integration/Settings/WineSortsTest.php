@@ -21,9 +21,9 @@
 
 namespace Test\Integration\Settings;
 
-use Test\TestCase;
+use Test\BrowserKitTestCase;
 
-class WineSortsTest extends TestCase {
+class WineSortsTest extends BrowserKitTestCase {
 
 	use \Illuminate\Foundation\Testing\DatabaseTransactions;
 
