@@ -24,6 +24,7 @@ namespace Test\Unit\Auth\Abilities;
 use App\Auth\Abilities\ApplicantAbilities;
 use App\MasterData\Applicant;
 use App\MasterData\Association;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Mockery;
 use Test\TestCase;
 
@@ -99,16 +100,72 @@ class ApplicantAbilitiesTest extends TestCase {
 		$this->assertFalse($this->abilities->edit($user, $applicant));
 	}
 
-	public function testCreate() {
-		$this->assertFalse($this->abilities->create($this->getUserMock()));
+	public function testCreateAsAssocAdmin() {
+		$user = $this->getUserMock();
+		$associations = Mockery::mock(Relation::class);
+		$user->shouldReceive('associations')
+			->once()
+			->andReturn($associations);
+		$associations->shouldReceive('exists')
+			->andReturn(true);
+
+		$this->assertTrue($this->abilities->create($user));
+	}
+
+	public function testCreateAsSimpleUser() {
+		$user = $this->getUserMock();
+		$associations = Mockery::mock(Relation::class);
+		$user->shouldReceive('associations')
+			->once()
+			->andReturn($associations);
+		$associations->shouldReceive('exists')
+			->andReturn(false);
+
+		$this->assertFalse($this->abilities->create($user));
 	}
 
 	public function testImport() {
 		$this->assertFalse($this->abilities->import($this->getUserMock()));
 	}
 
-	public function testEdit() {
-		
+	public function testEditAsAssocAdmin() {
+		$user = $this->getUserMock();
+		$applicant = Mockery::mock(Applicant::class);
+		$association = Mockery::mock(Association::class);
+		$applicant->shouldReceive('getAttribute')
+			->with('association')
+			->andReturn($association);
+		$user->shouldReceive('getAttribute')
+			->with('username')
+			->andReturn('gerda');
+		$applicant->shouldReceive('getAttribute')
+			->with('wuser_username')
+			->andReturn(null);
+		$association->shouldReceive('getAttribute')
+			->with('wuser_username')
+			->andReturn('gerda');
+
+		$this->assertTrue($this->abilities->edit($user, $applicant));
+	}
+
+	public function testEditAsSimpleUser() {
+		$user = $this->getUserMock();
+		$applicant = Mockery::mock(Applicant::class);
+		$association = Mockery::mock(Association::class);
+		$applicant->shouldReceive('getAttribute')
+			->with('association')
+			->andReturn($association);
+		$user->shouldReceive('getAttribute')
+			->with('username')
+			->andReturn('gerda');
+		$applicant->shouldReceive('getAttribute')
+			->with('wuser_username')
+			->andReturn(null);
+		$association->shouldReceive('getAttribute')
+			->with('wuser_username')
+			->andReturn('alfred');
+
+		$this->assertFalse($this->abilities->edit($user, $applicant));
 	}
 
 }

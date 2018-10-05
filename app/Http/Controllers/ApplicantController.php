@@ -25,6 +25,7 @@ use App\Contracts\MasterDataStore;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\MasterData\Applicant;
+use App\MasterData\User;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -63,10 +64,12 @@ class ApplicantController extends BaseController {
 	 * @return View
 	 */
 	public function index() {
+		/** @var User $user */
 		$user = $this->auth->user();
 		$applicants = $this->masterDataStore->getApplicants($user);
 		return $this->viewFactory->make('settings/applicant/index', [
 				'applicants' => $applicants,
+				'canAdd' => $user->associations()->exists(),
 		]);
 	}
 
@@ -78,10 +81,11 @@ class ApplicantController extends BaseController {
 	public function create() {
 		$this->authorize('create-applicant');
 
-		$associations = $this->masterDataStore->getAssociations()->pluck('select_label', 'id')->all();
+		$associations = $this->masterDataStore->getAssociations($this->auth->user())->pluck('select_label', 'id')->all();
 		$users = $this->selectNone + $this->masterDataStore->getUsers()->pluck('username', 'username')->all();
 
 		return $this->viewFactory->make('settings/applicant/form', [
+				'create' => true,
 				'associations' => $associations,
 				'users' => $users,
 		]);
@@ -175,6 +179,7 @@ class ApplicantController extends BaseController {
 		$users = $this->selectNone + $this->masterDataStore->getUsers()->pluck('username', 'username')->all();
 		return $this->viewFactory->make('settings/applicant/form',
 				[
+				'create' => false,
 				'applicant' => $applicant,
 				'editId' => $editId,
 				'associations' => $associations,

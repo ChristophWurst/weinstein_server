@@ -30,6 +30,7 @@ use App\MasterData\User;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory as View;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Mockery;
@@ -85,17 +86,28 @@ class ApplicantControllerTest extends BrowserKitTestCase {
 			->once()
 			->with('settings/applicant/index', [
 				'applicants' => $applicants,
+				'canAdd' => true,
 			])
 			->andReturn('view');
+		$associations = Mockery::mock(Relation::class);
+		$user->shouldReceive('associations')
+			->andReturn($associations);
+		$associations->shouldReceive('exists')
+			->andReturn(true);
 
 		$this->assertEquals('view', $this->controller->index());
 	}
 
 	public function testCreate() {
 		$associations = new Collection();
+		$user = Mockery::mock(User::class);
 		$users = new Collection();
 
+		$this->auth->shouldReceive('user')
+			->once()
+			->andReturn($user);
 		$this->masterDataStore->shouldReceive('getAssociations')
+			->with($user)
 			->once()
 			->andReturn($associations);
 		$this->masterDataStore->shouldReceive('getUsers')
@@ -104,6 +116,7 @@ class ApplicantControllerTest extends BrowserKitTestCase {
 		$this->view->shouldReceive('make')
 			->once()
 			->with('settings/applicant/form', [
+				'create' => true,
 				'associations' => [],
 				'users' => ['none' => 'kein'],
 			])
@@ -235,6 +248,7 @@ class ApplicantControllerTest extends BrowserKitTestCase {
 			->once()
 			->with('settings/applicant/form',
 				[
+				'create' => false,
 				'applicant' => $applicant,
 				'associations' => [],
 				'editId' => true,
