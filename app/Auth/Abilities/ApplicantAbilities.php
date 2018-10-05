@@ -43,7 +43,7 @@ class ApplicantAbilities {
 	}
 
 	public function create(User $user) {
-		return false;
+		return $user->associations()->exists();
 	}
 
 	public function import(User $user) {

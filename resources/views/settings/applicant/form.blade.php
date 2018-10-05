@@ -19,7 +19,7 @@
     </div>
 @endif
 {!! Form::open(array('class' => 'form-horizontal', 'role' => 'form')) !!}
-    @if($edit || Auth::user()->isAdmin())
+    @if($create || $edit || Auth::user()->isAdmin())
     <div class="form-group">
         {!! Form::Label('id', 'Betriebsnummer', array('class' => 'col-sm-2 col-md-2 control-label')) !!}
         <div class="col-sm-10 col-md-3">
@@ -35,7 +35,7 @@
         </div>
     </div>
     @endif
-    @if(Auth::user()->isAdmin())
+    @if($create || Auth::user()->isAdmin())
     <div class="form-group">
         {!! Form::Label('association_id', 'Verein', array('class' => 'col-sm-2 col-md-2 control-label')) !!}
         <div class="col-sm-10 col-md-3">
