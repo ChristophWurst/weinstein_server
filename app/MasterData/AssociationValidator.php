@@ -42,6 +42,7 @@ class AssociationValidator extends Validator {
 		return array(
 			'id' => 'Standnummer',
 			'name' => 'Bezeichnung',
+			'email' => 'E-Mail',
 			'wuser_username' => 'Benutzer'
 		);
 	}
@@ -56,6 +57,7 @@ class AssociationValidator extends Validator {
 		return array(
 			'id' => 'Required|integer|min:1|unique:association,id',
 			'name' => 'Required|between:4,80|unique:association,name',
+			'email' => 'email',
 			'wuser_username' => 'Exists:wuser,username',
 		);
 	}
@@ -73,8 +75,9 @@ class AssociationValidator extends Validator {
 		//only check uniqueness of name if it was changed
 		$nameUnchanged = isset($data['name']) && $data['name'] == $this->model->name;
 		return array(
-			'id' => 'Required|integer|min:1' . ($idUnchanged ? '' : '|unique:association,id'),
+			'id' => 'integer|min:1' . ($idUnchanged ? '' : '|unique:association,id'),
 			'name' => 'Required|between:4,80' . ($nameUnchanged ? '' : '|unique:association,name'),
+			'email' => 'email',
 			'wuser_username' => 'Exists:wuser,username',
 		);
 	}

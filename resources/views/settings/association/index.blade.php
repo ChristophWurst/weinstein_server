@@ -20,6 +20,7 @@
             <tr>
                 <th>#</th>
                 <th>Bezeichnung</th>
+                <th>E-Mail</th>
                 <th class="text-center">Verwalter</th>
                 <th class="text-center">Betriebe</th>
             </tr>
@@ -29,6 +30,11 @@
             <tr>
                 <td>{!! link_to_route('settings.association/show', $ass->id, array('id' => $ass->id)) !!}</td>
                 <td>{!! link_to_route('settings.association/show', $ass->name, array('id' => $ass->id)) !!}</td>
+                @if ($ass->email)
+                <td><a href="mailto:{{ ($ass->email ? : '-') }}">{{ ($ass->email ? : '-') }}</a></td>
+                @else
+                <td>-</td>
+                @endif
                 @if ($ass->wuser_username)
                 <td class="text-center">{!! link_to_route('settings.user/show', $ass->wuser_username, array('username' => $ass->wuser_username)) !!}</td>
                 @else
