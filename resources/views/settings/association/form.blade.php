@@ -15,12 +15,14 @@
     </div>
 @endif
 {!! Form::open(array('class' => 'form-horizontal', 'role' => 'form')) !!}
+    @if(Auth::user()->isAdmin())
     <div class="form-group">
         {!! Form::Label('id', 'Standnummer', array('class' => 'col-sm-2 col-md-2 control-label')) !!}
         <div class="col-sm-10 col-md-3">
-            {!! Form::text('id', (isset($data) ? $data['id'] : ''), array('class' => 'form-control col-md3')) !!}
+            {!! Form::text('id', (isset($data) ? $data['id'] : ''), array('class' => 'form-control col-md3', 'readonly' => !Auth::user()->isAdmin())) !!}
         </div>
     </div>
+    @endif
     <div class="form-group">
         {!! Form::Label('name', 'Bezeichnung', array('class' => 'col-sm-2 col-md-2 control-label')) !!}
         <div class="col-sm-10 col-md-3">
@@ -28,13 +30,15 @@
         </div>
     </div>
     <div class="form-group">
+        {!! Form::Label('email', 'E-Mail', array('class' => 'col-sm-2 col-md-2 control-label')) !!}
+        <div class="col-sm-10 col-md-3">
+            {!! Form::text('email', ($edit ? $data['email'] : ''), array('class' => 'form-control')) !!}
+        </div>
+    </div>
+    <div class="form-group">
         {!! Form::Label('wuser_username', 'Verwalter', array('class' => 'col-sm-2 col-md-2 control-label')) !!}
         <div class="col-sm-10 col-md-3">
-            @if (Auth::user()->isAdmin())
-            {!! Form::select('wuser_username', $users, ($edit ? $data['wuser_username'] : 'none'), array('class' => 'form-control col-md3')) !!}
-            @else
-            {!! Form::select('wuser_username', $users, ($edit ? $data['wuser_username'] : 'none'), array('class' => 'form-control col-md3', 'readonly' => true)) !!}
-            @endif
+            {!! Form::select('wuser_username', $users, ($edit ? $data['wuser_username'] : 'none'), array('class' => 'form-control col-md3', 'readonly' => !Auth::user()->isAdmin())) !!}
         </div>
     </div>
     <div class="form-group">

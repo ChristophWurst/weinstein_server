@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 /**
  * @property int $id
  * @property string $name
+ * @property string $email
  * @property string $wuser_username
  * @property User $user
  */
@@ -49,6 +50,7 @@ class Association extends Model implements AdministrateModel {
 	protected $fillable = [
 		'id',
 		'name',
+		'email',
 		'wuser_username'
 	];
 

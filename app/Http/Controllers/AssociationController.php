@@ -132,7 +132,7 @@ class AssociationController extends BaseController {
 	 * @return View
 	 */
 	public function edit(Association $association) {
-		$this->authorize('create-association', $association);
+		$this->authorize('edit-association', $association);
 
 		$user = $this->auth->user();
 		if ($user->isAdmin()) {
@@ -154,12 +154,16 @@ class AssociationController extends BaseController {
 	 * @return Response
 	 */
 	public function update(Association $association, Request $request) {
-		$this->authorize('create-association', $association);
+		$this->authorize('edit-association', $association);
 
 		$data = $request->all();
 		// remove default user of form's select
 		if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
 			$data['wuser_username'] = null;
+		}
+		// only admin can change id
+		if (isset($data['id']) && !$this->auth->user()->isAdmin()) {
+			unset($data['id']);
 		}
 		// only admin can change user
 		if (isset($data['wuser_username']) && !$this->auth->user()->isAdmin()) {
