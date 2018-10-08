@@ -105,12 +105,13 @@ class ApplicantController extends BaseController {
 			unset($data['wuser_username']);
 		}
 		try {
-			$this->masterDataStore->createApplicant($data);
+			list ($applicant, $user, $password) = $this->masterDataStore->createApplicant($data);
 		} catch (ValidationException $ve) {
 			return Redirect::route('settings.applicants/create')
 					->withErrors($ve->getErrors())
 					->withInput();
 		}
+		$request->session()->flash('applicant_created', [$user->username, $password]);
 		return Redirect::route('settings.applicants');
 	}
 

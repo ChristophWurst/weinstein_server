@@ -92,7 +92,7 @@ interface MasterDataStore {
 
 	/**
 	 * @param array $data
-	 * @return Applicant
+	 * @return array
 	 */
 	public function createApplicant(array $data);
 

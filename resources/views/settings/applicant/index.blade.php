@@ -1,6 +1,15 @@
 @extends('settings/settings')
 
 @section('settings_content')
+@if (Session::has('applicant_created'))
+<div class="alert alert-success">
+    <strong>Betrieb angelegt</strong><br>
+    <?php
+    list ($user, $password) = Session::get('applicant_created');
+    ?>
+    Der Betrieb kann sich mit Benutzernamen <strong>{{ $user }}</strong> und Password <strong>{{ $password }}</strong> anmelden.
+</div>
+@endif
 <h1>Betriebe</h1>
 @if (Auth::user()->isAdmin() || $canAdd)
 <a class="btn btn-default"

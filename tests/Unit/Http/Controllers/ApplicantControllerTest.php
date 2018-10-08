@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Session;
 use Mockery;
 use Mockery\MockInterface;
 use Test\BrowserKitTestCase;
@@ -152,12 +153,26 @@ class ApplicantControllerTest extends BrowserKitTestCase {
 			'wuser_username' => 'john',
 		];
 
+		$applicant = Mockery::mock(Applicant::class);
+		$user = Mockery::mock(User::class);
+		$password = 'hello';
 		$request->shouldReceive('all')
 			->once()
 			->andReturn($data);
 		$this->masterDataStore->shouldReceive('createApplicant')
 			->once()
-			->with($data);
+			->with($data)
+			->andReturn([$applicant, $user, $password]);
+		$session = Mockery::mock(\Illuminate\Contracts\Session\Session::class);
+		$user->shouldReceive('getAttribute')
+			->with('username')
+			->andReturn('user');
+		$request->shouldReceive('session')
+			->once()
+			->andReturn($session);
+		$session->shouldReceive('flash')
+			->once()
+			->with('applicant_created', ['user', 'hello']);
 
 		$this->response = $this->controller->store($request);
 

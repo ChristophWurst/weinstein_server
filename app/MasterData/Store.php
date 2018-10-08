@@ -97,9 +97,9 @@ class Store implements MasterDataStore {
 		$applicant = $this->applicantRepository->create($data);
 
 		//ActivityLogger::log('Betrieb [' . $data['id'] . '] erstellt');
-		$this->createApplicantUser($applicant);
+		list ($user, $password) = $this->createApplicantUser($applicant);
 
-		return $applicant;
+		return [$applicant,  $user, $password];
 	}
 
 	public function importApplicants(UploadedFile $file) {
@@ -318,17 +318,18 @@ class Store implements MasterDataStore {
 	 */
 	private function createApplicantUser(Applicant $applicant) {
 		//for better security, existing users are not associated with the new applicant
+		$password = str_random(15);
 		if (!User::find($applicant->id)) {
 			$user = $this->userRepository->create([
 				'username' => $applicant->id,
-				'password' => str_random(15), //random password for better security
+				'password' => $password, //random password for better security
 				'admin' => false,
 			]);
 			$applicant->user()->associate($user);
 			$applicant->save();
 		}
 		//ActivityLogger::log('Benutzer [' . $user->username . '] erstellt (zum Betrieb)');
-		return $applicant;
+		return [$user, $password];
 	}
 
 }
