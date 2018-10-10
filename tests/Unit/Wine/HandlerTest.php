@@ -113,6 +113,7 @@ class HandlerTest extends TestCase {
 	public function testUpdateWithValidationError() {
 		$user = Mockery::mock(User::class);
 		$competition = Mockery::mock(Competition::class);
+		$competitionState = Mockery::mock(CompetitionState::class);
 		$wine = Mockery::mock(Wine::class);
 		$data = [
 			'chosen' => true,
@@ -120,6 +121,9 @@ class HandlerTest extends TestCase {
 		$wine->shouldReceive('getAttribute')
 			->with('competition')
 			->andReturn($competition);
+		$competition->shouldReceive('getAttribute')
+			->with('competitionState')
+			->andReturn($competitionState);
 		Auth::shouldReceive('user')
 			->andReturn($user);
 		$validator = Mockery::mock(WineValidator::class);

@@ -98,7 +98,7 @@ class Handler implements WineHandler {
 		}
 		// Validate and update approval nr only during enrollment
 		// TODO: refactor this logic into better permission/state checks
-		if ((isset($data['approvalnr']) || is_null($data['approvalnr'])) && $competitionState->id > CompetitionState::STATE_ENROLLMENT) {
+		if (array_key_exists('approvalnr', $data) && $competitionState->id > CompetitionState::STATE_ENROLLMENT) {
 			unset($data['approvalnr']);
 		}
 
