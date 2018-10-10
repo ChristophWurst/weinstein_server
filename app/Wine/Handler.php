@@ -90,9 +90,16 @@ class Handler implements WineHandler {
 	 * @return Wine
 	 */
 	public function update(Wine $wine, array $data) {
+		$competitionState = $wine->competition->competitionState;
+
 		//allow short format for year field: YY -> 20YY
 		if (isset($data['vintage']) && ctype_digit($data['vintage']) && $data['vintage'] < 99) {
 			$data['vintage'] += 2000;
+		}
+		// Validate and update approval nr only during enrollment
+		// TODO: refactor this logic into better permission/state checks
+		if ((isset($data['approvalnr']) || is_null($data['approvalnr'])) && $competitionState->id > CompetitionState::STATE_ENROLLMENT) {
+			unset($data['approvalnr']);
 		}
 
 		$validator = $this->validatorFactory->newWineValidator($wine, $data);
@@ -100,7 +107,6 @@ class Handler implements WineHandler {
 		$validator->setUser(Auth::user());
 		$validator->validateUpdate();
 
-		$competitionState = $wine->competition->competitionState;
 		if (isset($data['kdb']) && $wine->kdb !== $data['kdb'] && $competitionState->id !== CompetitionState::STATE_KDB) {
 			throw new InvalidCompetitionStateException();
 		}
