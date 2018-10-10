@@ -106,8 +106,7 @@ class WineValidator extends Validator {
 			'alcohol' => 'required|numeric|between:0.1,30.0',
 			'alcoholtot' => 'numeric|between:0.1,99.9',
 			'sugar' => 'required|numeric|between:0.1,300.0',
-			'approvalnr' => ($this->requiresApprovalNr() ? 'required' : 'sometimes' )
-			. '|alpha_num|max:20',
+			'approvalnr' => 'sometimes|alpha_num|max:20',
 		);
 	}
 
@@ -133,8 +132,7 @@ class WineValidator extends Validator {
 			'alcohol' => 'required|numeric|between:0.1,30.0',
 			'alcoholtot' => 'numeric|between:0.1,99.9',
 			'sugar' => 'required|numeric|between:0.1,300.0',
-			'approvalnr' => ($this->requiresApprovalNr() ? 'required' : 'sometimes')
-			. '|alpha_num|max:20',
+			'approvalnr' => 'sometimes|alpha_num|max:20',
 		);
 	}
 
