@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Request;
 
 class ResetPasswordController extends Controller
@@ -59,6 +60,16 @@ class ResetPasswordController extends Controller
 		return redirect()->back()
 			->withInput($request->only('email'))
 			->withErrors(['username' => trans($response)]);
+	}
+
+	protected function resetPassword($user, $password)
+	{
+		$user->forceFill([
+			'password' => $password,
+			'remember_token' => Str::random(60),
+		])->save();
+
+		$this->guard()->login($user);
 	}
 
 }
