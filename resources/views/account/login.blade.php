@@ -14,5 +14,8 @@
 	<input type="text" name="username" class="form-control" placeholder="Benutzername" required autofocus>
 	<input type="password" name="password" class="form-control" placeholder="Passwort" required>
 	<button class="btn btn-default btn-block" type="submit">Anmelden</button>
+	<a class="text-center"
+	   type="button"
+	   href="{!! route('password.request') !!}">Password vergessen</a>
 	{!! Form::close() !!}
 @stop
