@@ -4,10 +4,10 @@
 		<meta charset="utf-8">
 	</head>
 	<body>
-		<h2>Password Reset</h2>
+		<h2>Passwort zur&uuml;cksetzen</h2>
 
 		<div>
-			To reset your password, complete this form: {!! URL::to('password/reset', array($token)) !!}.
+			Mit folgendem Link k&ouml;nnen Sie Ihr Weinstein-Passwort zur&uuml;cksetzen: {!! URL::to('password/reset', array($token)) !!}.
 		</div>
 	</body>
 </html>

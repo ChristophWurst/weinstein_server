@@ -21,12 +21,14 @@
 
 namespace App\MasterData;
 
+use App\Notifications\ResetPassword;
 use App\Support\Activity\Log;
 use App\Tasting\TastingSession;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 
 /**
@@ -37,6 +39,8 @@ use Illuminate\Support\Facades\Hash;
  */
 class User extends Authenticatable
 {
+
+	use Notifiable;
 
 	/**
 	 * table name
@@ -233,7 +237,31 @@ class User extends Authenticatable
 
 	public function getEmailForPasswordReset()
 	{
-		throw new Exception("method not implemented");
+		if ($this->associations()->exists()) {
+			// User is assoc admin -> only check assocs
+			$first = $this->associations()->whereNotNull('email')->first();
+			if (is_null($first)) {
+				return null;
+			}
+			return $first->email;
+		} else {
+			// User might be applicant admin -> check those
+			$first = $this->applicants()->whereNotNull('email')->first();
+			if (is_null($first)) {
+				return null;
+			}
+			return $first->email;
+		}
+	}
+
+	public function sendPasswordResetNotification($token)
+	{
+		$this->notify(new ResetPassword($token));
+	}
+
+	public function routeNotificationForMail()
+	{
+		return $this->getEmailForPasswordReset();
 	}
 
 	/**

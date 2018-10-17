@@ -536,6 +536,23 @@ Route::post('login', array(
 	'as' => 'postLogin',
 	'uses' => 'Auth\LoginController@auth',
 ));
+Route::get('login/request', array(
+	'as' => 'password.request-form',
+	'uses' => 'Auth\ForgotPasswordController@showLinkRequestForm',
+));
+Route::post('login/request', array(
+	'as' => 'password.request',
+	'uses' => 'Auth\ForgotPasswordController@sendResetLinkUsername',
+));
+Route::get('login/reset/{token}', array(
+	'as' => 'password.reset-form',
+	'uses' => 'Auth\ResetPasswordController@showResetForm',
+));
+Route::post('login/reset', array(
+	'as' => 'password.reset',
+	'uses' => 'Auth\ResetPasswordController@reset',
+));
+
 Route::get('logout', array(
 	'as' => 'logout',
 	'uses' => 'Auth\LoginController@logout',
