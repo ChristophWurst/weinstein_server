@@ -130,6 +130,8 @@ class AuthServiceProvider extends ServiceProvider {
 		Gate::define('update-wine', WineAbilities::class . '@update');
 		Gate::define('delete-wine', WineAbilities::class . '@delete');
 		Gate::define('redirect-wine', WineAbilities::class . '@redirect');
+		Gate::define('export-all-wines', WineAbilities::class . '@exportAll');
+		Gate::define('export-wines-flaws', WineAbilities::class . '@exportFlaws');
 		Gate::define('import-kdb-wines', WineAbilities::class . '@importKdb');
 		Gate::define('import-sosi-wines', WineAbilities::class . '@importSosi');
 		Gate::define('import-excluded-wines', WineAbilities::class . '@importExcluded');

@@ -219,10 +219,14 @@ use App\MasterData\CompetitionState;
 					headers: {'X-CSRF-TOKEN': '<?php echo csrf_token(); ?>'}
 				});
 			});
-			Raven.config('<?php echo config('sentry.dsn_pub'); ?>', {
-				release: '<?php echo config('app.version'); ?>',
-				environment: '<?php echo config('app.env'); ?>'
-			}).install()
+			try {
+                Raven.config('<?php echo config('sentry.dsn_pub'); ?>', {
+                    release: '<?php echo config('app.version'); ?>',
+                    environment: '<?php echo config('app.env'); ?>'
+                }).install()
+            } catch (e) {
+			    console.error('could not initialize Sentry:', e)
+            }
             @yield('script')
         </script>
     </body>

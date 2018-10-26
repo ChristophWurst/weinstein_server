@@ -74,6 +74,10 @@ class WineExport {
 		'Ex',
 		'Ausschank',
 	];
+	/**
+	 * @var bool
+	 */
+	private $showTasting2;
 
 	/**
 	 * Set worksheets first rows header values
@@ -150,7 +154,7 @@ class WineExport {
 			if ($w->rating1) {
 				$sheet->setCellValue("V$row", $w->rating1);
 			}
-			if ($w->rating2) {
+			if ($this->showTasting2 && $w->rating2) {
 				$sheet->setCellValue("W$row", $w->rating2);
 			}
 			if ($w->kdb) {
@@ -171,11 +175,12 @@ class WineExport {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param Collection $wines
 	 */
-	public function __construct(Collection $wines) {
+	public function __construct(Collection $wines, bool $showTasting2 = true) {
 		$this->wines = $wines;
+		$this->showTasting2 = $showTasting2;
 	}
 
 	/**
