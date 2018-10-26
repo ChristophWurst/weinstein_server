@@ -27,7 +27,7 @@
     <div class="col-sm-12 col-md-6 col-lg-4">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Stammdaten
+                <h3 class="panel-title">Stammdaten</h3>
             </div>
             <div class="panel-body row">
                 <div class="col-md-6">
@@ -104,37 +104,6 @@
                 <div class="col-md-6">
                     {{ str_replace(".", ",", $wine->sugar) }}
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-12 col-md-6 col-lg-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Kostergebnis
-            </div>
-            <div class="panel-body row">
-                <div class="col-md-6">
-                    1. Bewertung
-                </div>
-                <div class="col-md-6">
-                    @if ($wine->rating1)
-                    {{ str_replace(".", ",", $wine->rating1) }}
-                    @else
-                    -
-                    @endif
-                </div>
-                @if ($show_rating2)
-                <div class="col-md-6">
-                    2. Bewertung
-                </div>
-                <div class="col-md-6">
-                    @if ($wine->rating2)
-                    {{ str_replace(".", ",", $wine->rating2) }}
-                    @else
-                    -
-                    @endif
-                </div>
-                @endif
             </div>
         </div>
     </div>

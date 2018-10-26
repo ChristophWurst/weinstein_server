@@ -18,19 +18,19 @@
        Wein hinzuf&uuml;gen
     </a>
     @endif
-    @if ($competition_admin)
     <div class="btn-group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <span class="glyphicon glyphicon-export"></span> Export<span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
             <li>{!! link_to_route('enrollment.wines/export', 'Alle', array('competition' => $competition->id)) !!}</li>
+            @if ($competition_admin)
             <li>{!! link_to_route('enrollment.wines/export-kdb', 'KdB', array('competition' => $competition->id)) !!}</li>
             <li>{!! link_to_route('enrollment.wines/export-sosi', 'SoSi', array('competition' => $competition->id)) !!}</li>
             <li>{!! link_to_route('enrollment.wines/export-chosen', 'Ausschank', array('competition' => $competition->id)) !!}</li>
+            @endif
         </ul>
     </div>
-    @endif
     @if ($edit_kdb)
     <a class="btn btn-default"
        type="button"
@@ -112,12 +112,14 @@
     </a>
     @endif
     @if ($export_flaws)
+    @can('export-wines-flaws')
     <a class="btn btn-default"
        type="button"
        href="{!! route('enrollment.wines/export-flaws', array('competition' => $competition->id)) !!}">
         <span class="glyphicon glyphicon-import"></span>
        Fehlerprotokoll exportieren
     </a>
+    @endcan
     @endif
 	@if ($competition_admin)
     <div class="container-fluid pull-left">

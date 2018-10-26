@@ -140,7 +140,7 @@ class WineAbilities {
 	 * @param Wine $wine
 	 * @return boolean
 	 */
-	public function update(User $user, Wine $wine, array $data) {
+	public function update(User $user, Wine $wine, array $data = []) {
 		if ($this->updatesKdb($wine, $data) && !$this->mayUpdateKdb($user, $wine)) {
 			return false;
 		}
@@ -181,6 +181,14 @@ class WineAbilities {
 	 */
 	public function redirect(User $user, Competition $competition): bool {
 		return $competition->administrates($user);
+	}
+
+	public function exportAll(User $user): bool {
+		return true;
+	}
+
+	public function exportFlaws(User $user): bool {
+		return $user->associations()->exists();
 	}
 
 	/**

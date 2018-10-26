@@ -113,7 +113,7 @@ class WineController extends BaseController {
 				'user' => Auth::user(),
 				'competition_admin' => $competitionAdmin,
 				'wine_url' => route('wines.index'),
-				'show_add_wine' => $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT,
+				'show_add_wine' => $competitionAdmin && $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT,
 				'show_edit_wine' => $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT,
 				'show_rating1' => $this->showRating1($competition, $competitionAdmin),
 				'show_rating2' => $competitionAdmin && $competition->competitionState->id >= CompetitionState::STATE_TASTING2,
@@ -157,11 +157,9 @@ class WineController extends BaseController {
 			$showEdit = false;
 		}
 
-		return $this->viewFactory->make('competition/wines/show',
-				[
+		return $this->viewFactory->make('competition/wines/show', [
 				'wine' => $wine,
 				'show_edit_wine' => $showEdit,
-				'show_rating2' => $competitionAdmin,
 		]);
 	}
 
@@ -569,13 +567,14 @@ class WineController extends BaseController {
 	 * @return Resp
 	 */
 	public function exportAll(Competition $competition) {
-		$this->authorize('export-wines', $competition);
+		$this->authorize('export-all-wines', $competition);
 
 		$wines = $competition
 			->wine_details()
+			->admin(Auth::user())
 			->orderBy('nr')
 			->get();
-		$we = new WineExport($wines);
+		$we = new WineExport($wines, $competition->administrates(Auth::user()));
 		$filename = 'Weine ' . $competition->label . '.xls';
 		$headers = [
 			'Content-Type' => 'application/vnd.ms-excel',
