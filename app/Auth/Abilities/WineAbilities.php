@@ -141,9 +141,6 @@ class WineAbilities {
 	 * @return boolean
 	 */
 	public function update(User $user, Wine $wine, array $data = []) {
-		if (!$wine->competition->administrates($user)) {
-			return false;
-		}
 		if ($this->updatesKdb($wine, $data) && !$this->mayUpdateKdb($user, $wine)) {
 			return false;
 		}
