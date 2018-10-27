@@ -50,7 +50,7 @@ class LoginController extends BaseController
 	 */
 	public function __construct(AuthManager $auth, ActivityLogger $activityLogger, Factory $view)
 	{
-		$this->middleware('guest', ['except' => 'logout']);
+		$this->middleware('guest', ['except' => ['logout', 'account']]);
 
 		$this->auth = $auth;
 		$this->activityLogger = $activityLogger;
@@ -76,7 +76,13 @@ class LoginController extends BaseController
 			'username' => $username,
 			'password' => $password
 		], true)) {
-			$this->activityLogger->logUserAction('hat sich am System angemeldet', $this->auth->user());
+			$user = $this->auth->user();
+			$this->activityLogger->logUserAction('hat sich am System angemeldet', $user);
+			if ($user->first_login) {
+				Session::flash('first-login', true);
+				$user->first_login = false;
+				$user->save();
+			}
 			return Redirect::route('account');
 		}
 
