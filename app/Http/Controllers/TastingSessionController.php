@@ -259,7 +259,6 @@ class TastingSessionController extends BaseController {
 	public function statistics(TastingSession $tastingSession) {
 		$this->authorize('show-tastingsession-statistics', $tastingSession);
 		$this->checkCompetitionState($tastingSession->competition);
-		$this->checkTastingSessionLocked($tastingSession);
 
 		$this->shareCommonViewData($tastingSession->competition);
 		return $this->viewFactory->make('competition/tasting/tasting-session/statistics',
