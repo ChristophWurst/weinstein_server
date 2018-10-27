@@ -127,6 +127,15 @@ class LoginControllerTest extends BrowserKitTestCase {
 		$this->auth->shouldReceive('user')
 			->once()
 			->andReturn($user);
+		$user->shouldReceive('getAttribute')
+			->with('first_login')
+			->once()
+			->andReturn(true);
+		$user->shouldReceive('setAttribute')
+			->with('first_login', false)
+			->once();
+		$user->shouldReceive('save')
+			->once();
 		$this->activityLogger->shouldReceive('logUserAction')
 			->once();
 
