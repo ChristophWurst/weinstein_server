@@ -54,7 +54,7 @@ use App\MasterData\CompetitionState;
                             @elseif ($currentState == CompetitionState::STATE_SOSI)
                                 {{ $wines_sosi }} zugewiesen
                             @elseif ($currentState == CompetitionState::STATE_CHOOSE)
-                                {{ $wines_chosen }} ausgew&auml;hlt
+                                {{ $wines_chosen }} ausgew&auml;hlt, {{ $associations_chosen_signed_off }}/{{ $associations  }} Vereinen haben die Zuweisung abgeschlossen.
 							@elseif ($currentState == CompetitionState::STATE_CATALOGUE_NUMBERS)
                                 {{ $wines_without_catalogue_number }}/{{ $wines }} Weine ohne Katalognummer
                             @endif
@@ -111,12 +111,20 @@ use App\MasterData\CompetitionState;
                            SoSi Zuweisung abschlie&szlig;en
                         </a>
                         @elseif ($currentState === CompetitionState::STATE_CHOOSE)
-                        <a class="btn btn-default"
-                           type="button"
-                           href="{!! route('competition/complete-choosing', array('competition' => $competition->id)) !!}">
-                            <span class="glyphicon glyphicon-ok"></span>
-                           Auswahl abschlie&szlig;en
-                        </a>
+                            @if ($associations_chosen_signed_off  === $associations)
+                            <a class="btn btn-default"
+                               type="button"
+                               href="{!! route('competition/complete-choosing', array('competition' => $competition->id)) !!}">
+                                <span class="glyphicon glyphicon-ok"></span>
+                               Auswahl abschlie&szlig;en
+                            </a>
+                            @else
+                            <a class="btn"
+                               type="button"
+                               href="{!! route('competition/sign-chosen', array('competition' => $competition->id)) !!}">
+                                Ausständige Vereinsauswahl abschlie&szlig;en
+                            </a>
+                            @endif
 						@elseif ($currentState === CompetitionState::STATE_CATALOGUE_NUMBERS && $wines_without_catalogue_number === 0)
                         <a class="btn btn-default"
                            type="button"

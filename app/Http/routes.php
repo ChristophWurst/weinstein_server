@@ -45,6 +45,14 @@ Route::group(array('prefix' => 'competition/{competition}', 'middleware' => 'aut
 	Route::post('complete-sosi', array(
 		'uses' => 'CompetitionController@lockSosi'
 	));
+	Route::get('sign-chosen', array(
+		'as' => 'competition/sign-chosen',
+		'uses' => 'CompetitionController@showSignChosen',
+	));
+	Route::post('sign-choosing/{association}', array(
+		'as' => 'competition/sign-chosen-submit',
+		'uses' => 'CompetitionController@signChosen'
+	));
 	Route::get('complete-choosing', array(
 		'as' => 'competition/complete-choosing',
 		'uses' => 'CompetitionController@completeChoosing',

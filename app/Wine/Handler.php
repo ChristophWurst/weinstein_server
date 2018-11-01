@@ -136,10 +136,17 @@ class Handler implements WineHandler {
 				throw new WineLockedException();
 			}
 		}
-		if ($competitionState->id === CompetitionState::STATE_CHOOSE &&
-			($wine->kdb || $wine->sosi) &&
-			isset($data['chosen']) && !$data['chosen']) {
-			throw new AuthorizationException();
+		if ($competitionState->id === CompetitionState::STATE_CHOOSE) {
+			if (($wine->kdb || $wine->sosi) &&
+				isset($data['chosen']) && !$data['chosen']) {
+				throw new AuthorizationException("KdB und SoSi müssen ausgeschenkt werden");
+			}
+			if ($wine->competition->wines_chosen_signed_off()
+				->where('association_id', $wine->applicant->association->id)
+				->exists()) {
+				// Chosen wines of this association have already been signed off
+				throw new AuthorizationException("Vereinsadmin hat die Auswahl bereits abgeschlossen");
+			}
 		}
 		if ($competitionState->id === CompetitionState::STATE_CHOOSE &&
 			$wine->excluded &&

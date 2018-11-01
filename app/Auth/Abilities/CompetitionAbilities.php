@@ -21,6 +21,7 @@
 
 namespace App\Auth\Abilities;
 
+use App\MasterData\Association;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\TastingStage;
@@ -92,6 +93,12 @@ class CompetitionAbilities {
 
 	public function completeSosi(User $user, Competition $competition): bool {
 		return $competition->administrates($user) && $competition->competitionState->id === CompetitionState::STATE_SOSI;
+	}
+
+	public function signChosen(User $user, Competition $competition, Association $association = null): bool {
+		return $competition->competition_state_id === CompetitionState::STATE_CHOOSE // state
+			&& $user->associations()->exists() // is assoc admin? (for selection screen)
+			&& (is_null($association) ? true : $association->administrates($user)); // administrates?
 	}
 
 	public function completeChoosing(User $user, Competition $competition): bool {

@@ -31,6 +31,16 @@
             @endif
         </ul>
     </div>
+    @if ($export_flaws)
+        @can('export-wines-flaws')
+            <a class="btn btn-default"
+               type="button"
+               href="{!! route('enrollment.wines/export-flaws', array('competition' => $competition->id)) !!}">
+                <span class="glyphicon glyphicon-import"></span>
+                Fehlerprotokoll exportieren
+            </a>
+        @endcan
+    @endif
     @if ($edit_kdb)
     <a class="btn btn-default"
        type="button"
@@ -80,20 +90,20 @@
     </a>
     @endif
     @if ($edit_chosen)
-    <a class="btn btn-default"
-       type="button"
-       href="{!! route('enrollment.wines/import-chosen', array('competition' => $competition->id)) !!}">
-        <span class="glyphicon glyphicon-import"></span>
-       Auswahl importieren
-    </a>
-    @endif
-    @if ($show_complete_choosing && $competition_admin)
-    <a class="btn btn-default"
-       type="button"
-       href="{!! route('competition/complete-choosing', array('competition' => $competition->id)) !!}">
-        <span class="glyphicon glyphicon-ok"></span>
-       Auswahl abschlie&szlig;en
-    </a>
+        <a class="btn btn-default"
+           type="button"
+           href="{!! route('enrollment.wines/import-chosen', array('competition' => $competition->id)) !!}">
+            <span class="glyphicon glyphicon-import"></span>
+           Auswahl importieren
+        </a>
+        @can('sign-chosen', $competition)
+        <a class="btn btn-primary"
+           type="button"
+           href="{!! route('competition/sign-chosen', array('competition' => $competition->id)) !!}">
+            <span class="glyphicon glyphicon-ok"></span>
+            Auswahl abschlie&szlig;en
+        </a>
+        @endcan
     @endif
 	@if ($show_import_catalogue_numbers && $competition_admin)
     <a class="btn btn-default"
@@ -110,16 +120,6 @@
         <span class="glyphicon glyphicon-ok"></span>
        Katalognummernzuweisung abschlie&szlig;en
     </a>
-    @endif
-    @if ($export_flaws)
-    @can('export-wines-flaws')
-    <a class="btn btn-default"
-       type="button"
-       href="{!! route('enrollment.wines/export-flaws', array('competition' => $competition->id)) !!}">
-        <span class="glyphicon glyphicon-import"></span>
-       Fehlerprotokoll exportieren
-    </a>
-    @endcan
     @endif
 	@if ($competition_admin)
     <div class="container-fluid pull-left">

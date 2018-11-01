@@ -29,6 +29,7 @@ use App\Tasting\TastingSession;
 use App\Tasting\TastingStage;
 use App\Wine;
 use App\WineDetails;
+use App\WinesChosenSignedOff;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -162,6 +163,13 @@ class Competition extends Model implements AdministrateModel {
 	 */
 	public function wine_details() {
 		return $this->hasMany(WineDetails::class);
+	}
+
+	/**
+	 * @return HasMany
+	 */
+	public function wines_chosen_signed_off() {
+		return $this->hasMany(WinesChosenSignedOff::class);
 	}
 
 }
