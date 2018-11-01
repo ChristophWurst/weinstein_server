@@ -15,6 +15,7 @@ use App\Auth\Abilities\WineAbilities;
 use App\MasterData\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Test\Integration\Settings\CompetitionTest;
 
 class AuthServiceProvider extends ServiceProvider {
 
@@ -72,6 +73,7 @@ class AuthServiceProvider extends ServiceProvider {
 		Gate::define('complete-competition-tasting-kdb', CompetitionAbilities::class . '@completeTastingKdb');
 		Gate::define('complete-competition-tasting-excluded', CompetitionAbilities::class . '@completeTastingExcluded');
 		Gate::define('complete-competition-tasting-sosi', CompetitionAbilities::class . '@completeTastingSosi');
+		Gate::define('sign-chosen', CompetitionAbilities::class . '@signChosen');
 		Gate::define('complete-competition-tasting-choosing', CompetitionAbilities::class . '@completeTastingChoosing');
 		Gate::define('complete-competition-catalogue-numbers', CompetitionAbilities::class . '@completeCatalogueNumbers');
 

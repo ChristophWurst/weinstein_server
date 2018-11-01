@@ -60,7 +60,7 @@ class WineApiController extends BaseController {
 		} catch (ValidationException $ex) {
 			return response()->json(['errors' => $ex->getErrors()], 412);
 		} catch (AuthorizationException $ex) {
-			return response()->json(['error' => "Änderung nicht erlaubt"], 400);
+			return response()->json(['error' => $ex->getMessage()], 400);
 		} catch (InvalidCompetitionStateException $ex) {
 			return response()->json(['error' => "Diese Änderung ist in diesem Abschnitt der Verkostung nicht erlaubt."], 400);
 		}

@@ -25,15 +25,19 @@ use App\Contracts\MasterDataStore;
 use App\Contracts\TastingCatalogueHandler;
 use App\Contracts\TastingHandler;
 use App\Http\Controllers\BaseController;
+use App\MasterData\Association;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\Tasting\TastingStage;
+use App\WinesChosenSignedOff;
+use function array_map;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\Process\Exception\InvalidArgumentException;
@@ -107,6 +111,8 @@ class CompetitionController extends BaseController {
 				'wines_tasting_number2' => $competition->wines()->withTastingNumber(TastingStage::find(2))->count(),
 				'wines_sosi' => $competition->wines()->sosi()->count(),
 				'wines_chosen' => $competition->wines()->chosen()->count(),
+				'associations' => Association::count(),
+				'associations_chosen_signed_off' => $competition->wines_chosen_signed_off()->count(),
 				'wines_without_catalogue_number' => $this->tastingCatalogueHandler->getNrOfWinesWithoutCatalogueNumber($competition),
 		]);
 	}
@@ -224,6 +230,50 @@ class CompetitionController extends BaseController {
 			$this->tastingHandler->lockSosi($competition);
 		}
 		return Redirect::route('competition/show', ['competition' => $competition->id]);
+	}
+
+	public function showSignChosen(Competition $competition) {
+		$this->authorize('sign-chosen', $competition);
+
+		$user = Auth::user();
+		if ($user->isAdmin()) {
+			$associations = Association::all();
+		} else {
+			$associations = Auth::user()->associations;
+		}
+
+		return $this->view->make('competition/sign-chosen', [
+			'competition' => $competition,
+			'associations' => $associations->map(
+				function (Association $association) use ($competition) {
+					return [
+						'association' => $association,
+						'total' => $competition->wine_details()
+							->where('association_id', $association->id)
+							->count(),
+						'chosen' => $competition->wine_details()
+							->where('association_id', $association->id)
+							->where('chosen', true)
+							->count(),
+						'signed-off' => $competition->wines_chosen_signed_off()
+							->where('association_id', $association->id)
+							->exists(),
+					];
+				}),
+		]);
+	}
+
+	public function signChosen(Competition $competition, Association $association) {
+		$this->authorize('sign-chosen', $competition, $association);
+
+		$signedOff = new WinesChosenSignedOff();
+		$signedOff->association()->associate($association);
+		$signedOff->competition()->associate($competition);
+		$signedOff->save();
+
+		return Redirect::route('competition/sign-chosen', [
+			'competition' => $competition,
+		]);
 	}
 
 	/**

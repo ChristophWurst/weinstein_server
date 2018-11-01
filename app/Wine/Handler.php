@@ -136,10 +136,17 @@ class Handler implements WineHandler {
 				throw new WineLockedException();
 			}
 		}
-		if ($competitionState->id === CompetitionState::STATE_CHOOSE &&
-			($wine->kdb || $wine->sosi) &&
-			isset($data['chosen']) && !$data['chosen']) {
-			throw new AuthorizationException();
+		if ($competitionState->id === CompetitionState::STATE_CHOOSE) {
+			if (($wine->kdb || $wine->sosi) &&
+				isset($data['chosen']) && !$data['chosen']) {
+				throw new AuthorizationException("KdB und SoSi müssen ausgeschenkt werden");
+			}
+			if ($wine->competition->wines_chosen_signed_off()
+				->where('association_id', $wine->applicant->association->id)
+				->exists()) {
+				// Chosen wines of this association have already been signed off
+				throw new AuthorizationException("Vereinsadmin hat die Auswahl bereits abgeschlossen");
+			}
 		}
 		if ($competitionState->id === CompetitionState::STATE_CHOOSE &&
 			$wine->excluded &&
@@ -357,65 +364,6 @@ class Handler implements WineHandler {
 		$this->wineRepository->update($wine, [
 			'chosen' => $chosen,
 		]);
-	}
-
-	/**
-	 * Import chosen wines using a file
-	 * 
-	 * @param UploadedFile $file
-	 * @param Competition $competition
-	 * @return int Number of read lines
-	 */
-	public function importChosen(UploadedFile $file, Competition $competition): int {
-		//iterate over all entries and try to store them
-		//if exceptions occur, all db actions are rolled back to prevent data 
-		//inconsistency
-		try {
-			$doc = PHPExcel_IOFactory::load($file->getRealPath());
-		} catch (Exception $ex) {
-			throw new ValidationException(new MessageBag(array('Ung&uuml;ltiges Dateiformat')));
-		}
-
-		$sheet = $doc->getActiveSheet();
-
-		DB::beginTransaction();
-		try {
-			$competition->wines()->update(array('chosen' => false));
-			$competition->wines()->where('kdb', 1)->orWhere('sosi', 1)->update(array('chosen' => true));
-			$rowCount = 1;
-
-			foreach ($sheet->toArray() as $row) {
-				if (!isset($row[0])) {
-					Log::error('invalid tasting number import format');
-					throw new ValidationException(new MessageBag(array('Fehler beim Lesen der Datei')));
-				}
-				$wine = $competition->wines()->where('nr', '=', $row[0])->first();
-				if (is_null($wine)) {
-					Log::error('invalid wine id while importing chosen');
-					throw new ValidationException(new MessageBag(array('Wein ' . $row[0] . ' nicht vorhanden')));
-				}
-				if ($wine->excluded) {
-					Log::error('ex wine while importing chosen');
-					throw new ValidationException(new MessageBag(array('Wein ' . $row[0] . ' darf nicht ausgeschenkt werden (Ex)')));
-				}
-				try {
-					$this->updateChosen($wine, true);
-				} catch (AuthorizationException $ex) {
-					throw new ValidationException(new MessageBag(array('Änderung an Wein ' . $row[0] . ' nicht zulässig')));
-				}
-				$rowCount++;
-			}
-		} catch (ValidationException $ve) {
-			DB::rollback();
-			$messages = new MessageBag(array(
-				'row' => 'Fehler in Zeile ' . $rowCount,
-			));
-			$messages->merge($ve->getErrors());
-			throw new ValidationException($messages);
-		}
-		DB::commit();
-		//return number of read lines
-		return $rowCount - 1;
 	}
 
 	/**

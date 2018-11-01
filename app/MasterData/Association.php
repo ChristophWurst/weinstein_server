@@ -23,6 +23,7 @@ namespace App\MasterData;
 
 use App\AdministrateModel;
 use App\MasterData\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
