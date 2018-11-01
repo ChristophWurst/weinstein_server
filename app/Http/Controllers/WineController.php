@@ -524,42 +524,6 @@ class WineController extends BaseController {
 	}
 
 	/**
-	 * Show import form
-	 * 
-	 * @param Competition $competition
-	 * @return View
-	 */
-	public function importChosen(Competition $competition) {
-		$this->authorize('import-chosen-wines', $competition);
-
-		return $this->viewFactory->make('competition/wines/import-chosen');
-	}
-
-	/**
-	 * Validate and store import files chosen wines
-	 * 
-	 * @param Competition $competition
-	 * @return type
-	 */
-	public function importChosenStore(Competition $competition) {
-		$this->authorize('import-chosen-wines', $competition);
-
-		try {
-			$file = Input::file('xlsfile');
-			if ($file === null) {
-				return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
-			}
-			$rowsImported = $this->wineHandler->importChosen($file, $competition);
-		} catch (ValidationException $ve) {
-			return Redirect::route('enrollment.wines/import-chosen', ['competition' => $competition->id])
-					->withErrors($ve->getErrors())
-					->withInput();
-		}
-		Session::flash('rowsImported', $rowsImported);
-		return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
-	}
-
-	/**
 	 * Export competitions wines as Excel
 	 * 
 	 * @param Competition $competition

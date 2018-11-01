@@ -90,12 +90,6 @@
     </a>
     @endif
     @if ($edit_chosen)
-        <a class="btn btn-default"
-           type="button"
-           href="{!! route('enrollment.wines/import-chosen', array('competition' => $competition->id)) !!}">
-            <span class="glyphicon glyphicon-import"></span>
-           Auswahl importieren
-        </a>
         @can('sign-chosen', $competition)
         <a class="btn btn-primary"
            type="button"

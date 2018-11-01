@@ -76,13 +76,6 @@ interface WineHandler {
 	public function importSosi(UploadedFile $file, Competition $competition);
 
 	/**
-	 * @param UploadedFile $file
-	 * @param Competition $competition
-	 * @return int Number of read lines
-	 */
-	public function importChosen(UploadedFile $file, Competition $competition): int;
-
-	/**
 	 * @param Wine $wine
 	 */
 	public function delete(Wine $wine);
