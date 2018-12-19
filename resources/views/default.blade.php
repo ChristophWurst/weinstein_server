@@ -15,13 +15,7 @@ use App\MasterData\CompetitionState;
 		<link rel="icon" type="image/png" href="{!! asset('favicon-16x16.png') !!}" sizes="16x16">
 		<link rel="mask-icon" href="{!! asset('safari-pinned-tab.svg') !!}" color="#5bbad5">
 
-        <!-- Bootstrap -->
-        <link href="{!! asset('css/bootstrap.css') !!}" rel="stylesheet">
-        <link href="{!! asset('css/bootstrap-theme.css') !!}" rel="stylesheet">
-        
-        <link href="{!! asset('css/weinstein.css') !!}" rel="stylesheet">
-        <link href="{!! asset('js/vendor/select2/dist/css/select2.min.css') !!}" rel="stylesheet">
-        <link href="{!! asset('css/select2-bootstrap.css') !!}" rel="stylesheet">
+        <script src="{!! asset('js/weinstein.js') !!}"></script>
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -30,11 +24,8 @@ use App\MasterData\CompetitionState;
               <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
             <![endif]-->
 		<script type="text/javascript">
-			var Weinstein = {};
-			Weinstein.currentUser = {};
 			@if (Auth::check())
-			Weinstein.currentUser.username = '{{ Auth::user()->username }}';
-			Weinstein.currentUser.isAdmin = {{ Auth::user()->isAdmin() ? 'true' : 'false' }};
+			setUser('{{ Auth::user()->username }}', {{ Auth::user()->isAdmin() ? 'true' : 'false' }});
 			@endif
 		</script>
     </head>
@@ -63,7 +54,7 @@ use App\MasterData\CompetitionState;
 						?>
                         <li><a href="{!! $compLink !!}">Bewerb</a></li>
                         @else
-                        <?php 
+                        <?php
 							$stateTastingNumbers = in_array($competition->competitionState->description, array('ENROLLMENT', 'TASTINGNUMBERS1', 'TASTINGNUMBERS2')) && $competition->enrollmentFinished();
 							$stateTasting = in_array($competition->competitionState->description, array('TASTING1', 'TASTING2'));
 						?>
@@ -131,7 +122,7 @@ use App\MasterData\CompetitionState;
                                     <a href="{!! route('settings') !!}">&Uuml;bersicht</a>
                                 </li>
                                 <li class="divider">
-                                    
+
                                 </li>
                                 @if (Auth::user()->isAdmin())
                                 <li class="{!! Request::is('settings/competition*') ? 'active' : '' !!}">
@@ -144,7 +135,7 @@ use App\MasterData\CompetitionState;
                                     <a href="{!! route('settings.activitylog'); !!}">Ereignisse</a>
                                 </li>
                                 <li class="divider">
-                                    
+
                                 </li>
                                 @endif
                                 <li class="{!! Request::segment(2) == 'users' ? 'active' : '' !!}">
@@ -199,34 +190,13 @@ use App\MasterData\CompetitionState;
 				</div>
 		</div>
 
-		<script src="https://cdn.ravenjs.com/3.14.1/raven.min.js" crossorigin="anonymous"></script>
-        <script src="{!! asset('js/vendor/es6-promise/es6-promise.js') !!}"></script>
-        <script src="{!! asset('js/vendor/jquery/dist/jquery.min.js') !!}"></script>
-        <script src="{!! asset('js/vendor/bootstrap/dist/js/bootstrap.min.js') !!}"></script>
-		<script src="{!! asset('js/vendor/underscore/underscore.js') !!}"></script>
-		<script src="{!! asset('js/vendor/handlebars/handlebars.min.js') !!}"></script>
-		<script src="{!! asset('js/vendor/backbone/backbone.js') !!}"></script>
-		<script src="{!! asset('js/vendor/backbone.radio/build/backbone.radio.js') !!}"></script>
-		<script src="{!! asset('js/vendor/backbone.marionette/lib/backbone.marionette.js') !!}"></script>
-        <script src="{!! asset('js/vendor/select2/dist/js/select2.min.js') !!}"></script>
-        <script src="{!! asset('js/vendor/select2/dist/js/i18n/de.js') !!}"></script>
-        <script src="{!! asset('js/weinstein.js') !!}"></script>
-
         <script>
-			ES6Promise.polyfill();
-			$(function(){ 
-				$.ajaxSetup({
-					headers: {'X-CSRF-TOKEN': '<?php echo csrf_token(); ?>'}
-				});
-			});
-			try {
-                Raven.config('<?php echo config('sentry.dsn_pub'); ?>', {
-                    release: '<?php echo config('app.version'); ?>',
-                    environment: '<?php echo config('app.env'); ?>'
-                }).install()
-            } catch (e) {
-			    console.error('could not initialize Sentry:', e)
-            }
+            wsinit({
+                csrfToken: '<?php echo csrf_token(); ?>',
+                dsn: '<?php echo config('sentry.dsn_pub'); ?>',
+                release: '<?php echo config('app.version'); ?>',
+                environment: '<?php echo config('app.env'); ?>'
+            });
             @yield('script')
         </script>
     </body>

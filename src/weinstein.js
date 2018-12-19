@@ -1,0 +1,43 @@
+import $ from 'jquery'
+import '@babel/polyfill'
+import {init} from '@sentry/browser';
+import 'bootstrap'
+
+import './style/weinstein.less';
+
+import {addGlobal} from './globals';
+import {TastersView} from './views/tasterview';
+import {retastebutton} from './retastebutton';
+import {setUser} from './user';
+import {WineCollection} from './models/wine';
+import {WinesView} from './views/wineview';
+
+// TODO: refactor away from these globals
+addGlobal('$', $);
+addGlobal('TastersView', TastersView);
+addGlobal('retastebutton', retastebutton);
+addGlobal('WineCollection', WineCollection);
+addGlobal('WinesView', WinesView);
+addGlobal('setUser', setUser);
+
+console.debug('Weinstein dependencies and scripts loaded');
+
+window.wsinit = ({csrfToken, dsn, release, environment}) => {
+    $(function () {
+        $.ajaxSetup({
+            headers: {'X-CSRF-TOKEN': csrfToken}
+        });
+    });
+
+    try {
+        init({
+            dsn,
+            release,
+            environment
+        })
+    } catch (e) {
+        console.error('Could not initialize Sentry:', e)
+    }
+
+    console.info('Weinstein initialized');
+}

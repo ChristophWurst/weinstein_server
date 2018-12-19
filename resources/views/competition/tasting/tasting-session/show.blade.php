@@ -154,7 +154,7 @@ $(function() {
 
 @foreach ($data->commissions as $commission)
 $(function() {
-    var tv = new Weinstein.Views.TastersView({
+    var tv = new TastersView({
 		el: '#tasters-{{ $commission->side }}',
 		side: '{{ $commission->side }}',
 		locked: {{ $commission->locked ? 'true' : 'false' }},
