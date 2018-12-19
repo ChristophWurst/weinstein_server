@@ -136,10 +136,8 @@
 <!-- /.table-responsive -->
 
 <script type="text/javascript">
-	Weinstein.currentCompetition = {};
-
 	@if (!is_null($competition->wuser_username))
-	Weinstein.currentCompetition.adminUsername = '{{ $competition->wuser_username }}'
+    setCompetitionAdmin('{{ $competition->wuser_username }}')
 	@endif
 </script>
 
@@ -167,9 +165,9 @@ $(function() {
         submit();
     });
 
-	var wines = new Weinstein.Models.WineCollection();
+	var wines = new WineCollection();
 	wines.url = '{{ $wine_url }}';
-	var wineList = new Weinstein.Views.WineView({
+	var wineList = new WinesView({
 		el: $('#wines-container'),
 		wines: wines,
 		tableOptions: {
