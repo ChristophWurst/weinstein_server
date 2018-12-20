@@ -17,7 +17,6 @@ RUN npm run build
 FROM weinstein/webserver:latest
 COPY . /var/www
 COPY --from=php-builder /var/www/public/vendor /var/www/vendor
-COPY --from=js-builder /app/public/css/*.css /var/www/public/css/
 COPY --from=js-builder /app/public/js /var/www/public/js
 USER root
 RUN chown -R www-data /var/www && \
