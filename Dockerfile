@@ -11,10 +11,8 @@ FROM node:9.5.0 as js-builder
 WORKDIR /app
 COPY package*.json /app/
 RUN npm install
-COPY *bower* ./
-RUN ./node_modules/bower/bin/bower install --allow-root
 COPY . .
-RUN ./node_modules/grunt-cli/bin/grunt
+RUN npm run build
 
 FROM weinstein/webserver:latest
 COPY . /var/www
