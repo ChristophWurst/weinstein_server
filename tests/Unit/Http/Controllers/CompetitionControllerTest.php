@@ -106,7 +106,7 @@ class CompetitionControllerTest extends BrowserKitTestCase {
 		$competition = Mockery::mock(Competition::class);
 		$tasting = 3;
 
-		$this->setExpectedException(InvalidArgumentException::class);
+		$this->expectException(InvalidArgumentException::class);
 		$this->controller->completeTasting($competition, $tasting);
 	}
 
@@ -131,7 +131,7 @@ class CompetitionControllerTest extends BrowserKitTestCase {
 		$tasting = 3;
 		$request = Mockery::mock(Request::class);
 
-		$this->setExpectedException(InvalidArgumentException::class);
+		$this->expectException(InvalidArgumentException::class);
 		$this->controller->lockTasting($competition, $tasting, $request);
 	}
 

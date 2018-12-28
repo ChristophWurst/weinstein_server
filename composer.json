@@ -1,30 +1,27 @@
 {
-	"name": "laravel/laravel",
-	"description": "The Laravel Framework.",
-	"keywords": [
-		"framework",
-		"laravel"
-	],
+	"name": "weinstein/server",
+	"description": "Weinstein",
 	"type": "project",
 	"require": {
 		"php": ">=7.1.0",
 		"ext-zip": "1.*",
 		"ext-zlib": "*",
-		"laravel/framework": "5.4.*",
 		"itbz/fpdf": "1.7.3",
-		"laravelcollective/html": "^5.4",
 		"fzaninotto/faker": "~1.4",
+		"laravel/framework": "5.5.*",
+		"laravelcollective/html": "5.5.*",
 		"phpoffice/phpexcel": "^1.8",
 		"predis/predis": "^1.1",
 		"sentry/sentry-laravel": "^0.11.0"
 	},
 	"require-dev": {
+		"filp/whoops": "~2.0",
 		"mockery/mockery": "1.2.0",
 		"phpspec/phpspec": "~5.0",
-		"phpunit/phpunit": "~5.7",
+		"phpunit/phpunit": "~6.0",
 		"symfony/css-selector": "3.1.*",
 		"symfony/dom-crawler": "3.4.*",
-		"laravel/browser-kit-testing": "1.*"
+		"laravel/browser-kit-testing": "2.*"
 	},
 	"autoload": {
 		"classmap": [
@@ -44,6 +41,10 @@
 		}
 	},
 	"scripts": {
+		"post-autoload-dump": [
+			"Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+			"@php artisan package:discover"
+		],
 		"post-root-package-install": [
 			"php -r \"file_exists('.env') || copy('.env.example', '.env');\""
 		],
@@ -51,12 +52,10 @@
 			"php artisan key:generate"
 		],
 		"post-install-cmd": [
-			"Illuminate\\Foundation\\ComposerScripts::postInstall",
-			"php artisan optimize"
+			"Illuminate\\Foundation\\ComposerScripts::postInstall"
 		],
 		"post-update-cmd": [
-			"Illuminate\\Foundation\\ComposerScripts::postUpdate",
-			"php artisan optimize"
+			"Illuminate\\Foundation\\ComposerScripts::postUpdate"
 		]
 	},
 	"config": {

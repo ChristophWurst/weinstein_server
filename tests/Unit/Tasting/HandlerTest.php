@@ -92,7 +92,7 @@ class HandlerTest extends TestCase {
 	}
 
 	public function testLockTastingNumbersInvalidTastingStage() {
-		$this->setExpectedException(Exception::class, 'invalid competition state');
+		$this->expectException(Exception::class, 'invalid competition state');
 
 		$competition = \Mockery::mock(Competition::class);
 		$competitionState = \Mockery::mock(CompetitionState::class);
@@ -172,7 +172,7 @@ class HandlerTest extends TestCase {
 		$competitionState->description = 'ENROLLMENT';
 		$competition->competitionstate()->associate($competitionState);
 
-		$this->setExpectedException(Exception::class);
+		$this->expectException(Exception::class);
 		$this->handler->lockTasting($competition);
 	}
 
@@ -340,7 +340,7 @@ class HandlerTest extends TestCase {
 			->andReturn(null);
 		$this->tastingNumberRepository->shouldReceive('deleteAll')
 			->never();
-		$this->setExpectedException(Exception::class);
+		$this->expectException(Exception::class);
 
 		$this->handler->resetTastingNumbers($competition);
 	}

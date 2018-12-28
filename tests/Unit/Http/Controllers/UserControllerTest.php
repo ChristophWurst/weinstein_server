@@ -301,7 +301,7 @@ class UserControllerTest extends BrowserKitTestCase {
 			->andReturn(true);
 		$this->masterDataStore->shouldNotReceive('deleteUser');
 
-		$this->setExpectedException(\Exception::class);
+		$this->expectException(\Exception::class);
 		$this->controller->destroy($userToDelete, $this->request);
 	}
 
