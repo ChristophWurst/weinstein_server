@@ -24,8 +24,6 @@ namespace App\MasterData;
 use App\Notifications\ResetPassword;
 use App\Support\Activity\Log;
 use App\Tasting\TastingSession;
-use Exception;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -277,12 +275,12 @@ class User extends Authenticatable
 	}
 
 	/**
-	 * Check wheter two user objects are referencing the same data set
+	 * Check whether two user objects are referencing the same data set
 	 *
 	 * @param User $other
 	 * @return boolean
 	 */
-	public function is(Model $other)
+	public function is($other)
 	{
 		return $other instanceof User && $this->username === $other->username;
 	}
