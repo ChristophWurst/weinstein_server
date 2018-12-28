@@ -105,7 +105,7 @@ class StoreTest extends TestCase {
 		$this->associationRepository->expects($this->never())
 			->method('create');
 
-		$this->setExpectedException(ValidationException::class);
+		$this->expectException(ValidationException::class);
 		$this->store->createAssociation($data);
 	}
 
@@ -133,7 +133,7 @@ class StoreTest extends TestCase {
 		$this->associationRepository->expects($this->never())
 			->method('update');
 
-		$this->setExpectedException(ValidationException::class);
+		$this->expectException(ValidationException::class);
 		$this->store->updateAssociation($association, $data);
 	}
 

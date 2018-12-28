@@ -109,7 +109,7 @@ class CatalogueHandlerTest extends TestCase {
 			->andReturn(1);
 		$dbConnection->shouldReceive('rollBack')
 			->once();
-		$this->setExpectedException(ValidationException::class);
+		$this->expectException(ValidationException::class);
 
 		$this->handler->importCatalogueNumbers($file, $competition);
 	}
@@ -124,7 +124,7 @@ class CatalogueHandlerTest extends TestCase {
 		$competitionState->shouldReceive('getAttribute')
 			->with('id')
 			->andReturn(CompetitionState::STATE_ENROLLMENT);
-		$this->setExpectedException(InvalidCompetitionStateException::class);
+		$this->expectException(InvalidCompetitionStateException::class);
 
 		$this->handler->importCatalogueNumbers($file, $competition);
 	}
@@ -214,7 +214,7 @@ class CatalogueHandlerTest extends TestCase {
 			->with($wine1, ['catalogue_number' => 1]);
 		$dbConnection->shouldReceive('rollBack')
 			->once();
-		$this->setExpectedException(ValidationException::class);
+		$this->expectException(ValidationException::class);
 
 		$this->handler->importCatalogueNumbers($file, $competition);
 	}
@@ -265,7 +265,7 @@ class CatalogueHandlerTest extends TestCase {
 			->with($wine1, ['catalogue_number' => 1]);
 		$dbConnection->shouldReceive('rollBack')
 			->once();
-		$this->setExpectedException(ValidationException::class);
+		$this->expectException(ValidationException::class);
 
 		$this->handler->importCatalogueNumbers($file, $competition);
 	}
@@ -313,7 +313,7 @@ class CatalogueHandlerTest extends TestCase {
 			->with($wine1, ['catalogue_number' => 1]);
 		$dbConnection->shouldReceive('rollBack')
 			->once();
-		$this->setExpectedException(ValidationException::class);
+		$this->expectException(ValidationException::class);
 
 		$this->handler->importCatalogueNumbers($file, $competition);
 	}
@@ -454,7 +454,7 @@ class CatalogueHandlerTest extends TestCase {
 			->andReturn($wine1);
 		$dbConnection->shouldReceive('rollBack')
 			->once();
-		$this->setExpectedException(ValidationException::class);
+		$this->expectException(ValidationException::class);
 
 		$this->handler->importCatalogueNumbers($file, $competition);
 	}

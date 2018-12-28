@@ -140,7 +140,7 @@ class HandlerTest extends TestCase {
 			->once()
 			->andThrow(new ValidationException());
 
-		$this->setExpectedException(ValidationException::class);
+		$this->expectException(ValidationException::class);
 		$this->handler->update($wine, $data);
 	}
 
@@ -185,7 +185,7 @@ class HandlerTest extends TestCase {
 			->never()
 			->with($wine, $data);
 
-		$this->setExpectedException(InvalidCompetitionStateException::class);
+		$this->expectException(InvalidCompetitionStateException::class);
 		$this->handler->update($wine, $data);
 	}
 
@@ -230,7 +230,7 @@ class HandlerTest extends TestCase {
 			->never()
 			->with($wine, $data);
 
-		$this->setExpectedException(InvalidCompetitionStateException::class);
+		$this->expectException(InvalidCompetitionStateException::class);
 		$this->handler->update($wine, $data);
 	}
 
@@ -275,7 +275,7 @@ class HandlerTest extends TestCase {
 			->never()
 			->with($wine, $data);
 
-		$this->setExpectedException(InvalidCompetitionStateException::class);
+		$this->expectException(InvalidCompetitionStateException::class);
 		$this->handler->update($wine, $data);
 	}
 
@@ -320,7 +320,7 @@ class HandlerTest extends TestCase {
 			->never()
 			->with($wine, $data);
 
-		$this->setExpectedException(InvalidCompetitionStateException::class);
+		$this->expectException(InvalidCompetitionStateException::class);
 		$this->handler->update($wine, $data);
 	}
 
@@ -364,7 +364,7 @@ class HandlerTest extends TestCase {
 			->andReturn(false);
 		$this->wineRepository->shouldReceive('update')
 			->never();
-		$this->setExpectedException(WineLockedException::class);
+		$this->expectException(WineLockedException::class);
 
 		$this->handler->update($wine, $data);
 	}
@@ -413,7 +413,7 @@ class HandlerTest extends TestCase {
 			->andReturn(false);
 		$this->wineRepository->shouldReceive('update')
 			->never();
-		$this->setExpectedException(WineLockedException::class);
+		$this->expectException(WineLockedException::class);
 
 		$this->handler->update($wine, $data);
 	}
@@ -495,7 +495,7 @@ class HandlerTest extends TestCase {
 
 		$this->wineRepository->shouldNotReceive('update');
 
-		$this->setExpectedException(ValidationException::class);
+		$this->expectException(ValidationException::class);
 		$this->handler->updateKdb($wine, $data);
 	}
 
@@ -526,7 +526,7 @@ class HandlerTest extends TestCase {
 
 		$this->wineRepository->shouldNotReceive('update');
 
-		$this->setExpectedException(ValidationException::class);
+		$this->expectException(ValidationException::class);
 		$this->handler->updateSosi($wine, $data);
 	}
 
