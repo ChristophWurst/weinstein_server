@@ -102,7 +102,7 @@ class WineAbilities {
 	 * @return boolean
 	 */
 	private function mayUpdateKdb(User $user, Wine $wine) {
-		return $wine->administrates($user);
+		return $wine->competition->administrates($user);
 	}
 
 	/**
@@ -111,7 +111,7 @@ class WineAbilities {
 	 * @return boolean
 	 */
 	private function mayUpdateSosi(User $user, Wine $wine) {
-		return $wine->administrates($user);
+		return $wine->competition->administrates($user);
 	}
 
 	/**
