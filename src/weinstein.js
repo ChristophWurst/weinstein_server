@@ -2,10 +2,14 @@ import $ from 'jquery'
 import '@babel/polyfill'
 import {init} from '@sentry/browser';
 import 'bootstrap'
+import 'select2/dist/css/select2.css'
+import 'select2/dist/js/select2'
+import 'select2/dist/js/i18n/de'
 
 import './style/weinstein.less';
 
 import {addGlobal} from './globals';
+import './entertab'
 import {TastersView} from './views/tasterview';
 import {retastebutton} from './retastebutton';
 import {setUser} from './user';
