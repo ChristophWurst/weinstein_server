@@ -167,7 +167,7 @@ $(function() {
 
 @foreach ($data->commissions as $commission)
 $(function() {
-    new retastebutton({
+    retastebutton({
         'input': '#retaste-tastingnumber-{!! $commission->side !!}',
         'btn': '#retaste-btn-{!! $commission->side !!}',
         'translateUrl': '{!! route('tasting.numbers/translate', array('competition' => $competition->id, 'id' => ':id')) !!}',
