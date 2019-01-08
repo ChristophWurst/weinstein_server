@@ -117,7 +117,7 @@ class WineController extends BaseController {
 				'show_edit_wine' => $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT,
 				'show_rating1' => $this->showRating1($competition, $competitionAdmin),
 				'show_rating2' => $competitionAdmin && $competition->competitionState->id >= CompetitionState::STATE_TASTING2,
-				'edit_kdb' => $competition->competitionState->id === CompetitionState::STATE_KDB,
+				'edit_kdb' => $competitionAdmin && $competition->competitionState->id === CompetitionState::STATE_KDB,
 				'show_kdb' => $competition->competitionState->id >= CompetitionState::STATE_KDB,
 				'show_complete_kdb' => $competition->competitionState->id === CompetitionState::STATE_KDB,
 				'edit_excluded' => $competition->competitionState->id === CompetitionState::STATE_EXCLUDE,
