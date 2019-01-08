@@ -92,9 +92,10 @@ class WineAbilitiesTest extends TestCase {
 	/**
 	 * Simulate a user updating the sosi state (kdb remains)
 	 */
-	public function testUpdateAllowedForWineAdministrator() {
+	public function testUpdateNotAllowedForWineAdministrator() {
 		$user = $this->getUserMock();
 		$wine = Mockery::mock(Wine::class);
+		$competition = Mockery::mock(Competition::class);
 		$data = [
 			'id' => 23,
 			'kdb' => true,
@@ -106,7 +107,40 @@ class WineAbilitiesTest extends TestCase {
 		$wine->shouldReceive('getAttribute')
 			->with('sosi')
 			->andReturn(false);
-		$wine->shouldReceive('administrates')
+		$wine->shouldReceive('getAttribute')
+			->with('competition')
+			->andReturn($competition);
+		$competition->shouldReceive('administrates')
+			->with($user)
+			->andReturn(false);
+
+		$allowed = $this->abilities->update($user, $wine, $data);
+
+		$this->assertFalse($allowed);
+	}
+
+	/**
+	 * Simulate a user updating the sosi state (kdb remains)
+	 */
+	public function testUpdateAllowedForCompetitionAdministrator() {
+		$user = $this->getUserMock();
+		$wine = Mockery::mock(Wine::class);
+		$competition = Mockery::mock(Competition::class);
+		$data = [
+			'id' => 23,
+			'kdb' => true,
+			'sosi' => true,
+		];
+		$wine->shouldReceive('getAttribute')
+			->with('kdb')
+			->andReturn(true);
+		$wine->shouldReceive('getAttribute')
+			->with('sosi')
+			->andReturn(false);
+		$wine->shouldReceive('getAttribute')
+			->with('competition')
+			->andReturn($competition);
+		$competition->shouldReceive('administrates')
 			->with($user)
 			->andReturn(true);
 
