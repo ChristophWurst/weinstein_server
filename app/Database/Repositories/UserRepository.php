@@ -34,6 +34,15 @@ class UserRepository {
 	}
 
 	/**
+	 * @param string $username
+	 * @return User|null
+	 */
+	public function find(string $username)
+	{
+		return User::find($username);
+	}
+
+	/**
 	 * @param array $data
 	 * @return User
 	 */

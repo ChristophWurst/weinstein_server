@@ -64,6 +64,12 @@ interface MasterDataStore {
 	public function resetCompetition(Competition $competition);
 
 	/**
+	 * @param string $username
+	 * @return User|null
+	 */
+	public function getUser(string $username);
+
+	/**
 	 * @return Collection
 	 */
 	public function getUsers(User $user = null);

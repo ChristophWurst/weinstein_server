@@ -265,6 +265,11 @@ class Store implements MasterDataStore {
 		//return $this->competitionRepository->reset($competition);
 	}
 
+	public function getUser(string $username)
+	{
+		return $this->userRepository->find($username);
+	}
+
 	public function getUsers(User $user = null) {
 		if (is_null($user) || $user->isAdmin()) {
 			return $this->userRepository->findAll();
