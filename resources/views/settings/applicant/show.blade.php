@@ -9,6 +9,13 @@
         <span class="glyphicon glyphicon-edit"></span>
         bearbeiten
     </a>
+    @can('delete-applicant', $data)
+    <a href="{!! route('settings.applicants/delete', array('id' => $data->id)) !!}"
+       accesskey=""type="button" class="btn btn-warning">
+        <span class="glyphicon glyphicon-remove"></span>
+        l&ouml;schen
+    </a>
+    @endcan
 </p>
 <div class="row">
     <div class="col-sm-12 col-md-6 col-lg-4">

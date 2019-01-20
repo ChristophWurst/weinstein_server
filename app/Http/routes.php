@@ -417,6 +417,13 @@ Route::group(array('prefix' => 'settings', 'middleware' => 'auth'), function() {
 		Route::post('edit', array(
 			'uses' => 'ApplicantController@update',
 		));
+		Route::get('delete', array(
+			'as' => 'settings.applicants/delete',
+			'uses' => 'ApplicantController@delete',
+		));
+		Route::post('delete', array(
+			'uses' => 'ApplicantController@destroy',
+		));
 	});
 
 	/*

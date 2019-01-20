@@ -109,6 +109,11 @@ interface MasterDataStore {
 	public function updateApplicant(Applicant $applicant, array $data);
 
 	/**
+	 * @param Applicant $applicant
+	 */
+	public function deleteApplicant(Applicant $applicant);
+
+	/**
 	 * @return Collection
 	 */
 	public function getWineSorts();
