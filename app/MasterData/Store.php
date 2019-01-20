@@ -196,6 +196,10 @@ class Store implements MasterDataStore {
 		return $applicant;
 	}
 
+	public function deleteApplicant(Applicant $applicant) {
+		$this->applicantRepository->delete($applicant);
+	}
+
 	public function getAssociations(User $user = null) {
 		if (is_null($user) || $user->isAdmin()) {
 			return $this->associationRepository->findAll();

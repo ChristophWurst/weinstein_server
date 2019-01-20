@@ -72,4 +72,8 @@ class ApplicantRepository {
 		return $applicant;
 	}
 
+	public function delete(Applicant $applicant) {
+		$applicant->delete();
+	}
+
 }

@@ -224,4 +224,22 @@ class ApplicantController extends BaseController {
 		return Redirect::route('settings.applicants');
 	}
 
+	public function delete(Applicant $applicant) {
+		$this->authorize('delete-applicant', $applicant);
+
+		return $this->viewFactory->make('settings/applicant/delete',
+			[
+				'applicant' => $applicant,
+			]);
+	}
+
+	public function destroy(Applicant $applicant, Request $request) {
+		$this->authorize('delete-applicant', $applicant);
+
+		if ($request->get('del') === 'Ja') {
+			$this->masterDataStore->deleteApplicant($applicant);
+		}
+		return Redirect::route('settings.applicants');
+	}
+
 }
