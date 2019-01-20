@@ -318,9 +318,8 @@ class Store implements MasterDataStore {
 	 * Create user for applicant it it does not exist
 	 * 
 	 * @param Applicant $applicant
-	 * @return Applicant
 	 */
-	private function createApplicantUser(Applicant $applicant) {
+	public function createApplicantUser(Applicant $applicant) {
 		//for better security, existing users are not associated with the new applicant
 		$password = str_random(15);
 		if (!User::find($applicant->id)) {
