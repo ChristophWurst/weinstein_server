@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\AddMissingApplicantUsers;
 use App\Console\Commands\CreateUser;
 use App\Console\Commands\TestEmail;
 use Illuminate\Console\Scheduling\Schedule;
@@ -15,6 +16,7 @@ class Kernel extends ConsoleKernel {
 	 * @var array
 	 */
 	protected $commands = [
+		AddMissingApplicantUsers::class,
 		CreateUser::class,
 		TestEmail::class,
 	];

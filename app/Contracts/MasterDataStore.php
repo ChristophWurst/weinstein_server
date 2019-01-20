@@ -86,7 +86,7 @@ interface MasterDataStore {
 	public function deleteUser(User $user);
 
 	/**
-	 * @return Collection
+	 * @return Collection|Applicant[]
 	 */
 	public function getApplicants(User $user = null);
 
@@ -95,6 +95,13 @@ interface MasterDataStore {
 	 * @return array
 	 */
 	public function createApplicant(array $data);
+
+	/**
+	 * Create user for applicant it it does not exist
+	 *
+	 * @param Applicant $applicant
+	 */
+	public function createApplicantUser(Applicant $applicant);
 
 	/**
 	 * @param UploadedFile $file
