@@ -7,7 +7,7 @@
     <?php
     list ($user, $password) = Session::get('applicant_created');
     ?>
-    Der Betrieb kann sich mit Benutzernamen <strong>{{ $user }}</strong> und Password <strong>{{ $password }}</strong> anmelden.
+    Der Betrieb kann sich mit dem Benutzernamen <strong>{{ $user }}</strong> und Passwort <strong>{{ $password }}</strong> anmelden.
 </div>
 @endif
 <h1>Betriebe</h1>
