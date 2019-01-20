@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\AddMissingApplicantUsers;
+use App\Console\Commands\ChangePassword;
 use App\Console\Commands\CreateUser;
 use App\Console\Commands\TestEmail;
 use Illuminate\Console\Scheduling\Schedule;
@@ -17,6 +18,7 @@ class Kernel extends ConsoleKernel {
 	 */
 	protected $commands = [
 		AddMissingApplicantUsers::class,
+		ChangePassword::class,
 		CreateUser::class,
 		TestEmail::class,
 	];
