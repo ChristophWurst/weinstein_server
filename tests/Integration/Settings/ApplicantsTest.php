@@ -93,7 +93,7 @@ class ApplicantsTest extends BrowserKitTestCase {
 
 		$data = array_merge($applicant->address->toArray(), $applicant->toArray());
 		$data['label'] = 'Winzerhof XYZ';
-		$this->post('settings/applicant/' . $applicant->id . '/edit', $data);
+		$this->post('settings/applicants/' . $applicant->id . '/edit', $data);
 		$this->assertRedirectedTo('settings/applicants');
 
 		$this->get('settings/applicants');
