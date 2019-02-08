@@ -39,6 +39,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
+use function implode;
+use function in_array;
+use function is_array;
+use function json_decode;
 use PHPExcel_IOFactory;
 
 class Handler implements WineHandler {
@@ -72,6 +76,14 @@ class Handler implements WineHandler {
 		$validator->setUser(Auth::user());
 		$validator->validateCreate();
 		$wine = new Wine($data);
+
+		$sort = $wine->winesort;
+		$qualitiesAllowed = json_decode($sort->quality_allowed, false);
+		if (is_array($qualitiesAllowed) && !in_array($wine->winequality_id, $qualitiesAllowed)) {
+			throw new ValidationException(new MessageBag([
+				'Ungültige Kombination von Sorte und Qualitätsstufe. Zulässige Qualitätsstufe(n) ist/sind: ' . implode(',', $qualitiesAllowed),
+			]));
+		}
 
 		//associate competition
 		$wine->competition()->associate($competition);
