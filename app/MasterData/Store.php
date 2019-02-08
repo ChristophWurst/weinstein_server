@@ -256,6 +256,7 @@ class Store implements MasterDataStore {
 					$wine->delete();
 				}
 			}
+			$competition->wines_chosen_signed_off()->delete();
 
 			//$competition->user()->associate(null);
 			$competition->competitionState()->associate(CompetitionState::find(CompetitionState::STATE_ENROLLMENT));
