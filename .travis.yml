@@ -3,7 +3,7 @@ php:
     - 7.2
 
 addons:
-    mariadb: "10.0"
+    mariadb: "10.2"
 
 cache:
     directories:
