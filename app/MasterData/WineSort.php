@@ -21,8 +21,6 @@
 
 namespace App\MasterData;
 
-use App\MasterData\Competition;
-use App\MasterData\WineSort;
 use App\Wine;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
