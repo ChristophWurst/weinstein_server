@@ -148,10 +148,15 @@ class Handler implements WineHandler {
 				throw new AuthorizationException("Vereinsadmin hat die Auswahl bereits abgeschlossen");
 			}
 		}
+		if ($competitionState->id === CompetitionState::STATE_EXCLUDE &&
+			isset($data['excluded']) && $data['excluded']) {
+			// Excluded wines must not be chosen, hence we have to update the default value here
+			$data['chosen'] = false;
+		}
 		if ($competitionState->id === CompetitionState::STATE_CHOOSE &&
 			$wine->excluded &&
 			isset($data['chosen']) && $data['chosen']) {
-			throw new AuthorizationException();
+			throw new AuthorizationException("Dieser Wein darf nicht ausgeschenkt werden");
 		}
 
 		$this->wineRepository->update($wine, $data);
