@@ -405,7 +405,7 @@ Route::group(array('prefix' => 'settings', 'middleware' => 'auth'), function() {
 		));
 	});
 
-	Route::group(array('prefix' => 'applicant/{applicant}'), function() {
+	Route::group(array('prefix' => 'applicants/{applicant}'), function() {
 		Route::get('', array(
 			'as' => 'settings.applicant/show',
 			'uses' => 'ApplicantController@show'

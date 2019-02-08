@@ -31,6 +31,19 @@
     <strong>Hinweis:</strong> Sie sehen nur Betriebe, die Sie verwalten
 </div>
 @endif
+<div class="container-fluid pull-left">
+    <div class="input-group" id="search-applicant">
+        <input type="text"
+               value=""
+               class="form-control"
+               placeholder="Betriebsnummer">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="button">
+                <span class="glyphicon glyphicon-search"></span>
+            </button>
+        </span>
+    </div>
+</div>
 @if (Session::has('rowsImported'))
 <div class="alert alert-success" role="alert">
     <strong>Import erfolgreich</strong><br>
@@ -69,4 +82,27 @@
     </table>
 </div>
 <!-- /.table-responsive -->
+<script>
+    $(function() {
+        var url = '{!! route('settings.applicants') !!}/';
+
+        var input = $('#search-applicant input');
+        input.val(null); // empty input
+        var button = $('#search-applicant button');
+
+        function getUrl(id) {
+            return url + id;
+        }
+
+        function submit() {
+            var id = input.val();
+            window.location.href = getUrl(id);
+        }
+
+        button.click(function(e) {
+            submit();
+        });
+    });
+</script>
+
 @stop

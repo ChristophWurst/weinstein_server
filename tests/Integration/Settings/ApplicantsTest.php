@@ -85,15 +85,15 @@ class ApplicantsTest extends BrowserKitTestCase {
 
 		$this->be($admin);
 
-		$this->get('settings/applicant/' . $applicant->id);
+		$this->get('settings/applicants/' . $applicant->id);
 		$this->assertResponseOk();
 
-		$this->get('settings/applicant/' . $applicant->id . '/edit');
+		$this->get('settings/applicants/' . $applicant->id . '/edit');
 		$this->assertResponseOk();
 
 		$data = array_merge($applicant->address->toArray(), $applicant->toArray());
 		$data['label'] = 'Winzerhof XYZ';
-		$this->post('settings/applicant/' . $applicant->id . '/edit', $data);
+		$this->post('settings/applicants/' . $applicant->id . '/edit', $data);
 		$this->assertRedirectedTo('settings/applicants');
 
 		$this->get('settings/applicants');
