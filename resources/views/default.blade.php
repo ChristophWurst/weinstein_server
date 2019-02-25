@@ -80,23 +80,25 @@ use App\MasterData\CompetitionState;
                         <li class="dropdown {!! Request::segment(3) == 'evaluation' ? 'active' : '' !!}">
                             <a href="{!! route('evaluation', array('competition' => $competition->id)) !!}" class="dropdown-menu-left" data-toggle="dropdown">Auswertung <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li role="presentation" class="dropdown-header">Protokolle</li>
                                 @if ($competition->administrates(Auth::user()))
+                                <li role="presentation" class="dropdown-header">Protokolle</li>
                                 <li class="{{ Request::segment(3) == 'evaluation' && Request::segment(4) == 'protocols' ? 'active' : '' }}">
                                     <a href="{{ route('evaluation.protocols', array('competition' => $competition->id)) }}">Kostprotokolle</a>
                                 </li>
                                 @endif
-                                @if ($competition->administrates(Auth::user()) && $competition->competition_state_id === CompetitionState::STATE_FINISHED)
+                                @if ($competition->competition_state_id === CompetitionState::STATE_FINISHED)
                                 <li role="presentation" class="dropdown-header">Kataloge</li>
                                 <li class="{{ Request::segment(3) == 'evaluation' && Request::segment(4) == 'catalogues' ? 'active' : '' }}">
                                     <a href="{{ route('evaluation.catalogues/tasting', array('competition' => $competition->id)) }}">Kostkatalog</a>
                                 </li>
+                                @if ($competition->administrates(Auth::user()))
                                 <li class="{{ Request::segment(3) == 'evaluation' && Request::segment(4) == 'catalogues' ? 'active' : '' }}">
                                     <a href="{{ route('evaluation.catalogues/web', array('competition' => $competition->id)) }}">Webkatalog</a>
                                 </li>
                                 <li class="{{ Request::segment(3) == 'evaluation' && Request::segment(4) == 'catalogues' ? 'active' : '' }}">
                                     <a href="{{ route('evaluation.catalogues/address', array('competition' => $competition->id)) }}">Addresskatalog</a>
                                 </li>
+                                @endif
                                 @endif
                             </ul>
                         </li>

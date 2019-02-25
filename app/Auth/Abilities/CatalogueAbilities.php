@@ -39,6 +39,10 @@ class CatalogueAbilities {
 		return $this->administratesCompetition($user, $competition) && $this->checkCompetitionState($competition);
 	}
 
+	public function createTastingCatalogue(User $user, Competition $competition) {
+		return $user->associations()->exists();
+	}
+
 	public function importNumbers(User $user, Competition $competition) {
 		return $competition->administrates($user);
 	}

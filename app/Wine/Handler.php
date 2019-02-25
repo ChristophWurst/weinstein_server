@@ -125,7 +125,7 @@ class Handler implements WineHandler {
 		if (isset($data['sosi']) && $wine->sosi !== $data['sosi'] && $competitionState->id !== CompetitionState::STATE_SOSI) {
 			throw new InvalidCompetitionStateException();
 		}
-		if (isset($data['chosen']) && $wine->chosen !== $data['chosen'] && $competitionState->id !== CompetitionState::STATE_CHOOSE) {
+		if (isset($data['chosen']) && $wine->chosen != $data['chosen'] && $competitionState->id !== CompetitionState::STATE_CHOOSE) {
 			throw new InvalidCompetitionStateException();
 		}
 		if (isset($data['excluded']) && $wine->excluded !== $data['excluded'] && $competitionState->id !== CompetitionState::STATE_EXCLUDE) {
