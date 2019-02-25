@@ -21,8 +21,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\WineHandler;
 use App\MasterData\Competition;
-use App\Http\Controllers\BaseController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
 class CatalogueController extends BaseController {
@@ -71,17 +72,27 @@ class CatalogueController extends BaseController {
 
 	/**
 	 * Download tasting catalogue
-	 * 
+	 *
 	 * @param Competition $competition
 	 * @return \Illuminate\Http\Response
 	 */
-	public function tastingCatalogue(Competition $competition) {
-		$this->authorize('create-catalogue');
+	public function tastingCatalogue(Competition $competition, WineHandler $wineHandler) {
+		$this->authorize('create-tasting-catalogue', $competition);
 
-		$wines = $competition
-			->wine_details()
-			->Chosen()
-			->get();
+		$user = Auth::user();
+		if ($user->isAdmin()) {
+			$wines = $competition
+				->wine_details()
+				->Chosen()
+				->get();
+		} else {
+			$wines = $competition
+				->wine_details()
+				->Chosen()
+				->where('applicant_username', $user->username)
+				->orWhere('association_username', $user->username)
+				->get();
+		}
 		$we = new TastingCatalogueExport($wines);
 		$filename = 'Kostkatalog.xls';
 		$headers = [

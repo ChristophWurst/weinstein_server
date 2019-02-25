@@ -133,6 +133,7 @@ class WineController extends BaseController {
 				'show_catalogue_number' => $competition->competitionState->id >= CompetitionState::STATE_CATALOGUE_NUMBERS,
 				'show_complete_catalogue_numbers' => $competition->competitionState->id === CompetitionState::STATE_CATALOGUE_NUMBERS && $this->tastingCatalogueHandler->allWinesHaveBeenAssigned($competition),
 				'export_flaws' => $competition->competitionState->id >= CompetitionState::STATE_TASTING1,
+				'show_export_catalogue' => $competition->competitionState->id >= CompetitionState::STATE_TASTING1,
 				'show_enrollment_pdf_export' => $competition->competitionState->id === CompetitionState::STATE_ENROLLMENT,
 		]);
 	}

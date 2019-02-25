@@ -62,6 +62,7 @@ class AuthServiceProvider extends ServiceProvider {
 		 * Catalogue
 		 */
 		Gate::define('create-catalogue', CatalogueAbilities::class . '@create');
+		Gate::define('create-tasting-catalogue', CatalogueAbilities::class . '@createTastingCatalogue');
 
 		/**
 		 * Competition
