@@ -85,6 +85,7 @@ class CatalogueController extends BaseController {
 				->wine_details()
 				->Chosen()
 				->get();
+			$we = new AdminTastingCatalogueExport($wines);
 		} else {
 			$wines = $competition
 				->wine_details()
@@ -97,8 +98,9 @@ class CatalogueController extends BaseController {
 					['association_username', '=', $user->username],
 				])
 				->get();
+			$we = new TastingCatalogueExport($wines);
 		}
-		$we = new TastingCatalogueExport($wines);
+
 		$filename = 'Kostkatalog.xls';
 		$headers = [
 			'Content-Type' => 'application/vnd.ms-excel',
