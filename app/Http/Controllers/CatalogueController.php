@@ -88,9 +88,14 @@ class CatalogueController extends BaseController {
 		} else {
 			$wines = $competition
 				->wine_details()
-				->Chosen()
-				->where('applicant_username', $user->username)
-				->orWhere('association_username', $user->username)
+				->where([
+					['chosen', '=', true],
+					['applicant_username', '=', $user->username],
+				])
+				->orWhere([
+					['chosen', '=', true],
+					['association_username', '=', $user->username],
+				])
 				->get();
 		}
 		$we = new TastingCatalogueExport($wines);
