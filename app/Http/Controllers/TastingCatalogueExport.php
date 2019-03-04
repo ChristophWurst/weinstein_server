@@ -91,7 +91,7 @@ class TastingCatalogueExport {
 			$sheet->setCellValue("C$row", $w->winesort_name);
 			$sheet->setCellValue("D$row", $w->label);
 			$sheet->setCellValue("E$row", $w->vintage);
-			$sheet->setCellValue("F$row", $w->quality_label);
+			$sheet->setCellValue("F$row", $w->winequality->abbr);
 			if ($w->rating1) {
 				$sheet->setCellValue("G$row", floor($w->rating1 * 10) / 10);
 			}
