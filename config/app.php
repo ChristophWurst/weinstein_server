@@ -147,6 +147,7 @@ return [
 		 */
 		Collective\Html\HtmlServiceProvider::class,
 		Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
+		\Fideloper\Proxy\TrustedProxyServiceProvider::class,
 		/*
 		 * Application Service Providers...
 		 */
