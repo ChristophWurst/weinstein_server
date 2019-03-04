@@ -88,9 +88,15 @@ use App\MasterData\CompetitionState;
                                 @endif
                                 @if ($competition->competition_state_id === CompetitionState::STATE_FINISHED)
                                 <li role="presentation" class="dropdown-header">Kataloge</li>
+                                @if ($competition->administrates(Auth::user()))
+                                <li class="{{ Request::segment(3) == 'evaluation' && Request::segment(4) == 'catalogues' ? 'active' : '' }}">
+                                    <a href="{{ route('evaluation.catalogues/tasting', array('competition' => $competition->id)) }}">Admin-Kostkatalog</a>
+                                </li>
+                                @else
                                 <li class="{{ Request::segment(3) == 'evaluation' && Request::segment(4) == 'catalogues' ? 'active' : '' }}">
                                     <a href="{{ route('evaluation.catalogues/tasting', array('competition' => $competition->id)) }}">Kostkatalog</a>
                                 </li>
+                                @endif
                                 @if ($competition->administrates(Auth::user()))
                                 <li class="{{ Request::segment(3) == 'evaluation' && Request::segment(4) == 'catalogues' ? 'active' : '' }}">
                                     <a href="{{ route('evaluation.catalogues/web', array('competition' => $competition->id)) }}">Webkatalog</a>
