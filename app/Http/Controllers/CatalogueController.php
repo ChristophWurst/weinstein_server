@@ -89,7 +89,6 @@ class CatalogueController extends BaseController {
 		} else {
 			$wines = $competition
 				->wine_details()
-				->orderBy('catalogue_number')
 				->where([
 					['chosen', '=', true],
 					['applicant_username', '=', $user->username],
@@ -98,6 +97,7 @@ class CatalogueController extends BaseController {
 					['chosen', '=', true],
 					['association_username', '=', $user->username],
 				])
+				->orderBy('catalogue_number')
 				->get();
 			$we = new TastingCatalogueExport($wines);
 		}
