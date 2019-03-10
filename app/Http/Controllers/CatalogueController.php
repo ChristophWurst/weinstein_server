@@ -89,6 +89,7 @@ class CatalogueController extends BaseController {
 		} else {
 			$wines = $competition
 				->wine_details()
+				->orderBy('catalogue_number')
 				->where([
 					['chosen', '=', true],
 					['applicant_username', '=', $user->username],
