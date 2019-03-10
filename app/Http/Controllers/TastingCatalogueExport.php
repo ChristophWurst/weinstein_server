@@ -79,11 +79,6 @@ class TastingCatalogueExport {
 	 * @param PHPExcel_Worksheet $sheet
 	 */
 	private function setExcelData(PHPExcel_Worksheet $sheet) {
-		// Sort data
-		$this->wines = $this->wines->sort(function($wine1, $wine2) {
-			return $wine1->applicant->association->id - $wine2->applicant->association->id;
-		});
-
 		$row = 2;
 		foreach ($this->wines as $w) {
 			$sheet->setCellValue("A$row", $w->catalogue_number);
