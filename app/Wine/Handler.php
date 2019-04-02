@@ -266,7 +266,10 @@ class Handler implements WineHandler {
 		DB::beginTransaction();
 		$rowCount = 0;
 		try {
-			$competition->wines()->update(['excluded' => false]);
+			$competition->wines()->update([
+				'excluded' => false,
+				'chosen' => true,
+			]);
 			$rowCount++;
 
 			foreach ($sheet->toArray() as $row) {
@@ -281,6 +284,7 @@ class Handler implements WineHandler {
 				}
 				$this->wineRepository->update($wine, [
 					'excluded' => true,
+					'chosen' => false,
 				]);
 				$rowCount++;
 			}
