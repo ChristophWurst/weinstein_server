@@ -11,27 +11,27 @@
 </div>
 @endif
 <h1>Betriebe</h1>
-@if (Auth::user()->isAdmin() || $canAdd)
-<a class="btn btn-default"
-   type="button"
-   href="{!! route('settings.applicants/create') !!}">
-    <span class="glyphicon glyphicon-plus"></span>
-   Betrieb hinzuf&uuml;gen
-</a>
-@if (Auth::user()->isAdmin())
-<a class="btn btn-default"
-   type="button"
-   href="{!! route('settings.applicants/import') !!}">
-    <span class="glyphicon glyphicon-import"></span>
-    Daten importieren
-</a>
-@endif
-@else
-<div class="alert alert-info" role="alert">
-    <strong>Hinweis:</strong> Sie sehen nur Betriebe, die Sie verwalten
-</div>
-@endif
-<div class="container-fluid pull-left">
+<div class="form-inline">
+    @if (Auth::user()->isAdmin() || $canAdd)
+    <a class="btn btn-default"
+       type="button"
+       href="{!! route('settings.applicants/create') !!}">
+        <span class="glyphicon glyphicon-plus"></span>
+       Betrieb hinzuf&uuml;gen
+    </a>
+    @if (Auth::user()->isAdmin())
+    <a class="btn btn-default"
+       type="button"
+       href="{!! route('settings.applicants/import') !!}">
+        <span class="glyphicon glyphicon-import"></span>
+        Daten importieren
+    </a>
+    @endif
+    @else
+    <div class="alert alert-info" role="alert">
+        <strong>Hinweis:</strong> Sie sehen nur Betriebe, die Sie verwalten
+    </div>
+    @endif
     <div class="input-group" id="search-applicant">
         <input type="text"
                value=""
