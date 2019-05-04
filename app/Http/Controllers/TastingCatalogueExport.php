@@ -82,7 +82,7 @@ class TastingCatalogueExport {
 		$row = 2;
 		foreach ($this->wines as $w) {
 			$sheet->setCellValue("A$row", $w->catalogue_number);
-			$sheet->setCellValue("B$row", $w->applicant->lastname);
+			$sheet->setCellValue("B$row", $w->applicant->firstname . ' ' . $w->applicant->lastname);
 			$sheet->setCellValue("C$row", $w->winesort_name);
 			$sheet->setCellValue("D$row", $w->label);
 			$sheet->setCellValue("E$row", $w->vintage);
