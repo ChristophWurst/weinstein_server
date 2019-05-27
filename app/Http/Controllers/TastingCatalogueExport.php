@@ -45,7 +45,8 @@ class TastingCatalogueExport {
 	 */
 	private $headers = [
 		'KatNr',
-		'Name',
+		'Nachname',
+		'Vorname',
 		'Sorte',
 		'Marke',
 		'Jahr',
@@ -71,6 +72,7 @@ class TastingCatalogueExport {
 		$sheet->setCellValue("G1", $this->headers[6]);
 		$sheet->setCellValue("H1", $this->headers[7]);
 		$sheet->setCellValue("I1", $this->headers[8]);
+		$sheet->setCellValue("J1", $this->headers[9]);
 	}
 
 	/**
@@ -82,19 +84,20 @@ class TastingCatalogueExport {
 		$row = 2;
 		foreach ($this->wines as $w) {
 			$sheet->setCellValue("A$row", $w->catalogue_number);
-			$sheet->setCellValue("B$row", $w->applicant->firstname . ' ' . $w->applicant->lastname);
-			$sheet->setCellValue("C$row", $w->winesort_name);
-			$sheet->setCellValue("D$row", $w->label);
-			$sheet->setCellValue("E$row", $w->vintage);
-			$sheet->setCellValue("F$row", $w->winequality->abbr);
+			$sheet->setCellValue("B$row", $w->applicant->lastname);
+			$sheet->setCellValue("C$row", $w->applicant->firstname);
+			$sheet->setCellValue("D$row", $w->winesort_name);
+			$sheet->setCellValue("E$row", $w->label);
+			$sheet->setCellValue("F$row", $w->vintage);
+			$sheet->setCellValue("G$row", $w->winequality->abbr);
 			if ($w->rating1) {
-				$sheet->setCellValue("G$row", floor($w->rating1 * 10) / 10);
+				$sheet->setCellValue("H$row", floor($w->rating1 * 10) / 10);
 			}
 			if ($w->kdb) {
-				$sheet->setCellValue("H$row", "KdB");
+				$sheet->setCellValue("I$row", "KdB");
 			}
 			if ($w->sosi) {
-				$sheet->setCellValue("I$row", "SoSi");
+				$sheet->setCellValue("J$row", "SoSi");
 			}
 			$row++;
 		}
