@@ -22,7 +22,7 @@
     "@babel/preset-env": "^7.5.5",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.1.0",
-    "file-loader": "^4.0.0",
+    "file-loader": "^4.1.0",
     "handlebars-loader": "^1.7.1",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
