@@ -14,7 +14,7 @@
     "bootstrap": "3.4.1",
     "handlebars": "^4.7.2",
     "jquery": "^3.4.1",
-    "select2": "^4.0.12",
+    "select2": "^4.0.13",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
