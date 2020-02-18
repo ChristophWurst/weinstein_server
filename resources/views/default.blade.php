@@ -109,6 +109,7 @@ use App\MasterData\CompetitionState;
                             </ul>
                         </li>
                         @endif
+                        <li class="{!! Request::segment(1) === 'downloads' ? 'active' : ''!!}"><a href="{!! route('downloads') !!}">Downloads</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown {!! Request::segment(1) == 'account' ? 'active' : '' !!}">
@@ -154,6 +155,12 @@ use App\MasterData\CompetitionState;
                                 </li>
                                 <li class="{!! (Request::segment(2) == 'applicants' || Request::segment(2) == 'applicant') ? 'active' : '' !!}">
                                     <a href="{!! route('settings.applicants') !!}">Betriebe</a>
+                                </li>
+                                <li class="divider">
+
+                                </li>
+                                <li class="{!! Request::segment(2) == 'downloads' ? 'active' : '' !!}">
+                                    <a href="{!! route('settings.downloads') !!}">Downloads</a>
                                 </li>
                             </ul>
                         </li>

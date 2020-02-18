@@ -467,6 +467,36 @@ Route::group(array('prefix' => 'settings', 'middleware' => 'auth'), function() {
 	});
 
 	/*
+	 * Download settings
+	 */
+	Route::group(array('prefix' => 'downloads'), function() {
+		Route::get('', array(
+			'as' => 'settings.downloads',
+			'uses' => 'DownloadSettingsController@index'
+		));
+		Route::get('create', array(
+			'as' => 'settings.downloads/create',
+			'uses' => 'DownloadSettingsController@create',
+		));
+		Route::post('create', array(
+			'uses' => 'DownloadSettingsController@store',
+		));
+	});
+	Route::group(array('prefix' => 'download/{download}'), function() {
+		Route::get('', array(
+			'as' => 'settings.download/show',
+			'uses' => 'DownloadSettingsController@show'
+		));
+		Route::get('delete', array(
+			'as' => 'settings.download/delete',
+			'uses' => 'DownloadSettingsController@delete',
+		));
+		Route::post('delete', array(
+			'uses' => 'DownloadSettingsController@destroy',
+		));
+	});
+
+	/*
 	 * Users
 	 */
 	Route::group(array('prefix' => 'users'), function() {
@@ -530,7 +560,11 @@ Route::group(array('prefix' => 'settings', 'middleware' => 'auth'), function() {
 	});
 });
 
-
+Route::get('downloads', array(
+	'as' => 'downloads',
+	'uses' => 'DownloadsController@index',
+	'middleware' => 'auth'
+));
 Route::get('account', array(
 	'as' => 'account',
 	'uses' => 'Auth\LoginController@account',
