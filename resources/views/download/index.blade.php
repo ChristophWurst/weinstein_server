@@ -12,7 +12,7 @@
         <tbody>
             @foreach ($downloads as $download)
             <tr>
-                <td><a href="{{ asset('storage/' . $download->path) }}">{{ $download->name }}</a></td>
+                <td>{!! link_to_route('settings.download/show', $download->name, array('id' => $download->id)) !!}</td>
             </tr>
             @endforeach
         </tbody>
