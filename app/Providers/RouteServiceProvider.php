@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\MasterData\Applicant;
 use App\MasterData\Association;
 use App\MasterData\Competition;
+use App\MasterData\Download;
 use App\MasterData\User;
 use App\MasterData\WineSort;
 use App\Tasting\Commission;
@@ -39,6 +40,7 @@ class RouteServiceProvider extends ServiceProvider {
 		Route::model('applicant', Applicant::class);
 		Route::model('competition', Competition::class);
 		Route::model('commission', Commission::class);
+		Route::model('download', Download::class);
 		Route::model('association', Association::class);
 		Route::model('competition', Competition::class);
 		Route::model('tasters', Taster::class);

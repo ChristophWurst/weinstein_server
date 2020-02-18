@@ -39,6 +39,13 @@ use App\MasterData\WineSort;
                 <a href="{!! route('settings.applicants') !!}">Betriebe <span class="badge pull-right">{!! Applicant::count() !!}</span></a>
             </li>
         </ul>
+        <ul class="nav nav-sidebar">
+            @can ('manage-downloads')
+            <li>
+                {!! link_to_route('settings.downloads', 'Downloads') !!}
+            </li>
+            @endif
+        </ul>
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
         @yield('settings_content')

@@ -17,5 +17,10 @@
     <li>
         {!! link_to_route('settings.applicants', 'Betriebe') !!}
     </li>
+    @can ('manage-downloads')
+    <li>
+        {!! link_to_route('settings.downloads', 'Downloads') !!}
+    </li>
+    @endif
 </ul>
 @stop
