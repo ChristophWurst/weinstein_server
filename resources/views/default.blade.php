@@ -156,12 +156,15 @@ use App\MasterData\CompetitionState;
                                 <li class="{!! (Request::segment(2) == 'applicants' || Request::segment(2) == 'applicant') ? 'active' : '' !!}">
                                     <a href="{!! route('settings.applicants') !!}">Betriebe</a>
                                 </li>
+
+                                @can('manage-downloads')
                                 <li class="divider">
 
                                 </li>
                                 <li class="{!! Request::segment(2) == 'downloads' ? 'active' : '' !!}">
                                     <a href="{!! route('settings.downloads') !!}">Downloads</a>
                                 </li>
+                                @endcan
                             </ul>
                         </li>
                     </ul>
