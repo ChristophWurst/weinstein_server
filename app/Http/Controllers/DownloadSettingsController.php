@@ -113,8 +113,6 @@ class DownloadSettingsController extends BaseController {
 	 * @param Download $download
 	 */
 	public function show(Download $download) {
-		$this->authorize('manage-downloads', $download);
-
 		return \response()->download(storage_path('app/' . $download->path), $download->name);
 	}
 
