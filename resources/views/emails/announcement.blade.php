@@ -1,0 +1,6 @@
+{!! $text !!}
+
+--
+
+Weinstein
+{{ URL::to('/') }}

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Database\Seeder;
+
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -19,22 +21,22 @@
  *
  */
 class AddressTableSeeder extends Seeder {
-    
+
 	/**
 	 * Insert new address into database
-	 * 
+	 *
 	 * @param int $zipcode
 	 * @param string $city
 	 * @param string $street
 	 * @param string $nr
 	 */
-	public static function createAddress($zipcode, $city, $street, $nr) {
-		return Address::create(array(
+	public static function createAddress($zipcode, $city, $street, $nr): \App\MasterData\Address {
+		return \App\MasterData\Address::create(array(
 			'zipcode' => $zipcode,
 			'city' => $city,
 			'street' => $street,
 			'nr' => $nr,
 		));
 	}
-    
+
 }
