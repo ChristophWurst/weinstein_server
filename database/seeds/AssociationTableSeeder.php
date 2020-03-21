@@ -18,18 +18,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-class AssociationTableSeeder extends Seeder {
+class AssociationTableSeeder extends \Illuminate\Database\Seeder {
 
 	/**
 	 * Insert new association into database
-	 * 
+	 *
 	 * @param integer $id
 	 * @param string $name
 	 * @param int|null $username
-	 * @return Association
+	 * @return \App\MasterData\Association
 	 */
 	private static function createAssociation($id, $name, $username) {
-		return Association::create(array(
+		return \App\MasterData\Association::create(array(
 			'id' => $id,
 			'name' => $name,
 			'wuser_username' => $username,

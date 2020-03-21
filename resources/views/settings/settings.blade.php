@@ -41,8 +41,13 @@ use App\MasterData\WineSort;
         </ul>
         <ul class="nav nav-sidebar">
             @can ('manage-downloads')
-            <li>
+            <li class="{!! Request::segment(2) == 'downloads' ? 'active' : '' !!}">
                 {!! link_to_route('settings.downloads', 'Downloads') !!}
+            </li>
+            @endif
+            @can ('send-announcements')
+            <li class="{!! Request::segment(2) == 'announcements' ? 'active' : '' !!}">
+                {!! link_to_route('settings.announcements', 'Mitteilungen') !!}
             </li>
             @endif
         </ul>

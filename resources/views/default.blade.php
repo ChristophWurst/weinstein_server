@@ -165,6 +165,12 @@ use App\MasterData\CompetitionState;
                                     <a href="{!! route('settings.downloads') !!}">Downloads</a>
                                 </li>
                                 @endcan
+
+                                @can('send-announcements')
+                                    <li class="{!! Request::segment(2) == 'announcements' ? 'active' : '' !!}">
+                                        <a href="{!! route('settings.announcements') !!}">Mitteilungen</a>
+                                    </li>
+                                @endcan
                             </ul>
                         </li>
                     </ul>

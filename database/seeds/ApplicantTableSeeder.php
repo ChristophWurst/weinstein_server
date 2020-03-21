@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Database\Seeder;
+
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -18,11 +20,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+
 class ApplicantTableSeeder extends Seeder {
 
 	/**
 	 * Insert new applicant into database
-	 * 
+	 *
 	 * @param string $label
 	 * @param string $title
 	 * @param string $firstname
@@ -34,11 +37,11 @@ class ApplicantTableSeeder extends Seeder {
 	 * @param string $web
 	 * @param int $association
 	 * @param string|null $username
-	 * @param Address $address
-	 * @return Applicant
+	 * @param \App\MasterData\Address $address
+	 * @return \App\MasterData\Applicant
 	 */
-	public static function createAppilcant($id, $label, $title, $firstname, $lastname, $phone, $fax, $mobile, $email, $web, $association, $username, Address $address) {
-		$a = Applicant::create(array(
+	public static function createAppilcant($id, $label, $title, $firstname, $lastname, $phone, $fax, $mobile, $email, $web, $association, $username, \App\MasterData\Address $address) {
+		$a = \App\MasterData\Applicant::create(array(
 					'id' => $id,
 					'label' => $label,
 					'title' => $title,
@@ -73,8 +76,8 @@ class ApplicantTableSeeder extends Seeder {
 			} else {
 				$username = null;
 			}
-            
-            
+
+
 			$address = AddressTableSeeder::createAddress(rand(1000, 9000), "city $i", "$i-street", "$i/$i");
 			$this->createAppilcant($i * 10000, "applicant $i", "title $i", "first $i", "last $i", rand(10000000, 90000000), rand(10000000, 90000000), rand(10000000, 90000000), "$i@test.com", "www.test$i.com", $i % 20 + 1, $username, $address);
 		}

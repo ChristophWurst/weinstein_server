@@ -22,6 +22,9 @@ $(document).keydown(e => {
         if (self.is('button') || self.is('a.btn')) {
             return true;
         }
+        if (self.hasClass('no-magic')) {
+            return true;
+        }
 
         // If not a regular hyperlink/button/textarea
         if ($.inArray(self, focusable) && (!self.is('a,button'))) {
@@ -35,7 +38,7 @@ $(document).keydown(e => {
             // Element not found, which means it's not an input
             // -> probably s2 element, so let's find the actual select element
             self = self.closest('div').find('select');
-            var idx = focusable.index(self);
+            idx = focusable.index(self);
         }
         var next = focusable.eq(idx + (e.shiftKey ? -1 : 1));
         if (next.hasClass("select2-hidden-accessible")) {

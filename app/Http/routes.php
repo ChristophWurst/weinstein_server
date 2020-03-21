@@ -497,6 +497,19 @@ Route::group(array('prefix' => 'settings', 'middleware' => 'auth'), function() {
 	});
 
 	/*
+	 * Announcements
+	 */
+	Route::group(array('prefix' => 'announcements'), function() {
+		Route::get('', array(
+			'as' => 'settings.announcements',
+			'uses' => 'AnnouncementsController@index'
+		));
+		Route::post('', array(
+			'uses' => 'AnnouncementsController@send',
+		));
+	});
+
+	/*
 	 * Users
 	 */
 	Route::group(array('prefix' => 'users'), function() {
