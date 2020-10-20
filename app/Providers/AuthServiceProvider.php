@@ -15,7 +15,6 @@ use App\Auth\Abilities\WineAbilities;
 use App\MasterData\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
-use Test\Integration\Settings\CompetitionTest;
 
 class AuthServiceProvider extends ServiceProvider {
 

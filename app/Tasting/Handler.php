@@ -40,7 +40,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
-use PHPExcel_IOFactory;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class Handler implements TastingHandler {
 
@@ -181,7 +181,7 @@ class Handler implements TastingHandler {
 		//if exceptions occur, all db actions are rolled back to prevent data 
 		//inconsistency
 		try {
-			$doc = PHPExcel_IOFactory::load($file->getRealPath());
+			$doc = IOFactory::load($file->getRealPath());
 		} catch (Exception $ex) {
 			throw new ValidationException(new MessageBag(array('Ung&uuml;ltiges Dateiformat')));
 		}

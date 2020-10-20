@@ -32,9 +32,9 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
-use PHPExcel;
-use PHPExcel_IOFactory;
-use PHPExcel_Reader_Exception;
+use InvalidArgumentException;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpSpreadsheet\Spreadsheet;
 
 class CatalogueHandler implements TastingCatalogueHandler {
 
@@ -71,10 +71,10 @@ class CatalogueHandler implements TastingCatalogueHandler {
 		return $this->wineRepository->getNumberOfWinesWithoutCatalogueNumber($competition);
 	}
 
-	protected function loadExcelFile(UploadedFile $file): PHPExcel {
+	protected function loadExcelFile(UploadedFile $file): \PhpOffice\PhpSpreadsheet\Spreadsheet {
 		try {
-			return PHPExcel_IOFactory::load($file->getRealPath());
-		} catch (PHPExcel_Reader_Exception $ex) {
+			return IOFactory::load($file->getRealPath());
+		} catch (InvalidArgumentException $ex) {
 			throw new ValidationException(new MessageBag(array('Ung&uuml;ltiges Dateiformat')));
 		}
 	}

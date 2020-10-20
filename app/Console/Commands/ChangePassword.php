@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Contracts\MasterDataStore;
-use App\Exceptions\ValidationException;
 use Illuminate\Console\Command;
 
 class ChangePassword extends Command

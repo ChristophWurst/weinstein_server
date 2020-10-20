@@ -33,7 +33,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
-use PHPExcel_IOFactory;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use function str_random;
 
 class Store implements MasterDataStore {
@@ -110,7 +110,7 @@ class Store implements MasterDataStore {
 		//iterate over all entries and try to store them
 		//if exceptions occur, all db actions are rolled back to prevent data 
 		//inconsistency
-		$doc = PHPExcel_IOFactory::load($file->getRealPath());
+		$doc = IOFactory::load($file->getRealPath());
 		$sheet = $doc->getActiveSheet();
 
 		$rowCount = 0;

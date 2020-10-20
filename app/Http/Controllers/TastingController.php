@@ -23,7 +23,6 @@ namespace App\Http\Controllers;
 
 use App\Contracts\TastingHandler;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\BaseController;
 use App\Tasting\Commission;
 use App\Tasting\TastingNumber;
 use App\Tasting\TastingSession;

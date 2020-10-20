@@ -21,7 +21,6 @@
 
 namespace App;
 
-use App\AdministrateModel;
 use App\MasterData\Applicant;
 use App\MasterData\Competition;
 use App\MasterData\User;

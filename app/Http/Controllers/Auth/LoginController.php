@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Contracts\ActivityLogger;
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Controller;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;

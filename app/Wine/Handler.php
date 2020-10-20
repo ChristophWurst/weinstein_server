@@ -31,7 +31,6 @@ use App\MasterData\CompetitionState;
 use App\MasterData\User;
 use App\Validation\WineValidatorFactory;
 use App\Wine;
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
@@ -39,11 +38,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use function implode;
 use function in_array;
 use function is_array;
 use function json_decode;
-use PHPExcel_IOFactory;
 
 class Handler implements WineHandler {
 
@@ -79,7 +78,7 @@ class Handler implements WineHandler {
 
 		$sort = $wine->winesort;
 		$qualitiesAllowed = json_decode($sort->quality_allowed, false);
-		if (is_array($qualitiesAllowed) && !in_array($wine->winequality_id, $qualitiesAllowed)) {
+		if (is_array($qualitiesAllowed) && !empty($qualitiesAllowed) && !in_array($wine->winequality_id, $qualitiesAllowed)) {
 			throw new ValidationException(new MessageBag([
 				'Ungültige Kombination von Sorte und Qualitätsstufe. Zulässige Qualitätsstufe(n) ist/sind: ' . implode(',', $qualitiesAllowed),
 			]));
@@ -204,8 +203,8 @@ class Handler implements WineHandler {
 		//if exceptions occur, all db actions are rolled back to prevent data 
 		//inconsistency
 		try {
-			$doc = PHPExcel_IOFactory::load($file->getRealPath());
-		} catch (Exception $ex) {
+			$doc = IOFactory::load($file->getRealPath());
+		} catch (\InvalidArgumentException $ex) {
 			throw new ValidationException(new MessageBag(array('Ung&uuml;ltiges Dateiformat')));
 		}
 
@@ -256,8 +255,8 @@ class Handler implements WineHandler {
 		//if exceptions occur, all db actions are rolled back to prevent data 
 		//inconsistency
 		try {
-			$doc = PHPExcel_IOFactory::load($file->getRealPath());
-		} catch (Exception $ex) {
+			$doc = IOFactory::load($file->getRealPath());
+		} catch (\InvalidArgumentException $ex) {
 			throw new ValidationException(new MessageBag(array('Ung&uuml;ltiges Dateiformat')));
 		}
 
@@ -329,8 +328,8 @@ class Handler implements WineHandler {
 		//if exceptions occur, all db actions are rolled back to prevent data 
 		//inconsistency
 		try {
-			$doc = PHPExcel_IOFactory::load($file->getRealPath());
-		} catch (Exception $ex) {
+			$doc = IOFactory::load($file->getRealPath());
+		} catch (\InvalidArgumentException $ex) {
 			throw new ValidationException(new MessageBag(array('Ung&uuml;ltiges Dateiformat')));
 		}
 
