@@ -31,6 +31,6 @@
     "url-loader": "^4.1.1",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.11",
-    "webpack-merge": "^4.2.2"
+    "webpack-merge": "^5.2.0"
   }
 }
