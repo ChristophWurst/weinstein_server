@@ -1,0 +1,90 @@
+name: Test
+on: [push]
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: [7.1]
+    name: php${{ matrix.php-version }} unit tests
+    services:
+      db:
+        image: mariadb:10.2
+        env:
+          MYSQL_ROOT_PASSWORD: my-secret-pw
+          MYSQL_DATABASE: weinstein_test
+          MYSQL_USER: weinstein_test
+          MYSQL_PASSWORD: test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+    steps:
+      - name: Set up php${{ matrix.php-version }}
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: ${{ matrix.php-version }}
+          tools: composer:v1
+          extensions: ctype,curl,dom,gd,iconv,intl,json,mbstring,openssl,posix,xml,zip
+          coverage: none
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: composer i
+      - name: Prepare env
+        run: cp tests/test.env .env.testing
+      - name: Initialize database
+        run: php artisan migrate --env=testing
+      - name: Run tests
+        run: php ./vendor/bin/phpunit --no-coverage -c tests/phpunit.xml tests/Unit/
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: [7.1]
+    name: php${{ matrix.php-version }} integration tests
+    services:
+      db:
+        image: mariadb:10.2
+        env:
+          MYSQL_ROOT_PASSWORD: my-secret-pw
+          MYSQL_DATABASE: weinstein_test
+          MYSQL_USER: weinstein_test
+          MYSQL_PASSWORD: test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+    steps:
+      - name: Set up php${{ matrix.php-version }}
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: ${{ matrix.php-version }}
+          tools: composer:v1
+          extensions: ctype,curl,dom,gd,iconv,intl,json,mbstring,openssl,posix,xml,zip
+          coverage: none
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: composer i
+      - name: Prepare env
+        run: |
+          cp tests/test.env .env.testing
+          php artisan key:generate --no-interaction --env=testing
+      - name: Initialize database
+        run: |
+          php artisan migrate --env=testing
+          php artisan migrate:rollback --no-interaction --env=testing
+          php artisan migrate --no-interaction --env=testing
+      - name: Run tests
+        run: php ./vendor/bin/phpunit --no-coverage -c tests/phpunit.xml tests/Integration/
+      - name: Print logs
+        if: ${{ failure() }}
+        run: cat ./storage/logs/laravel.log
