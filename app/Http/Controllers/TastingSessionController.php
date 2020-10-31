@@ -134,7 +134,7 @@ class TastingSessionController extends BaseController {
 		$this->authorize('create-tastingsession', $competition);
 		$this->checkCompetitionState($competition);
 
-		$data = Input::all();
+		$data = \Illuminate\Support\Facades\Request::all();
 		//unset user if set to 'none'
 		if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
 			unset($data['wuser_username']);
@@ -244,7 +244,7 @@ class TastingSessionController extends BaseController {
 		$this->checkCompetitionState($tastingSession->competition);
 		$this->checkTastingSessionLocked($tastingSession);
 
-		$data = Input::all();
+		$data = \Illuminate\Support\Facades\Request::all();
 		try {
 			$this->tastingHandler->updateTastingSession($tastingSession, $data);
 		} catch (ValidationException $ve) {
@@ -294,7 +294,7 @@ class TastingSessionController extends BaseController {
 		$this->checkCompetitionState($tastingSession->competition);
 		$this->checkTastingSessionLocked($tastingSession);
 
-		if (Input::has('del') && Input::get('del') == 'Ja') {
+		if (\Illuminate\Support\Facades\Request::has('del') && \Illuminate\Support\Facades\Request::input('del') == 'Ja') {
 			$this->tastingHandler->lockTastingSession($tastingSession);
 		}
 		return Redirect::route('tasting.session/show', ['tastingsession' => $tastingSession->id]);
@@ -329,7 +329,7 @@ class TastingSessionController extends BaseController {
 		$this->checkTastingSessionLocked($tastingSession);
 
 		$competition = $tastingSession->competition;
-		if (Input::get('del') == 'Ja') {
+		if (\Illuminate\Support\Facades\Request::input('del') == 'Ja') {
 			$this->tastingHandler->deleteTastingSession($tastingSession);
 		}
 		return Redirect::route('tasting.sessions', ['competition' => $competition->id]);

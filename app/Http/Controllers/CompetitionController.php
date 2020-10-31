@@ -175,7 +175,7 @@ class CompetitionController extends BaseController {
 	public function lockKdb(Competition $competition) {
 		$this->authorize('complete-competition-kdb');
 
-		if (Input::has('del') && Input::get('del') === 'Ja') {
+		if (\Illuminate\Support\Facades\Request::has('del') && \Illuminate\Support\Facades\Request::input('del') === 'Ja') {
 			$this->tastingHandler->lockKdb($competition);
 		}
 		return Redirect::route('competition/show', ['competition' => $competition->id]);
@@ -200,7 +200,7 @@ class CompetitionController extends BaseController {
 	public function lockExcluded(Competition $competition) {
 		$this->authorize('complete-competition-excluded');
 
-		if (Input::has('del') && Input::get('del') == 'Ja') {
+		if (\Illuminate\Support\Facades\Request::has('del') && \Illuminate\Support\Facades\Request::input('del') == 'Ja') {
 			$this->tastingHandler->lockExcluded($competition);
 		}
 		return Redirect::route('competition/show', ['competition' => $competition->id]);
@@ -225,7 +225,7 @@ class CompetitionController extends BaseController {
 	public function lockSosi(Competition $competition) {
 		$this->authorize('complete-competition-sosi');
 
-		if (Input::has('del') && Input::get('del') == 'Ja') {
+		if (\Illuminate\Support\Facades\Request::has('del') && \Illuminate\Support\Facades\Request::input('del') == 'Ja') {
 			$this->tastingHandler->lockSosi($competition);
 		}
 		return Redirect::route('competition/show', ['competition' => $competition->id]);
@@ -294,7 +294,7 @@ class CompetitionController extends BaseController {
 	public function lockChoosing(Competition $competition) {
 		$this->authorize('complete-competition-tasting-numbers');
 
-		if (Input::has('del') && Input::get('del') == 'Ja') {
+		if (\Illuminate\Support\Facades\Request::has('del') && \Illuminate\Support\Facades\Request::input('del') == 'Ja') {
 			$this->tastingHandler->lockChoosing($competition);
 		}
 		return Redirect::route('competition/show', ['competition' => $competition->id]);
@@ -331,7 +331,7 @@ class CompetitionController extends BaseController {
 	public function lockTastingNumbers(Competition $competition, $tasting): RedirectResponse {
 		$this->authorize('complete-competition-tasting-numbers');
 
-		if (Input::has('del') && Input::get('del') == 'Ja') {
+		if (\Illuminate\Support\Facades\Request::has('del') && \Illuminate\Support\Facades\Request::input('del') == 'Ja') {
 			$this->tastingHandler->lockTastingNumbers($competition, $tasting);
 			return Redirect::route('competition/show', [
 					'competition' => $competition->id
@@ -391,7 +391,7 @@ class CompetitionController extends BaseController {
 	public function postReset(Competition $competition) {
 		$this->authorize('reset-competition', $competition);
 
-		if (Input::has('reset') && Input::get('reset') === 'Ja') {
+		if (\Illuminate\Support\Facades\Request::has('reset') && \Illuminate\Support\Facades\Request::input('reset') === 'Ja') {
 			$this->masterDataStore->resetCompetition($competition);
 		}
 		return Redirect::route('settings.competitions');
