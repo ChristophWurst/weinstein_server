@@ -21,12 +21,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
-use PHPExcel;
-use PHPExcel_Settings;
-use PHPExcel_Worksheet;
-use PHPExcel_Writer_Excel5;
+use Illuminate\Support\Str;
+use PhpOffice\PhpSpreadsheet\Settings;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
 
 class ResultExport {
 
@@ -50,9 +50,9 @@ class ResultExport {
 	/**
 	 * Set worksheets first rows header values
 	 * 
-	 * @param PHPExcel_Worksheet $sheet
+	 * @param Worksheet $sheet
 	 */
-	private function setExcelHeaders(PHPExcel_Worksheet $sheet) {
+	private function setExcelHeaders(Worksheet $sheet) {
 		//headers
 		$sheet->setCellValue("A1", $this->headers[0]);
 		$sheet->setCellValue("B1", $this->headers[1]);
@@ -61,9 +61,9 @@ class ResultExport {
 	/**
 	 * Set worksheets data rows
 	 * 
-	 * @param PHPExcel_Worksheet $sheet
+	 * @param Worksheet $sheet
 	 */
-	private function setExcelData(PHPExcel_Worksheet $sheet) {
+	private function setExcelData(Worksheet $sheet) {
 		//data
 		$row = 2;
 		foreach ($this->wines as $w) {
@@ -85,21 +85,21 @@ class ResultExport {
 	/**
 	 * Export all wines of current competition as Excel spread sheet
 	 * 
-	 * @return Excel sheet
+	 * @return string file name
 	 */
 	public function asExcel() {
 		$filename = sys_get_temp_dir() . '/' . Str::random();
 		$locale = 'de_DE';
-		$validLocale = PHPExcel_Settings::setLocale($locale);
+		$validLocale = Settings::setLocale($locale);
 		if (!$validLocale) {
 			Log::warning('Unable to set locale to ' . $locale . " - reverting to en_us" . PHP_EOL);
 		}
-		$doc = new PHPExcel();
-		$sheet = $doc->getSheet();
+		$doc = new Spreadsheet();
+		$sheet = $doc->getSheet(0);
 		$sheet->setTitle('Weine');
 		$this->setExcelHeaders($sheet);
 		$this->setExcelData($sheet);
-		$writer = new PHPExcel_Writer_Excel5($doc);
+		$writer = new Xls($doc);
 		$writer->save($filename);
 		return $filename;
 	}

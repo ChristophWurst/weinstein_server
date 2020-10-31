@@ -25,7 +25,6 @@ use App\Contracts\TastingHandler;
 use App\Exceptions\IllegalTastingStageException;
 use App\Exceptions\InvalidCompetitionStateException;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\BaseController;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\MasterData\TastingProtocol;

@@ -29,10 +29,10 @@ use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use PHPExcel;
-use PHPExcel_Settings;
-use PHPExcel_Worksheet;
-use PHPExcel_Writer_Excel5;
+use PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Settings;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpSpreadsheet\Writer\Xls;
 use function array_add;
 
 class TastingProtocol {
@@ -93,9 +93,9 @@ class TastingProtocol {
 	}
 
 	/**
-	 * @param PHPExcel_Worksheet $sheet
+	 * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $sheet
 	 */
-	private function setHeaders(PHPExcel_Worksheet $sheet) {
+	private function setHeaders(\PhpOffice\PhpSpreadsheet\Spreadsheet $sheet) {
 		$sheet->setCellValue('A1', 'Kostnummer');
 		$sheet->setCellValue('B1', 'Dateinummer');
 		$sheet->setCellValue('C1', 'Gesamtergebnis');
@@ -152,9 +152,9 @@ class TastingProtocol {
 	}
 
 	/**
-	 * @param PHPExcel_Worksheet $sheet
+	 * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $sheet
 	 */
-	private function setData(PHPExcel_Worksheet $sheet) {
+	private function setData(\PhpOffice\PhpSpreadsheet\Spreadsheet $sheet) {
 		$data = $this->tastingSession->tastedwines()
 			->orderBy('tastingnumber_nr')
 			->select('tastingnumber_nr', 'tastingnumber_id', 'wine_id', 'wine_nr', 'result')
@@ -179,16 +179,16 @@ class TastingProtocol {
 	public function asExcel(): string {
 		$filename = sys_get_temp_dir() . '/' . Str::random();
 		$locale = 'de_DE';
-		$validLocale = PHPExcel_Settings::setLocale($locale);
+		$validLocale = Settings::setLocale($locale);
 		if (!$validLocale) {
 			Log::warning('Unable to set locale to ' . $locale . " - reverting to en_us" . PHP_EOL);
 		}
-		$doc = new PHPExcel();
-		$sheet = $doc->getSheet();
+		$doc = new Spreadsheet();
+		$sheet = $doc->getSheet(0);
 		$sheet->setTitle('Kostprotokoll');
 		$this->setHeaders($sheet);
 		$this->setData($sheet);
-		$writer = new PHPExcel_Writer_Excel5($doc);
+		$writer = new Xls($doc);
 		$writer->save($filename);
 		return $filename;
 	}

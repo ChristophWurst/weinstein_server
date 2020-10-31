@@ -24,7 +24,6 @@ namespace App\Tasting;
 use App\AdministrateModel;
 use App\MasterData\Competition;
 use App\MasterData\User;
-use App\Tasting\TastingStage;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;

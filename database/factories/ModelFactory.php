@@ -122,6 +122,7 @@ $factory->define(WineSort::class, function() {
 	return [
 		'order' => rand(1, 50000),
 		'name' => str_random(10),
+		'quality_allowed' => '[]',
 	];
 });
 

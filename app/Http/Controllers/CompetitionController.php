@@ -24,13 +24,11 @@ namespace App\Http\Controllers;
 use App\Contracts\MasterDataStore;
 use App\Contracts\TastingCatalogueHandler;
 use App\Contracts\TastingHandler;
-use App\Http\Controllers\BaseController;
 use App\MasterData\Association;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\Tasting\TastingStage;
 use App\WinesChosenSignedOff;
-use function array_map;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -41,6 +39,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\Process\Exception\InvalidArgumentException;
+use function array_map;
 
 class CompetitionController extends BaseController {
 

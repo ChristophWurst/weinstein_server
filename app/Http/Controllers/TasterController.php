@@ -7,7 +7,6 @@ use App\Exceptions\ValidationException;
 use App\Tasting\Commission;
 use App\Tasting\Taster;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use function response;
 
 class TasterController extends BaseController {

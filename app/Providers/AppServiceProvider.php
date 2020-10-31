@@ -3,8 +3,6 @@
 namespace App\Providers;
 
 use App\MasterData\Competition;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;

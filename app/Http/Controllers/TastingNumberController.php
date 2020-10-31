@@ -24,7 +24,6 @@ namespace App\Http\Controllers;
 use App\Contracts\TastingHandler;
 use App\Exceptions\InvalidCompetitionStateException;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\BaseController;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\Tasting\TastingNumber;

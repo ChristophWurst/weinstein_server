@@ -22,7 +22,6 @@
 namespace App\Database\Repositories;
 
 use App\MasterData\Competition;
-use App\MasterData\User;
 use App\Tasting\TastingSession;
 use App\Tasting\TastingStage;
 

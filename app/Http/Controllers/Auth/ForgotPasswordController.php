@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\MasterData\User;
-use function back;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Support\Facades\Password;
 use Symfony\Component\HttpFoundation\Request;
+use function back;
 
 class ForgotPasswordController extends Controller
 {

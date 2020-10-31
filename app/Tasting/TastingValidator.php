@@ -21,8 +21,6 @@
 
 namespace App\Tasting;
 
-use App\Tasting\Commission;
-use App\Tasting\TastingSession;
 use App\Validation\Validator;
 use Illuminate\Database\Eloquent\Model;
 

@@ -22,7 +22,6 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\ActivityLogger;
-use App\Http\Controllers\BaseController;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Response;
 

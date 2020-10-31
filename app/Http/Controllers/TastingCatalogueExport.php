@@ -23,11 +23,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use PHPExcel;
-use PHPExcel_Settings;
-use PHPExcel_Worksheet;
-use PHPExcel_Worksheet_PageSetup;
-use PHPExcel_Writer_Excel5;
+use PhpOffice\PhpSpreadsheet;
+use PhpOffice\PhpSpreadsheet\Settings;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpSpreadsheet\Worksheet\PageSetup;
+use PhpSpreadsheet\Writer\Xls;
+
+;
 
 class TastingCatalogueExport {
 
@@ -59,9 +61,9 @@ class TastingCatalogueExport {
 	/**
 	 * Set worksheets first rows header values
 	 * 
-	 * @param PHPExcel_Worksheet $sheet
+	 * @param Worksheet $sheet
 	 */
-	private function setExcelHeaders(PHPExcel_Worksheet $sheet) {
+	private function setExcelHeaders(Worksheet $sheet) {
 		//headers
 		$sheet->setCellValue("A1", $this->headers[0]);
 		$sheet->setCellValue("B1", $this->headers[1]);
@@ -78,9 +80,9 @@ class TastingCatalogueExport {
 	/**
 	 * Set worksheets data rows
 	 * 
-	 * @param PHPExcel_Worksheet $sheet
+	 * @param Worksheet $sheet
 	 */
-	private function setExcelData(PHPExcel_Worksheet $sheet) {
+	private function setExcelData(Worksheet $sheet) {
 		$row = 2;
 		foreach ($this->wines as $w) {
 			$sheet->setCellValue("A$row", $w->catalogue_number);
@@ -115,24 +117,24 @@ class TastingCatalogueExport {
 	/**
 	 * Export all wines of current competition as Excel spread sheet
 	 * 
-	 * @return Excel sheet
+	 * @return string the file name
 	 */
 	public function asExcel() {
 		$filename = sys_get_temp_dir() . '/' . Str::random();
 		$locale = 'de_DE';
-		$validLocale = PHPExcel_Settings::setLocale($locale);
+		$validLocale = Settings::setLocale($locale);
 		if (!$validLocale) {
 			Log::warning('Unable to set locale to ' . $locale . " - reverting to en_us" . PHP_EOL);
 		}
-		$doc = new PHPExcel();
-		$sheet = $doc->getSheet();
-		$layout = new PHPExcel_Worksheet_PageSetup();
-		$layout->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
+		$doc = new PhpSpreadsheet\Spreadsheet();
+		$sheet = $doc->getSheet(0);
+		$layout = new PhpSpreadsheet\Worksheet\PageSetup();
+		$layout->setPaperSize(PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
 		$sheet->setPageSetup($layout);
 		$sheet->setTitle('Kostkatalog');
 		$this->setExcelHeaders($sheet);
 		$this->setExcelData($sheet);
-		$writer = new PHPExcel_Writer_Excel5($doc);
+		$writer = new PhpSpreadsheet\Writer\Xls($doc);
 		$writer->save($filename);
 		return $filename;
 	}

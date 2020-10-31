@@ -23,8 +23,6 @@ namespace App\Http\Controllers;
 
 use App\Mail\Announcement;
 use App\MasterData\Applicant;
-use App\MasterData\Download;
-use App\MasterData\User;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -32,9 +30,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Storage;
 use function pathinfo;
-use function storage_path;
 
 class AnnouncementsController extends BaseController
 {

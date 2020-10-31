@@ -34,8 +34,7 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Http\UploadedFile;
 use Mockery;
 use Mockery\MockInterface;
-use PHPExcel;
-use PHPExcel_Worksheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Test\TestCase;
 
 class CatalogueHandlerTest extends TestCase {
@@ -77,8 +76,8 @@ class CatalogueHandlerTest extends TestCase {
 		$file = Mockery::mock(UploadedFile::class);
 		$competition = Mockery::mock(Competition::class);
 		$competitionState = Mockery::mock(CompetitionState::class);
-		$doc = $this->getMockBuilder(PHPExcel::class)->disableOriginalConstructor()->getMock();
-		$sheet = $this->getMockBuilder(PHPExcel_Worksheet::class)->disableOriginalConstructor()->getMock();
+		$doc = $this->getMockBuilder(\PhpOffice\PhpSpreadsheet\Spreadsheet::class)->disableOriginalConstructor()->getMock();
+		$sheet = $this->getMockBuilder(Worksheet::class)->disableOriginalConstructor()->getMock();
 		$dbConnection = Mockery::mock(Connection::class);
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
@@ -133,8 +132,8 @@ class CatalogueHandlerTest extends TestCase {
 		$file = Mockery::mock(UploadedFile::class);
 		$competition = Mockery::mock(Competition::class);
 		$competitionState = Mockery::mock(CompetitionState::class);
-		$doc = $this->getMockBuilder(PHPExcel::class)->disableOriginalConstructor()->getMock();
-		$sheet = $this->getMockBuilder(PHPExcel_Worksheet::class)->disableOriginalConstructor()->getMock();
+		$doc = $this->getMockBuilder(\PhpOffice\PhpSpreadsheet\Spreadsheet::class)->disableOriginalConstructor()->getMock();
+		$sheet = $this->getMockBuilder(Worksheet::class)->disableOriginalConstructor()->getMock();
 		$dbConnection = Mockery::mock(Connection::class);
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
@@ -175,8 +174,8 @@ class CatalogueHandlerTest extends TestCase {
 		$file = Mockery::mock(UploadedFile::class);
 		$competition = Mockery::mock(Competition::class);
 		$competitionState = Mockery::mock(CompetitionState::class);
-		$doc = $this->getMockBuilder(PHPExcel::class)->disableOriginalConstructor()->getMock();
-		$sheet = $this->getMockBuilder(PHPExcel_Worksheet::class)->disableOriginalConstructor()->getMock();
+		$doc = $this->getMockBuilder(\PhpOffice\PhpSpreadsheet\Spreadsheet::class)->disableOriginalConstructor()->getMock();
+		$sheet = $this->getMockBuilder(Worksheet::class)->disableOriginalConstructor()->getMock();
 		$wine1 = Mockery::mock(Wine::class);
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
@@ -223,8 +222,8 @@ class CatalogueHandlerTest extends TestCase {
 		$file = Mockery::mock(UploadedFile::class);
 		$competition = Mockery::mock(Competition::class);
 		$competitionState = Mockery::mock(CompetitionState::class);
-		$doc = $this->getMockBuilder(PHPExcel::class)->disableOriginalConstructor()->getMock();
-		$sheet = $this->getMockBuilder(PHPExcel_Worksheet::class)->disableOriginalConstructor()->getMock();
+		$doc = $this->getMockBuilder(\PhpOffice\PhpSpreadsheet\Spreadsheet::class)->disableOriginalConstructor()->getMock();
+		$sheet = $this->getMockBuilder(Worksheet::class)->disableOriginalConstructor()->getMock();
 		$wine1 = Mockery::mock(Wine::class);
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
@@ -277,8 +276,8 @@ class CatalogueHandlerTest extends TestCase {
 		$file = Mockery::mock(UploadedFile::class);
 		$competition = Mockery::mock(Competition::class);
 		$competitionState = Mockery::mock(CompetitionState::class);
-		$doc = $this->getMockBuilder(PHPExcel::class)->disableOriginalConstructor()->getMock();
-		$sheet = $this->getMockBuilder(PHPExcel_Worksheet::class)->disableOriginalConstructor()->getMock();
+		$doc = $this->getMockBuilder(\PhpOffice\PhpSpreadsheet\Spreadsheet::class)->disableOriginalConstructor()->getMock();
+		$sheet = $this->getMockBuilder(Worksheet::class)->disableOriginalConstructor()->getMock();
 		$wine1 = Mockery::mock(Wine::class);
 		$competition->shouldReceive('getAttribute')
 			->with('competitionState')
@@ -322,8 +321,8 @@ class CatalogueHandlerTest extends TestCase {
 		$file = Mockery::mock(UploadedFile::class);
 		$competition = Mockery::mock(Competition::class);
 		$competitionState = Mockery::mock(CompetitionState::class);
-		$doc = $this->getMockBuilder(PHPExcel::class)->disableOriginalConstructor()->getMock();
-		$sheet = $this->getMockBuilder(PHPExcel_Worksheet::class)->disableOriginalConstructor()->getMock();
+		$doc = $this->createMock(\PhpOffice\PhpSpreadsheet\Spreadsheet::class);
+		$sheet = $this->getMockBuilder(Worksheet::class)->disableOriginalConstructor()->getMock();
 		$wine1 = Mockery::mock(Wine::class);
 		$wine2 = Mockery::mock(Wine::class);
 		$competition->shouldReceive('getAttribute')

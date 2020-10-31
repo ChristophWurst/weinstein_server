@@ -23,11 +23,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use PHPExcel;
-use PHPExcel_Settings;
-use PHPExcel_Worksheet;
-use PHPExcel_Worksheet_PageSetup;
-use PHPExcel_Writer_Excel5;
+use PhpOffice\PhpSpreadsheet\Settings;
+use PhpSpreadsheet\Spreadsheet;
+use PhpSpreadsheet\Worksheet\PageSetup;
+use PhpSpreadsheet\Writer\Xls;
+
+;
 
 class AddressCatalogueExport {
 
@@ -51,9 +52,9 @@ class AddressCatalogueExport {
 	/**
 	 * Set worksheets first rows header values
 	 * 
-	 * @param PHPExcel_Worksheet $sheet
+	 * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $sheet
 	 */
-	private function setExcelHeaders(PHPExcel_Worksheet $sheet) {
+	private function setExcelHeaders(\PhpOffice\PhpSpreadsheet\Spreadsheet $sheet) {
 		//headers
 		$sheet->setCellValue("A1", $this->headers[0]);
 		$sheet->setCellValue("B1", $this->headers[1]);
@@ -62,9 +63,9 @@ class AddressCatalogueExport {
 	/**
 	 * Set worksheets data rows
 	 * 
-	 * @param PHPExcel_Worksheet $sheet
+	 * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $sheet
 	 */
-	private function setExcelData(PHPExcel_Worksheet $sheet) {
+	private function setExcelData(\PhpOffice\PhpSpreadsheet\Spreadsheet $sheet) {
 		//data
 		$row = 2;
 		foreach ($this->addresses as $address) {
@@ -91,19 +92,19 @@ class AddressCatalogueExport {
 	public function asExcel() {
 		$filename = sys_get_temp_dir() . '/' . Str::random();
 		$locale = 'de_DE';
-		$validLocale = PHPExcel_Settings::setLocale($locale);
+		$validLocale = Settings::setLocale($locale);
 		if (!$validLocale) {
 			Log::warning('Unable to set locale to ' . $locale . " - reverting to en_us" . PHP_EOL);
 		}
-		$doc = new PHPExcel();
-		$sheet = $doc->getSheet();
-		$layout = new PHPExcel_Worksheet_PageSetup();
-		$layout->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
+		$doc = new Spreadsheet();
+		$sheet = $doc->getSheet(0);
+		$layout = new PageSetup();
+		$layout->setPaperSize(PageSetup::PAPERSIZE_A4);
 		$sheet->setPageSetup($layout);
 		$sheet->setTitle('Adresskatalog');
 		$this->setExcelHeaders($sheet);
 		$this->setExcelData($sheet);
-		$writer = new PHPExcel_Writer_Excel5($doc);
+		$writer = new Xls($doc);
 		$writer->save($filename);
 		return $filename;
 	}

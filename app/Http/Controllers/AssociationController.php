@@ -23,7 +23,6 @@ namespace App\Http\Controllers;
 
 use App\Contracts\MasterDataStore;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\BaseController;
 use App\MasterData\Association;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory;

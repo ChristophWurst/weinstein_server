@@ -23,7 +23,6 @@ namespace App\Http\Controllers;
 
 use App\MasterData\Download;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\Response;
 
 class DownloadsController extends BaseController {
 
