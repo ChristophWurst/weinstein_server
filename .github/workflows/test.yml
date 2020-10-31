@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: [7.1]
+        php-version: [7.2, 7.3]
     name: php${{ matrix.php-version }} unit tests
     services:
       db:
@@ -27,7 +27,6 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
           php-version: ${{ matrix.php-version }}
-          tools: composer:v1
           extensions: ctype,curl,dom,gd,iconv,intl,json,mbstring,openssl,posix,xml,zip
           coverage: none
       - name: Checkout
@@ -45,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: [7.1]
+        php-version: [7.2, 7.3]
     name: php${{ matrix.php-version }} integration tests
     services:
       db:
@@ -67,7 +66,6 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
           php-version: ${{ matrix.php-version }}
-          tools: composer:v1
           extensions: ctype,curl,dom,gd,iconv,intl,json,mbstring,openssl,posix,xml,zip
           coverage: none
       - name: Checkout
