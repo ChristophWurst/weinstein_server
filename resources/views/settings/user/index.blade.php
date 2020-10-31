@@ -23,7 +23,7 @@
             @foreach ($users as $u)
             <tr>
                 <td>
-                    {!! link_to_route('settings.user/show', $u->username, array('username' => $u->username)) !!}
+                    {!! link_to_route('settings.user/show', $u->username, array('user' => $u->username)) !!}
                 </td>
                 <td>
                     @if ($u->isAdmin())
@@ -36,7 +36,7 @@
                     {!! link_to_route('settings.users/edit', 'bearbeiten', 
                                 array('username' => $u->username)) !!}
                     @if($u->username != Auth::user()->username)
-                        | {!! link_to_route('settings.users/delete', 'l&ouml;schen', array('username' => $u->username)) !!}
+                        | {!! link_to_route('settings.users/delete', 'l&ouml;schen', array('user' => $u->username)) !!}
                     @endif
                 </td>
             </tr>

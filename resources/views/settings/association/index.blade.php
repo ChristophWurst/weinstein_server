@@ -28,15 +28,15 @@
         <tbody> 
            @foreach ($associations as $ass)
             <tr>
-                <td>{!! link_to_route('settings.association/show', $ass->id, array('id' => $ass->id)) !!}</td>
-                <td>{!! link_to_route('settings.association/show', $ass->name, array('id' => $ass->id)) !!}</td>
+                <td>{!! link_to_route('settings.association/show', $ass->id, array('association' => $ass->id)) !!}</td>
+                <td>{!! link_to_route('settings.association/show', $ass->name, array('association' => $ass->id)) !!}</td>
                 @if ($ass->email)
                 <td><a href="mailto:{{ ($ass->email ? : '-') }}">{{ ($ass->email ? : '-') }}</a></td>
                 @else
                 <td>-</td>
                 @endif
                 @if ($ass->wuser_username)
-                <td class="text-center">{!! link_to_route('settings.user/show', $ass->wuser_username, array('username' => $ass->wuser_username)) !!}</td>
+                <td class="text-center">{!! link_to_route('settings.user/show', $ass->wuser_username, array('user' => $ass->wuser_username)) !!}</td>
                 @else
                 <td class="text-center">{{ ($ass->wuser_username ? : '-') }}</td>
                 @endif

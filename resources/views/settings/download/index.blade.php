@@ -30,7 +30,7 @@
         <tbody>
             @foreach ($downloads as $download)
             <tr>
-                <td>{!! link_to_route('settings.download/show', $download->name, array('id' => $download->id)) !!}</td>
+                <td>{!! link_to_route('settings.download/show', $download->name, array('download' => $download->id)) !!}</td>
                 <td class="text-right">
                     @can('manage-downloads')
                     {!! link_to_route('settings.download/delete', 'l&ouml;schen', array('download' => $download)) !!}

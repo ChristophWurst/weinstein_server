@@ -3,7 +3,7 @@
 @section('main_content')
 <h1>{!! $tasting_session->nr !!}. Sitzung - Statistik</h1>
 <p>
-    <a href="{!! route('tasting.session/show', array('tastingsession' => $tasting_session->id)) !!}"
+    <a href="{!! route('tasting.session/show', array('tastingsession' => $tasting_session)) !!}"
         accesskey="" type="button" class="btn btn-default">
         <span class="glyphicon glyphicon-chevron-left"></span>
         zur Kostsitzung

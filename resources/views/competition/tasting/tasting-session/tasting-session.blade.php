@@ -18,13 +18,13 @@
             <li>
                 <div class="text-center">
                     @if ($show_finish1)
-                    <a href="{!! route('competition/complete-tasting', array('tastingsession' => $competition->id, 'tasting' => $competition->getTastingStage()->id)) !!}"
+                    <a href="{!! route('competition/complete-tasting', array('competition' => $competition->id, 'tasting' => $competition->getTastingStage()->id)) !!}"
                         type="button" class="btn btn-sm btn-default">
                         <span class="glyphicon glyphicon-ok-sign"></span>
                         1. Verkostung abschlie&szlig;en
                     </a>
                     @elseif ($show_finish2)
-                    <a href="{!! route('competition/complete-tasting', array('tastingsession' => $competition->id, 'tasting' => $competition->getTastingStage()->id)) !!}"
+                    <a href="{!! route('competition/complete-tasting', array('competition' => $competition->id, 'tasting' => $competition->getTastingStage()->id)) !!}"
                         type="button" class="btn btn-sm btn-default">
                         <span class="glyphicon glyphicon-ok-sign"></span>
                         2. Verkostung abschlie&szlig;en

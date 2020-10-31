@@ -31,6 +31,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Laravel\BrowserKitTesting\TestResponse;
 use Mockery;
 use Mockery\MockInterface;
 use Test\BrowserKitTestCase;
@@ -117,7 +118,7 @@ class AssociationControllerTest extends BrowserKitTestCase {
 			->once()
 			->andThrow(new ValidationException());
 
-		$this->response = $this->controller->store($request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->store($request));
 
 		$this->assertRedirectedToRoute('settings.associations/create', [], [
 			'errors',
@@ -142,7 +143,7 @@ class AssociationControllerTest extends BrowserKitTestCase {
 				// No username
 		]);
 
-		$this->response = $this->controller->store($request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->store($request));
 
 		$this->assertRedirectedToRoute('settings.associations');
 	}
@@ -214,7 +215,7 @@ class AssociationControllerTest extends BrowserKitTestCase {
 			->once()
 			->andReturn(1234);
 
-		$this->response = $this->controller->update($association, $request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->update($association, $request));
 		$this->assertRedirectedToRoute('settings.associations/edit', [
 			'association' => 1234,
 			], [
@@ -240,7 +241,7 @@ class AssociationControllerTest extends BrowserKitTestCase {
 				'wuser_username' => null,
 			]);
 
-		$this->response = $this->controller->update($association, $request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->update($association, $request));
 		$this->assertRedirectedToRoute('settings.associations');
 	}
 

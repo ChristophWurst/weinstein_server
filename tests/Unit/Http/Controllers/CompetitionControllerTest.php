@@ -33,6 +33,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use InvalidArgumentException;
+use Laravel\BrowserKitTesting\TestResponse;
 use Mockery;
 use Mockery\MockInterface;
 use Test\BrowserKitTestCase;
@@ -158,7 +159,7 @@ class CompetitionControllerTest extends BrowserKitTestCase {
 			->andReturn(12);
 
 		// TODO: fix weird error "InvalidArgumentException: Route [competition/shows] not defined."
-		$this->response = $this->controller->lockTasting($competition, $tasting, $request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->lockTasting($competition, $tasting, $request));
 
 		$this->assertRedirectedToRoute('competition/show', [
 			'competition' => 12,

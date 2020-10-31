@@ -36,7 +36,7 @@
                     {{ $session->tastedwines()->count() }}
                 </td>
                 @if ($session->wuser_username)
-                <td class="text-center">{!! link_to_route('settings.user/show', $session->wuser_username, array('username' => $session->wuser_username)) !!}</td>
+                <td class="text-center">{!! link_to_route('settings.user/show', $session->wuser_username, array('user' => $session->wuser_username)) !!}</td>
                 @else
                 <td class="text-center">{{ ($session->wuser_username ? : '-') }}</td>
                 @endif

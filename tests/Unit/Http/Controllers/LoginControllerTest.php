@@ -29,6 +29,7 @@ use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Laravel\BrowserKitTesting\TestResponse;
 use Mockery;
 use Mockery\MockInterface;
 use Test\BrowserKitTestCase;
@@ -98,7 +99,7 @@ class LoginControllerTest extends BrowserKitTestCase {
 				], true)
 			->andReturn(false);
 
-		$this->response = $this->controller->auth($request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->auth($request));
 
 		$this->assertRedirectedToRoute('login', [], [
 			'_old_input'
@@ -139,7 +140,7 @@ class LoginControllerTest extends BrowserKitTestCase {
 		$this->activityLogger->shouldReceive('logUserAction')
 			->once();
 
-		$this->response = $this->controller->auth($request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->auth($request));
 
 		$this->assertRedirectedToRoute('account');
 	}
@@ -158,7 +159,7 @@ class LoginControllerTest extends BrowserKitTestCase {
 		$this->activityLogger->shouldReceive('logUserAction')
 			->once();
 
-		$this->response = $this->controller->logout();
+		$this->response = TestResponse::fromBaseResponse($this->controller->logout());
 
 		$this->assertRedirectedToRoute('start');
 	}

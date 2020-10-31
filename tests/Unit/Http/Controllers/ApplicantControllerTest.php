@@ -33,7 +33,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Session;
+use Laravel\BrowserKitTesting\TestResponse;
 use Mockery;
 use Mockery\MockInterface;
 use Test\BrowserKitTestCase;
@@ -141,7 +141,7 @@ class ApplicantControllerTest extends BrowserKitTestCase {
 			->with($data)
 			->andThrow(new ValidationException());
 
-		$this->response = $this->controller->store($request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->store($request));
 
 		$this->assertRedirectedToRoute('settings.applicants/create');
 	}
@@ -174,7 +174,7 @@ class ApplicantControllerTest extends BrowserKitTestCase {
 			->once()
 			->with('applicant_created', ['user', 'hello']);
 
-		$this->response = $this->controller->store($request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->store($request));
 
 		$this->assertRedirectedToRoute('settings.applicants');
 	}
@@ -231,7 +231,7 @@ class ApplicantControllerTest extends BrowserKitTestCase {
 		  ->once()
 		  ->with('rowsImported', 13); */
 
-		$this->response = $this->controller->postImport($request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->postImport($request));
 		$this->assertRedirectedToRoute('settings.applicants');
 	}
 

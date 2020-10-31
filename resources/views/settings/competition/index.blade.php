@@ -20,7 +20,7 @@
                 </td>
                 @if ($c->wuser_username)
                 <td class="text-center">
-                    {!! link_to_route('settings.user/show', $c->wuser_username, array('id' => $c->wuser_username)) !!}
+                    {!! link_to_route('settings.user/show', $c->wuser_username, array('user' => $c->wuser_username)) !!}
                 </td>
                 @else
                 <td class="text-center">

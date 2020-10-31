@@ -3,7 +3,7 @@
 @section('settings_content')
 
 <h1>{!! $data->username !!}</h1>
-<a href="{!! route('settings.users/edit', array('username' => $data->username)) !!}" type="button" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> bearbeiten</a>
+<a href="{!! route('settings.users/edit', array('user' => $data->username)) !!}" type="button" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> bearbeiten</a>
 <p></p>
 <div class="row">
     <div class="col-sm-12 col-md-6 col-lg-4">
@@ -17,7 +17,7 @@
                 <li class="list-group-item">
                     {!! link_to_route('settings.association/show', 
                                 $association->id . ' - ' .$association->name,
-                                array('id' => $association->id)) 
+                                array('association' => $association->id))
                     !!}
                 </li>
                 @endforeach
@@ -38,7 +38,7 @@
                 <li class="list-group-item">
                     {!! link_to_route('settings.applicant/show', 
                                   $applicant->id . ' - ' .$applicant->label . ' ' . $applicant->lastname,
-                                  array('id' => $applicant->id)) 
+                                  array('applicant' => $applicant->id))
                     !!}
                 </li>
                 @endforeach

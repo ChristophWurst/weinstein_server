@@ -32,7 +32,7 @@ class CompetitionTest extends BrowserKitTestCase {
 	use \Illuminate\Foundation\Testing\DatabaseTransactions;
 
 	public function testShowCompetitions() {
-		$admin = factory(User::class, 'admin')->make();
+		$admin = factory(User::class)->states('admin')->make();
 
 		$this->be($admin);
 
@@ -42,7 +42,7 @@ class CompetitionTest extends BrowserKitTestCase {
 	}
 
 	public function testResetCompetition() {
-		$admin = factory(User::class, 'admin')->make();
+		$admin = factory(User::class)->states('admin')->make();
 
 		$competition = factory(Competition::class)->create([
 			'competition_state_id' => CompetitionState::STATE_EXCLUDE,

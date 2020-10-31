@@ -130,7 +130,7 @@ class EnrollmentTest extends BrowserKitTestCase {
 	}
 
 	public function testEditWineAsAdmin() {
-		$user = factory(User::class, 'admin')->create();
+		$user = factory(User::class)->states('admin')->create();
 		$applicant = factory(Applicant::class)->create([
 			'wuser_username' => $user->username,
 		]);

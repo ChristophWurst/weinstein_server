@@ -48,7 +48,7 @@ class ResetCompetitionTest extends BrowserKitTestCase {
 	}
 
 	public function testResetLargeDateSet() {
-		$user = factory(User::class, 'admin')->create();
+		$user = factory(User::class)->states('admin')->create();
 		$competition = $this->prepareCompetition();
 		$this->assertSame(105, $competition->wines()->count());
 

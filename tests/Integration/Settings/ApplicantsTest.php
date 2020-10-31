@@ -35,7 +35,7 @@ class ApplicantsTest extends BrowserKitTestCase {
 
 	public function createApplicant() {
 		$faker = Factory::create();
-		$admin = factory(User::class, 'admin')->create();
+		$admin = factory(User::class)->states('admin')->create();
 		$association = factory(Association::class)->create();
 
 		$this->be($admin);
@@ -80,7 +80,7 @@ class ApplicantsTest extends BrowserKitTestCase {
 	}
 
 	public function testEditApplicant() {
-		$admin = factory(User::class, 'admin')->create();
+		$admin = factory(User::class)->states('admin')->create();
 		$applicant = factory(Applicant::class)->create();
 
 		$this->be($admin);

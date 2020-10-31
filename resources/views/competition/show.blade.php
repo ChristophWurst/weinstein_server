@@ -71,7 +71,7 @@ use App\MasterData\CompetitionState;
                             Zuweisung abschlie&szlig;en
                         </a>
                         @elseif ($currentState === CompetitionState::STATE_TASTING1 && $wines === $wines_tasted1)
-                        <a href="{!! route('competition/complete-tasting', array('tastingsession' => $competition->id, 'tasting' => $competition->getTastingStage()->id)) !!}"
+                        <a href="{!! route('competition/complete-tasting', array('competition' => $competition->id, 'tasting' => $competition->getTastingStage()->id)) !!}"
                             type="button" class="btn btn-sm btn-default">
                             <span class="glyphicon glyphicon-ok-sign"></span>
                             1. Verkostung abschlie&szlig;en
@@ -98,7 +98,7 @@ use App\MasterData\CompetitionState;
                             Zuweisung abschlie&szlig;en
                         </a>
                         @elseif ($currentState == CompetitionState::STATE_TASTING2 && $wines_tasted2 === $wines_tasting_number2)
-                        <a href="{!! route('competition/complete-tasting', array('tastingsession' => $competition->id, 'tasting' => $competition->getTastingStage()->id)) !!}"
+                        <a href="{!! route('competition/complete-tasting', array('competition' => $competition->id, 'tasting' => $competition->getTastingStage()->id)) !!}"
                             type="button" class="btn btn-sm btn-default">
                             <span class="glyphicon glyphicon-ok-sign"></span>
                             2. Verkostung abschlie&szlig;en

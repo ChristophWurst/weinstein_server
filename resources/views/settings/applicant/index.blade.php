@@ -66,12 +66,12 @@
         <tbody>
             @foreach ($applicants as $applicant)
             <tr>
-                <td class="text-center">{!! link_to_route('settings.applicant/show', $applicant->id, array('id' => $applicant->id)) !!}</td>
+                <td class="text-center">{!! link_to_route('settings.applicant/show', $applicant->id, array('applicant' => $applicant->id)) !!}</td>
                 <td>{{ ($applicant->label ? : '-') }}</td>
                 <td>{{ $applicant->firstname }} {{ $applicant->lastname }}</td>
-                <td>{!! link_to_route('settings.association/show', $applicant->association->name, array('id' => $applicant->association->id)) !!}</td>
+                <td>{!! link_to_route('settings.association/show', $applicant->association->name, array('association' => $applicant->association->id)) !!}</td>
                 @if ($applicant->wuser_username)
-                <td class="text-center">{!! link_to_route('settings.user/show', $applicant->wuser_username, array('username' => $applicant->wuser_username)) !!}</td>
+                <td class="text-center">{!! link_to_route('settings.user/show', $applicant->wuser_username, array('user' => $applicant->wuser_username)) !!}</td>
                 @else
                 <td class="text-center">{{ ($applicant->wuser_username ? : '-') }}</td>
                 @endif

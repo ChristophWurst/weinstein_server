@@ -23,7 +23,7 @@ namespace App\Wine;
 
 use App\MasterData\Competition;
 use App\Wine;
-use fpdf\FPDF;
+use FPDF;
 use Illuminate\Support\Str;
 
 class EnrollmentForm {
