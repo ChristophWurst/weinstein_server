@@ -79,7 +79,7 @@ class WineSortController extends BaseController {
 		$this->authorize('create-winesort');
 
 		try {
-			$data = Input::all();
+			$data = \Illuminate\Support\Facades\Request::all();
 			$this->masterDataStore->createWineSort($data);
 		} catch (ValidationException $ve) {
 			return Redirect::route('settings.winesorts/create')
@@ -113,7 +113,7 @@ class WineSortController extends BaseController {
 		$this->authorize('update-winesort', $wineSort);
 
 		try {
-			$data = Input::all();
+			$data = \Illuminate\Support\Facades\Request::all();
 			$this->masterDataStore->updateWineSort($wineSort, $data);
 		} catch (ValidationException $ve) {
 			return Redirect::route('settings.winesorts/edit', ['winesort' => $wineSort->id])

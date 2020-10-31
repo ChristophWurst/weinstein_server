@@ -126,7 +126,7 @@ class TastingNumberController extends BaseController {
 		}
 
 		try {
-			$data = Input::all();
+			$data = \Illuminate\Support\Facades\Request::all();
 			$this->tastingHandler->createTastingNumber($data, $competition);
 		} catch (ValidationException $ve) {
 			return Redirect::route('tasting.numbers/assign', ['competition' => $competition->id])
@@ -168,7 +168,7 @@ class TastingNumberController extends BaseController {
 	public function reset(Competition $competition) {
 		$this->authorize('unassign-tastingnumber', $competition);
 
-		if (Input::get('reset') == 'Ja') {
+		if (\Illuminate\Support\Facades\Request::input('reset') == 'Ja') {
 			$this->tastingHandler->resetTastingNumbers($competition);
 		}
 		return Redirect::route('tasting.numbers', ['competition' => $competition->id]);
@@ -197,7 +197,7 @@ class TastingNumberController extends BaseController {
 	public function delete(TastingNumber $tastingNumber) {
 		$this->authorize('unassign-tastingnumber');
 
-		if (Input::get('del') == 'Ja') {
+		if (\Illuminate\Support\Facades\Request::input('del') == 'Ja') {
 			$this->tastingHandler->deleteTastingNumber($tastingNumber);
 		}
 		return Redirect::route('tasting.numbers', ['competition' => $tastingNumber->wine->competition->id]);
@@ -226,7 +226,7 @@ class TastingNumberController extends BaseController {
 		$this->authorize('import-tastingnumbers');
 
 		try {
-			$file = Input::file('xlsfile');
+			$file = \Illuminate\Support\Facades\Request::fil('xlsfile');
 			if ($file === null) {
 				return Redirect::route('tasting.numbers', ['competition' => $competition->id]);
 			}

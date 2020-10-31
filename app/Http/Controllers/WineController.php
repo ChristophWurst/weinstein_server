@@ -208,7 +208,7 @@ class WineController extends BaseController {
 		$this->authorize('create-wine', $competition);
 
 		try {
-			$data = Input::all();
+			$data = \Illuminate\Support\Facades\Request::all();
 			if (isset($data['alcohol'])) {
 				$data['alcohol'] = $this->commaToDot($data['alcohol']);
 			}
@@ -302,7 +302,7 @@ class WineController extends BaseController {
 		$this->authorize('update-wine', $wine);
 
 		try {
-			$data = Input::all();
+			$data = \Illuminate\Support\Facades\Request::all();
 			if (isset($data['alcohol'])) {
 				$data['alcohol'] = $this->commaToDot($data['alcohol']);
 			}
@@ -363,7 +363,7 @@ class WineController extends BaseController {
 	public function destroy(Wine $wine) {
 		$this->authorize('delete-wine', $wine);
 
-		if (Input::get('del') == 'Ja') {
+		if (\Illuminate\Support\Facades\Request::input('del') == 'Ja') {
 			$this->wineHandler->delete($wine);
 		}
 		return Redirect::route('enrollment.wines', ['competition' => $wine->competition->id]);
@@ -377,7 +377,7 @@ class WineController extends BaseController {
 		$this->authorize('update-wine', $wine);
 
 		try {
-			$this->wineHandler->updateKdb($wine, Input::only('value'));
+			$this->wineHandler->updateKdb($wine, \Illuminate\Support\Facades\Request::only('value'));
 		} catch (ValidationException $ve) {
 			return Response::json([
 					'error' => 'Fehler beim setzen von KdB',
@@ -411,7 +411,7 @@ class WineController extends BaseController {
 		$this->authorize('import-kdb-wines', $competition);
 
 		try {
-			$file = Input::file('xlsfile');
+			$file = \Illuminate\Support\Facades\Request::fil('xlsfile');
 			if ($file === null) {
 				return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
 			}
@@ -447,7 +447,7 @@ class WineController extends BaseController {
 		$this->authorize('import-excluded-wines', $competition);
 
 		try {
-			$file = Input::file('xlsfile');
+			$file = \Illuminate\Support\Facades\Request::fil('xlsfile');
 			if ($file === null) {
 				return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
 			}
@@ -475,7 +475,7 @@ class WineController extends BaseController {
 			]);
 		}
 		try {
-			$this->wineHandler->updateSosi($wine, Input::only('value'));
+			$this->wineHandler->updateSosi($wine, \Illuminate\Support\Facades\Request::only('value'));
 		} catch (ValidationException $ve) {
 			return Response::json([
 					'error' => 'Fehler beim setzen von SoSi',
@@ -509,7 +509,7 @@ class WineController extends BaseController {
 		$this->authorize('import-sosi-wines', $competition);
 
 		try {
-			$file = Input::file('xlsfile');
+			$file = \Illuminate\Support\Facades\Request::fil('xlsfile');
 			if ($file === null) {
 				return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
 			}

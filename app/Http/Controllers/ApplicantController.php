@@ -196,7 +196,7 @@ class ApplicantController extends BaseController {
 	public function update(Applicant $applicant) {
 		$this->authorize('edit-applicant', $applicant);
 
-		$data = Input::all();
+		$data = \Illuminate\Support\Facades\Request::all();
 		//remove default user of form's select
 		if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
 			unset($data['wuser_username']);
