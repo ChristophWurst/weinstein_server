@@ -48,7 +48,7 @@ class HandlerTest extends TestCase {
 	/** @var Handler */
 	private $handler;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->wineRepository = Mockery::mock(WineRepository::class);

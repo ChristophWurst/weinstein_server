@@ -51,7 +51,7 @@ class CatalogueHandlerTest extends TestCase {
 	/** @var CatalogueHandler|MockInterface */
 	private $handler;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->db = Mockery::mock(DatabaseManager::class);

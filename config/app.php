@@ -146,7 +146,6 @@ return [
 		 * Package Service Providers...
 		 */
 		Collective\Html\HtmlServiceProvider::class,
-		Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
 		/*
 		 * Application Service Providers...
 		 */
@@ -210,6 +209,5 @@ return [
 		/**
 		 * Other packages
 		 */
-		'Sentry' => Sentry\SentryLaravel\SentryFacade::class,
 	],
 ];

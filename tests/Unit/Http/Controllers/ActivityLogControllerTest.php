@@ -42,7 +42,7 @@ class ActivityLogControllerTest extends BrowserKitTestCase {
 	/** @var ActivityLogController */
 	private $controller;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->activityLogger = Mockery::mock(ActivityLogger::class);

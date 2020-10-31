@@ -31,7 +31,7 @@ class ActivityLogAbilitiesTest extends TestCase {
 	/** @var ActivityLogAbilities */
 	private $abilities;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->abilities = new ActivityLogAbilities();

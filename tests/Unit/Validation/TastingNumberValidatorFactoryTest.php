@@ -32,7 +32,7 @@ class TastingNumberValidatorFactoryTest extends TestCase {
 	/** @var TastingNumberValidatorFactory */
 	private $factory;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->factory = new TastingNumberValidatorFactory();

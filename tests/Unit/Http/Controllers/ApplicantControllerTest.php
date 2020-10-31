@@ -54,7 +54,7 @@ class ApplicantControllerTest extends BrowserKitTestCase {
 	/** @var ApplicantController */
 	private $controller;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->masterDataStore = Mockery::mock(MasterDataStore::class);

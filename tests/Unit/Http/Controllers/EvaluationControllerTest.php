@@ -35,7 +35,7 @@ class EvaluationControllerTest extends BrowserKitTestCase {
 	/** @var EvaluationController|MockInterface */
 	private $controller;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->view = Mockery::mock(Factory::class);

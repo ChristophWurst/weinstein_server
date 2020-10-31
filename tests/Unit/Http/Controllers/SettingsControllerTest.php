@@ -36,7 +36,7 @@ class SettingsControllerTest extends BrowserKitTestCase {
 	/** @var SettingsController */
 	private $controller;
 	
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->view = Mockery::mock(Factory::class);

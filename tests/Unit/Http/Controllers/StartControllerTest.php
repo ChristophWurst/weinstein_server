@@ -36,7 +36,7 @@ class StartControllerTest extends BrowserKitTestCase {
 	/** @var StartController */
 	private $controller;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->view = Mockery::mock(Factory::class);

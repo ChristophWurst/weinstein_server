@@ -38,7 +38,7 @@ class WineAbilitiesTest extends TestCase {
 	/** @var WineAbilities */
 	private $abilities;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->abilities = new WineAbilities();
