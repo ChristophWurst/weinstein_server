@@ -47,7 +47,7 @@ class LoginControllerTest extends BrowserKitTestCase {
 	/** @var AuthenticationController */
 	private $controller;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->auth = Mockery::mock(AuthManager::class);

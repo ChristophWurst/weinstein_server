@@ -217,7 +217,7 @@ use App\MasterData\CompetitionState;
         <script>
             wsinit({
                 csrfToken: '<?php echo csrf_token(); ?>',
-                dsn: '<?php echo config('sentry.dsn_pub'); ?>',
+                dsn: '<?php echo config('sentry.dsn'); ?>',
                 release: '<?php echo config('app.version'); ?>',
                 environment: '<?php echo config('app.env'); ?>'
             });

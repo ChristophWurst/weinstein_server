@@ -31,7 +31,7 @@ class UserAbilitiesTest extends TestCase {
 	/** @var UserAbilities */
 	private $abilities;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->abilities = new UserAbilities();

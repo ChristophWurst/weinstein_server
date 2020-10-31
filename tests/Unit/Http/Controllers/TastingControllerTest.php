@@ -47,7 +47,7 @@ class TastingControllerTest extends BrowserKitTestCase {
 	/** @var TastingController|MockInterface */
 	private $controller;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->tastingHandler = Mockery::mock(TastingHandler::class);

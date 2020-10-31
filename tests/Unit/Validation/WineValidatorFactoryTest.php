@@ -32,7 +32,7 @@ class WineValidatorFactoryTest extends TestCase {
 	/** @var WineValidatorFactory */
 	private $factory;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->factory = new WineValidatorFactory();

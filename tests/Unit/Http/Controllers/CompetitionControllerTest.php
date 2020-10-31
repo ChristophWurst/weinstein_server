@@ -57,7 +57,7 @@ class CompetitionControllerTest extends BrowserKitTestCase {
 	/** @var CompetitionController|MockInterface */
 	private $controller;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->masterDataStore = Mockery::mock(MasterDataStore::class);

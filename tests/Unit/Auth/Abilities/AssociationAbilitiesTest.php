@@ -34,7 +34,7 @@ class AssociationAbilitiesTest extends TestCase {
 	/** @var AssociationAbilities|MockInterface */
 	private $abilities;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->abilities = new AssociationAbilities();

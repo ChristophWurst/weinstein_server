@@ -34,7 +34,7 @@ class CatalogueAbilitiesTest extends TestCase {
 	/** @var CatalogueAbilities */
 	private $abilities;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->abilities = new CatalogueAbilities();

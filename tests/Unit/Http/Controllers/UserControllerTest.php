@@ -52,7 +52,7 @@ class UserControllerTest extends BrowserKitTestCase {
 	/** @var UserController */
 	private $controller;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->request = Mockery::mock(Request::class);
