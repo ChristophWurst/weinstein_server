@@ -8,7 +8,7 @@
 		"ext-zlib": "*",
 		"itbz/fpdf": "1.7.3",
 		"fzaninotto/faker": "~1.4",
-		"laravel/framework": "6.0.*",
+		"laravel/framework": "6.18.*",
 		"laravelcollective/html": "*",
 		"phpoffice/phpspreadsheet": "^1.15",
 		"predis/predis": "^1.1",
