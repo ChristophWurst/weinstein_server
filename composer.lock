@@ -2999,16 +2999,16 @@
         },
         {
             "name": "sentry/sentry-laravel",
-            "version": "2.1.1",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getsentry/sentry-laravel.git",
-                "reference": "882d1cd98f41582afa3840a0c7c650d091d66898"
+                "reference": "f4c663b6510e793a180dee6b3a7c95c339f7fd8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getsentry/sentry-laravel/zipball/882d1cd98f41582afa3840a0c7c650d091d66898",
-                "reference": "882d1cd98f41582afa3840a0c7c650d091d66898",
+                "url": "https://api.github.com/repos/getsentry/sentry-laravel/zipball/f4c663b6510e793a180dee6b3a7c95c339f7fd8a",
+                "reference": "f4c663b6510e793a180dee6b3a7c95c339f7fd8a",
                 "shasum": ""
             },
             "require": {
@@ -3076,7 +3076,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2020-10-08T08:30:08+00:00"
+            "time": "2020-11-04T14:56:24+00:00"
         },
         {
             "name": "setasign/fpdf",
