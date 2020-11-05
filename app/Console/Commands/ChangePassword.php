@@ -40,5 +40,7 @@ class ChangePassword extends Command
 			'username' => $username,
 			'password' => $password,
 		]);
+
+        return 0;
 	}
 }

@@ -34,7 +34,7 @@ class TastingNumbersTest extends BrowserKitTestCase {
 	use \Illuminate\Foundation\Testing\DatabaseTransactions;
 
 	public function testListTastingNumbers() {
-		$user = factory(User::class, 'admin')->create();
+		$user = factory(User::class)->states('admin')->create();
 		$competition = factory(Competition::class)->create([
 			'competition_state_id' => CompetitionState::STATE_ENROLLMENT,
 		]);
@@ -46,7 +46,7 @@ class TastingNumbersTest extends BrowserKitTestCase {
 	}
 
 	public function testCompetitionStateIncreasesWhenFirstNumberIsAsssigned() {
-		$user = factory(User::class, 'admin')->create();
+		$user = factory(User::class)->states('admin')->create();
 		$competition = factory(Competition::class)->create([
 			'competition_state_id' => CompetitionState::STATE_ENROLLMENT,
 		]);
@@ -73,7 +73,7 @@ class TastingNumbersTest extends BrowserKitTestCase {
 	}
 
 	public function testAssignTastingNumber() {
-		$user = factory(User::class, 'admin')->create();
+		$user = factory(User::class)->states('admin')->create();
 		$competition = factory(Competition::class)->create([
 			'competition_state_id' => CompetitionState::STATE_ENROLLMENT,
 		]);
@@ -113,7 +113,7 @@ class TastingNumbersTest extends BrowserKitTestCase {
 	}
 
 	public function testDeallocateTastingNumbers() {
-		$user = factory(User::class, 'admin')->create();
+		$user = factory(User::class)->states('admin')->create();
 		$competition = factory(Competition::class)->create([
 			'competition_state_id' => CompetitionState::STATE_ENROLLMENT,
 		]);
@@ -144,7 +144,7 @@ class TastingNumbersTest extends BrowserKitTestCase {
 	}
 
 	public function testFinishAllocation() {
-		$user = factory(User::class, 'admin')->create();
+		$user = factory(User::class)->states('admin')->create();
 		$competition = factory(Competition::class)->create([
 			'competition_state_id' => CompetitionState::STATE_ENROLLMENT,
 		]);

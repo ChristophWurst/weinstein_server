@@ -15,7 +15,7 @@
 
 <a class="btn btn-default"
    role="button"
-   href="{!! route('settings.users/edit', array('username' => Auth::user()->username)) !!}">
+   href="{!! route('settings.users/edit', array('user' => Auth::user()->username)) !!}">
     Anmeldedaten &auml;ndern
 </a>
 <a class="btn btn-default"

@@ -28,7 +28,7 @@ class WineSortsTest extends BrowserKitTestCase {
 	use \Illuminate\Foundation\Testing\DatabaseTransactions;
 
 	public function testShowSorts() {
-		$admin = factory(\App\MasterData\User::class, 'admin')->make();
+		$admin = factory(\App\MasterData\User::class)->states('admin')->make();
 
 		$this->be($admin);
 		$this->get('settings/winesorts');
@@ -37,7 +37,7 @@ class WineSortsTest extends BrowserKitTestCase {
 	}
 
 	public function testCreateWineSort() {
-		$admin = factory(\App\MasterData\User::class, 'admin')->make();
+		$admin = factory(\App\MasterData\User::class)->states('admin')->make();
 
 		$this->be($admin);
 		$this->get('settings/winesorts/create');

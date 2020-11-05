@@ -63,7 +63,7 @@ class UserTest extends BrowserKitTestCase {
 		$user = factory(User::class)->create([
 			'password' => 'passme',
 		]);
-		$admin = factory(User::class, 'admin')->create();
+		$admin = factory(User::class)->states('admin')->create();
 
 		$this->be($admin);
 

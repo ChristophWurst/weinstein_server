@@ -46,6 +46,8 @@ class CreateUser extends Command {
 		]);
 
 		$this->info('User <' . $user->username . '> created successfully.');
+
+        return 0;
 	}
 
 }

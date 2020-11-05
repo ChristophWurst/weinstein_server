@@ -4,13 +4,13 @@
 
 <h1>{!! $data->label !!} {!! $data->lastname !!} - {!! $data->address->city !!}</h1>
 <p>
-    <a href="{!! route('settings.applicants/edit', array('id' => $data->id)) !!}"
+    <a href="{!! route('settings.applicants/edit', array('applicant' => $data->id)) !!}"
     accesskey=""type="button" class="btn btn-default">
         <span class="glyphicon glyphicon-edit"></span>
         bearbeiten
     </a>
     @can('delete-applicant', $data)
-    <a href="{!! route('settings.applicants/delete', array('id' => $data->id)) !!}"
+    <a href="{!! route('settings.applicants/delete', array('applicant' => $data->id)) !!}"
        accesskey=""type="button" class="btn btn-warning">
         <span class="glyphicon glyphicon-remove"></span>
         l&ouml;schen
@@ -35,13 +35,13 @@
                 <p>
                     <strong>Verwalter:</strong>
                     @if ($data->wuser_username)
-                    {!! link_to_route('settings.user/show', $data->wuser_username, array('username' => $data->wuser_username)) !!}
+                    {!! link_to_route('settings.user/show', $data->wuser_username, array('user' => $data->wuser_username)) !!}
                     @else
                     -
                     @endif
                 </p>
                 <p>
-                    <strong>Verein:</strong> {!! link_to_route('settings.association/show', $data->association->name, array('id' => $data->association->id)) !!}
+                    <strong>Verein:</strong> {!! link_to_route('settings.association/show', $data->association->name, array('association' => $data->association->id)) !!}
                 </p>
             </div>
         </div>

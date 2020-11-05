@@ -32,6 +32,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Laravel\BrowserKitTesting\TestResponse;
 use Mockery;
 use Mockery\MockInterface;
 use Test\BrowserKitTestCase;
@@ -107,7 +108,7 @@ class TastingControllerTest extends BrowserKitTestCase {
 			->with('id')
 			->andReturn(33);
 
-		$this->response = $this->controller->store($tastingSession, $request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->store($tastingSession, $request));
 
 		$this->assertRedirectedToRoute('tasting.session/taste', [
 			'tastingsession' => 33,
@@ -137,7 +138,7 @@ class TastingControllerTest extends BrowserKitTestCase {
 			->with('id')
 			->andReturn(33);
 
-		$this->response = $this->controller->store($tastingSession, $request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->store($tastingSession, $request));
 
 		$this->assertRedirectedToRoute('tasting.session/show', [
 			'tastingsession' => 33,
@@ -195,7 +196,7 @@ class TastingControllerTest extends BrowserKitTestCase {
 			->with('id')
 			->andReturn(7);
 
-		$this->response = $this->controller->update($tastingSession, $tastingNumber, $commission, $request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->update($tastingSession, $tastingNumber, $commission, $request));
 
 		$this->assertRedirectedToRoute('tasting.session/show', [
 			'tastingsession' => 7,

@@ -25,12 +25,9 @@ $factory->define(User::class,
 	];
 });
 
-$factory->defineAs(User::class, 'admin',
+$factory->state(User::class, 'admin',
 	function () {
 	return [
-		'username' => str_random(10),
-		'password' => bcrypt(str_random(10)),
-		'remember_token' => str_random(10),
 		'admin' => true,
 	];
 });

@@ -30,7 +30,7 @@ class ActivitLogTest extends BrowserKitTestCase {
 	use \Illuminate\Foundation\Testing\DatabaseTransactions;
 
 	public function testShowLogs() {
-		$admin = factory(User::class, 'admin')->make();
+		$admin = factory(User::class)->states('admin')->make();
 
 		$this->be($admin);
 		$this->get('settings/activitylog');

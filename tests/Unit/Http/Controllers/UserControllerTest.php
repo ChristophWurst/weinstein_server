@@ -29,6 +29,7 @@ use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Laravel\BrowserKitTesting\TestResponse;
 use Mockery;
 use Mockery\MockInterface;
 use Test\BrowserKitTestCase;
@@ -117,7 +118,7 @@ class UserControllerTest extends BrowserKitTestCase {
 			->once()
 			->andThrow(new ValidationException());
 
-		$this->response = $this->controller->store($this->request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->store($this->request));
 
 		$this->assertRedirectedToRoute('settings.users/create');
 	}
@@ -143,7 +144,7 @@ class UserControllerTest extends BrowserKitTestCase {
 			->once()
 			->andReturn($newUser);
 
-		$this->response = $this->controller->store($this->request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->store($this->request));
 
 		$this->assertRedirectedToRoute('settings.users');
 	}
@@ -208,7 +209,7 @@ class UserControllerTest extends BrowserKitTestCase {
 			->once()
 			->andThrow(new ValidationException());
 
-		$this->response = $this->controller->update($userToEdit, $this->request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->update($userToEdit, $this->request));
 
 		$this->assertRedirectedToRoute('settings.users/edit', [
 			'user' => 'garfield',
@@ -244,7 +245,7 @@ class UserControllerTest extends BrowserKitTestCase {
 			])
 			->once();
 
-		$this->response = $this->controller->update($userToEdit, $this->request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->update($userToEdit, $this->request));
 
 		$this->assertRedirectedToRoute('settings.users');
 	}
@@ -282,7 +283,7 @@ class UserControllerTest extends BrowserKitTestCase {
 			->andReturn('Nein');
 		$this->masterDataStore->shouldNotReceive('deleteUser');
 
-		$this->response = $this->controller->destroy($userToDelete, $this->request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->destroy($userToDelete, $this->request));
 
 		$this->assertRedirectedToRoute('settings.users');
 	}
@@ -325,7 +326,7 @@ class UserControllerTest extends BrowserKitTestCase {
 			->once()
 			->with($userToDelete);
 
-		$this->response = $this->controller->destroy($userToDelete, $this->request);
+		$this->response = TestResponse::fromBaseResponse($this->controller->destroy($userToDelete, $this->request));
 
 		$this->assertRedirectedToRoute('settings.users');
 	}

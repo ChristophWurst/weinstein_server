@@ -32,7 +32,7 @@ class AssociationsTest extends BrowserKitTestCase {
 	use \Illuminate\Foundation\Testing\DatabaseTransactions;
 
 	public function testCreateNewAssociation() {
-		$admin = factory(User::class, 'admin')->create();
+		$admin = factory(User::class)->states('admin')->create();
 
 		$this->be($admin);
 
@@ -54,7 +54,7 @@ class AssociationsTest extends BrowserKitTestCase {
 	}
 
 	public function testEditAssociation() {
-		$admin = factory(User::class, 'admin')->create();
+		$admin = factory(User::class)->states('admin')->create();
 		$association = factory(Association::class)->create();
 
 		$this->be($admin);

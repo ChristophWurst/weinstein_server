@@ -32,7 +32,7 @@
                 <p>
                     <strong>Verwalter:</strong>
                     @if ($data->wuser_username)
-                    {!! link_to_route('settings.user/show', $data->wuser_username, array('username' => $data->wuser_username)) !!}
+                    {!! link_to_route('settings.user/show', $data->wuser_username, array('user' => $data->wuser_username)) !!}
                     @else
                     -
                     @endif

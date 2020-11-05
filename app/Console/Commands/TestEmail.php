@@ -38,6 +38,8 @@ class TestEmail extends Command
 	{
 		$this->mailer->to($this->argument('email'))
 			->send(new \App\Mail\TestEmail());
+
+        return 0;
 	}
 
 }

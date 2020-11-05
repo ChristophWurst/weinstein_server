@@ -3,7 +3,7 @@
 @section('settings_content')
 
 <h1>{!! $data->id !!} {!! $data->name !!}</h1>
-<a href="{!! route('settings.associations/edit', array('id' => $data->id)) !!}" type="button" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> bearbeiten</a>
+<a href="{!! route('settings.associations/edit', array('association' => $data->id)) !!}" type="button" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> bearbeiten</a>
 <h2>Verein</h2>
 <p>
     <strong>Standnummer:</strong> {!! $data->id !!}
@@ -14,7 +14,7 @@
 <p>
     <strong>Verwalter:</strong>
     @if ($data->wuser_username)
-    {!! link_to_route('settings.user/show', $data->wuser_username, array('username' => $data->wuser_username)) !!}
+    {!! link_to_route('settings.user/show', $data->wuser_username, array('user' => $data->wuser_username)) !!}
     @else
     -
     @endif
@@ -31,7 +31,7 @@
                 <li class="list-group-item">
                     {!! link_to_route('settings.applicant/show', 
                                   $applicant->id . ' - ' .$applicant->label . ' ' . $applicant->lastname,
-                                  array('id' => $applicant->id)) 
+                                  array('applicant' => $applicant->id))
                     !!}
                 </li>
                 @endforeach
