@@ -7,7 +7,7 @@
 		"ext-zip": "1.*",
 		"ext-zlib": "*",
 		"fzaninotto/faker": "~1.4",
-		"laravel/framework": "7.0.*",
+		"laravel/framework": "7.23.*",
 		"laravelcollective/html": "*",
 		"phpoffice/phpspreadsheet": "^1.15",
 		"predis/predis": "^1.1",
