@@ -5850,16 +5850,16 @@
         },
         {
             "name": "laravel/browser-kit-testing",
-            "version": "v6.2.0",
+            "version": "v6.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/browser-kit-testing.git",
-                "reference": "288b542a92e2a523ca04ed4d3470389e6c448b05"
+                "reference": "5f86191b955c88a888b53754ff75511dc60876da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/browser-kit-testing/zipball/288b542a92e2a523ca04ed4d3470389e6c448b05",
-                "reference": "288b542a92e2a523ca04ed4d3470389e6c448b05",
+                "url": "https://api.github.com/repos/laravel/browser-kit-testing/zipball/5f86191b955c88a888b53754ff75511dc60876da",
+                "reference": "5f86191b955c88a888b53754ff75511dc60876da",
                 "shasum": ""
             },
             "require": {
@@ -5908,7 +5908,7 @@
                 "laravel",
                 "testing"
             ],
-            "time": "2020-10-30T09:10:17+00:00"
+            "time": "2020-11-10T15:33:44+00:00"
         },
         {
             "name": "mockery/mockery",
