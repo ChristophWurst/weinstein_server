@@ -1,5 +1,12 @@
 <?php
 
+namespace Database\Seeders;
+
+use App\MasterData\Competition;
+use App\Tasting\TastingNumber;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *

@@ -1,5 +1,11 @@
 <?php
 
+namespace Database\Seeders;
+
+use App\MasterData\Competition;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -18,24 +24,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-class TasterTableSeeder extends Seeder {
-
+class CompetitionTableSeeder extends Seeder {
+    
 	/**
-	 * Insert new taster into database
+	 * Insert new competition into database
 	 * 
-	 * @param int $nr
-	 * @param string $name
-	 * @param boolean $active
-	 * @param tasterside $commission
-	 * @return Taster
+	 * @param string $label
+	 * @param int $competitionState
+	 * @param string|null $username
+	 * @return Competition
 	 */
-	public static function createTaster($nr, $name, $active, $commission) {
-		return Taster::create(array(
-					'nr' => $nr,
-					'name' => $name,
-					'active' => $active,
-					'commission_id' => $commission,
+	public static function createCompetition($label, $competitionState, $username) {
+		return Competition::create(array(
+			'label' => $label,
+			'competition_state_id' => $competitionState,
+			'wuser_username' => $username,
 		));
 	}
-
+    
+	/**
+	 * Run competition seeder
+	 */
+	public function run() {
+		DB::table('competition')->delete();
+        
+		$this->createCompetition('comp1', 1, 'user1');
+	}
+    
 }

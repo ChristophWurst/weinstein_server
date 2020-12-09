@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: [7.3, 7.4]
+        php-version: [7.4]
     name: php${{ matrix.php-version }} unit tests
     services:
       db:
@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: [7.3, 7.4]
+        php-version: [7.4]
     name: php${{ matrix.php-version }} integration tests
     services:
       db:

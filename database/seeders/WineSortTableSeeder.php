@@ -1,5 +1,11 @@
 <?php
 
+namespace Database\Seeders;
+
+use App\MasterData\WineSort;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -18,31 +24,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-class CompetitionTableSeeder extends Seeder {
+class WineSortTableSeeder extends Seeder {
     
 	/**
-	 * Insert new competition into database
+	 * Insert new wine sort into database
 	 * 
-	 * @param string $label
-	 * @param int $competitionState
-	 * @param string|null $username
-	 * @return Competition
+	 * @param string $name
+	 * @param int $order
+	 * @return WineSort
 	 */
-	public static function createCompetition($label, $competitionState, $username) {
-		return Competition::create(array(
-			'label' => $label,
-			'competition_state_id' => $competitionState,
-			'wuser_username' => $username,
+	public static function createWineSort($name, $order) {
+		return WineSort::create(array(
+			'name' => $name,
+			'order' => $order,
 		));
 	}
     
 	/**
-	 * Run competition seeder
+	 * Run wine sort seeder
 	 */
 	public function run() {
-		DB::table('competition')->delete();
+		//delete existing wine sorts
+		DB::table('winesort')->delete();
         
-		$this->createCompetition('comp1', 1, 'user1');
+		for ($i = 1; $i <= 15; $i++) {
+			$this->createWineSort("sort $i", $i);
+		}
 	}
     
 }

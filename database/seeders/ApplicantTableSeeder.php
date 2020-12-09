@@ -1,6 +1,11 @@
 <?php
 
+namespace Database\Seeders;
+
+use App\MasterData\Address;
+use App\MasterData\Applicant;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
@@ -37,11 +42,11 @@ class ApplicantTableSeeder extends Seeder {
 	 * @param string $web
 	 * @param int $association
 	 * @param string|null $username
-	 * @param \App\MasterData\Address $address
-	 * @return \App\MasterData\Applicant
+	 * @param Address $address
+	 * @return Applicant
 	 */
-	public static function createAppilcant($id, $label, $title, $firstname, $lastname, $phone, $fax, $mobile, $email, $web, $association, $username, \App\MasterData\Address $address) {
-		$a = \App\MasterData\Applicant::create(array(
+	public static function createAppilcant($id, $label, $title, $firstname, $lastname, $phone, $fax, $mobile, $email, $web, $association, $username, Address $address) {
+		$a = Applicant::create(array(
 					'id' => $id,
 					'label' => $label,
 					'title' => $title,

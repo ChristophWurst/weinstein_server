@@ -1,5 +1,14 @@
 <?php
 
+namespace Database\Seeders;
+
+use App\MasterData\Applicant;
+use App\MasterData\Competition;
+use App\MasterData\WineSort;
+use App\Wine;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *

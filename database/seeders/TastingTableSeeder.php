@@ -1,5 +1,11 @@
 <?php
 
+namespace Database\Seeders;
+
+use App\Tasting\Tasting;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -38,9 +44,9 @@ class TastingTableSeeder extends Seeder {
 
 	/**
 	 * Run tasting seeder
-	 * 
+	 *
 	 * @todo finish implementation
-	 * 
+	 *
 	 */
 	public function run() {
 		//delete existing tastings
