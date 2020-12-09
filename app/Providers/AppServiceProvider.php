@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\MasterData\Competition;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
@@ -19,6 +20,8 @@ class AppServiceProvider extends ServiceProvider {
 		if (env('APP_ENV', 'production') === 'production') {
 			URL::forceScheme("https"); //force HTTPS schema in production
 		}
+
+		Paginator::useBootstrap();
 
 		Validator::extend('tastingnumber_nr_unique',
 			function($attribute, $value, array $parameters) {

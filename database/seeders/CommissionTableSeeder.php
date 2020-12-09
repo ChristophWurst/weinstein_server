@@ -1,5 +1,9 @@
 <?php
 
+namespace Database\Seeders;
+
+use App\Tasting\Commission;
+
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -18,32 +22,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-class WineSortTableSeeder extends Seeder {
-    
+class CommissionTableSeeder {
+
 	/**
-	 * Insert new wine sort into database
+	 * Create new commission
 	 * 
-	 * @param string $name
-	 * @param int $order
-	 * @return WineSort
+	 * @param string $side
+	 * @param int $tastingSession
+	 * @return Commission
 	 */
-	public static function createWineSort($name, $order) {
-		return WineSort::create(array(
-			'name' => $name,
-			'order' => $order,
+	public static function createCommission($side, $tastingSession) {
+		return Commission::create(array(
+				'side' => $side,
+				'tastingsession_id' => $tastingSession,
 		));
 	}
-    
-	/**
-	 * Run wine sort seeder
-	 */
-	public function run() {
-		//delete existing wine sorts
-		DB::table('winesort')->delete();
-        
-		for ($i = 1; $i <= 15; $i++) {
-			$this->createWineSort("sort $i", $i);
-		}
-	}
-    
+
 }

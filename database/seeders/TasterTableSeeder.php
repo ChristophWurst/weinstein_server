@@ -1,5 +1,10 @@
 <?php
 
+namespace Database\Seeders;
+
+use App\Tasting\Taster;
+use Illuminate\Database\Seeder;
+
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -18,19 +23,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-class CommissionTableSeeder {
+class TasterTableSeeder extends Seeder {
 
 	/**
-	 * Create new commission
+	 * Insert new taster into database
 	 * 
-	 * @param type $side
-	 * @param type $tastingSession
-	 * @return type
+	 * @param int $nr
+	 * @param string $name
+	 * @param boolean $active
+	 * @param int $commission
+	 * @return Taster
 	 */
-	public static function createCommission($side, $tastingSession) {
-		return Commission::create(array(
-				'side' => $side,
-				'tastingsession_id' => $tastingSession,
+	public static function createTaster($nr, $name, $active, $commission) {
+		return Taster::create(array(
+					'nr' => $nr,
+					'name' => $name,
+					'active' => $active,
+					'commission_id' => $commission,
 		));
 	}
 

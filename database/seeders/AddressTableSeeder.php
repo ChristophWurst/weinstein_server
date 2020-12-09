@@ -1,5 +1,8 @@
 <?php
 
+namespace Database\Seeders;
+
+use App\MasterData\Address;
 use Illuminate\Database\Seeder;
 
 /**
@@ -30,8 +33,8 @@ class AddressTableSeeder extends Seeder {
 	 * @param string $street
 	 * @param string $nr
 	 */
-	public static function createAddress($zipcode, $city, $street, $nr): \App\MasterData\Address {
-		return \App\MasterData\Address::create(array(
+	public static function createAddress($zipcode, $city, $street, $nr): Address {
+		return Address::create(array(
 			'zipcode' => $zipcode,
 			'city' => $city,
 			'street' => $street,

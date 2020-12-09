@@ -1,5 +1,11 @@
 <?php
 
+namespace Database\Seeders;
+
+use App\MasterData\Association;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
 /**
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
@@ -18,7 +24,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-class AssociationTableSeeder extends \Illuminate\Database\Seeder {
+class AssociationTableSeeder extends Seeder {
 
 	/**
 	 * Insert new association into database
@@ -26,10 +32,10 @@ class AssociationTableSeeder extends \Illuminate\Database\Seeder {
 	 * @param integer $id
 	 * @param string $name
 	 * @param int|null $username
-	 * @return \App\MasterData\Association
+	 * @return Association
 	 */
 	private static function createAssociation($id, $name, $username) {
-		return \App\MasterData\Association::create(array(
+		return Association::create(array(
 			'id' => $id,
 			'name' => $name,
 			'wuser_username' => $username,
