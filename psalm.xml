@@ -10,8 +10,8 @@
         <directory name="app"/>
         <directory name="bootstrap"/>
         <directory name="database"/>
-        <ignoreFiles>
-            <directory name="vendor"/>
-        </ignoreFiles>
     </projectFiles>
+    <extraFiles>
+        <directory name="vendor" />
+    </extraFiles>
 <plugins><pluginClass class="Psalm\LaravelPlugin\Plugin"/></plugins></psalm>
