@@ -4,6 +4,7 @@
 	"type": "project",
 	"require": {
 		"php": ">=7.4",
+		"ext-redis": "*",
 		"ext-zip": "1.*",
 		"ext-zlib": "*",
 		"fzaninotto/faker": "~1.4",
@@ -12,7 +13,6 @@
 		"laravel/legacy-factories": "^1.1",
 		"laravelcollective/html": "*",
 		"phpoffice/phpspreadsheet": "^1.15",
-		"predis/predis": "^1.1",
 		"sentry/sentry-laravel": "*",
 		"setasign/fpdf": "^1.8"
 	},
