@@ -11,8 +11,7 @@ nbproject/private
 /public/css/weinstein.css
 
 # Generated js
-/public/js/weinstein.js
-/public/js/weinstein.js.map
+/public/js/
 /app/storage/logs/laravel.log
 /app/storage/sessions/
 /app/storage/views/
