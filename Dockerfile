@@ -7,7 +7,7 @@ RUN php -f composer.phar install \
 COPY . .
 RUN php -f composer.phar install --no-dev -o
 
-FROM node:9.5.0 as js-builder
+FROM node:10 as js-builder
 WORKDIR /app
 COPY package*.json /app/
 RUN npm install

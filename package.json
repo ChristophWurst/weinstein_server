@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "webpack --progress --hide-modules --config webpack.prod.js",
+    "build": "webpack --progress --config webpack.prod.js",
     "dev": "webpack --progress --watch --config webpack.dev.js"
   },
   "dependencies": {
