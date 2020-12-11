@@ -6,7 +6,7 @@ jobs:
     strategy:
       matrix:
         php-version: [7.4]
-    name: php${{ matrix.php-version }} unit tests
+    name: php${{ matrix.php-version }} static analysis
     services:
       db:
         image: mariadb:10.2

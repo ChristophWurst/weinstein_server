@@ -1,0 +1,23 @@
+name: Static analysis
+on: [push]
+jobs:
+  psalm:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: [7.4]
+    name: php${{ matrix.php-version }} unit tests
+    steps:
+      - name: Set up php${{ matrix.php-version }}
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: ${{ matrix.php-version }}
+          tools: composer:v1
+          extensions: ctype,curl,dom,gd,iconv,intl,json,mbstring,openssl,posix,xml,zip
+          coverage: none
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: composer i
+      - name: Run analysis
+        run: composer run psalm
