@@ -81,8 +81,8 @@ class ApplicantValidator extends Validator {
 	 * 
 	 * @return array
 	 */
-	protected function getUpdateRules(array $data, Model $applicant = null) {
-		if (isset($data['id']) && $data['id'] == $applicant->id) {
+	protected function getUpdateRules(array $data, Model $model = null) {
+		if (isset($data['id']) && $data['id'] == $model->id) {
 			//id unchanged
 			$rules = array();
 		} else {
