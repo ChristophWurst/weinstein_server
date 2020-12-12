@@ -66,10 +66,10 @@ class AssociationValidator extends Validator {
 	 * Get rules for updating an existing association
 	 * 
 	 * @param array $data
-	 * @param Model $association
+	 * @param Model $model
 	 * @return array
 	 */
-	protected function getUpdateRules(array $data, Model $association = null) {
+	protected function getUpdateRules(array $data, Model $model = null) {
 		//only check uniqueness of id if it was changed
 		$idUnchanged = isset($data['id']) && $data['id'] == $this->model->id;
 		//only check uniqueness of name if it was changed
