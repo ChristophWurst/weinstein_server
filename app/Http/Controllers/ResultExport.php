@@ -22,11 +22,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\Settings;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ResultExport {
 
@@ -99,7 +100,7 @@ class ResultExport {
 		$sheet->setTitle('Weine');
 		$this->setExcelHeaders($sheet);
 		$this->setExcelData($sheet);
-		$writer = new Xls($doc);
+		$writer = new Xlsx($doc);
 		$writer->save($filename);
 		return $filename;
 	}

@@ -58,7 +58,7 @@ class Address extends Model {
 	 * @return Relation
 	 */
 	public function Applicant() {
-		return $this->hasOne('Applicant');
+		return $this->hasOne(Applicant::class);
 	}
 
 }

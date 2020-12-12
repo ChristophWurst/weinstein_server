@@ -22,13 +22,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\Settings;
-use PhpSpreadsheet\Spreadsheet;
-use PhpSpreadsheet\Worksheet\PageSetup;
-use PhpSpreadsheet\Writer\Xls;
-
-;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class AdminTastingCatalogueExport {
 
@@ -61,9 +61,9 @@ class AdminTastingCatalogueExport {
 	/**
 	 * Set worksheets first rows header values
 	 * 
-	 * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $sheet
+	 * @param Worksheet $sheet
 	 */
-	private function setExcelHeaders(\PhpOffice\PhpSpreadsheet\Spreadsheet $sheet) {
+	private function setExcelHeaders(Worksheet $sheet) {
 		//headers
 		$sheet->setCellValue("A1", $this->headers[0]);
 		$sheet->setCellValue("B1", $this->headers[1]);
@@ -81,9 +81,9 @@ class AdminTastingCatalogueExport {
 	/**
 	 * Set worksheets data rows
 	 * 
-	 * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $sheet
+	 * @param Worksheet $sheet
 	 */
-	private function setExcelData(\PhpOffice\PhpSpreadsheet\Spreadsheet $sheet) {
+	private function setExcelData(Worksheet $sheet) {
 		// Sort data
 		$this->wines = $this->wines->sort(function($wine1, $wine2) {
 			return $wine1->applicant->association->id - $wine2->applicant->association->id;
@@ -124,9 +124,9 @@ class AdminTastingCatalogueExport {
 	/**
 	 * Export all wines of current competition as Excel spread sheet
 	 * 
-	 * @return Excel sheet
+	 * @return string sheet
 	 */
-	public function asExcel() {
+	public function asExcel(): string {
 		$filename = sys_get_temp_dir() . '/' . Str::random();
 		$locale = 'de_DE';
 		$validLocale = Settings::setLocale($locale);
@@ -141,7 +141,7 @@ class AdminTastingCatalogueExport {
 		$sheet->setTitle('Kostkatalog');
 		$this->setExcelHeaders($sheet);
 		$this->setExcelData($sheet);
-		$writer = new Xls($doc);
+		$writer = new Xlsx($doc);
 		$writer->save($filename);
 		return $filename;
 	}

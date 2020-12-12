@@ -21,7 +21,6 @@
 
 namespace App\MasterData;
 
-use App\MasterData\TastingProtocol;
 use App\Tasting\Taster;
 use App\Tasting\TastingNumber;
 use App\Tasting\TastingSession;
@@ -29,10 +28,11 @@ use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Reader\Xls;
 use PhpOffice\PhpSpreadsheet\Settings;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpSpreadsheet\Writer\Xls;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use function array_add;
 
 class TastingProtocol {
@@ -93,9 +93,9 @@ class TastingProtocol {
 	}
 
 	/**
-	 * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $sheet
+	 * @param Worksheet $sheet
 	 */
-	private function setHeaders(\PhpOffice\PhpSpreadsheet\Spreadsheet $sheet) {
+	private function setHeaders(Worksheet $sheet) {
 		$sheet->setCellValue('A1', 'Kostnummer');
 		$sheet->setCellValue('B1', 'Dateinummer');
 		$sheet->setCellValue('C1', 'Gesamtergebnis');
@@ -152,9 +152,9 @@ class TastingProtocol {
 	}
 
 	/**
-	 * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $sheet
+	 * @param Worksheet $sheet
 	 */
-	private function setData(\PhpOffice\PhpSpreadsheet\Spreadsheet $sheet) {
+	private function setData(Worksheet $sheet) {
 		$data = $this->tastingSession->tastedwines()
 			->orderBy('tastingnumber_nr')
 			->select('tastingnumber_nr', 'tastingnumber_id', 'wine_id', 'wine_nr', 'result')
@@ -188,7 +188,7 @@ class TastingProtocol {
 		$sheet->setTitle('Kostprotokoll');
 		$this->setHeaders($sheet);
 		$this->setData($sheet);
-		$writer = new Xls($doc);
+		$writer = new Xlsx($doc);
 		$writer->save($filename);
 		return $filename;
 	}

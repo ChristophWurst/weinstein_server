@@ -6,6 +6,7 @@ namespace App;
 use App\MasterData\Association;
 use App\MasterData\Competition;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class WinesChosenSignedOff extends Model
 {

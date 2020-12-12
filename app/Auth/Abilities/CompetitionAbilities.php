@@ -25,7 +25,7 @@ use App\MasterData\Association;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\MasterData\User;
-use App\TastingStage;
+use App\Tasting\TastingStage;
 use Illuminate\Support\Facades\Log;
 
 class CompetitionAbilities {

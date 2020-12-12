@@ -52,7 +52,7 @@ class ForgotPasswordController extends Controller
 		);
 
 		return $response == Password::RESET_LINK_SENT
-			? $this->sendResetLinkResponse($response)
+			? $this->sendResetLinkResponse($request, $response)
 			: $this->sendResetLinkFailedResponse($request, $response);
 	}
 }

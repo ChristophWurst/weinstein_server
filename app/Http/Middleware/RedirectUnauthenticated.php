@@ -23,8 +23,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Logging\Log;
 use Illuminate\Http\Request;
+use Psr\Log\LoggerInterface;
 use function redirect;
 use function response;
 
@@ -33,14 +33,14 @@ class RedirectUnauthenticated {
 	/** @var Guard */
 	private $auth;
 
-	/** @var Log */
+	/** @var LoggerInterface */
 	private $log;
 
 	/**
 	 * @param Guard $auth
-	 * @param Log $log
+	 * @param LoggerInterface $log
 	 */
-	public function __construct(Guard $auth, Log $log) {
+	public function __construct(Guard $auth, LoggerInterface $log) {
 		$this->auth = $auth;
 		$this->log = $log;
 	}

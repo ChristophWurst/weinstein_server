@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
 use InvalidArgumentException;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class CatalogueHandler implements TastingCatalogueHandler {
 
@@ -71,7 +71,7 @@ class CatalogueHandler implements TastingCatalogueHandler {
 		return $this->wineRepository->getNumberOfWinesWithoutCatalogueNumber($competition);
 	}
 
-	protected function loadExcelFile(UploadedFile $file): \PhpOffice\PhpSpreadsheet\Spreadsheet {
+	protected function loadExcelFile(UploadedFile $file): Spreadsheet {
 		try {
 			return IOFactory::load($file->getRealPath());
 		} catch (InvalidArgumentException $ex) {

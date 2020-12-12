@@ -27,6 +27,7 @@ use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\Tasting\TastingNumber;
+use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -115,7 +116,6 @@ class TastingNumberController extends BaseController {
 	 * Validate and store newly assigned tasting number
 	 * 
 	 * @param Competition $competition
-	 * @return Response
 	 */
 	public function store(Competition $competition) {
 		$this->authorize('assign-tastingnumber');
@@ -142,7 +142,7 @@ class TastingNumberController extends BaseController {
 			$allWines = $competition->wines()->kdb()->count();
 			$assigned = $competition->wines()->kdb()->withTastingNumber($tastingStage)->count();
 		} else {
-			throw Exception('invalid application state, should be TASTINGNUMBERS1 or TASTINGNUMBERS2');
+			throw new Exception('invalid application state, should be TASTINGNUMBERS1 or TASTINGNUMBERS2');
 		}
 		if ($assigned === $allWines) {
 			return Redirect::route('tasting.numbers', ['competition' => $competition->id]);

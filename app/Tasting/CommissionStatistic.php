@@ -39,7 +39,7 @@ class CommissionStatistic extends Model {
 	 * @return Relation
 	 */
 	public function commission() {
-		return $this->belongsTo('Commission');
+		return $this->belongsTo(Commission::class);
 	}
 
 }
