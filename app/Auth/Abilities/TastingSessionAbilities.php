@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Auth\Abilities;
@@ -30,135 +29,149 @@ use App\Tasting\TastingSession;
 /**
  * @todo review permissions, they are probably wrong
  */
-class TastingSessionAbilities {
+class TastingSessionAbilities
+{
+    use CommonAbilities;
 
-	use CommonAbilities;
+    private function isTastinSessionAdmin(User $user, TastingSession $tastingSession)
+    {
+        return $tastingSession->administrates($user);
+    }
 
-	private function isTastinSessionAdmin(User $user, TastingSession $tastingSession) {
-		return $tastingSession->administrates($user);
-	}
+    private function checkTastingStage(Competition $competition)
+    {
+        return in_array($competition->competitionState->id, [
+            CompetitionState::STATE_TASTING1,
+            CompetitionState::STATE_TASTING2,
+        ]);
+    }
 
-	private function checkTastingStage(Competition $competition) {
-		return in_array($competition->competitionState->id, [
-			CompetitionState::STATE_TASTING1,
-			CompetitionState::STATE_TASTING2
-		]);
-	}
+    private function isTastingSessionDeletable(TastingSession $tastingSession)
+    {
+        return $tastingSession->tasters->count() > 0;
+    }
 
-	private function isTastingSessionDeletable(TastingSession $tastingSession) {
-		return $tastingSession->tasters->count() > 0;
-	}
+    /**
+     * @param User $user
+     * @param Competition $competition
+     * @return bool
+     */
+    public function showAll(User $user, Competition $competition)
+    {
+        // TODO: only admins??
+        return $this->checkTastingStage($competition);
+    }
 
-	/**
-	 * @param User $user
-	 * @param Competition $competition
-	 * @return bool
-	 */
-	public function showAll(User $user, Competition $competition) {
-		// TODO: only admins??
-		return $this->checkTastingStage($competition);
-	}
+    /**
+     * @param User $user
+     * @param Competition $competition
+     * @return bool
+     */
+    public function create(User $user, Competition $competition)
+    {
+        return $competition->administrates($user)
+            && $this->checkTastingStage($competition);
+    }
 
-	/**
-	 * @param User $user
-	 * @param Competition $competition
-	 * @return bool
-	 */
-	public function create(User $user, Competition $competition) {
-		return $competition->administrates($user)
-			&& $this->checkTastingStage($competition);
-	}
+    /**
+     * @param User $user
+     * @param TastingSession $tastingSession
+     * @return bool
+     */
+    public function edit(User $user, TastingSession $tastingSession)
+    {
+        return $tastingSession->competition->administrates($user)
+            && $this->checkTastingStage($tastingSession->competition);
+    }
 
-	/**
-	 * @param User $user
-	 * @param TastingSession $tastingSession
-	 * @return bool
-	 */
-	public function edit(User $user, TastingSession $tastingSession) {
-		return $tastingSession->competition->administrates($user)
-			&& $this->checkTastingStage($tastingSession->competition);
-	}
+    /**
+     * @param User $user
+     * @param TastingSession $tastingSession
+     * @return bool
+     */
+    public function show(User $user, TastingSession $tastingSession)
+    {
+        return $this->isTastinSessionAdmin($user, $tastingSession)
+            && $this->checkTastingStage($tastingSession->competition);
+    }
 
-	/**
-	 * @param User $user
-	 * @param TastingSession $tastingSession
-	 * @return bool
-	 */
-	public function show(User $user, TastingSession $tastingSession) {
-		return $this->isTastinSessionAdmin($user, $tastingSession)
-			&& $this->checkTastingStage($tastingSession->competition);
-	}
+    /**
+     * @param User $user
+     * @param TastingSession $tastingSession
+     * @return bool
+     */
+    public function tasters(User $user, TastingSession $tastingSession)
+    {
+        return $this->isTastinSessionAdmin($user, $tastingSession)
+            && $this->checkTastingStage($tastingSession->competition);
+    }
 
-	/**
-	 * @param User $user
-	 * @param TastingSession $tastingSession
-	 * @return bool
-	 */
-	public function tasters(User $user, TastingSession $tastingSession) {
-		return $this->isTastinSessionAdmin($user, $tastingSession)
-			&& $this->checkTastingStage($tastingSession->competition);
-	}
+    /**
+     * @param User $user
+     * @param TastingSession $tastingSession
+     * @return bool
+     */
+    public function addTaster(User $user, TastingSession $tastingSession)
+    {
+        return $this->isTastinSessionAdmin($user, $tastingSession)
+            && $this->checkTastingStage($tastingSession->competition);
+    }
 
-	/**
-	 * @param User $user
-	 * @param TastingSession $tastingSession
-	 * @return bool
-	 */
-	public function addTaster(User $user, TastingSession $tastingSession) {
-		return $this->isTastinSessionAdmin($user, $tastingSession)
-			&& $this->checkTastingStage($tastingSession->competition);
-	}
+    /**
+     * @param User $user
+     * @param Taster $taster
+     * @return bool
+     */
+    public function editTaster(User $user, Taster $taster)
+    {
+        $tastingSession = $taster->commission->tastingSession;
 
-	/**
-	 * @param User $user
-	 * @param Taster $taster
-	 * @return bool
-	 */
-	public function editTaster(User $user, Taster $taster) {
-		$tastingSession = $taster->commission->tastingSession;
-		return $this->isTastinSessionAdmin($user, $tastingSession)
-			&& $this->checkTastingStage($tastingSession->competition);
-	}
+        return $this->isTastinSessionAdmin($user, $tastingSession)
+            && $this->checkTastingStage($tastingSession->competition);
+    }
 
-	/**
-	 * @param User $user
-	 * @param TastingSession $tastingSession
-	 * @return bool
-	 */
-	public function showStatistics(User $user, TastingSession $tastingSession) {
-		return $this->isTastinSessionAdmin($user, $tastingSession)
-			&& $this->checkTastingStage($tastingSession->competition);
-	}
+    /**
+     * @param User $user
+     * @param TastingSession $tastingSession
+     * @return bool
+     */
+    public function showStatistics(User $user, TastingSession $tastingSession)
+    {
+        return $this->isTastinSessionAdmin($user, $tastingSession)
+            && $this->checkTastingStage($tastingSession->competition);
+    }
 
-	/**
-	 * @param User $user
-	 * @param TastingSession $tastingSession
-	 * @return bool
-	 */
-	public function exportResult(User $user, TastingSession $tastingSession) {
-		return $this->isTastinSessionAdmin($user, $tastingSession)
-			&& $this->checkTastingStage($tastingSession->competition);
-	}
+    /**
+     * @param User $user
+     * @param TastingSession $tastingSession
+     * @return bool
+     */
+    public function exportResult(User $user, TastingSession $tastingSession)
+    {
+        return $this->isTastinSessionAdmin($user, $tastingSession)
+            && $this->checkTastingStage($tastingSession->competition);
+    }
 
-	/**
-	 * @param User $user
-	 * @param TastingSession $tastingSession
-	 * @return bool
-	 */
-	public function lock(User $user, TastingSession $tastingSession) {
-		return $this->isTastinSessionAdmin($user, $tastingSession)
-			&& $this->checkTastingStage($tastingSession->competition);
-	}
+    /**
+     * @param User $user
+     * @param TastingSession $tastingSession
+     * @return bool
+     */
+    public function lock(User $user, TastingSession $tastingSession)
+    {
+        return $this->isTastinSessionAdmin($user, $tastingSession)
+            && $this->checkTastingStage($tastingSession->competition);
+    }
 
-	/**
-	 * @param User $user
-	 * @param TastingSession $tastingSession
-	 * @return bool
-	 */
-	public function delete(User $user, TastingSession $tastingSession) {
-		return $this->isTastinSessionAdmin($user, $tastingSession)
-			&& $this->checkTastingStage($tastingSession->competition)
-			&& $this->isTastingSessionDeletable($tastingSession);
-	}
-
+    /**
+     * @param User $user
+     * @param TastingSession $tastingSession
+     * @return bool
+     */
+    public function delete(User $user, TastingSession $tastingSession)
+    {
+        return $this->isTastinSessionAdmin($user, $tastingSession)
+            && $this->checkTastingStage($tastingSession->competition)
+            && $this->isTastingSessionDeletable($tastingSession);
+    }
 }

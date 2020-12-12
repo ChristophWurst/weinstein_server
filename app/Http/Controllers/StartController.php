@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Http\Controllers;
@@ -24,25 +23,26 @@ namespace App\Http\Controllers;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 
-class StartController extends BaseController {
+class StartController extends BaseController
+{
+    /** @var Factory */
+    private $view;
 
-	/** @var Factory */
-	private $view;
+    /**
+     * @param Factory $view
+     */
+    public function __construct(Factory $view)
+    {
+        $this->view = $view;
+    }
 
-	/**
-	 * @param Factory $view
-	 */
-	public function __construct(Factory $view) {
-		$this->view = $view;
-	}
-
-	/**
-	 * Show start page
-	 * 
-	 * @return View
-	 */
-	public function index() {
-		return $this->view->make('index');
-	}
-
+    /**
+     * Show start page.
+     *
+     * @return View
+     */
+    public function index()
+    {
+        return $this->view->make('index');
+    }
 }

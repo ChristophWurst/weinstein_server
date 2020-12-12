@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Support\Activity;
@@ -31,32 +30,32 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @property string $wuser_username
  * @property User $user
  */
-class Log extends Model {
+class Log extends Model
+{
+    /**
+     * table name.
+     *
+     * @var string
+     */
+    protected $table = 'activitylog';
 
-	/**
-	 * table name
-	 * 
-	 * @var string
-	 */
-	protected $table = 'activitylog';
+    /**
+     * attributs for mass assignment.
+     *
+     * @var array of string
+     */
+    protected $fillable = [
+        'message',
+        'wuser_username',
+    ];
 
-	/**
-	 * attributs for mass assignment
-	 * 
-	 * @var array of string
-	 */
-	protected $fillable = [
-		'message',
-		'wuser_username',
-	];
-
-	/**
-	 * n activity logs : 1 user
-	 * 
-	 * @return Relation
-	 */
-	public function user() {
-		return $this->belongsTo(User::class, 'wuser_username', 'username');
-	}
-
+    /**
+     * n activity logs : 1 user.
+     *
+     * @return Relation
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'wuser_username', 'username');
+    }
 }

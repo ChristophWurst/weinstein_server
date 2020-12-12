@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\MasterData;
@@ -24,46 +23,48 @@ namespace App\MasterData;
 use App\Validation\Validator;
 use Illuminate\Database\Eloquent\Model;
 
-class AddressValidator extends Validator {
+class AddressValidator extends Validator
+{
+    /**
+     * Models class name.
+     *
+     * @var string
+     */
+    protected $modelClass = Address::class;
 
-	/**
-	 * Models class name
-	 * 
-	 * @var string
-	 */
-	protected $modelClass = Address::class;
+    /**
+     * Get attribute names.
+     *
+     * @return array
+     */
+    protected function getAttributeNames()
+    {
+        return [
+            'street' => 'Straße',
+            'nr' => 'Nr',
+            'zipcode' => 'PLZ',
+            'city' => 'Ort',
+        ];
+    }
 
-	/**
-	 * Get attribute names
-	 * 
-	 * @return array
-	 */
-	protected function getAttributeNames() {
-		return array(
-			'street' => 'Straße',
-			'nr' => 'Nr',
-			'zipcode' => 'PLZ',
-			'city' => 'Ort'
-		);
-	}
+    /**
+     * Get rules for creating a new address.
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function getCreateRules(array $data)
+    {
+        return [
+            'street' => 'max:100',
+            'nr' => 'max:20',
+            'zipcode' => 'required|integer|between:1000,9999',
+            'city' => 'max:70',
+        ];
+    }
 
-	/**
-	 * Get rules for creating a new address
-	 * 
-	 * @param array $data
-	 * @return array
-	 */
-	protected function getCreateRules(array $data) {
-		return array(
-			'street' => 'max:100',
-			'nr' => 'max:20',
-			'zipcode' => 'required|integer|between:1000,9999',
-			'city' => 'max:70'
-		);
-	}
-
-	protected function getUpdateRules(array $data, Model $model = null) {
-		return $this->getCreateRules($data);
-	}
-
+    protected function getUpdateRules(array $data, Model $model = null)
+    {
+        return $this->getCreateRules($data);
+    }
 }

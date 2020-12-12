@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Unit\Auth\Abilities;
@@ -31,338 +30,353 @@ use App\Wine;
 use Mockery;
 use Test\TestCase;
 
-class WineAbilitiesTest extends TestCase {
+class WineAbilitiesTest extends TestCase
+{
+    use AbilitiesMock;
 
-	use AbilitiesMock;
+    /** @var WineAbilities */
+    private $abilities;
 
-	/** @var WineAbilities */
-	private $abilities;
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-	protected function setUp(): void {
-		parent::setUp();
+        $this->abilities = new WineAbilities();
+    }
 
-		$this->abilities = new WineAbilities();
-	}
+    public function testShow()
+    {
+        $user = Mockery::mock(User::class);
+        $wine = Mockery::mock(Wine::class);
+        $wine->shouldReceive('administrates')
+            ->once()
+            ->with($user)
+            ->andReturn(false);
 
-	public function testShow() {
-		$user = Mockery::mock(User::class);
-		$wine = Mockery::mock(Wine::class);
-		$wine->shouldReceive('administrates')
-			->once()
-			->with($user)
-			->andReturn(false);
+        $allowed = $this->abilities->show($user, $wine);
 
-		$allowed = $this->abilities->show($user, $wine);
+        $this->assertFalse($allowed);
+    }
 
-		$this->assertFalse($allowed);
-	}
+    public function testCreate()
+    {
+        $user = $this->getUserMock();
+        $competition = Mockery::mock(Competition::class);
+        $competitionState = Mockery::mock(CompetitionState::class);
+        $competition->shouldReceive('getAttribute')
+            ->with('competitionState')
+            ->andReturn($competitionState);
+        $competitionState->shouldReceive('getAttribute')
+            ->with('id')
+            ->andReturn(CompetitionState::STATE_ENROLLMENT);
 
-	public function testCreate() {
-		$user = $this->getUserMock();
-		$competition = Mockery::mock(Competition::class);
-		$competitionState = Mockery::mock(CompetitionState::class);
-		$competition->shouldReceive('getAttribute')
-			->with('competitionState')
-			->andReturn($competitionState);
-		$competitionState->shouldReceive('getAttribute')
-			->with('id')
-			->andReturn(CompetitionState::STATE_ENROLLMENT);
+        $allowed = $this->abilities->create($user, $competition);
 
-		$allowed = $this->abilities->create($user, $competition);
+        $this->assertTrue($allowed);
+    }
 
-		$this->assertTrue($allowed);
-	}
+    public function testCreateWithWrongCompetitionState()
+    {
+        $user = $this->getUserMock();
+        $competition = Mockery::mock(Competition::class);
+        $competitionState = Mockery::mock(CompetitionState::class);
+        $competition->shouldReceive('getAttribute')
+            ->with('competitionState')
+            ->andReturn($competitionState);
+        $competitionState->shouldReceive('getAttribute')
+            ->with('id')
+            ->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
 
-	public function testCreateWithWrongCompetitionState() {
-		$user = $this->getUserMock();
-		$competition = Mockery::mock(Competition::class);
-		$competitionState = Mockery::mock(CompetitionState::class);
-		$competition->shouldReceive('getAttribute')
-			->with('competitionState')
-			->andReturn($competitionState);
-		$competitionState->shouldReceive('getAttribute')
-			->with('id')
-			->andReturn(CompetitionState::STATE_CATALOGUE_NUMBERS);
+        $allowed = $this->abilities->create($user, $competition);
 
-		$allowed = $this->abilities->create($user, $competition);
+        $this->assertFalse($allowed);
+    }
 
-		$this->assertFalse($allowed);
-	}
+    /**
+     * Simulate a user updating the sosi state (kdb remains).
+     */
+    public function testUpdateNotAllowedForWineAdministrator()
+    {
+        $user = $this->getUserMock();
+        $wine = Mockery::mock(Wine::class);
+        $competition = Mockery::mock(Competition::class);
+        $data = [
+            'id' => 23,
+            'kdb' => true,
+            'sosi' => true,
+        ];
+        $wine->shouldReceive('getAttribute')
+            ->with('kdb')
+            ->andReturn(true);
+        $wine->shouldReceive('getAttribute')
+            ->with('sosi')
+            ->andReturn(false);
+        $wine->shouldReceive('getAttribute')
+            ->with('competition')
+            ->andReturn($competition);
+        $competition->shouldReceive('administrates')
+            ->with($user)
+            ->andReturn(false);
 
-	/**
-	 * Simulate a user updating the sosi state (kdb remains)
-	 */
-	public function testUpdateNotAllowedForWineAdministrator() {
-		$user = $this->getUserMock();
-		$wine = Mockery::mock(Wine::class);
-		$competition = Mockery::mock(Competition::class);
-		$data = [
-			'id' => 23,
-			'kdb' => true,
-			'sosi' => true,
-		];
-		$wine->shouldReceive('getAttribute')
-			->with('kdb')
-			->andReturn(true);
-		$wine->shouldReceive('getAttribute')
-			->with('sosi')
-			->andReturn(false);
-		$wine->shouldReceive('getAttribute')
-			->with('competition')
-			->andReturn($competition);
-		$competition->shouldReceive('administrates')
-			->with($user)
-			->andReturn(false);
+        $allowed = $this->abilities->update($user, $wine, $data);
 
-		$allowed = $this->abilities->update($user, $wine, $data);
+        $this->assertFalse($allowed);
+    }
 
-		$this->assertFalse($allowed);
-	}
+    /**
+     * Simulate a user updating the sosi state (kdb remains).
+     */
+    public function testUpdateAllowedForCompetitionAdministrator()
+    {
+        $user = $this->getUserMock();
+        $wine = Mockery::mock(Wine::class);
+        $competition = Mockery::mock(Competition::class);
+        $data = [
+            'id' => 23,
+            'kdb' => true,
+            'sosi' => true,
+        ];
+        $wine->shouldReceive('getAttribute')
+            ->with('kdb')
+            ->andReturn(true);
+        $wine->shouldReceive('getAttribute')
+            ->with('sosi')
+            ->andReturn(false);
+        $wine->shouldReceive('getAttribute')
+            ->with('competition')
+            ->andReturn($competition);
+        $competition->shouldReceive('administrates')
+            ->with($user)
+            ->andReturn(true);
 
-	/**
-	 * Simulate a user updating the sosi state (kdb remains)
-	 */
-	public function testUpdateAllowedForCompetitionAdministrator() {
-		$user = $this->getUserMock();
-		$wine = Mockery::mock(Wine::class);
-		$competition = Mockery::mock(Competition::class);
-		$data = [
-			'id' => 23,
-			'kdb' => true,
-			'sosi' => true,
-		];
-		$wine->shouldReceive('getAttribute')
-			->with('kdb')
-			->andReturn(true);
-		$wine->shouldReceive('getAttribute')
-			->with('sosi')
-			->andReturn(false);
-		$wine->shouldReceive('getAttribute')
-			->with('competition')
-			->andReturn($competition);
-		$competition->shouldReceive('administrates')
-			->with($user)
-			->andReturn(true);
+        $allowed = $this->abilities->update($user, $wine, $data);
 
-		$allowed = $this->abilities->update($user, $wine, $data);
+        $this->assertTrue($allowed);
+    }
 
-		$this->assertTrue($allowed);
-	}
+    /**
+     * Simulate a user updating nothing.
+     */
+    public function testUpdateAllowedIfNothingChanges()
+    {
+        $user = $this->getUserMock();
+        $wine = Mockery::mock(Wine::class);
+        $data = [
+            'id' => 23,
+            'kdb' => true,
+            'sosi' => true,
+            'chosen' => true,
+            'excluded' => false,
+        ];
+        $wine->shouldReceive('getAttribute')
+            ->with('kdb')
+            ->andReturn(true);
+        $wine->shouldReceive('getAttribute')
+            ->with('sosi')
+            ->andReturn(true);
+        $wine->shouldReceive('getAttribute')
+            ->with('chosen')
+            ->andReturn(true);
+        $wine->shouldReceive('getAttribute')
+            ->with('excluded')
+            ->andReturn(false);
+        $wine->shouldReceive('administrates')
+            ->with($user)
+            ->andReturn(true);
 
-	/**
-	 * Simulate a user updating nothing
-	 */
-	public function testUpdateAllowedIfNothingChanges() {
-		$user = $this->getUserMock();
-		$wine = Mockery::mock(Wine::class);
-		$data = [
-			'id' => 23,
-			'kdb' => true,
-			'sosi' => true,
-			'chosen' => true,
-			'excluded' => false,
-		];
-		$wine->shouldReceive('getAttribute')
-			->with('kdb')
-			->andReturn(true);
-		$wine->shouldReceive('getAttribute')
-			->with('sosi')
-			->andReturn(true);
-		$wine->shouldReceive('getAttribute')
-			->with('chosen')
-			->andReturn(true);
-		$wine->shouldReceive('getAttribute')
-			->with('excluded')
-			->andReturn(false);
-		$wine->shouldReceive('administrates')
-			->with($user)
-			->andReturn(true);
+        $allowed = $this->abilities->update($user, $wine, $data);
 
-		$allowed = $this->abilities->update($user, $wine, $data);
+        $this->assertTrue($allowed);
+    }
 
-		$this->assertTrue($allowed);
-	}
+    /**
+     * Simulate a user updating a wine where they are not association admin.
+     */
+    public function testUpdateForbiddenIfNotAssociationAdmin()
+    {
+        $user = $this->getUserMock();
+        $wine = Mockery::mock(Wine::class);
+        $competition = Mockery::mock(Competition::class);
+        $applicant = Mockery::mock(Applicant::class);
+        $association = Mockery::mock(Association::class);
+        $data = [
+            'chosen' => true,
+        ];
+        $wine->shouldReceive('getAttribute')
+            ->with('chosen')
+            ->andReturn(false);
+        $wine->shouldReceive('getAttribute')
+            ->with('competition')
+            ->andReturn($competition);
+        $competition->shouldReceive('administrates')
+            ->once()
+            ->with($user)
+            ->andReturn(false);
+        $wine->shouldReceive('getAttribute')
+            ->with('applicant')
+            ->andReturn($applicant);
+        $applicant->shouldReceive('getAttribute')
+            ->with('association')
+            ->andReturn($association);
+        $association->shouldReceive('administrates')
+            ->andReturn(false);
 
-	/**
-	 * Simulate a user updating a wine where they are not association admin
-	 */
-	public function testUpdateForbiddenIfNotAssociationAdmin() {
-		$user = $this->getUserMock();
-		$wine = Mockery::mock(Wine::class);
-		$competition = Mockery::mock(Competition::class);
-		$applicant = Mockery::mock(Applicant::class);
-		$association = Mockery::mock(Association::class);
-		$data = [
-			'chosen' => true,
-		];
-		$wine->shouldReceive('getAttribute')
-			->with('chosen')
-			->andReturn(false);
-		$wine->shouldReceive('getAttribute')
-			->with('competition')
-			->andReturn($competition);
-		$competition->shouldReceive('administrates')
-			->once()
-			->with($user)
-			->andReturn(false);
-		$wine->shouldReceive('getAttribute')
-			->with('applicant')
-			->andReturn($applicant);
-		$applicant->shouldReceive('getAttribute')
-			->with('association')
-			->andReturn($association);
-		$association->shouldReceive('administrates')
-			->andReturn(false);
+        $allowed = $this->abilities->update($user, $wine, $data);
 
-		$allowed = $this->abilities->update($user, $wine, $data);
+        $this->assertFalse($allowed);
+    }
 
-		$this->assertFalse($allowed);
-	}
+    /**
+     * Simulate a user updating a wine where they are association admin.
+     */
+    public function testUpdateAllowedIfUserIsAssociationAdmin()
+    {
+        $user = $this->getUserMock();
+        $wine = Mockery::mock(Wine::class);
+        $competition = Mockery::mock(Competition::class);
+        $applicant = Mockery::mock(Applicant::class);
+        $association = Mockery::mock(Association::class);
+        $data = [
+            'chosen' => true,
+        ];
+        $wine->shouldReceive('getAttribute')
+            ->with('chosen')
+            ->andReturn(false);
+        $wine->shouldReceive('getAttribute')
+            ->with('competition')
+            ->andReturn($competition);
+        $competition->shouldReceive('administrates')
+            ->once()
+            ->with($user)
+            ->andReturn(false);
+        $wine->shouldReceive('getAttribute')
+            ->with('applicant')
+            ->andReturn($applicant);
+        $applicant->shouldReceive('getAttribute')
+            ->with('association')
+            ->andReturn($association);
+        $association->shouldReceive('administrates')
+            ->andReturn(true);
 
-	/**
-	 * Simulate a user updating a wine where they are association admin
-	 */
-	public function testUpdateAllowedIfUserIsAssociationAdmin() {
-		$user = $this->getUserMock();
-		$wine = Mockery::mock(Wine::class);
-		$competition = Mockery::mock(Competition::class);
-		$applicant = Mockery::mock(Applicant::class);
-		$association = Mockery::mock(Association::class);
-		$data = [
-			'chosen' => true,
-		];
-		$wine->shouldReceive('getAttribute')
-			->with('chosen')
-			->andReturn(false);
-		$wine->shouldReceive('getAttribute')
-			->with('competition')
-			->andReturn($competition);
-		$competition->shouldReceive('administrates')
-			->once()
-			->with($user)
-			->andReturn(false);
-		$wine->shouldReceive('getAttribute')
-			->with('applicant')
-			->andReturn($applicant);
-		$applicant->shouldReceive('getAttribute')
-			->with('association')
-			->andReturn($association);
-		$association->shouldReceive('administrates')
-			->andReturn(true);
+        $allowed = $this->abilities->update($user, $wine, $data);
 
-		$allowed = $this->abilities->update($user, $wine, $data);
+        $this->assertTrue($allowed);
+    }
 
-		$this->assertTrue($allowed);
-	}
+    /**
+     * Simulate a user updating a wine where they are competition admin.
+     */
+    public function testUpdateAllowedIfUserIsCompetitionAdmin()
+    {
+        $user = $this->getUserMock();
+        $wine = Mockery::mock(Wine::class);
+        $competition = Mockery::mock(Competition::class);
+        $applicant = Mockery::mock(Applicant::class);
+        $association = Mockery::mock(Association::class);
+        $data = [
+            'chosen' => true,
+        ];
+        $wine->shouldReceive('getAttribute')
+            ->with('chosen')
+            ->andReturn(false);
+        $wine->shouldReceive('getAttribute')
+            ->with('competition')
+            ->andReturn($competition);
+        $competition->shouldReceive('administrates')
+            ->with($user)
+            ->andReturn(true);
+        $wine->shouldReceive('getAttribute')
+            ->with('applicant')
+            ->andReturn($applicant);
+        $applicant->shouldReceive('getAttribute')
+            ->with('association')
+            ->andReturn($association);
+        $association->shouldReceive('administrates')
+            ->andReturn(true);
 
-	/**
-	 * Simulate a user updating a wine where they are competition admin
-	 */
-	public function testUpdateAllowedIfUserIsCompetitionAdmin() {
-		$user = $this->getUserMock();
-		$wine = Mockery::mock(Wine::class);
-		$competition = Mockery::mock(Competition::class);
-		$applicant = Mockery::mock(Applicant::class);
-		$association = Mockery::mock(Association::class);
-		$data = [
-			'chosen' => true,
-		];
-		$wine->shouldReceive('getAttribute')
-			->with('chosen')
-			->andReturn(false);
-		$wine->shouldReceive('getAttribute')
-			->with('competition')
-			->andReturn($competition);
-		$competition->shouldReceive('administrates')
-			->with($user)
-			->andReturn(true);
-		$wine->shouldReceive('getAttribute')
-			->with('applicant')
-			->andReturn($applicant);
-		$applicant->shouldReceive('getAttribute')
-			->with('association')
-			->andReturn($association);
-		$association->shouldReceive('administrates')
-			->andReturn(true);
+        $allowed = $this->abilities->update($user, $wine, $data);
 
-		$allowed = $this->abilities->update($user, $wine, $data);
+        $this->assertTrue($allowed);
+    }
 
-		$this->assertTrue($allowed);
-	}
+    public function testEnrollmentPdf()
+    {
+        $user = Mockery::mock(User::class);
+        $wine = Mockery::mock(Wine::class);
+        $wine->shouldReceive('administrates')
+            ->once()
+            ->with($user)
+            ->andReturn(true);
 
-	public function testEnrollmentPdf() {
-		$user = Mockery::mock(User::class);
-		$wine = Mockery::mock(Wine::class);
-		$wine->shouldReceive('administrates')
-			->once()
-			->with($user)
-			->andReturn(true);
+        $allowed = $this->abilities->enrollmentPdf($user, $wine);
 
-		$allowed = $this->abilities->enrollmentPdf($user, $wine);
+        $this->assertTrue($allowed);
+    }
 
-		$this->assertTrue($allowed);
-	}
+    public function testDelete()
+    {
+        $user = Mockery::mock(User::class);
+        $wine = Mockery::mock(Wine::class);
+        $wine->shouldReceive('administrates')
+            ->once()
+            ->with($user)
+            ->andReturn(true);
 
-	public function testDelete() {
-		$user = Mockery::mock(User::class);
-		$wine = Mockery::mock(Wine::class);
-		$wine->shouldReceive('administrates')
-			->once()
-			->with($user)
-			->andReturn(true);
+        $allowed = $this->abilities->delete($user, $wine);
 
-		$allowed = $this->abilities->delete($user, $wine);
+        $this->assertTrue($allowed);
+    }
 
-		$this->assertTrue($allowed);
-	}
+    public function testRedirect()
+    {
+        $user = Mockery::mock(User::class);
+        $competition = Mockery::mock(Competition::class);
+        $competition->shouldReceive('administrates')
+            ->once()
+            ->with($user)
+            ->andReturn(true);
 
-	public function testRedirect() {
-		$user = Mockery::mock(User::class);
-		$competition = Mockery::mock(Competition::class);
-		$competition->shouldReceive('administrates')
-			->once()
-			->with($user)
-			->andReturn(true);
+        $allowed = $this->abilities->redirect($user, $competition);
 
-		$allowed = $this->abilities->redirect($user, $competition);
+        $this->assertTrue($allowed);
+    }
 
-		$this->assertTrue($allowed);
-	}
+    public function testImportKdb()
+    {
+        $user = Mockery::mock(User::class);
+        $competition = Mockery::mock(Competition::class);
+        $competition->shouldReceive('administrates')
+            ->with($user)
+            ->andReturn(false);
 
-	public function testImportKdb() {
-		$user = Mockery::mock(User::class);
-		$competition = Mockery::mock(Competition::class);
-		$competition->shouldReceive('administrates')
-			->with($user)
-			->andReturn(false);
+        $allowed = $this->abilities->importKdb($user, $competition);
 
-		$allowed = $this->abilities->importKdb($user, $competition);
+        $this->assertFalse($allowed);
+    }
 
-		$this->assertFalse($allowed);
-	}
+    public function testImportSosi()
+    {
+        $user = Mockery::mock(User::class);
+        $competition = Mockery::mock(Competition::class);
+        $competition->shouldReceive('administrates')
+            ->with($user)
+            ->andReturn(true);
 
-	public function testImportSosi() {
-		$user = Mockery::mock(User::class);
-		$competition = Mockery::mock(Competition::class);
-		$competition->shouldReceive('administrates')
-			->with($user)
-			->andReturn(true);
+        $allowed = $this->abilities->importSosi($user, $competition);
 
-		$allowed = $this->abilities->importSosi($user, $competition);
+        $this->assertTrue($allowed);
+    }
 
-		$this->assertTrue($allowed);
-	}
+    public function testImportExcluded()
+    {
+        $user = Mockery::mock(User::class);
+        $competition = Mockery::mock(Competition::class);
+        $competition->shouldReceive('administrates')
+            ->with($user)
+            ->andReturn(true);
 
-	public function testImportExcluded() {
-		$user = Mockery::mock(User::class);
-		$competition = Mockery::mock(Competition::class);
-		$competition->shouldReceive('administrates')
-			->with($user)
-			->andReturn(true);
+        $allowed = $this->abilities->importExcluded($user, $competition);
 
-		$allowed = $this->abilities->importExcluded($user, $competition);
-
-		$this->assertTrue($allowed);
-	}
-
+        $this->assertTrue($allowed);
+    }
 }

@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Database\Repositories;
@@ -24,29 +23,31 @@ namespace App\Database\Repositories;
 use App\MasterData\WineSort;
 use Illuminate\Database\Eloquent\Collection;
 
-class WineSortRepository {
+class WineSortRepository
+{
+    /**
+     * @return Collection
+     */
+    public function findAll()
+    {
+        return WineSort::all();
+    }
 
-	/**
-	 * @return Collection
-	 */
-	public function findAll() {
-		return WineSort::all();
-	}
+    /**
+     * @param array $data
+     * @return WineSort
+     */
+    public function create(array $data)
+    {
+        return WineSort::create($data);
+    }
 
-	/**
-	 * @param array $data
-	 * @return WineSort
-	 */
-	public function create(array $data) {
-		return WineSort::create($data);
-	}
-
-	/**
-	 * @param WineSort $wineSort
-	 * @param array $data
-	 */
-	public function update(WineSort $wineSort, array $data) {
-		$wineSort->update($data);
-	}
-
+    /**
+     * @param WineSort $wineSort
+     * @param array $data
+     */
+    public function update(WineSort $wineSort, array $data)
+    {
+        $wineSort->update($data);
+    }
 }

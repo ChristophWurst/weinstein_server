@@ -21,25 +21,24 @@ use Illuminate\Database\Seeder;
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
-class AddressTableSeeder extends Seeder {
-
-	/**
-	 * Insert new address into database
-	 *
-	 * @param int $zipcode
-	 * @param string $city
-	 * @param string $street
-	 * @param string $nr
-	 */
-	public static function createAddress($zipcode, $city, $street, $nr): Address {
-		return Address::create(array(
-			'zipcode' => $zipcode,
-			'city' => $city,
-			'street' => $street,
-			'nr' => $nr,
-		));
-	}
-
+class AddressTableSeeder extends Seeder
+{
+    /**
+     * Insert new address into database.
+     *
+     * @param int $zipcode
+     * @param string $city
+     * @param string $street
+     * @param string $nr
+     */
+    public static function createAddress($zipcode, $city, $street, $nr): Address
+    {
+        return Address::create([
+            'zipcode' => $zipcode,
+            'city' => $city,
+            'street' => $street,
+            'nr' => $nr,
+        ]);
+    }
 }

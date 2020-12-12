@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Tasting;
@@ -24,22 +23,22 @@ namespace App\Tasting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-class TasterStatistic extends Model {
+class TasterStatistic extends Model
+{
+    /**
+     * DB table name.
+     *
+     * @var string
+     */
+    protected $table = 'stat_taster';
 
-	/**
-	 * DB table name
-	 * 
-	 * @var string
-	 */
-	protected $table = 'stat_taster';
-
-	/**
-	 * 1 statistic : 1 taster
-	 * 
-	 * @return Relation
-	 */
-	public function taster() {
-		return $this->belongsTo(Taster::class);
-	}
-
+    /**
+     * 1 statistic : 1 taster.
+     *
+     * @return Relation
+     */
+    public function taster()
+    {
+        return $this->belongsTo(Taster::class);
+    }
 }

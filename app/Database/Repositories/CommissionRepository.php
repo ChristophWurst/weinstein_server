@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Database\Repositories;
@@ -24,26 +23,28 @@ namespace App\Database\Repositories;
 use App\Tasting\Commission;
 use App\Tasting\TastingSession;
 
-class CommissionRepository {
+class CommissionRepository
+{
+    /**
+     * @param int $id
+     * @return Commission
+     */
+    public function find($id)
+    {
+        return Commission::find($id);
+    }
 
-	/**
-	 * @param int $id
-	 * @return Commission
-	 */
-	public function find($id) {
-		return Commission::find($id);
-	}
+    /**
+     * @param array $data
+     * @param TastingSession $tastingSession
+     * @return Commission
+     */
+    public function create(array $data, TastingSession $tastingSession)
+    {
+        $commission = new Commission($data);
+        $commission->tastingSession()->associate($tastingSession);
+        $commission->save();
 
-	/**
-	 * @param array $data
-	 * @param TastingSession $tastingSession
-	 * @return Commission
-	 */
-	public function create(array $data, TastingSession $tastingSession) {
-		$commission = new Commission($data);
-		$commission->tastingSession()->associate($tastingSession);
-		$commission->save();
-		return $commission;
-	}
-
+        return $commission;
+    }
 }

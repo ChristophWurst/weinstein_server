@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\MasterData;
@@ -36,309 +35,330 @@ use Illuminate\Support\MessageBag;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use function str_random;
 
-class Store implements MasterDataStore {
+class Store implements MasterDataStore
+{
+    /** @var ApplicantRepository */
+    private $applicantRepository;
 
-	/** @var ApplicantRepository */
-	private $applicantRepository;
+    /** @var AssociationRepository */
+    private $associationRepository;
 
-	/** @var AssociationRepository */
-	private $associationRepository;
+    /** @var CompetitionRepository */
+    private $competitionRepository;
 
-	/** @var CompetitionRepository */
-	private $competitionRepository;
+    /** @var UserRepository */
+    private $userRepository;
 
-	/** @var UserRepository */
-	private $userRepository;
+    /** @var WineSortRepository */
+    private $wineSortRepository;
 
-	/** @var WineSortRepository */
-	private $wineSortRepository;
+    public function __construct(ApplicantRepository $applicantRepository, AssociationRepository $associationRepository,
+        CompetitionRepository $competitionRepository, UserRepository $userRepository, WineSortRepository $wineSortRepository)
+    {
+        $this->applicantRepository = $applicantRepository;
+        $this->associationRepository = $associationRepository;
+        $this->competitionRepository = $competitionRepository;
+        $this->userRepository = $userRepository;
+        $this->wineSortRepository = $wineSortRepository;
+    }
 
-	public function __construct(ApplicantRepository $applicantRepository, AssociationRepository $associationRepository,
-		CompetitionRepository $competitionRepository, UserRepository $userRepository, WineSortRepository $wineSortRepository) {
-		$this->applicantRepository = $applicantRepository;
-		$this->associationRepository = $associationRepository;
-		$this->competitionRepository = $competitionRepository;
-		$this->userRepository = $userRepository;
-		$this->wineSortRepository = $wineSortRepository;
-	}
+    public function getApplicants(User $user = null)
+    {
+        if (is_null($user) || $user->isAdmin()) {
+            return $this->applicantRepository->findAll();
+        }
 
-	public function getApplicants(User $user = null) {
-		if (is_null($user) || $user->isAdmin()) {
-			return $this->applicantRepository->findAll();
-		}
-		return $this->applicantRepository->findForUser($user);
-	}
+        return $this->applicantRepository->findForUser($user);
+    }
 
-	public function createApplicant(array $data) {
-		$applicantValidationException = null;
+    public function createApplicant(array $data)
+    {
+        $applicantValidationException = null;
 
-		//validate applicant
-		try {
-			$applicantValidator = new ApplicantValidator($data);
-			$applicantValidator->validateCreate();
-		} catch (ValidationException $ve) {
-			$applicantValidationException = $ve;
-		}
-		//validate address
-		try {
-			$addressValidator = new AddressValidator($data);
-			$addressValidator->validateCreate();
-		} catch (ValidationException $ve) {
-			if ($applicantValidationException) {
-				$merged = $applicantValidationException->merge($ve);
-				throw $merged;
-			}
-			throw ($ve);
-		}
-		if ($applicantValidationException) {
-			throw $applicantValidationException;
-		}
+        //validate applicant
+        try {
+            $applicantValidator = new ApplicantValidator($data);
+            $applicantValidator->validateCreate();
+        } catch (ValidationException $ve) {
+            $applicantValidationException = $ve;
+        }
+        //validate address
+        try {
+            $addressValidator = new AddressValidator($data);
+            $addressValidator->validateCreate();
+        } catch (ValidationException $ve) {
+            if ($applicantValidationException) {
+                $merged = $applicantValidationException->merge($ve);
+                throw $merged;
+            }
+            throw ($ve);
+        }
+        if ($applicantValidationException) {
+            throw $applicantValidationException;
+        }
 
-		$applicant = $this->applicantRepository->create($data);
+        $applicant = $this->applicantRepository->create($data);
 
-		//ActivityLogger::log('Betrieb [' . $data['id'] . '] erstellt');
-		list ($user, $password) = $this->createApplicantUser($applicant);
+        //ActivityLogger::log('Betrieb [' . $data['id'] . '] erstellt');
+        list($user, $password) = $this->createApplicantUser($applicant);
 
-		return [$applicant,  $user, $password];
-	}
+        return [$applicant,  $user, $password];
+    }
 
-	public function importApplicants(UploadedFile $file) {
-		//validate file (mime types)
-		$fileValidator = new ApplicantImportValidator($file);
-		$fileValidator->validate();
+    public function importApplicants(UploadedFile $file)
+    {
+        //validate file (mime types)
+        $fileValidator = new ApplicantImportValidator($file);
+        $fileValidator->validate();
 
-		//iterate over all entries and try to store them
-		//if exceptions occur, all db actions are rolled back to prevent data 
-		//inconsistency
-		$doc = IOFactory::load($file->getRealPath());
-		$sheet = $doc->getActiveSheet();
+        //iterate over all entries and try to store them
+        //if exceptions occur, all db actions are rolled back to prevent data
+        //inconsistency
+        $doc = IOFactory::load($file->getRealPath());
+        $sheet = $doc->getActiveSheet();
 
-		$rowCount = 0;
-		DB::beginTransaction();
-		try {
-			foreach ($sheet->toArray() as $row) {
-				//ignore null rows
-				$empty = true;
-				for ($i = 0; $i <= 14; $i++) {
-					if ($row[$i] != null && $row[$i] != '') {
-						$empty = false;
-					}
-				}
-				if ($empty) {
-					continue;
-				}
+        $rowCount = 0;
+        DB::beginTransaction();
+        try {
+            foreach ($sheet->toArray() as $row) {
+                //ignore null rows
+                $empty = true;
+                for ($i = 0; $i <= 14; $i++) {
+                    if ($row[$i] != null && $row[$i] != '') {
+                        $empty = false;
+                    }
+                }
+                if ($empty) {
+                    continue;
+                }
 
-				$rowCount++;
-				$data = array(
-					'id' => $row[0],
-					'label' => $row[1],
-					'title' => $row[2],
-					'firstname' => $row[3],
-					'lastname' => $row[4],
-					'street' => $row[5],
-					'zipcode' => $row[6],
-					'city' => $row[7],
-					'phone' => $row[8],
-					'fax' => $row[9],
-					'mobile' => $row[10],
-					'email' => $row[11],
-					'web' => $row[12],
-					'association_id' => $row[13],
-				);
+                $rowCount++;
+                $data = [
+                    'id' => $row[0],
+                    'label' => $row[1],
+                    'title' => $row[2],
+                    'firstname' => $row[3],
+                    'lastname' => $row[4],
+                    'street' => $row[5],
+                    'zipcode' => $row[6],
+                    'city' => $row[7],
+                    'phone' => $row[8],
+                    'fax' => $row[9],
+                    'mobile' => $row[10],
+                    'email' => $row[11],
+                    'web' => $row[12],
+                    'association_id' => $row[13],
+                ];
 
-				//unset email if empty string
-				if ($data['email'] === '') {
-					unset($data['email']);
-				}
-				$this->createApplicant($data);
-			}
-		} catch (ValidationException $ve) {
-			DB::rollback();
-			$messages = new MessageBag(array(
-				'row' => 'Fehler in Zeile ' . $rowCount,
-			));
-			$messages->merge($ve->getErrors());
-			throw new ValidationException($messages);
-		}
-		DB::commit();
-		//ActivityLogger::log($rowCount . ' Betriebe importiert');
-		//return number of read lines
-		return $rowCount;
-	}
+                //unset email if empty string
+                if ($data['email'] === '') {
+                    unset($data['email']);
+                }
+                $this->createApplicant($data);
+            }
+        } catch (ValidationException $ve) {
+            DB::rollback();
+            $messages = new MessageBag([
+                'row' => 'Fehler in Zeile '.$rowCount,
+            ]);
+            $messages->merge($ve->getErrors());
+            throw new ValidationException($messages);
+        }
+        DB::commit();
+        //ActivityLogger::log($rowCount . ' Betriebe importiert');
+        //return number of read lines
+        return $rowCount;
+    }
 
-	public function updateApplicant(Applicant $applicant, array $data) {
-		$applicantValidationException = null;
+    public function updateApplicant(Applicant $applicant, array $data)
+    {
+        $applicantValidationException = null;
 
-		//validate applicant
-		try {
-			$applicantValidator = new ApplicantValidator($data, $applicant);
-			$applicantValidator->validateUpdate();
-		} catch (ValidationException $ve) {
-			$applicantValidationException = $ve;
-		}
-		//validate address
-		try {
-			$addressValidator = new AddressValidator($data, $applicant->address);
-			$addressValidator->validateUpdate();
-		} catch (ValidationException $ve) {
-			if ($applicantValidationException) {
-				$merged = $applicantValidationException->merge($ve);
-				throw $merged;
-			}
-			throw ($ve);
-		}
-		if ($applicantValidationException) {
-			throw $applicantValidationException;
-		}
+        //validate applicant
+        try {
+            $applicantValidator = new ApplicantValidator($data, $applicant);
+            $applicantValidator->validateUpdate();
+        } catch (ValidationException $ve) {
+            $applicantValidationException = $ve;
+        }
+        //validate address
+        try {
+            $addressValidator = new AddressValidator($data, $applicant->address);
+            $addressValidator->validateUpdate();
+        } catch (ValidationException $ve) {
+            if ($applicantValidationException) {
+                $merged = $applicantValidationException->merge($ve);
+                throw $merged;
+            }
+            throw ($ve);
+        }
+        if ($applicantValidationException) {
+            throw $applicantValidationException;
+        }
 
-		$this->applicantRepository->update($applicant, $data);
-		//ActivityLogger::log('Betrieb [' . $applicant->id . '] bearbeitet');
-		return $applicant;
-	}
+        $this->applicantRepository->update($applicant, $data);
+        //ActivityLogger::log('Betrieb [' . $applicant->id . '] bearbeitet');
+        return $applicant;
+    }
 
-	public function deleteApplicant(Applicant $applicant) {
-		$this->applicantRepository->delete($applicant);
-	}
+    public function deleteApplicant(Applicant $applicant)
+    {
+        $this->applicantRepository->delete($applicant);
+    }
 
-	public function getAssociations(User $user = null) {
-		if (is_null($user) || $user->isAdmin()) {
-			return $this->associationRepository->findAll();
-		}
-		return $this->associationRepository->findForUser($user);
-	}
+    public function getAssociations(User $user = null)
+    {
+        if (is_null($user) || $user->isAdmin()) {
+            return $this->associationRepository->findAll();
+        }
 
-	public function createAssociation(array $data) {
-		$associationValidator = new AssociationValidator($data);
-		$associationValidator->validateCreate();
-		$association = $this->associationRepository->create($data);
-		//ActivityLogger::log('Verein [' . $data['name'] . '] erstellt');
-		return $association;
-	}
+        return $this->associationRepository->findForUser($user);
+    }
 
-	public function updateAssociation(Association $association, array $data) {
-		$associationValidator = new AssociationValidator($data, $association);
-		$associationValidator->validateUpdate();
+    public function createAssociation(array $data)
+    {
+        $associationValidator = new AssociationValidator($data);
+        $associationValidator->validateCreate();
+        $association = $this->associationRepository->create($data);
+        //ActivityLogger::log('Verein [' . $data['name'] . '] erstellt');
+        return $association;
+    }
 
-		$this->associationRepository->update($association, $data);
-		//ActivityLogger::log('Verein [' . $association->name . '] bearbeitet');
-		return $association;
-	}
+    public function updateAssociation(Association $association, array $data)
+    {
+        $associationValidator = new AssociationValidator($data, $association);
+        $associationValidator->validateUpdate();
 
-	public function deleteAssociation(Association $association) {
-		throw new NotImplementedException();
-	}
+        $this->associationRepository->update($association, $data);
+        //ActivityLogger::log('Verein [' . $association->name . '] bearbeitet');
+        return $association;
+    }
 
-	public function getCompetitions(User $user = null) {
-		return $this->competitionRepository->findAll();
-	}
+    public function deleteAssociation(Association $association)
+    {
+        throw new NotImplementedException();
+    }
 
-	public function resetCompetition(Competition $competition) {
-		// TODO: refactor to non-static
-		DB::transaction(function() use ($competition) {
-			foreach ($competition->tastingsessions as $session) {
-				foreach ($session->commissions as $commission) {
-					foreach ($commission->tasters as $taster) {
-						$taster->tastings()->delete();
-						$taster->delete();
-					}
-					$commission->delete();
-				}
-				$session->delete();
-			}
-			while (true) {
-				$wines = $competition->wines()->take(100)->get();
-				if ($wines->isEmpty()) {
-					break;
-				}
+    public function getCompetitions(User $user = null)
+    {
+        return $this->competitionRepository->findAll();
+    }
 
-				foreach ($wines as $wine) {
-					$wine->tastingnumbers()->delete();
-					$wine->delete();
-				}
-			}
-			$competition->wines_chosen_signed_off()->delete();
+    public function resetCompetition(Competition $competition)
+    {
+        // TODO: refactor to non-static
+        DB::transaction(function () use ($competition) {
+            foreach ($competition->tastingsessions as $session) {
+                foreach ($session->commissions as $commission) {
+                    foreach ($commission->tasters as $taster) {
+                        $taster->tastings()->delete();
+                        $taster->delete();
+                    }
+                    $commission->delete();
+                }
+                $session->delete();
+            }
+            while (true) {
+                $wines = $competition->wines()->take(100)->get();
+                if ($wines->isEmpty()) {
+                    break;
+                }
 
-			//$competition->user()->associate(null);
-			$competition->competitionState()->associate(CompetitionState::find(CompetitionState::STATE_ENROLLMENT));
-			$competition->save();
-		});
-		//ActivityLogger::log('Bewerb [' . $competition->label . '] zur&uuml;ckgesetzt');
-		//return $this->competitionRepository->reset($competition);
-	}
+                foreach ($wines as $wine) {
+                    $wine->tastingnumbers()->delete();
+                    $wine->delete();
+                }
+            }
+            $competition->wines_chosen_signed_off()->delete();
 
-	public function getUser(string $username)
-	{
-		return $this->userRepository->find($username);
-	}
+            //$competition->user()->associate(null);
+            $competition->competitionState()->associate(CompetitionState::find(CompetitionState::STATE_ENROLLMENT));
+            $competition->save();
+        });
+        //ActivityLogger::log('Bewerb [' . $competition->label . '] zur&uuml;ckgesetzt');
+        //return $this->competitionRepository->reset($competition);
+    }
 
-	public function getUsers(User $user = null) {
-		if (is_null($user) || $user->isAdmin()) {
-			return $this->userRepository->findAll();
-		}
-		// Non-admin users see only their own user
-		return new Collection([
-			$user
-		]);
-	}
+    public function getUser(string $username)
+    {
+        return $this->userRepository->find($username);
+    }
 
-	public function createUser(array $data) {
-		$userValidator = new UserValidator($data);
-		$userValidator->validateCreate();
-		$user = $this->userRepository->create($data);
-		//ActivityLogger::log('Benutzer [' . $data['username'] . '] erstellt');
-		return $user;
-	}
+    public function getUsers(User $user = null)
+    {
+        if (is_null($user) || $user->isAdmin()) {
+            return $this->userRepository->findAll();
+        }
+        // Non-admin users see only their own user
+        return new Collection([
+            $user,
+        ]);
+    }
 
-	public function updateUser(User $user, $data) {
-		$userValidator = new UserValidator($data, $user);
-		$userValidator->validateUpdate();
-		$this->userRepository->update($user, $data);
-		//ActivityLogger::log('Benutzer [' . $user->username . '] bearbeitet');
-	}
+    public function createUser(array $data)
+    {
+        $userValidator = new UserValidator($data);
+        $userValidator->validateCreate();
+        $user = $this->userRepository->create($data);
+        //ActivityLogger::log('Benutzer [' . $data['username'] . '] erstellt');
+        return $user;
+    }
 
-	public function deleteUser(User $user) {
-		$this->userRepository->delete($user);
-		//Log::info('user <' . $user->username . '> deleted by ' . $this->auth->user()->username);
-		//ActivityLogger::log('Benutzer [' . $username . '] gel&ouml;scht');
-	}
+    public function updateUser(User $user, $data)
+    {
+        $userValidator = new UserValidator($data, $user);
+        $userValidator->validateUpdate();
+        $this->userRepository->update($user, $data);
+        //ActivityLogger::log('Benutzer [' . $user->username . '] bearbeitet');
+    }
 
-	public function getWineSorts() {
-		return $this->wineSortRepository->findAll();
-	}
+    public function deleteUser(User $user)
+    {
+        $this->userRepository->delete($user);
+        //Log::info('user <' . $user->username . '> deleted by ' . $this->auth->user()->username);
+        //ActivityLogger::log('Benutzer [' . $username . '] gel&ouml;scht');
+    }
 
-	public function createWineSort(array $data) {
-		$validator = new WineSortValidator($data);
-		$validator->validateCreate();
+    public function getWineSorts()
+    {
+        return $this->wineSortRepository->findAll();
+    }
 
-		return $this->wineSortRepository->create($data);
-	}
+    public function createWineSort(array $data)
+    {
+        $validator = new WineSortValidator($data);
+        $validator->validateCreate();
 
-	public function updateWineSort(WineSort $wineSort, array $data) {
-		$validator = new WineSortValidator($data, $wineSort);
-		$validator->validateUpdate();
+        return $this->wineSortRepository->create($data);
+    }
 
-		$this->wineSortRepository->update($wineSort, $data);
-	}
+    public function updateWineSort(WineSort $wineSort, array $data)
+    {
+        $validator = new WineSortValidator($data, $wineSort);
+        $validator->validateUpdate();
 
-	/**
-	 * Create user for applicant it it does not exist
-	 * 
-	 * @param Applicant $applicant
-	 */
-	public function createApplicantUser(Applicant $applicant) {
-		//for better security, existing users are not associated with the new applicant
-		$password = str_random(15);
-		if (!User::find($applicant->id)) {
-			$user = $this->userRepository->create([
-				'username' => $applicant->id,
-				'password' => $password, //random password for better security
-				'admin' => false,
-			]);
-			$applicant->user()->associate($user);
-			$applicant->save();
-		}
-		//ActivityLogger::log('Benutzer [' . $user->username . '] erstellt (zum Betrieb)');
-		return [$user, $password];
-	}
+        $this->wineSortRepository->update($wineSort, $data);
+    }
 
+    /**
+     * Create user for applicant it it does not exist.
+     *
+     * @param Applicant $applicant
+     */
+    public function createApplicantUser(Applicant $applicant)
+    {
+        //for better security, existing users are not associated with the new applicant
+        $password = str_random(15);
+        if (! User::find($applicant->id)) {
+            $user = $this->userRepository->create([
+                'username' => $applicant->id,
+                'password' => $password, //random password for better security
+                'admin' => false,
+            ]);
+            $applicant->user()->associate($user);
+            $applicant->save();
+        }
+        //ActivityLogger::log('Benutzer [' . $user->username . '] erstellt (zum Betrieb)');
+        return [$user, $password];
+    }
 }

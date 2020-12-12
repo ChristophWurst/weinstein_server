@@ -16,49 +16,49 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Integration\Settings;
 
 use Test\BrowserKitTestCase;
 
-class WineSortsTest extends BrowserKitTestCase {
+class WineSortsTest extends BrowserKitTestCase
+{
+    use \Illuminate\Foundation\Testing\DatabaseTransactions;
 
-	use \Illuminate\Foundation\Testing\DatabaseTransactions;
+    public function testShowSorts()
+    {
+        $admin = factory(\App\MasterData\User::class)->states('admin')->make();
 
-	public function testShowSorts() {
-		$admin = factory(\App\MasterData\User::class)->states('admin')->make();
+        $this->be($admin);
+        $this->get('settings/winesorts');
+        $this->assertResponseOk();
+        $this->see('Sorten');
+    }
 
-		$this->be($admin);
-		$this->get('settings/winesorts');
-		$this->assertResponseOk();
-		$this->see('Sorten');
-	}
+    public function testCreateWineSort()
+    {
+        $admin = factory(\App\MasterData\User::class)->states('admin')->make();
 
-	public function testCreateWineSort() {
-		$admin = factory(\App\MasterData\User::class)->states('admin')->make();
+        $this->be($admin);
+        $this->get('settings/winesorts/create');
+        $this->assertResponseOk();
 
-		$this->be($admin);
-		$this->get('settings/winesorts/create');
-		$this->assertResponseOk();
+        $this->post('settings/winesorts/create', [
+            'order' => 'NaN',
+            'name' => 'Veltline',
+        ]);
+        $this->assertRedirectedTo('settings/winesorts/create');
+        $this->get('settings/winesorts/create');
+        $this->see('Fehler!');
 
-		$this->post('settings/winesorts/create', [
-			'order' => 'NaN',
-			'name' => 'Veltline',
-		]);
-		$this->assertRedirectedTo('settings/winesorts/create');
-		$this->get('settings/winesorts/create');
-		$this->see('Fehler!');
-
-		$data = [
-			'order' => rand(1, 100000),
-			'name' => str_random(10),
-		];
-		$this->post('settings/winesorts/create', $data);
-		$this->assertRedirectedTo('settings/winesorts');
-		$this->see($admin['order']);
-		$this->see($admin['name']);
-	}
-
+        $data = [
+            'order' => rand(1, 100000),
+            'name' => str_random(10),
+        ];
+        $this->post('settings/winesorts/create', $data);
+        $this->assertRedirectedTo('settings/winesorts');
+        $this->see($admin['order']);
+        $this->see($admin['name']);
+    }
 }

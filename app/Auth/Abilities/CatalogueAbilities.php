@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Auth\Abilities;
@@ -25,26 +24,30 @@ use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
 use App\MasterData\User;
 
-class CatalogueAbilities {
+class CatalogueAbilities
+{
+    private function administratesCompetition(User $user, Competition $competition)
+    {
+        return $competition->administrates($user);
+    }
 
-	private function administratesCompetition(User $user, Competition $competition) {
-		return $competition->administrates($user);
-	}
+    private function checkCompetitionState(Competition $competition)
+    {
+        return $competition->competition_state_id === CompetitionState::STATE_FINISHED;
+    }
 
-	private function checkCompetitionState(Competition $competition) {
-		return $competition->competition_state_id === CompetitionState::STATE_FINISHED;
-	}
+    public function create(User $user, Competition $competition)
+    {
+        return $this->administratesCompetition($user, $competition) && $this->checkCompetitionState($competition);
+    }
 
-	public function create(User $user, Competition $competition) {
-		return $this->administratesCompetition($user, $competition) && $this->checkCompetitionState($competition);
-	}
+    public function createTastingCatalogue(User $user, Competition $competition)
+    {
+        return $user->associations()->exists();
+    }
 
-	public function createTastingCatalogue(User $user, Competition $competition) {
-		return $user->associations()->exists();
-	}
-
-	public function importNumbers(User $user, Competition $competition) {
-		return $competition->administrates($user);
-	}
-
+    public function importNumbers(User $user, Competition $competition)
+    {
+        return $competition->administrates($user);
+    }
 }

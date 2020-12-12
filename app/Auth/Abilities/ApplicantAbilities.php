@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Auth\Abilities;
@@ -24,34 +23,39 @@ namespace App\Auth\Abilities;
 use App\MasterData\Applicant;
 use App\MasterData\User;
 
-class ApplicantAbilities {
+class ApplicantAbilities
+{
+    use CommonAbilities;
 
-	use CommonAbilities;
+    private function administrates(User $user, Applicant $applicant)
+    {
+        if ($applicant->wuser_username === $user->username) {
+            return true;
+        }
+        if (! is_null($applicant->association) && $applicant->association->wuser_username === $user->username) {
+            return true;
+        }
 
-	private function administrates(User $user, Applicant $applicant) {
-		if ($applicant->wuser_username === $user->username) {
-			return true;
-		}
-		if (!is_null($applicant->association) && $applicant->association->wuser_username === $user->username) {
-			return true;
-		}
-		return false;
-	}
+        return false;
+    }
 
-	public function show(User $user, Applicant $applicant) {
-		return $this->administrates($user, $applicant);
-	}
+    public function show(User $user, Applicant $applicant)
+    {
+        return $this->administrates($user, $applicant);
+    }
 
-	public function create(User $user) {
-		return $user->associations()->exists();
-	}
+    public function create(User $user)
+    {
+        return $user->associations()->exists();
+    }
 
-	public function import(User $user) {
-		return false;
-	}
+    public function import(User $user)
+    {
+        return false;
+    }
 
-	public function edit(User $user, Applicant $applicant) {
-		return $this->administrates($user, $applicant);
-	}
-
+    public function edit(User $user, Applicant $applicant)
+    {
+        return $this->administrates($user, $applicant);
+    }
 }

@@ -2,7 +2,7 @@
 
 return [
 
-	/*
+    /*
     |--------------------------------------------------------------------------
     | Password Reset Language Lines
     |--------------------------------------------------------------------------
@@ -13,10 +13,10 @@ return [
     |
     */
 
-	'password' => 'Passwort muss zwischen 5 und 80 Zeichen lang sein!',
-	'reset' => 'Passwort wurde zurückgesetzt!',
-	'sent' => 'E-Mail zur Passwortrücksendung wurde zugestellt!',
-	'token' => 'Der Rücksetzungscode ist ungültig.',
-	'user' => 'Benutzer existiert nicht.',
+    'password' => 'Passwort muss zwischen 5 und 80 Zeichen lang sein!',
+    'reset' => 'Passwort wurde zurückgesetzt!',
+    'sent' => 'E-Mail zur Passwortrücksendung wurde zugestellt!',
+    'token' => 'Der Rücksetzungscode ist ungültig.',
+    'user' => 'Benutzer existiert nicht.',
 
 ];

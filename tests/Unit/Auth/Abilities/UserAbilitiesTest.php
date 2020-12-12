@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Unit\Auth\Abilities;
@@ -24,53 +23,57 @@ namespace Test\Unit\Auth\Abilities;
 use App\Auth\Abilities\UserAbilities;
 use Test\TestCase;
 
-class UserAbilitiesTest extends TestCase {
+class UserAbilitiesTest extends TestCase
+{
+    use AbilitiesMock;
 
-	use AbilitiesMock;
+    /** @var UserAbilities */
+    private $abilities;
 
-	/** @var UserAbilities */
-	private $abilities;
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-	protected function setUp(): void {
-		parent::setUp();
+        $this->abilities = new UserAbilities();
+    }
 
-		$this->abilities = new UserAbilities();
-	}
+    public function testCreate()
+    {
+        $user = $this->getUserMock();
 
-	public function testCreate() {
-		$user = $this->getUserMock();
+        $this->assertFalse($this->abilities->create($user));
+    }
 
-		$this->assertFalse($this->abilities->create($user));
-	}
+    public function testShow()
+    {
+        $user = $this->getUserMock();
+        $toShow = $this->getUserMock();
 
-	public function testShow() {
-		$user = $this->getUserMock();
-		$toShow = $this->getUserMock();
+        $toShow->shouldReceive('administrates')
+            ->once()
+            ->with($user)
+            ->andReturn(true);
 
-		$toShow->shouldReceive('administrates')
-			->once()
-			->with($user)
-			->andReturn(true);
+        $this->assertTrue($this->abilities->show($user, $toShow));
+    }
 
-		$this->assertTrue($this->abilities->show($user, $toShow));
-	}
+    public function testEdit()
+    {
+        $user = $this->getUserMock();
+        $toEdit = $this->getUserMock();
 
-	public function testEdit() {
-		$user = $this->getUserMock();
-		$toEdit = $this->getUserMock();
+        $toEdit->shouldReceive('administrates')
+            ->once()
+            ->with($user)
+            ->andReturn(true);
 
-		$toEdit->shouldReceive('administrates')
-			->once()
-			->with($user)
-			->andReturn(true);
+        $this->assertTrue($this->abilities->edit($user, $toEdit));
+    }
 
-		$this->assertTrue($this->abilities->edit($user, $toEdit));
-	}
+    public function testDelete()
+    {
+        $user = $this->getUserMock();
 
-	public function testDelete() {
-		$user = $this->getUserMock();
-
-		$this->assertFalse($this->abilities->delete($user));
-	}
-
+        $this->assertFalse($this->abilities->delete($user));
+    }
 }

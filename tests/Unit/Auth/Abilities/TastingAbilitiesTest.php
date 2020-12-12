@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Unit\Auth\Abilities;
@@ -27,52 +26,55 @@ use Mockery;
 use Mockery\MockInterface;
 use Test\TestCase;
 
-class TastingAbilitiesTest extends TestCase {
+class TastingAbilitiesTest extends TestCase
+{
+    use AbilitiesMock;
 
-	use AbilitiesMock;
+    /** @var TastingAbilities */
+    private $abilities;
 
-	/** @var TastingAbilities */
-	private $abilities;
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-	protected function setUp(): void {
-		parent::setUp();
+        $this->abilities = new TastingAbilities();
+    }
 
-		$this->abilities = new TastingAbilities();
-	}
+    /**
+     * @return MockInterface
+     */
+    private function getTastingSessionMock()
+    {
+        return Mockery::mock(TastingSession::class);
+    }
 
-	/**
-	 * @return MockInterface
-	 */
-	private function getTastingSessionMock() {
-		return Mockery::mock(TastingSession::class);
-	}
+    public function testCreateNonAdmin()
+    {
+        $user = $this->getUserMock();
+        $tastingSession = $this->getTastingSessionMock();
 
-	public function testCreateNonAdmin() {
-		$user = $this->getUserMock();
-		$tastingSession = $this->getTastingSessionMock();
+        $tastingSession->shouldReceive('administrates')
+            ->once()
+            ->with($user)
+            ->andReturn(false);
 
-		$tastingSession->shouldReceive('administrates')
-			->once()
-			->with($user)
-			->andReturn(false);
+        $this->assertFalse($this->abilities->create($user, $tastingSession));
+    }
 
-		$this->assertFalse($this->abilities->create($user, $tastingSession));
-	}
+    public function testCreateLockedSession()
+    {
+        $user = $this->getUserMock();
+        $tastingSession = $this->getTastingSessionMock();
 
-	public function testCreateLockedSession() {
-		$user = $this->getUserMock();
-		$tastingSession = $this->getTastingSessionMock();
+        $tastingSession->shouldReceive('administrates')
+            ->once()
+            ->with($user)
+            ->andReturn(true);
+        $tastingSession->shouldReceive('getAttribute')
+            ->once()
+            ->with('locked')
+            ->andReturn(true);
 
-		$tastingSession->shouldReceive('administrates')
-			->once()
-			->with($user)
-			->andReturn(true);
-		$tastingSession->shouldReceive('getAttribute')
-			->once()
-			->with('locked')
-			->andReturn(true);
-
-		$this->assertFalse($this->abilities->create($user, $tastingSession));
-	}
-
+        $this->assertFalse($this->abilities->create($user, $tastingSession));
+    }
 }

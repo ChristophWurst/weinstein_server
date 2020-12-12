@@ -16,258 +16,275 @@ use Illuminate\Support\Collection;
 use PHPUnit_Framework_MockObject_MockObject;
 use Test\TestCase;
 
-class StoreTest extends TestCase {
+class StoreTest extends TestCase
+{
+    /** @var ApplicantRepository|PHPUnit_Framework_MockObject_MockObject */
+    private $applicantRepository;
 
-	/** @var ApplicantRepository|PHPUnit_Framework_MockObject_MockObject */
-	private $applicantRepository;
+    /** @var AssociationRepository|PHPUnit_Framework_MockObject_MockObject */
+    private $associationRepository;
 
-	/** @var AssociationRepository|PHPUnit_Framework_MockObject_MockObject */
-	private $associationRepository;
+    /** @var CompetitionRepository|PHPUnit_Framework_MockObject_MockObject */
+    private $competitionRepository;
 
-	/** @var CompetitionRepository|PHPUnit_Framework_MockObject_MockObject */
-	private $competitionRepository;
+    /** @var UserRepository|PHPUnit_Framework_MockObject_MockObject */
+    private $userRepository;
 
-	/** @var UserRepository|PHPUnit_Framework_MockObject_MockObject */
-	private $userRepository;
+    /** @var WineSortRepository|PHPUnit_Framework_MockObject_MockObject */
+    private $wineSortRepository;
 
-	/** @var WineSortRepository|PHPUnit_Framework_MockObject_MockObject */
-	private $wineSortRepository;
+    /** @var Store */
+    private $store;
 
-	/** @var Store */
-	private $store;
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-	protected function setUp(): void {
-		parent::setUp();
+        $this->applicantRepository = $this->getSimpleClassMock(ApplicantRepository::class);
+        $this->associationRepository = $this->getSimpleClassMock(AssociationRepository::class);
+        $this->competitionRepository = $this->getSimpleClassMock(CompetitionRepository::class);
+        $this->userRepository = $this->getSimpleClassMock(UserRepository::class);
+        $this->wineSortRepository = $this->getSimpleClassMock(WineSortRepository::class);
+        $this->store = new Store($this->applicantRepository, $this->associationRepository, $this->competitionRepository,
+            $this->userRepository, $this->wineSortRepository);
+    }
 
-		$this->applicantRepository = $this->getSimpleClassMock(ApplicantRepository::class);
-		$this->associationRepository = $this->getSimpleClassMock(AssociationRepository::class);
-		$this->competitionRepository = $this->getSimpleClassMock(CompetitionRepository::class);
-		$this->userRepository = $this->getSimpleClassMock(UserRepository::class);
-		$this->wineSortRepository = $this->getSimpleClassMock(WineSortRepository::class);
-		$this->store = new Store($this->applicantRepository, $this->associationRepository, $this->competitionRepository,
-			$this->userRepository, $this->wineSortRepository);
-	}
+    public function testGetAllAssociations()
+    {
+        $collection = new Collection();
 
-	public function testGetAllAssociations() {
-		$collection = new Collection();
+        $this->associationRepository->expects($this->once())
+            ->method('findAll')
+            ->will($this->returnValue($collection));
 
-		$this->associationRepository->expects($this->once())
-			->method('findAll')
-			->will($this->returnValue($collection));
+        $this->assertEquals($collection, $this->store->getAssociations());
+    }
 
-		$this->assertEquals($collection, $this->store->getAssociations());
-	}
+    public function testGetAllAssociationsAsAdmin()
+    {
+        $collection = new Collection();
 
-	public function testGetAllAssociationsAsAdmin() {
-		$collection = new Collection();
+        $this->associationRepository->expects($this->once())
+            ->method('findAll')
+            ->will($this->returnValue($collection));
 
-		$this->associationRepository->expects($this->once())
-			->method('findAll')
-			->will($this->returnValue($collection));
+        $this->assertEquals($collection, $this->store->getAssociations());
+    }
 
-		$this->assertEquals($collection, $this->store->getAssociations());
-	}
+    public function testGetAssociationsAsNonAdmin()
+    {
+        $collection = new Collection();
+        $user = new User();
 
-	public function testGetAssociationsAsNonAdmin() {
-		$collection = new Collection();
-		$user = new User();
+        $this->associationRepository->expects($this->once())
+            ->method('findForUser')
+            ->with($user)
+            ->will($this->returnValue($collection));
 
-		$this->associationRepository->expects($this->once())
-			->method('findForUser')
-			->with($user)
-			->will($this->returnValue($collection));
+        $this->assertEquals($collection, $this->store->getAssociations($user));
+    }
 
-		$this->assertEquals($collection, $this->store->getAssociations($user));
-	}
+    public function testCreateAssociation()
+    {
+        $data = [
+            'id' => 40,
+            'name' => 'Pulkau',
+        ];
 
-	public function testCreateAssociation() {
-		$data = [
-			'id' => 40,
-			'name' => 'Pulkau',
-		];
+        $association = new Association($data);
+        $this->associationRepository->expects($this->once())
+            ->method('create')
+            ->with($data)
+            ->will($this->returnValue($association));
 
-		$association = new Association($data);
-		$this->associationRepository->expects($this->once())
-			->method('create')
-			->with($data)
-			->will($this->returnValue($association));
+        $this->assertEquals($association, $this->store->createAssociation($data));
+    }
 
-		$this->assertEquals($association, $this->store->createAssociation($data));
-	}
+    public function testCreateAssociationValidationFails()
+    {
+        $data = [
+            'id' => -1,
+            'name' => 'Pulkau',
+        ];
 
-	public function testCreateAssociationValidationFails() {
-		$data = [
-			'id' => -1,
-			'name' => 'Pulkau',
-		];
+        $association = new Association($data);
+        $this->associationRepository->expects($this->never())
+            ->method('create');
 
-		$association = new Association($data);
-		$this->associationRepository->expects($this->never())
-			->method('create');
+        $this->expectException(ValidationException::class);
+        $this->store->createAssociation($data);
+    }
 
-		$this->expectException(ValidationException::class);
-		$this->store->createAssociation($data);
-	}
+    public function testUpdateAssociation()
+    {
+        $association = new Association();
+        $data = [
+            'id' => 33,
+            'name' => 'Pillersdorf',
+        ];
 
-	public function testUpdateAssociation() {
-		$association = new Association();
-		$data = [
-			'id' => 33,
-			'name' => 'Pillersdorf',
-		];
+        $this->associationRepository->expects($this->once())
+            ->method('update')
+            ->with($association, $data);
 
-		$this->associationRepository->expects($this->once())
-			->method('update')
-			->with($association, $data);
+        $this->store->updateAssociation($association, $data);
+    }
 
-		$this->store->updateAssociation($association, $data);
-	}
+    public function testUpdateAssociationValidationFails()
+    {
+        $association = new Association();
+        $data = [
+            'id' => -5,
+            'name' => 'Pillersdorf',
+        ];
 
-	public function testUpdateAssociationValidationFails() {
-		$association = new Association();
-		$data = [
-			'id' => -5,
-			'name' => 'Pillersdorf',
-		];
+        $this->associationRepository->expects($this->never())
+            ->method('update');
 
-		$this->associationRepository->expects($this->never())
-			->method('update');
+        $this->expectException(ValidationException::class);
+        $this->store->updateAssociation($association, $data);
+    }
 
-		$this->expectException(ValidationException::class);
-		$this->store->updateAssociation($association, $data);
-	}
+    public function testGetAllCompetitions()
+    {
+        $collection = new Collection();
 
-	public function testGetAllCompetitions() {
-		$collection = new Collection();
+        $this->competitionRepository->expects($this->once())
+            ->method('findAll')
+            ->will($this->returnValue($collection));
 
-		$this->competitionRepository->expects($this->once())
-			->method('findAll')
-			->will($this->returnValue($collection));
+        $this->assertEquals($collection, $this->store->getCompetitions());
+    }
 
-		$this->assertEquals($collection, $this->store->getCompetitions());
-	}
+    public function testGetAllUsers()
+    {
+        $collection = new Collection();
 
-	public function testGetAllUsers() {
-		$collection = new Collection();
+        $this->userRepository->expects($this->once())
+            ->method('findAll')
+            ->will($this->returnValue($collection));
 
-		$this->userRepository->expects($this->once())
-			->method('findAll')
-			->will($this->returnValue($collection));
+        $this->assertEquals($collection, $this->store->getUsers());
+    }
 
-		$this->assertEquals($collection, $this->store->getUsers());
-	}
+    public function testGetUsersAsAdmin()
+    {
+        $collection = new Collection();
+        $user = new User();
+        $user->admin = true;
 
-	public function testGetUsersAsAdmin() {
-		$collection = new Collection();
-		$user = new User();
-		$user->admin = true;
+        $this->userRepository->expects($this->once())
+            ->method('findAll')
+            ->will($this->returnValue($collection));
 
-		$this->userRepository->expects($this->once())
-			->method('findAll')
-			->will($this->returnValue($collection));
+        $this->assertEquals($collection, $this->store->getUsers($user));
+    }
 
-		$this->assertEquals($collection, $this->store->getUsers($user));
-	}
+    public function testGetUsersAsNonAdmin()
+    {
+        $user = new User();
+        $user->admin = false;
+        $collection = new Collection([$user]);
 
-	public function testGetUsersAsNonAdmin() {
-		$user = new User();
-		$user->admin = false;
-		$collection = new Collection([$user]);
+        $this->userRepository->expects($this->never())
+            ->method('findAll');
 
-		$this->userRepository->expects($this->never())
-			->method('findAll');
+        $this->assertEquals($collection, $this->store->getUsers($user));
+    }
 
-		$this->assertEquals($collection, $this->store->getUsers($user));
-	}
+    public function testCreateUser()
+    {
+        $data = [
+            'username' => 'jane123',
+            'password' => '123456',
+        ];
 
-	public function testCreateUser() {
-		$data = [
-			'username' => 'jane123',
-			'password' => '123456',
-		];
+        $expected = new User($data);
+        $this->userRepository->expects($this->once())
+            ->method('create')
+            ->with($data)
+            ->will($this->returnValue($expected));
 
-		$expected = new User($data);
-		$this->userRepository->expects($this->once())
-			->method('create')
-			->with($data)
-			->will($this->returnValue($expected));
+        $actual = $this->store->createUser($data);
 
-		$actual = $this->store->createUser($data);
+        $this->assertEquals($expected, $actual);
+    }
 
-		$this->assertEquals($expected, $actual);
-	}
+    public function testUpdateUser()
+    {
+        $user = new User([
+            'user123',
+            'password456',
+        ]);
+        $data = [
+            'username' => 'jane123',
+            'password' => '123456',
+        ];
 
-	public function testUpdateUser() {
-		$user = new User([
-			'user123',
-			'password456',
-		]);
-		$data = [
-			'username' => 'jane123',
-			'password' => '123456',
-		];
+        $this->userRepository->expects($this->once())
+            ->method('update')
+            ->with($user, $data);
 
-		$this->userRepository->expects($this->once())
-			->method('update')
-			->with($user, $data);
+        $this->store->updateUser($user, $data);
+    }
 
-		$this->store->updateUser($user, $data);
-	}
+    public function testDeleteUser()
+    {
+        $user = new User([
+            'user123',
+            'password456',
+        ]);
 
-	public function testDeleteUser() {
-		$user = new User([
-			'user123',
-			'password456',
-		]);
+        $this->userRepository->expects($this->once())
+            ->method('delete')
+            ->with($user);
 
-		$this->userRepository->expects($this->once())
-			->method('delete')
-			->with($user);
+        $this->store->deleteUser($user);
+    }
 
-		$this->store->deleteUser($user);
-	}
+    public function testGetWineSorts()
+    {
+        $collection = new Collection();
 
-	public function testGetWineSorts() {
-		$collection = new Collection();
+        $this->wineSortRepository->expects($this->once())
+            ->method('findAll')
+            ->will($this->returnValue($collection));
 
-		$this->wineSortRepository->expects($this->once())
-			->method('findAll')
-			->will($this->returnValue($collection));
+        $this->assertEquals($collection, $this->store->getWineSorts());
+    }
 
-		$this->assertEquals($collection, $this->store->getWineSorts());
-	}
+    public function testCreateWineSort()
+    {
+        $data = [
+            'order' => 13,
+            'name' => 'Grüner Veltliner',
+        ];
 
-	public function testCreateWineSort() {
-		$data = [
-			'order' => 13,
-			'name' => 'Grüner Veltliner',
-		];
+        $result = new WineSort($data);
+        $this->wineSortRepository->expects($this->once())
+            ->method('create')
+            ->with($data)
+            ->will($this->returnValue($result));
 
-		$result = new WineSort($data);
-		$this->wineSortRepository->expects($this->once())
-			->method('create')
-			->with($data)
-			->will($this->returnValue($result));
+        $this->assertEquals($result, $this->store->createWineSort($data));
+    }
 
-		$this->assertEquals($result, $this->store->createWineSort($data));
-	}
+    public function testUpdateWineSort()
+    {
+        $old = new WineSort([
+            'order' => 21,
+            'name' => 'Blauburger',
+        ]);
 
-	public function testUpdateWineSort() {
-		$old = new WineSort([
-			'order' => 21,
-			'name' => 'Blauburger',
-		]);
+        $data = [
+            'order' => 13,
+            'name' => 'Grüner Veltliner',
+        ];
 
-		$data = [
-			'order' => 13,
-			'name' => 'Grüner Veltliner',
-		];
+        $this->wineSortRepository->expects($this->once())
+            ->method('update')
+            ->with($old, $data);
 
-		$this->wineSortRepository->expects($this->once())
-			->method('update')
-			->with($old, $data);
-
-		$this->store->updateWineSort($old, $data);
-	}
-
+        $this->store->updateWineSort($old, $data);
+    }
 }

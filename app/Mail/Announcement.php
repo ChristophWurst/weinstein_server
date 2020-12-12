@@ -9,32 +9,31 @@ use Illuminate\Queue\SerializesModels;
 
 class Announcement extends Mailable implements ShouldQueue
 {
-	use Queueable, SerializesModels;
+    use Queueable, SerializesModels;
 
-	/**
-	 * @var string
-	 */
-	private $text;
+    /**
+     * @var string
+     */
+    private $text;
 
-	/**
-	 * @return void
-	 */
-	public function __construct(string $subject, string $text)
-	{
-		$this->subject = $subject;
-		$this->text = $text;
-	}
+    /**
+     * @return void
+     */
+    public function __construct(string $subject, string $text)
+    {
+        $this->subject = $subject;
+        $this->text = $text;
+    }
 
-	/**
-	 * @return $this
-	 */
-	public function build()
-	{
-		return $this->text('emails.announcement')
-			->subject($this->subject)
-			->with([
-				'text' => $this->text,
-			]);
-	}
-
+    /**
+     * @return $this
+     */
+    public function build()
+    {
+        return $this->text('emails.announcement')
+            ->subject($this->subject)
+            ->with([
+                'text' => $this->text,
+            ]);
+    }
 }

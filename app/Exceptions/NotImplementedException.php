@@ -16,17 +16,16 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Exceptions;
 
 use Exception;
 
-class NotImplementedException extends Exception {
-
-	public function __construct($message = "not implemented yet", $code = 0, Exception $previous = null) {
-		parent::__construct($message, $code, $previous);
-	}
-
+class NotImplementedException extends Exception
+{
+    public function __construct($message = 'not implemented yet', $code = 0, Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
 }

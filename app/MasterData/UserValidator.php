@@ -16,61 +16,62 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\MasterData;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Validation\Validator;
+use Illuminate\Database\Eloquent\Model;
 
-class UserValidator extends Validator {
+class UserValidator extends Validator
+{
+    /**
+     * Models class name.
+     *
+     * @var string
+     */
+    protected $modelClass = User::class;
 
-	/**
-	 * Models class name
-	 * 
-	 * @var string
-	 */
-	protected $modelClass = User::class;
+    /**
+     * Get attributes names.
+     *
+     * @return array
+     */
+    protected function getAttributeNames()
+    {
+        return [
+            'username' => 'Benutzername',
+            'password' => 'Passwort',
+            'admin' => 'Administrator',
+        ];
+    }
 
-	/**
-	 * Get attributes names
-	 * 
-	 * @return array
-	 */
-	protected function getAttributeNames() {
-		return array(
-			'username' => 'Benutzername',
-			'password' => 'Passwort',
-			'admin' => 'Administrator'
-		);
-	}
+    /**
+     * Get rules for creating a new user.
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function getCreateRules(array $data)
+    {
+        return [
+            'username' => 'Required|Min:4|Max:80|alpha_dash|Unique:wuser',
+            'password' => 'Min:5|Max:80',
+        ];
+    }
 
-	/**
-	 * Get rules for creating a new user
-	 * 
-	 * @param array $data
-	 * @return array
-	 */
-	protected function getCreateRules(array $data) {
-		return array(
-			'username' => 'Required|Min:4|Max:80|alpha_dash|Unique:wuser',
-			'password' => 'Min:5|Max:80'
-		);
-	}
+    /**
+     * @param array $data
+     * @param Model $model
+     * @return array
+     */
+    protected function getUpdateRules(array $data, Model $model = null)
+    {
+        $usernameUnchanged = isset($data['username']) && $model->username === $data['username'];
 
-	/**
-	 * 
-	 * @param array $data
-	 * @param Model $model
-	 * @return array
-	 */
-	protected function getUpdateRules(array $data, Model $model = null) {
-		$usernameUnchanged = isset($data['username']) && $model->username === $data['username'];
-		return array(
-			'username' => 'Required|Min:4|Max:80|alpha_dash' . ($usernameUnchanged ? '' : '|Unique:wuser'),
-			'password' => 'Min:5|Max:80'
-		);
-	}
-
+        return [
+            'username' => 'Required|Min:4|Max:80|alpha_dash'.($usernameUnchanged ? '' : '|Unique:wuser'),
+            'password' => 'Min:5|Max:80',
+        ];
+    }
 }

@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Unit\Auth\Abilities;
@@ -26,31 +25,33 @@ use App\MasterData\User;
 use Mockery;
 use Test\TestCase;
 
-class ActivityLogAbilitiesTest extends TestCase {
+class ActivityLogAbilitiesTest extends TestCase
+{
+    /** @var ActivityLogAbilities */
+    private $abilities;
 
-	/** @var ActivityLogAbilities */
-	private $abilities;
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-	protected function setUp(): void {
-		parent::setUp();
+        $this->abilities = new ActivityLogAbilities();
+    }
 
-		$this->abilities = new ActivityLogAbilities();
-	}
+    public function testViewAsAdmin()
+    {
+        $user = Mockery::mock(User::class);
 
-	public function testViewAsAdmin() {
-		$user = Mockery::mock(User::class);
+        $user->shouldReceive('isAdmin')->once()->andReturn(true);
 
-		$user->shouldReceive('isAdmin')->once()->andReturn(true);
+        $this->assertTrue($this->abilities->view($user));
+    }
 
-		$this->assertTrue($this->abilities->view($user));
-	}
+    public function testViewAsNonAdmin()
+    {
+        $user = Mockery::mock(User::class);
 
-	public function testViewAsNonAdmin() {
-		$user = Mockery::mock(User::class);
+        $user->shouldReceive('isAdmin')->once()->andReturn(false);
 
-		$user->shouldReceive('isAdmin')->once()->andReturn(false);
-
-		$this->assertFalse($this->abilities->view($user));
-	}
-
+        $this->assertFalse($this->abilities->view($user));
+    }
 }

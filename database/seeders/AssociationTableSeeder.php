@@ -22,53 +22,53 @@ use Illuminate\Support\Facades\DB;
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
-class AssociationTableSeeder extends Seeder {
+class AssociationTableSeeder extends Seeder
+{
+    /**
+     * Insert new association into database.
+     *
+     * @param int $id
+     * @param string $name
+     * @param int|null $username
+     * @return Association
+     */
+    private static function createAssociation($id, $name, $username)
+    {
+        return Association::create([
+            'id' => $id,
+            'name' => $name,
+            'wuser_username' => $username,
+        ]);
+    }
 
-	/**
-	 * Insert new association into database
-	 *
-	 * @param integer $id
-	 * @param string $name
-	 * @param int|null $username
-	 * @return Association
-	 */
-	private static function createAssociation($id, $name, $username) {
-		return Association::create(array(
-			'id' => $id,
-			'name' => $name,
-			'wuser_username' => $username,
-		));
-	}
+    /**
+     * Run association seeder.
+     */
+    public function run()
+    {
+        //delete all associations
+        DB::table('association')->delete();
 
-	/**
-	 * Run association seeder
-	 */
-	public function run() {
-		//delete all associations
-		DB::table('association')->delete();
-
-		$this->createAssociation(1, 'association 1', null);
-		$this->createAssociation(2, 'association 2', 'user1');
-		$this->createAssociation(3, 'association 3', 'user2');
-		$this->createAssociation(4, 'association 4', null);
-		$this->createAssociation(5, 'association 5', null);
-		$this->createAssociation(6, 'association 6', null);
-		$this->createAssociation(7, 'association 7', null);
-		$this->createAssociation(8, 'association 8', 'user1');
-		$this->createAssociation(9, 'association 9', 'user2');
-		$this->createAssociation(10, 'association 10', 'user3');
-		$this->createAssociation(11, 'association 11', 'admin1');
-		$this->createAssociation(12, 'association 12', null);
-		$this->createAssociation(13, 'association 13', null);
-		$this->createAssociation(14, 'association 14', 'admin1');
-		$this->createAssociation(15, 'association 15', 'admin2');
-		$this->createAssociation(16, 'association 16', null);
-		$this->createAssociation(17, 'association 17', null);
-		$this->createAssociation(18, 'association 18', null);
-		$this->createAssociation(19, 'association 19', null);
-		$this->createAssociation(20, 'association 20', null);
-	}
-
+        $this->createAssociation(1, 'association 1', null);
+        $this->createAssociation(2, 'association 2', 'user1');
+        $this->createAssociation(3, 'association 3', 'user2');
+        $this->createAssociation(4, 'association 4', null);
+        $this->createAssociation(5, 'association 5', null);
+        $this->createAssociation(6, 'association 6', null);
+        $this->createAssociation(7, 'association 7', null);
+        $this->createAssociation(8, 'association 8', 'user1');
+        $this->createAssociation(9, 'association 9', 'user2');
+        $this->createAssociation(10, 'association 10', 'user3');
+        $this->createAssociation(11, 'association 11', 'admin1');
+        $this->createAssociation(12, 'association 12', null);
+        $this->createAssociation(13, 'association 13', null);
+        $this->createAssociation(14, 'association 14', 'admin1');
+        $this->createAssociation(15, 'association 15', 'admin2');
+        $this->createAssociation(16, 'association 16', null);
+        $this->createAssociation(17, 'association 17', null);
+        $this->createAssociation(18, 'association 18', null);
+        $this->createAssociation(19, 'association 19', null);
+        $this->createAssociation(20, 'association 20', null);
+    }
 }

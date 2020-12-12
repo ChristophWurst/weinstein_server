@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Unit\Auth\Abilities;
@@ -28,144 +27,152 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Mockery;
 use Test\TestCase;
 
-class ApplicantAbilitiesTest extends TestCase {
+class ApplicantAbilitiesTest extends TestCase
+{
+    use AbilitiesMock;
 
-	use AbilitiesMock;
+    /** @var ApplicantAbilities */
+    private $abilities;
 
-	/** @var ApplicantAbilities */
-	private $abilities;
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-	protected function setUp(): void {
-		parent::setUp();
+        $this->abilities = new ApplicantAbilities();
+    }
 
-		$this->abilities = new ApplicantAbilities();
-	}
+    public function testShowEditApplicantAdmin()
+    {
+        $user = $this->getUserMock();
+        $applicant = Mockery::mock(Applicant::class);
 
-	public function testShowEditApplicantAdmin() {
-		$user = $this->getUserMock();
-		$applicant = Mockery::mock(Applicant::class);
+        $user->shouldReceive('getAttribute')
+            ->with('username')
+            ->andReturn('hans');
+        $applicant->shouldReceive('getAttribute')
+            ->with('wuser_username')
+            ->andReturn('hans');
 
-		$user->shouldReceive('getAttribute')
-			->with('username')
-			->andReturn('hans');
-		$applicant->shouldReceive('getAttribute')
-			->with('wuser_username')
-			->andReturn('hans');
+        $this->assertTrue($this->abilities->show($user, $applicant));
+        $this->assertTrue($this->abilities->edit($user, $applicant));
+    }
 
-		$this->assertTrue($this->abilities->show($user, $applicant));
-		$this->assertTrue($this->abilities->edit($user, $applicant));
-	}
+    public function testShowEditAssociationAdmin()
+    {
+        $user = $this->getUserMock();
+        $applicant = Mockery::mock(Applicant::class);
+        $association = Mockery::mock(Association::class);
 
-	public function testShowEditAssociationAdmin() {
-		$user = $this->getUserMock();
-		$applicant = Mockery::mock(Applicant::class);
-		$association = Mockery::mock(Association::class);
+        $user->shouldReceive('getAttribute')
+            ->with('username')
+            ->andReturn('hans');
+        $applicant->shouldReceive('getAttribute')
+            ->with('wuser_username')
+            ->andReturn('ferdinand');
+        $applicant->shouldReceive('getAttribute')
+            ->with('association')
+            ->andReturn($association);
+        $association->shouldReceive('getAttribute')
+            ->with('wuser_username')
+            ->andReturn('hans');
 
-		$user->shouldReceive('getAttribute')
-			->with('username')
-			->andReturn('hans');
-		$applicant->shouldReceive('getAttribute')
-			->with('wuser_username')
-			->andReturn('ferdinand');
-		$applicant->shouldReceive('getAttribute')
-			->with('association')
-			->andReturn($association);
-		$association->shouldReceive('getAttribute')
-			->with('wuser_username')
-			->andReturn('hans');
+        $this->assertTrue($this->abilities->show($user, $applicant));
+        $this->assertTrue($this->abilities->edit($user, $applicant));
+    }
 
-		$this->assertTrue($this->abilities->show($user, $applicant));
-		$this->assertTrue($this->abilities->edit($user, $applicant));
-	}
+    public function testShowEditNoAccess()
+    {
+        $user = $this->getUserMock();
+        $applicant = Mockery::mock(Applicant::class);
+        $association = Mockery::mock(Association::class);
 
-	public function testShowEditNoAccess() {
-		$user = $this->getUserMock();
-		$applicant = Mockery::mock(Applicant::class);
-		$association = Mockery::mock(Association::class);
+        $user->shouldReceive('getAttribute')
+            ->with('username')
+            ->andReturn('hans');
+        $applicant->shouldReceive('getAttribute')
+            ->with('wuser_username')
+            ->andReturn('ferdinand');
+        $applicant->shouldReceive('getAttribute')
+            ->with('association')
+            ->andReturn($association);
+        $association->shouldReceive('getAttribute')
+            ->with('wuser_username')
+            ->andReturn('maria');
 
-		$user->shouldReceive('getAttribute')
-			->with('username')
-			->andReturn('hans');
-		$applicant->shouldReceive('getAttribute')
-			->with('wuser_username')
-			->andReturn('ferdinand');
-		$applicant->shouldReceive('getAttribute')
-			->with('association')
-			->andReturn($association);
-		$association->shouldReceive('getAttribute')
-			->with('wuser_username')
-			->andReturn('maria');
+        $this->assertFalse($this->abilities->show($user, $applicant));
+        $this->assertFalse($this->abilities->edit($user, $applicant));
+    }
 
-		$this->assertFalse($this->abilities->show($user, $applicant));
-		$this->assertFalse($this->abilities->edit($user, $applicant));
-	}
+    public function testCreateAsAssocAdmin()
+    {
+        $user = $this->getUserMock();
+        $associations = Mockery::mock(Relation::class);
+        $user->shouldReceive('associations')
+            ->once()
+            ->andReturn($associations);
+        $associations->shouldReceive('exists')
+            ->andReturn(true);
 
-	public function testCreateAsAssocAdmin() {
-		$user = $this->getUserMock();
-		$associations = Mockery::mock(Relation::class);
-		$user->shouldReceive('associations')
-			->once()
-			->andReturn($associations);
-		$associations->shouldReceive('exists')
-			->andReturn(true);
+        $this->assertTrue($this->abilities->create($user));
+    }
 
-		$this->assertTrue($this->abilities->create($user));
-	}
+    public function testCreateAsSimpleUser()
+    {
+        $user = $this->getUserMock();
+        $associations = Mockery::mock(Relation::class);
+        $user->shouldReceive('associations')
+            ->once()
+            ->andReturn($associations);
+        $associations->shouldReceive('exists')
+            ->andReturn(false);
 
-	public function testCreateAsSimpleUser() {
-		$user = $this->getUserMock();
-		$associations = Mockery::mock(Relation::class);
-		$user->shouldReceive('associations')
-			->once()
-			->andReturn($associations);
-		$associations->shouldReceive('exists')
-			->andReturn(false);
+        $this->assertFalse($this->abilities->create($user));
+    }
 
-		$this->assertFalse($this->abilities->create($user));
-	}
+    public function testImport()
+    {
+        $this->assertFalse($this->abilities->import($this->getUserMock()));
+    }
 
-	public function testImport() {
-		$this->assertFalse($this->abilities->import($this->getUserMock()));
-	}
+    public function testEditAsAssocAdmin()
+    {
+        $user = $this->getUserMock();
+        $applicant = Mockery::mock(Applicant::class);
+        $association = Mockery::mock(Association::class);
+        $applicant->shouldReceive('getAttribute')
+            ->with('association')
+            ->andReturn($association);
+        $user->shouldReceive('getAttribute')
+            ->with('username')
+            ->andReturn('gerda');
+        $applicant->shouldReceive('getAttribute')
+            ->with('wuser_username')
+            ->andReturn(null);
+        $association->shouldReceive('getAttribute')
+            ->with('wuser_username')
+            ->andReturn('gerda');
 
-	public function testEditAsAssocAdmin() {
-		$user = $this->getUserMock();
-		$applicant = Mockery::mock(Applicant::class);
-		$association = Mockery::mock(Association::class);
-		$applicant->shouldReceive('getAttribute')
-			->with('association')
-			->andReturn($association);
-		$user->shouldReceive('getAttribute')
-			->with('username')
-			->andReturn('gerda');
-		$applicant->shouldReceive('getAttribute')
-			->with('wuser_username')
-			->andReturn(null);
-		$association->shouldReceive('getAttribute')
-			->with('wuser_username')
-			->andReturn('gerda');
+        $this->assertTrue($this->abilities->edit($user, $applicant));
+    }
 
-		$this->assertTrue($this->abilities->edit($user, $applicant));
-	}
+    public function testEditAsSimpleUser()
+    {
+        $user = $this->getUserMock();
+        $applicant = Mockery::mock(Applicant::class);
+        $association = Mockery::mock(Association::class);
+        $applicant->shouldReceive('getAttribute')
+            ->with('association')
+            ->andReturn($association);
+        $user->shouldReceive('getAttribute')
+            ->with('username')
+            ->andReturn('gerda');
+        $applicant->shouldReceive('getAttribute')
+            ->with('wuser_username')
+            ->andReturn(null);
+        $association->shouldReceive('getAttribute')
+            ->with('wuser_username')
+            ->andReturn('alfred');
 
-	public function testEditAsSimpleUser() {
-		$user = $this->getUserMock();
-		$applicant = Mockery::mock(Applicant::class);
-		$association = Mockery::mock(Association::class);
-		$applicant->shouldReceive('getAttribute')
-			->with('association')
-			->andReturn($association);
-		$user->shouldReceive('getAttribute')
-			->with('username')
-			->andReturn('gerda');
-		$applicant->shouldReceive('getAttribute')
-			->with('wuser_username')
-			->andReturn(null);
-		$association->shouldReceive('getAttribute')
-			->with('wuser_username')
-			->andReturn('alfred');
-
-		$this->assertFalse($this->abilities->edit($user, $applicant));
-	}
-
+        $this->assertFalse($this->abilities->edit($user, $applicant));
+    }
 }

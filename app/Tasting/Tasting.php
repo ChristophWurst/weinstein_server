@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Tasting;
@@ -32,42 +31,43 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @property TastingNumber $tastingnumber
  * @property int $rating
  */
-class Tasting extends Model {
+class Tasting extends Model
+{
+    /**
+     * Table name.
+     *
+     * @var string
+     */
+    protected $table = 'tasting';
 
-	/**
-	 * Table name
-	 * 
-	 * @var string 
-	 */
-	protected $table = 'tasting';
+    /**
+     * Attributes for mass assignment.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'tastingnumber_id',
+        'taster_id',
+        'rating',
+    ];
 
-	/**
-	 * Attributes for mass assignment
-	 * 
-	 * @var array 
-	 */
-	protected $fillable = [
-		'tastingnumber_id',
-		'taster_id',
-		'rating'
-	];
+    /**
+     * 1 tasting : 1 taster.
+     *
+     * @return Relation
+     */
+    public function taster()
+    {
+        return $this->belongsTo(Taster::class);
+    }
 
-	/**
-	 * 1 tasting : 1 taster
-	 * 
-	 * @return Relation
-	 */
-	public function taster() {
-		return $this->belongsTo(Taster::class);
-	}
-
-	/**
-	 * 1 tasting : 1 tasting number
-	 * 
-	 * @return Relation
-	 */
-	public function tastingnumber() {
-		return $this->belongsTo(TastingNumber::class);
-	}
-
+    /**
+     * 1 tasting : 1 tasting number.
+     *
+     * @return Relation
+     */
+    public function tastingnumber()
+    {
+        return $this->belongsTo(TastingNumber::class);
+    }
 }

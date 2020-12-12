@@ -16,44 +16,42 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Integration\Competition;
 
 use App\MasterData\Competition;
-use Test\BrowserKitTestCase;
 use function factory;
+use Test\BrowserKitTestCase;
 
-class AuthorizationTest extends BrowserKitTestCase {
+class AuthorizationTest extends BrowserKitTestCase
+{
+    use \Illuminate\Foundation\Testing\DatabaseTransactions;
 
-	use \Illuminate\Foundation\Testing\DatabaseTransactions;
+    public static function urisThatNeedAuthenticationData()
+    {
+        return [
+            ['competition/{id}'],
+            ['competition/{id}/wines'],
+            ['competition/{id}/wines/create'],
+            ['competition/{id}/wines/create', 'POST'],
+            ['competition/{id}/wines/export'],
+            ['competition/{id}/wines/export-kdb'],
+            ['competition/{id}/wines/export-sosi'],
+            ['competition/{id}/wines/export-chosen'],
+            ['competition/{id}/wines/redirect/123'],
+        ];
+    }
 
-	public static function urisThatNeedAuthenticationData() {
+    /**
+     * @dataProvider urisThatNeedAuthenticationData
+     */
+    public function testNoAnonymouseAccess($rawUri, $method = 'GET')
+    {
+        $competition = factory(Competition::class)->create();
+        $uri = str_replace('{id}', $competition->id, $rawUri);
 
-
-		return [
-			['competition/{id}'],
-			['competition/{id}/wines'],
-			['competition/{id}/wines/create'],
-			['competition/{id}/wines/create', 'POST'],
-			['competition/{id}/wines/export'],
-			['competition/{id}/wines/export-kdb'],
-			['competition/{id}/wines/export-sosi'],
-			['competition/{id}/wines/export-chosen'],
-			['competition/{id}/wines/redirect/123'],
-		];
-	}
-
-	/**
-	 * @dataProvider urisThatNeedAuthenticationData
-	 */
-	public function testNoAnonymouseAccess($rawUri, $method = 'GET') {
-		$competition = factory(Competition::class)->create();
-		$uri = str_replace('{id}', $competition->id, $rawUri);
-
-		$this->call($method, $uri);
-		$this->assertRedirectedTo('login');
-	}
-
+        $this->call($method, $uri);
+        $this->assertRedirectedTo('login');
+    }
 }

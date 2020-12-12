@@ -20,22 +20,21 @@ use App\Tasting\Commission;
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
-class CommissionTableSeeder {
-
-	/**
-	 * Create new commission
-	 * 
-	 * @param string $side
-	 * @param int $tastingSession
-	 * @return Commission
-	 */
-	public static function createCommission($side, $tastingSession) {
-		return Commission::create(array(
-				'side' => $side,
-				'tastingsession_id' => $tastingSession,
-		));
-	}
-
+class CommissionTableSeeder
+{
+    /**
+     * Create new commission.
+     *
+     * @param string $side
+     * @param int $tastingSession
+     * @return Commission
+     */
+    public static function createCommission($side, $tastingSession)
+    {
+        return Commission::create([
+                'side' => $side,
+                'tastingsession_id' => $tastingSession,
+        ]);
+    }
 }

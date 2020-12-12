@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Database\Repositories;
@@ -25,24 +24,26 @@ use App\Tasting\Taster;
 use App\Tasting\Tasting;
 use App\Tasting\TastingNumber;
 
-class TastingRepository {
+class TastingRepository
+{
+    /**
+     * @param array $data
+     * @param Taster $taster
+     * @param TastingNumber $tastingNumber
+     * @return Tasting
+     */
+    public function create(array $data, Taster $taster, TastingNumber $tastingNumber)
+    {
+        $tasting = new Tasting($data);
+        $tasting->taster()->associate($taster);
+        $tasting->tastingnumber()->associate($tastingNumber);
+        $tasting->save();
 
-	/**
-	 * @param array $data
-	 * @param Taster $taster
-	 * @param TastingNumber $tastingNumber
-	 * @return Tasting
-	 */
-	public function create(array $data, Taster $taster, TastingNumber $tastingNumber) {
-		$tasting = new Tasting($data);
-		$tasting->taster()->associate($taster);
-		$tasting->tastingnumber()->associate($tastingNumber);
-		$tasting->save();
-		return $tasting;
-	}
+        return $tasting;
+    }
 
-	public function clear(TastingNumber $tastingNumber) {
-		$tastingNumber->tastings()->delete();
-	}
-
+    public function clear(TastingNumber $tastingNumber)
+    {
+        $tastingNumber->tastings()->delete();
+    }
 }

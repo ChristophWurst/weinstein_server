@@ -16,26 +16,27 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Database\Repositories;
 
 use App\MasterData\Competition;
 
-class CompetitionRepository {
+class CompetitionRepository
+{
+    public function findAll()
+    {
+        return Competition::all();
+    }
 
-	public function findAll() {
-		return Competition::all();
-	}
+    public function update(Competition $competition)
+    {
+        $competition->save();
+    }
 
-	public function update(Competition $competition) {
-		$competition->save();
-	}
-
-	public function increaseStage(Competition $competition) {
-		$competition->competition_state_id += 1;
-		$competition->save();
-	}
-
+    public function increaseStage(Competition $competition)
+    {
+        $competition->competition_state_id += 1;
+        $competition->save();
+    }
 }

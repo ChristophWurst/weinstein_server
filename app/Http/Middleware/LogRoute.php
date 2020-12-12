@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-/**
+/*
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
  * @license AGPL-3.0
@@ -25,18 +25,19 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class LogRoute {
+class LogRoute
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */
+    public function handle(Request $request, Closure $next)
+    {
+        Log::debug('Request: ('.$request->method().', '.$request->fullUrl().')');
 
-	/**
-	 * Handle an incoming request.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \Closure  $next
-	 * @return mixed
-	 */
-	public function handle(Request $request, Closure $next) {
-		Log::debug('Request: (' . $request->method() . ', ' . $request->fullUrl() . ')');
-		return $next($request);
-	}
-
+        return $next($request);
+    }
 }

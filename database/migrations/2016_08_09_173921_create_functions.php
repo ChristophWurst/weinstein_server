@@ -3,25 +3,27 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class CreateFunctions extends Migration {
+class CreateFunctions extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        DB::unprepared('DROP function IF EXISTS `taster_variance`');
+        DB::unprepared('DROP function IF EXISTS `harm_mean`');
+        DB::unprepared('DROP function IF EXISTS `commission_variance`');
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up() {
-		DB::unprepared('DROP function IF EXISTS `taster_variance`');
-		DB::unprepared('DROP function IF EXISTS `harm_mean`');
-		DB::unprepared('DROP function IF EXISTS `commission_variance`');
+        $this->createTasterVariance();
+        $this->createHarmMean();
+        $this->createCommissionVariance();
+    }
 
-		$this->createTasterVariance();
-		$this->createHarmMean();
-		$this->createCommissionVariance();
-	}
-
-	private function createTasterVariance() {
-		$sql = <<<SQL
+    private function createTasterVariance()
+    {
+        $sql = <<<'SQL'
 CREATE FUNCTION `taster_variance` (
 	t_id INT
 )
@@ -65,11 +67,12 @@ BEGIN
 	RETURN ROUND(sum / n, 5);
 END
 SQL;
-		DB::unprepared($sql);
-	}
+        DB::unprepared($sql);
+    }
 
-	private function createHarmMean() {
-		$sql = <<<SQL
+    private function createHarmMean()
+    {
+        $sql = <<<'SQL'
 CREATE FUNCTION `harm_mean` (
 	tn_id INT
 )
@@ -106,11 +109,12 @@ BEGIN
 	RETURN ROUND(n / sum, 5);
 END
 SQL;
-		DB::unprepared($sql);
-	}
+        DB::unprepared($sql);
+    }
 
-	private function createCommissionVariance() {
-		$sql = <<<SQL
+    private function createCommissionVariance()
+    {
+        $sql = <<<'SQL'
 CREATE FUNCTION `commission_variance` (
 	c_id INT
 )
@@ -157,18 +161,18 @@ BEGIN
 	RETURN ROUND(sum / n, 5);
 END
 SQL;
-		DB::unprepared($sql);
-	}
+        DB::unprepared($sql);
+    }
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down() {
-		DB::unprepared('DROP function IF EXISTS `taster_variance`');
-		DB::unprepared('DROP function IF EXISTS `harm_mean`');
-		DB::unprepared('DROP function IF EXISTS `commission_variance`');
-	}
-
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        DB::unprepared('DROP function IF EXISTS `taster_variance`');
+        DB::unprepared('DROP function IF EXISTS `harm_mean`');
+        DB::unprepared('DROP function IF EXISTS `commission_variance`');
+    }
 }

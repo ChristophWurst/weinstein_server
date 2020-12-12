@@ -12,100 +12,104 @@ use Illuminate\Support\Facades\Session;
 
 class LoginController extends BaseController
 {
-	/*
-	|--------------------------------------------------------------------------
-	| Login Controller
-	|--------------------------------------------------------------------------
-	|
-	| This controller handles authenticating users for the application and
-	| redirecting them to your home screen. The controller uses a trait
-	| to conveniently provide its functionality to your applications.
-	|
-	*/
+    /*
+    |--------------------------------------------------------------------------
+    | Login Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller handles authenticating users for the application and
+    | redirecting them to your home screen. The controller uses a trait
+    | to conveniently provide its functionality to your applications.
+    |
+    */
 
-	// use AuthenticatesUsers;
+    // use AuthenticatesUsers;
 
-	/** @var ActivityLogger */
-	private $activityLogger;
+    /** @var ActivityLogger */
+    private $activityLogger;
 
-	/** @var AuthManager */
-	private $auth;
+    /** @var AuthManager */
+    private $auth;
 
-	/** @var Factory */
-	private $view;
+    /** @var Factory */
+    private $view;
 
-	/**
-	 * Where to redirect users after login.
-	 *
-	 * @var string
-	 */
-	protected $redirectTo = '/home';
+    /**
+     * Where to redirect users after login.
+     *
+     * @var string
+     */
+    protected $redirectTo = '/home';
 
-	/**
-	 * Create a new controller instance.
-	 *
-	 * @return void
-	 */
-	public function __construct(AuthManager $auth, ActivityLogger $activityLogger, Factory $view)
-	{
-		$this->middleware('guest', ['except' => ['logout', 'account']]);
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct(AuthManager $auth, ActivityLogger $activityLogger, Factory $view)
+    {
+        $this->middleware('guest', ['except' => ['logout', 'account']]);
 
-		$this->auth = $auth;
-		$this->activityLogger = $activityLogger;
-		$this->view = $view;
-	}
+        $this->auth = $auth;
+        $this->activityLogger = $activityLogger;
+        $this->view = $view;
+    }
 
-	public function login()
-	{
-		return $this->view->make('account/login');
-	}
+    public function login()
+    {
+        return $this->view->make('account/login');
+    }
 
-	/**
-	 * Try to log user in
-	 *
-	 * @param Request $request
-	 */
-	public function auth(Request $request) {
-		$username = $request->input('username');
-		$password = $request->input('password');
+    /**
+     * Try to log user in.
+     *
+     * @param Request $request
+     */
+    public function auth(Request $request)
+    {
+        $username = $request->input('username');
+        $password = $request->input('password');
 
-		if ($this->auth->attempt([
-			'username' => $username,
-			'password' => $password
-		], true)) {
-			$user = $this->auth->user();
-			$this->activityLogger->logUserAction('hat sich am System angemeldet', $user);
-			if ($user->first_login) {
-				Session::flash('first-login', true);
-				$user->first_login = false;
-				$user->save();
-			}
-			return Redirect::route('account');
-		}
+        if ($this->auth->attempt([
+            'username' => $username,
+            'password' => $password,
+        ], true)) {
+            $user = $this->auth->user();
+            $this->activityLogger->logUserAction('hat sich am System angemeldet', $user);
+            if ($user->first_login) {
+                Session::flash('first-login', true);
+                $user->first_login = false;
+                $user->save();
+            }
 
-		Session::forget('successful');
-		Session::put('successful', false);
-		return Redirect::route('login')->withInput();
-	}
+            return Redirect::route('account');
+        }
 
-	/**
-	 * Display account information
-	 */
-	public function account()
-	{
-		return $this->view->make('account/account');
-	}
+        Session::forget('successful');
+        Session::put('successful', false);
 
-	/**
-	 * Log user out
-	 */
-	public function logout()
-	{
-		if ($this->auth->check()) {
-			$user = $this->auth->user();
-			$this->auth->logout();
-			$this->activityLogger->logUserAction('hat sich vom System abgemeldet', $user);
-		}
-		return Redirect::route('start');
-	}
+        return Redirect::route('login')->withInput();
+    }
+
+    /**
+     * Display account information.
+     */
+    public function account()
+    {
+        return $this->view->make('account/account');
+    }
+
+    /**
+     * Log user out.
+     */
+    public function logout()
+    {
+        if ($this->auth->check()) {
+            $user = $this->auth->user();
+            $this->auth->logout();
+            $this->activityLogger->logUserAction('hat sich vom System abgemeldet', $user);
+        }
+
+        return Redirect::route('start');
+    }
 }

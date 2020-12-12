@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * @author Christoph Wurst <christoph@winzerhof-wurst.at>
  *
  * @license AGPL-3.0

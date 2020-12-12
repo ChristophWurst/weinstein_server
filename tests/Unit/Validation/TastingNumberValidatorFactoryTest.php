@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Unit\Validation;
@@ -27,28 +26,29 @@ use App\Validation\TastingNumberValidatorFactory;
 use Mockery;
 use Test\TestCase;
 
-class TastingNumberValidatorFactoryTest extends TestCase {
+class TastingNumberValidatorFactoryTest extends TestCase
+{
+    /** @var TastingNumberValidatorFactory */
+    private $factory;
 
-	/** @var TastingNumberValidatorFactory */
-	private $factory;
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-	protected function setUp(): void {
-		parent::setUp();
+        $this->factory = new TastingNumberValidatorFactory();
+    }
 
-		$this->factory = new TastingNumberValidatorFactory();
-	}
+    public function testNewValidator()
+    {
+        $data = [
+            'id' => 123,
+        ];
+        $competition = Mockery::mock(Competition::class);
+        $expected = new TastingNumberValidator($data);
+        $expected->setCompetition($competition);
 
-	public function testNewValidator() {
-		$data = [
-			'id' => 123,
-		];
-		$competition = Mockery::mock(Competition::class);
-		$expected = new TastingNumberValidator($data);
-		$expected->setCompetition($competition);
+        $validator = $this->factory->newValidator($competition, $data);
 
-		$validator = $this->factory->newValidator($competition, $data);
-
-		$this->assertEquals($expected, $validator);
-	}
-
+        $this->assertEquals($expected, $validator);
+    }
 }

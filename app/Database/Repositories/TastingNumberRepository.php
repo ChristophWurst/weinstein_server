@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Database\Repositories;
@@ -28,81 +27,88 @@ use App\Tasting\TastingStage;
 use App\Wine;
 use Illuminate\Database\Eloquent\Collection;
 
-class TastingNumberRepository {
+class TastingNumberRepository
+{
+    /**
+     * @param int $id
+     * @return TastingNumber|null
+     */
+    public function find($id)
+    {
+        return TastingNumber::find($id);
+    }
 
-	/**
-	 * @param int $id
-	 * @return TastingNumber|null
-	 */
-	public function find($id) {
-		return TastingNumber::find($id);
-	}
+    /**
+     * @param Competition $competition
+     * @param TastingStage $tastingStage
+     * @return Collection
+     */
+    public function findAllForCompetitionTastingStage(Competition $competition, TastingStage $tastingStage)
+    {
+        $query = $competition->tastingnumbers();
+        $query = $query->where('tastingstage_id', '=', $tastingStage->id);
 
-	/**
-	 * @param Competition $competition
-	 * @param TastingStage $tastingStage
-	 * @return Collection
-	 */
-	public function findAllForCompetitionTastingStage(Competition $competition, TastingStage $tastingStage) {
-		$query = $competition->tastingnumbers();
-		$query = $query->where('tastingstage_id', '=', $tastingStage->id);
-		return $query->orderBy('nr', 'asc')->get();
-	}
+        return $query->orderBy('nr', 'asc')->get();
+    }
 
-	/**
-	 * Get untasted tasting numbers of given competition
-	 * 
-	 * @param Competition $competition
-	 * @param int $limit
-	 * @return Collection
-	 */
-	public function findUntasted(Competition $competition, TastingStage $tastingStage, $limit = 2) {
-		$query = $competition->tastingnumbers()->whereNotIn('tastingnumber.id',
-				function($query) {
-				$query->select('tastingnumber_id as id')->from('tasting');
-			})
-			->where('tastingstage_id', '=', $tastingStage->id)
-			->orderBy('nr');
+    /**
+     * Get untasted tasting numbers of given competition.
+     *
+     * @param Competition $competition
+     * @param int $limit
+     * @return Collection
+     */
+    public function findUntasted(Competition $competition, TastingStage $tastingStage, $limit = 2)
+    {
+        $query = $competition->tastingnumbers()->whereNotIn('tastingnumber.id',
+                function ($query) {
+                    $query->select('tastingnumber_id as id')->from('tasting');
+                })
+            ->where('tastingstage_id', '=', $tastingStage->id)
+            ->orderBy('nr');
 
-		return $query->take($limit)->get();
-	}
+        return $query->take($limit)->get();
+    }
 
-	/**
-	 * @param array $data
-	 * @param Wine $wine
-	 * @param TastingStage $tastingStage
-	 * @return TastingNumber
-	 */
-	public function create(array $data, Wine $wine, TastingStage $tastingStage) {
-		$tastingNumber = new TastingNumber($data);
+    /**
+     * @param array $data
+     * @param Wine $wine
+     * @param TastingStage $tastingStage
+     * @return TastingNumber
+     */
+    public function create(array $data, Wine $wine, TastingStage $tastingStage)
+    {
+        $tastingNumber = new TastingNumber($data);
 
-		$tastingNumber->wine()->associate($wine);
-		$tastingNumber->tastingstage()->associate($tastingStage);
-		$tastingNumber->save();
+        $tastingNumber->wine()->associate($wine);
+        $tastingNumber->tastingstage()->associate($tastingStage);
+        $tastingNumber->save();
 
-		return $tastingNumber;
-	}
+        return $tastingNumber;
+    }
 
-	/**
-	 * @param Competition $competition
-	 */
-	public function deleteAll(Competition $competition, TastingStage $tastingStage) {
-		$competition->tastingnumbers()->tastingStage($tastingStage)->delete();
-	}
+    /**
+     * @param Competition $competition
+     */
+    public function deleteAll(Competition $competition, TastingStage $tastingStage)
+    {
+        $competition->tastingnumbers()->tastingStage($tastingStage)->delete();
+    }
 
-	/**
-	 * @param TastingNumber $tastingNumber
-	 */
-	public function delete(TastingNumber $tastingNumber) {
-		$tastingNumber->delete();
-	}
+    /**
+     * @param TastingNumber $tastingNumber
+     */
+    public function delete(TastingNumber $tastingNumber)
+    {
+        $tastingNumber->delete();
+    }
 
-	/**
-	 * @param TastingNumber $tastingNumber
-	 * @return boolean
-	 */
-	public function isTasted(TastingNumber $tastingNumber) {
-		return TastedWine::where('tastingnumber_id', $tastingNumber->id)->count() > 0;
-	}
-
+    /**
+     * @param TastingNumber $tastingNumber
+     * @return bool
+     */
+    public function isTasted(TastingNumber $tastingNumber)
+    {
+        return TastedWine::where('tastingnumber_id', $tastingNumber->id)->count() > 0;
+    }
 }

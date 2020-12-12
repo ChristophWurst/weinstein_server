@@ -22,37 +22,36 @@ use Illuminate\Support\Facades\DB;
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
-class TastingTableSeeder extends Seeder {
+class TastingTableSeeder extends Seeder
+{
+    /**
+     * Insert new tasting into database.
+     *
+     * @param float $rating
+     * @param int $taster
+     * @param int $tastingnumber
+     * @return Tasting
+     */
+    public static function createTasting($rating, $taster, $tastingnumber)
+    {
+        return Tasting::create([
+            'rating' => $rating,
+            'taster_id' => $taster,
+            'tastingnumber_id' => $tastingnumber,
+        ]);
+    }
 
-	/**
-	 * Insert new tasting into database
-	 * 
-	 * @param float $rating
-	 * @param int $taster
-	 * @param int $tastingnumber
-	 * @return Tasting
-	 */
-	public static function createTasting($rating, $taster, $tastingnumber) {
-		return Tasting::create(array(
-			'rating' => $rating,
-			'taster_id' => $taster,
-			'tastingnumber_id' => $tastingnumber,
-		));
-	}
+    /**
+     * Run tasting seeder.
+     *
+     * @todo finish implementation
+     */
+    public function run()
+    {
+        //delete existing tastings
+        DB::table('tasting')->delete();
 
-	/**
-	 * Run tasting seeder
-	 *
-	 * @todo finish implementation
-	 *
-	 */
-	public function run() {
-		//delete existing tastings
-		DB::table('tasting')->delete();
-        
-		//TODO: finish implementation
-	}
-
+        //TODO: finish implementation
+    }
 }

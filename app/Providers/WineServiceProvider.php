@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Providers;
@@ -25,18 +24,19 @@ use App\Contracts\WineHandler;
 use App\Wine\Handler;
 use Illuminate\Support\ServiceProvider;
 
-class WineServiceProvider extends ServiceProvider {
+class WineServiceProvider extends ServiceProvider
+{
+    protected $defer = true;
 
-	protected $defer = true;
+    public function register()
+    {
+        $this->app->bind(WineHandler::class, Handler::class);
+    }
 
-	public function register() {
-		$this->app->bind(WineHandler::class, Handler::class);
-	}
-
-	public function provides() {
-		return [
-			WineHandler::class,
-		];
-	}
-
+    public function provides()
+    {
+        return [
+            WineHandler::class,
+        ];
+    }
 }

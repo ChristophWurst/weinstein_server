@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Unit\Auth\Abilities;
@@ -26,31 +25,35 @@ use App\MasterData\User;
 use Mockery;
 use Mockery\MockInterface;
 
-trait AbilitiesMock {
+trait AbilitiesMock
+{
+    /**
+     * @return User|MockInterface
+     */
+    public function getUserMock()
+    {
+        $user = Mockery::mock(User::class);
+        $user->shouldReceive('isAdmin')->andReturn(false);
 
-	/**
-	 * @return User|MockInterface
-	 */
-	public function getUserMock() {
-		$user = Mockery::mock(User::class);
-		$user->shouldReceive('isAdmin')->andReturn(false);
-		return $user;
-	}
+        return $user;
+    }
 
-	/**
-	 * @return User|MockInterface
-	 */
-	public function getAdminMock() {
-		$admin = Mockery::mock(User::class);
-		$admin->shouldReceive('isAdmin')->andReturn(true);
-		return $admin;
-	}
-	
-	/**
-	 * @return Competition|MockInterface
-	 */
-	public function getCompetitionMock() {
-		return Mockery::mock(Competition::class);
-	}
+    /**
+     * @return User|MockInterface
+     */
+    public function getAdminMock()
+    {
+        $admin = Mockery::mock(User::class);
+        $admin->shouldReceive('isAdmin')->andReturn(true);
 
+        return $admin;
+    }
+
+    /**
+     * @return Competition|MockInterface
+     */
+    public function getCompetitionMock()
+    {
+        return Mockery::mock(Competition::class);
+    }
 }

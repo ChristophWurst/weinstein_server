@@ -16,32 +16,32 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Integration;
 
 use App\MasterData\User;
-use Test\BrowserKitTestCase;
 use function factory;
+use Test\BrowserKitTestCase;
 
-class StartPageTest extends BrowserKitTestCase {
-	
-	use \Illuminate\Foundation\Testing\DatabaseTransactions;
+class StartPageTest extends BrowserKitTestCase
+{
+    use \Illuminate\Foundation\Testing\DatabaseTransactions;
 
-	public function testVisitStartPageAnonymously() {
-		$this->get('/');
+    public function testVisitStartPageAnonymously()
+    {
+        $this->get('/');
 
-		$this->assertResponseOk();
-	}
+        $this->assertResponseOk();
+    }
 
-	public function testVisitStartPage() {
-		$user = factory(User::class)->make();
-		$this->be($user);
+    public function testVisitStartPage()
+    {
+        $user = factory(User::class)->make();
+        $this->be($user);
 
-		$this->get('/');
+        $this->get('/');
 
-		$this->assertResponseOk();
-	}
-
+        $this->assertResponseOk();
+    }
 }

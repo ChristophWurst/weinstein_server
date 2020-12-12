@@ -21,26 +21,25 @@ use Illuminate\Database\Seeder;
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
-class TasterTableSeeder extends Seeder {
-
-	/**
-	 * Insert new taster into database
-	 * 
-	 * @param int $nr
-	 * @param string $name
-	 * @param boolean $active
-	 * @param int $commission
-	 * @return Taster
-	 */
-	public static function createTaster($nr, $name, $active, $commission) {
-		return Taster::create(array(
-					'nr' => $nr,
-					'name' => $name,
-					'active' => $active,
-					'commission_id' => $commission,
-		));
-	}
-
+class TasterTableSeeder extends Seeder
+{
+    /**
+     * Insert new taster into database.
+     *
+     * @param int $nr
+     * @param string $name
+     * @param bool $active
+     * @param int $commission
+     * @return Taster
+     */
+    public static function createTaster($nr, $name, $active, $commission)
+    {
+        return Taster::create([
+                    'nr' => $nr,
+                    'name' => $name,
+                    'active' => $active,
+                    'commission_id' => $commission,
+        ]);
+    }
 }

@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Unit\Http\Controllers;
@@ -24,19 +23,19 @@ namespace Test\Unit\Http\Controllers;
 use App\MasterData\User;
 use Mockery;
 
-trait AuthorizationHelper {
+trait AuthorizationHelper
+{
+    protected function getAdminMock()
+    {
+        $user = Mockery::mock(User::class);
 
-	protected function getAdminMock() {
-		$user = Mockery::mock(User::class);
+        $user->shouldReceive('isAdmin')
+            ->withNoArgs()
+            ->andReturn(true);
+        $user->shouldReceive('getAttribute')
+            ->with('username')
+            ->andReturn('frank');
 
-		$user->shouldReceive('isAdmin')
-			->withNoArgs()
-			->andReturn(true);
-		$user->shouldReceive('getAttribute')
-			->with('username')
-			->andReturn('frank');
-
-		return $user;
-	}
-
+        return $user;
+    }
 }

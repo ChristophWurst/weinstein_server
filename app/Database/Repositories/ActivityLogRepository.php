@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Database\Repositories;
@@ -24,26 +23,28 @@ namespace App\Database\Repositories;
 use App\MasterData\User;
 use App\Support\Activity\Log;
 
-class ActivityLogRepository {
+class ActivityLogRepository
+{
+    /**
+     * @param int $limit
+     */
+    public function findMostRecent($limit)
+    {
+        return Log::orderBy('created_at', 'desc')->take(max([$limit, 500]))->get();
+    }
 
-	/**
-	 * @param integer $limit
-	 */
-	public function findMostRecent($limit) {
-		return Log::orderBy('created_at', 'desc')->take(max([$limit, 500]))->get();
-	}
+    /**
+     * @param string $message
+     */
+    public function create($message, User $user = null)
+    {
+        $entry = new Log([
+            'message' => $message,
+        ]);
+        if (! is_null($user)) {
+            $entry->user()->associate($user);
+        }
 
-	/**
-	 * @param string $message
-	 */
-	public function create($message, User $user = null) {
-		$entry = new Log([
-			'message' => $message,
-		]);
-		if (!is_null($user)) {
-			$entry->user()->associate($user);
-		}
-		return $entry->save();
-	}
-
+        return $entry->save();
+    }
 }
