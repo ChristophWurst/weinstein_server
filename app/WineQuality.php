@@ -54,7 +54,7 @@ class WineQuality extends Model {
 	 * @return Relation
 	 */
 	public function wines() {
-		return $this->hasMany('Wine');
+		return $this->hasMany(Wine::class);
 	}
 
 }

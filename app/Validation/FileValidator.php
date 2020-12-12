@@ -21,7 +21,7 @@
 
 namespace App\Validation;
 
-use App\Exception\ValidationException;
+use App\Exceptions\ValidationException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Validator as BaseValidator;
 

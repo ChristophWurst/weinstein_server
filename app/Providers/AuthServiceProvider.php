@@ -78,10 +78,6 @@ class AuthServiceProvider extends ServiceProvider {
 		Gate::define('complete-competition-catalogue-numbers', CompetitionAbilities::class . '@completeCatalogueNumbers');
 
 		/**
-		 * Catalogue Numbers
-		 */
-		Gate::define('import-catalogue-numbers', CatalogueNumberAbilities::class . '@import');
-		/**
 		 * Evaluation
 		 */
 		Gate::define('show-evaluations', CatalogueAbilities::class . '@importNumbers');

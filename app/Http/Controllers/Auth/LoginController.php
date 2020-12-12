@@ -64,7 +64,6 @@ class LoginController extends BaseController
 	 * Try to log user in
 	 *
 	 * @param Request $request
-	 * @return Response
 	 */
 	public function auth(Request $request) {
 		$username = $request->input('username');
@@ -91,8 +90,6 @@ class LoginController extends BaseController
 
 	/**
 	 * Display account information
-	 *
-	 * @return Response
 	 */
 	public function account()
 	{
@@ -101,8 +98,6 @@ class LoginController extends BaseController
 
 	/**
 	 * Log user out
-	 *
-	 * @return Response
 	 */
 	public function logout()
 	{

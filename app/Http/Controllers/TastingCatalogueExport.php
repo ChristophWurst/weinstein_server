@@ -22,14 +22,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use PhpOffice\PhpSpreadsheet;
 use PhpOffice\PhpSpreadsheet\Settings;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpSpreadsheet\Worksheet\PageSetup;
-use PhpSpreadsheet\Writer\Xls;
-
-;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
 
 class TastingCatalogueExport {
 
@@ -119,22 +118,22 @@ class TastingCatalogueExport {
 	 * 
 	 * @return string the file name
 	 */
-	public function asExcel() {
+	public function asExcel(): string {
 		$filename = sys_get_temp_dir() . '/' . Str::random();
 		$locale = 'de_DE';
 		$validLocale = Settings::setLocale($locale);
 		if (!$validLocale) {
 			Log::warning('Unable to set locale to ' . $locale . " - reverting to en_us" . PHP_EOL);
 		}
-		$doc = new PhpSpreadsheet\Spreadsheet();
+		$doc = new Spreadsheet();
 		$sheet = $doc->getSheet(0);
-		$layout = new PhpSpreadsheet\Worksheet\PageSetup();
-		$layout->setPaperSize(PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
+		$layout = new PageSetup();
+		$layout->setPaperSize(PageSetup::PAPERSIZE_A4);
 		$sheet->setPageSetup($layout);
 		$sheet->setTitle('Kostkatalog');
 		$this->setExcelHeaders($sheet);
 		$this->setExcelData($sheet);
-		$writer = new PhpSpreadsheet\Writer\Xls($doc);
+		$writer = new  Xls($doc);
 		$writer->save($filename);
 		return $filename;
 	}

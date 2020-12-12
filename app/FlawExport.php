@@ -24,11 +24,11 @@ namespace App;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Settings;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpSpreadsheet\Worksheet\PageSetup;;
-use PhpSpreadsheet\Writer\Xls;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
 
 class FlawExport {
 
@@ -52,9 +52,9 @@ class FlawExport {
 	/**
 	 * Set worksheets first rows header values
 	 * 
-	 * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $sheet
+	 * @param Worksheet $sheet
 	 */
-	private function setExcelHeaders(\PhpOffice\PhpSpreadsheet\Spreadsheet $sheet) {
+	private function setExcelHeaders(Worksheet $sheet) {
 		//headers
 		$sheet->setCellValue("A1", $this->headers[0]);
 		$sheet->setCellValue("B1", $this->headers[1]);
@@ -74,9 +74,9 @@ class FlawExport {
 	/**
 	 * Set worksheets data rows
 	 * 
-	 * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $sheet
+	 * @param Worksheet $sheet
 	 */
-	private function setExcelData(\PhpOffice\PhpSpreadsheet\Spreadsheet $sheet) {
+	private function setExcelData(Worksheet $sheet) {
 		//data
 		$row = 2;
 		foreach ($this->wines as $w) {
@@ -111,9 +111,9 @@ class FlawExport {
 	/**
 	 * Export all wines of current competition as Excel spread sheet
 	 * 
-	 * @return Excel sheet
+	 * @return string sheet
 	 */
-	public function asExcel() {
+	public function asExcel(): string {
 		$filename = sys_get_temp_dir() . '/' . Str::random();
 		$locale = 'de_DE';
 		$validLocale = Settings::setLocale($locale);

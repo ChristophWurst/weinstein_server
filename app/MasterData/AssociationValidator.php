@@ -66,7 +66,7 @@ class AssociationValidator extends Validator {
 	 * Get rules for updating an existing association
 	 * 
 	 * @param array $data
-	 * @param \Weinstein\Association\Model $association
+	 * @param Model $association
 	 * @return array
 	 */
 	protected function getUpdateRules(array $data, Model $association = null) {

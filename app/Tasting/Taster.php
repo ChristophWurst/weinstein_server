@@ -21,6 +21,7 @@
 
 namespace App\Tasting;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
@@ -66,10 +67,10 @@ class Taster extends Model {
 	/**
 	 * Scope only active tasters
 	 * 
-	 * @param Query $query
-	 * @return Query
+	 * @param Builder $query
+	 * @return Builder
 	 */
-	public function scopeActive($query) {
+	public function scopeActive($query): Builder {
 		return $query->where('active', '=', true);
 	}
 

@@ -39,7 +39,7 @@ class TasterStatistic extends Model {
 	 * @return Relation
 	 */
 	public function taster() {
-		return $this->belongsTo('Taster');
+		return $this->belongsTo(Taster::class);
 	}
 
 }

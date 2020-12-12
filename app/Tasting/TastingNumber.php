@@ -22,6 +22,7 @@
 namespace App\Tasting;
 
 use App\Wine;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -84,11 +85,11 @@ class TastingNumber extends Model {
 	/**
 	 * Scope tasting numbers to given tasting stage
 	 * 
-	 * @param Query $query
+	 * @param Builder $query
 	 * @param TastingStage $tastingStage
-	 * @return Query
+	 * @return Builder
 	 */
-	public function scopeTastingStage($query, TastingStage $tastingStage) {
+	public function scopeTastingStage(Builder $query, TastingStage $tastingStage): Builder {
 		return $query->where('tastingstage_id', '=', $tastingStage->id);
 	}
 
