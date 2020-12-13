@@ -22,6 +22,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\WineHandler;
 use App\MasterData\Competition;
+use App\MasterData\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -87,6 +88,7 @@ class CatalogueController extends BaseController
     {
         $this->authorize('create-tasting-catalogue', $competition);
 
+        /** @var User $user */
         $user = Auth::user();
         if ($user->isAdmin()) {
             $wines = $competition

@@ -26,6 +26,7 @@ use App\Contracts\TastingHandler;
 use App\MasterData\Association;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
+use App\MasterData\User;
 use App\Tasting\TastingStage;
 use App\WinesChosenSignedOff;
 use function array_map;
@@ -255,6 +256,7 @@ class CompetitionController extends BaseController
     {
         $this->authorize('sign-chosen', $competition);
 
+        /** @var User $user */
         $user = Auth::user();
         if ($user->isAdmin()) {
             $associations = Association::all();

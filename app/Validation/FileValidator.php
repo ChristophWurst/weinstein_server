@@ -87,7 +87,7 @@ class FileValidator
         ];
         $validator = BaseValidator::make($data, $rules, $this->getErrorMessages(), $names);
         if ($validator->fails()) {
-            throw new ValidationException($validator->messages());
+            throw new ValidationException($validator->errors());
         }
     }
 }

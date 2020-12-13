@@ -21,12 +21,12 @@
 namespace App\Contracts;
 
 use App\Exceptions\InvalidCompetitionStateException;
+use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
 use App\MasterData\User;
 use App\Wine;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Validation\ValidationException;
 
 interface WineHandler
 {
@@ -66,6 +66,10 @@ interface WineHandler
     public function importExcluded(UploadedFile $file, Competition $competition);
 
     /**
+     * @param Wine $wine
+     * @param array $data
+     * @throws ValidationException
+     */
     public function updateSosi(Wine $wine, array $data);
 
     /**
