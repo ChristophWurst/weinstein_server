@@ -27,3 +27,6 @@ Homestead.json
 # Test report
 tests/clover.xml
 coverage
+
+# CS fixer cache
+.php_cs.cache
