@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Symfony\Component\HttpFoundation\Request;
 
 class ResetPasswordController extends Controller
 {
