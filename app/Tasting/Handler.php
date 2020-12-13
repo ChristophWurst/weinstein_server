@@ -365,7 +365,7 @@ class Handler implements TastingHandler
         return $this->tasterRepository->update($taster, $data);
     }
 
-    public function createTasting(array $data, TastingSession $tastingSession)
+    public function createTasting(array $data, TastingSession $tastingSession): void
     {
         $nrCommissions = count($this->getNextTastingNumbers($tastingSession));
         $validator = new TastingValidator($data);

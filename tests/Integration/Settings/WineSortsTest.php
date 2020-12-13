@@ -20,11 +20,12 @@
 
 namespace Test\Integration\Settings;
 
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Test\BrowserKitTestCase;
 
 class WineSortsTest extends BrowserKitTestCase
 {
-    use \Illuminate\Foundation\Testing\DatabaseTransactions;
+    use DatabaseTransactions;
 
     public function testShowSorts()
     {

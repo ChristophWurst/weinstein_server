@@ -44,6 +44,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use function route;
 
 class WineController extends BaseController
@@ -209,14 +210,15 @@ class WineController extends BaseController
      *
      * @param Competition $competition
      * @param Request $request
-     * @return Resp
+     *
+     * @return RedirectResponse
      */
-    public function store(Competition $competition, Request $request)
+    public function store(Competition $competition, Request $request): RedirectResponse
     {
         $this->authorize('create-wine', $competition);
 
         try {
-            $data = \Illuminate\Support\Facades\Request::all();
+            $data = $request->all();
             if (isset($data['alcohol'])) {
                 $data['alcohol'] = $this->commaToDot($data['alcohol']);
             }
@@ -309,14 +311,15 @@ class WineController extends BaseController
      * association, competition, sort
      *
      * @param Wine $wine
-     * @return Resp
+     *
+     * @return RedirectResponse
      */
-    public function update(Wine $wine)
+    public function update(Wine $wine, Request $request): RedirectResponse
     {
         $this->authorize('update-wine', $wine);
 
         try {
-            $data = \Illuminate\Support\Facades\Request::all();
+            $data = $request->all();
             if (isset($data['alcohol'])) {
                 $data['alcohol'] = $this->commaToDot($data['alcohol']);
             }
@@ -376,11 +379,11 @@ class WineController extends BaseController
      * @param Wine $wine
      * @return RedirectResponse
      */
-    public function destroy(Wine $wine)
+    public function destroy(Wine $wine, Request $request)
     {
         $this->authorize('delete-wine', $wine);
 
-        if (\Illuminate\Support\Facades\Request::input('del') == 'Ja') {
+        if ($request->input('del') == 'Ja') {
             $this->wineHandler->delete($wine);
         }
 
@@ -390,12 +393,12 @@ class WineController extends BaseController
     /**
      * @param Wine $wine
      */
-    public function updateKdb(Wine $wine)
+    public function updateKdb(Wine $wine, Request $request)
     {
         $this->authorize('update-wine', $wine);
 
         try {
-            $this->wineHandler->updateKdb($wine, \Illuminate\Support\Facades\Request::only('value'));
+            $this->wineHandler->updateKdb($wine, $request->only('value'));
         } catch (ValidationException $ve) {
             return Response::json([
                     'error' => 'Fehler beim setzen von KdB',
@@ -427,12 +430,12 @@ class WineController extends BaseController
      * @param Competition $competition
      * @return RedirectResponse
      */
-    public function importKdbStore(Competition $competition)
+    public function importKdbStore(Competition $competition, Request $request)
     {
         $this->authorize('import-kdb-wines', $competition);
 
         try {
-            $file = \Illuminate\Support\Facades\Request::fil('xlsfile');
+            $file = $request->fil('xlsfile');
             if ($file === null) {
                 return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
             }
@@ -466,12 +469,12 @@ class WineController extends BaseController
      * @param Competition $competition
      * @return RedirectResponse
      */
-    public function importExcludedStore(Competition $competition)
+    public function importExcludedStore(Competition $competition, Request $request)
     {
         $this->authorize('import-excluded-wines', $competition);
 
         try {
-            $file = \Illuminate\Support\Facades\Request::fil('xlsfile');
+            $file = $request->fil('xlsfile');
             if ($file === null) {
                 return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
             }
@@ -490,7 +493,7 @@ class WineController extends BaseController
      * @param Wine $wine
      * @return JsonResponse
      */
-    public function updateSosi(Wine $wine)
+    public function updateSosi(Wine $wine, Request $request)
     {
         $this->authorize('update-wine', $wine);
 
@@ -501,7 +504,7 @@ class WineController extends BaseController
             ]);
         }
         try {
-            $this->wineHandler->updateSosi($wine, \Illuminate\Support\Facades\Request::only('value'));
+            $this->wineHandler->updateSosi($wine, $request->only('value'));
         } catch (ValidationException $ve) {
             return Response::json([
                     'error' => 'Fehler beim setzen von SoSi',
@@ -533,12 +536,12 @@ class WineController extends BaseController
      * @param Competition $competition
      * @return RedirectResponse
      */
-    public function importSosiStore(Competition $competition)
+    public function importSosiStore(Competition $competition, Request $request)
     {
         $this->authorize('import-sosi-wines', $competition);
 
         try {
-            $file = \Illuminate\Support\Facades\Request::fil('xlsfile');
+            $file = $request->file('xlsfile');
             if ($file === null) {
                 return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
             }
@@ -557,9 +560,10 @@ class WineController extends BaseController
      * Export competitions wines as Excel.
      *
      * @param Competition $competition
-     * @return Resp
+     *
+     * @return BinaryFileResponse
      */
-    public function exportAll(Competition $competition)
+    public function exportAll(Competition $competition): BinaryFileResponse
     {
         $this->authorize('export-all-wines', $competition);
 
@@ -582,9 +586,10 @@ class WineController extends BaseController
      * Export competitions kdb wines as Excel.
      *
      * @param Competition $competition
-     * @return Resp
+     *
+     * @return BinaryFileResponse
      */
-    public function exportKdb(Competition $competition)
+    public function exportKdb(Competition $competition): BinaryFileResponse
     {
         $this->authorize('export-wines-kdb', $competition);
 
@@ -607,9 +612,10 @@ class WineController extends BaseController
      * Export competitions sosi wines as Excel.
      *
      * @param Competition $competition
-     * @return Resp
+     *
+     * @return BinaryFileResponse
      */
-    public function exportSosi(Competition $competition)
+    public function exportSosi(Competition $competition): BinaryFileResponse
     {
         $this->authorize('export-wines-sosi', $competition);
 
@@ -632,9 +638,10 @@ class WineController extends BaseController
      * Export competitions chosen wines as Excel.
      *
      * @param Competition $competition
-     * @return Resp
+     *
+     * @return BinaryFileResponse
      */
-    public function exportChosen(Competition $competition)
+    public function exportChosen(Competition $competition): BinaryFileResponse
     {
         $this->authorize('export-wines-chosen', $competition);
 

@@ -24,6 +24,7 @@ use App\Contracts\WineHandler;
 use App\MasterData\Competition;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class CatalogueController extends BaseController
 {
@@ -31,9 +32,10 @@ class CatalogueController extends BaseController
      * Download address catalogue.
      *
      * @param Competition $competition
-     * @return \Illuminate\Http\Response
+     *
+     * @return BinaryFileResponse
      */
-    public function addressCatalogue(Competition $competition)
+    public function addressCatalogue(Competition $competition): BinaryFileResponse
     {
         $this->authorize('create-catalogue');
 
@@ -51,9 +53,10 @@ class CatalogueController extends BaseController
      * Download web catalogue.
      *
      * @param Competition $competition
-     * @return \Illuminate\Http\Response
+     *
+     * @return BinaryFileResponse
      */
-    public function webCatalogue(Competition $competition)
+    public function webCatalogue(Competition $competition): BinaryFileResponse
     {
         $this->authorize('create-catalogue');
 
@@ -77,9 +80,10 @@ class CatalogueController extends BaseController
      * Download tasting catalogue.
      *
      * @param Competition $competition
-     * @return \Illuminate\Http\Response
+     *
+     * @return BinaryFileResponse
      */
-    public function tastingCatalogue(Competition $competition, WineHandler $wineHandler)
+    public function tastingCatalogue(Competition $competition, WineHandler $wineHandler): BinaryFileResponse
     {
         $this->authorize('create-tasting-catalogue', $competition);
 

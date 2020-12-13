@@ -143,10 +143,12 @@ class CompetitionController extends BaseController
     /**
      * @param Competition $competition
      * @param int $tasting
-     * @return Response
+     *
+     * @return RedirectResponse
+     *
      * @throws InvalidArgumentException
      */
-    public function lockTasting(Competition $competition, $tasting, Request $request)
+    public function lockTasting(Competition $competition, $tasting, Request $request): RedirectResponse
     {
         $this->authorize('complete-competition-tasting');
 
@@ -177,9 +179,10 @@ class CompetitionController extends BaseController
 
     /**
      * @param Competition $competition
-     * @return Response
+     *
+     * @return RedirectResponse
      */
-    public function lockKdb(Competition $competition)
+    public function lockKdb(Competition $competition): RedirectResponse
     {
         $this->authorize('complete-competition-kdb');
 
@@ -205,9 +208,10 @@ class CompetitionController extends BaseController
 
     /**
      * @param Competition $competition
-     * @return Response
+     *
+     * @return RedirectResponse
      */
-    public function lockExcluded(Competition $competition)
+    public function lockExcluded(Competition $competition): RedirectResponse
     {
         $this->authorize('complete-competition-excluded');
 
@@ -233,9 +237,10 @@ class CompetitionController extends BaseController
 
     /**
      * @param Competition $competition
-     * @return Response
+     *
+     * @return RedirectResponse
      */
-    public function lockSosi(Competition $competition)
+    public function lockSosi(Competition $competition): RedirectResponse
     {
         $this->authorize('complete-competition-sosi');
 
@@ -307,9 +312,10 @@ class CompetitionController extends BaseController
 
     /**
      * @param Competition $competition
-     * @return Response
+     *
+     * @return RedirectResponse
      */
-    public function lockChoosing(Competition $competition)
+    public function lockChoosing(Competition $competition): RedirectResponse
     {
         $this->authorize('complete-competition-tasting-numbers');
 
@@ -346,7 +352,9 @@ class CompetitionController extends BaseController
     /**
      * @param Competition $competition
      * @param int $tasting
-     * @return Response
+     *
+     * @return RedirectResponse
+     *
      * @throws InvalidArgumentException
      */
     public function lockTastingNumbers(Competition $competition, $tasting): RedirectResponse
@@ -415,9 +423,10 @@ class CompetitionController extends BaseController
 
     /**
      * @param Competition $competition
-     * @return Response
+     *
+     * @return RedirectResponse
      */
-    public function postReset(Competition $competition)
+    public function postReset(Competition $competition): RedirectResponse
     {
         $this->authorize('reset-competition', $competition);
 

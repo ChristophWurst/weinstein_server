@@ -33,11 +33,14 @@ use App\Tasting\TastingSession;
 use App\Tasting\TastingStage;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response as Response2;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class TastingSessionController extends BaseController
 {
@@ -135,14 +138,15 @@ class TastingSessionController extends BaseController
      * Validate and store newly created sessions.
      *
      * @param Competition $competition
-     * @return Response
+     *
+     * @return RedirectResponse
      */
-    public function store(Competition $competition)
+    public function store(Competition $competition): RedirectResponse
     {
         $this->authorize('create-tastingsession', $competition);
         $this->checkCompetitionState($competition);
 
-        $data = \Illuminate\Support\Facades\Request::all();
+        $data = Request::all();
         //unset user if set to 'none'
         if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
             unset($data['wuser_username']);
@@ -183,9 +187,10 @@ class TastingSessionController extends BaseController
      *
      * @param TastingSession $tastingSession
      * @param Commission $commission
-     * @return Response2
+     *
+     * @return BinaryFileResponse
      */
-    public function exportResult(TastingSession $tastingSession, Commission $commission)
+    public function exportResult(TastingSession $tastingSession, Commission $commission): BinaryFileResponse
     {
         $this->authorize('export-tastingsession-result', $tastingSession);
         $this->checkCompetitionState($tastingSession->competition);
@@ -212,9 +217,10 @@ class TastingSessionController extends BaseController
 
     /**
      * @param TastingSession $tastingSession
-     * @return Response
+     *
+     * @return BinaryFileResponse
      */
-    public function exportProtocol(TastingSession $tastingSession)
+    public function exportProtocol(TastingSession $tastingSession): BinaryFileResponse
     {
         $this->authorize('export-tastingsession-protocol', $tastingSession);
 
@@ -253,15 +259,16 @@ class TastingSessionController extends BaseController
      * Validate and store updated values.
      *
      * @param TastingSession $tastingSession
-     * @return Response
+     *
+     * @return RedirectResponse
      */
-    public function update(TastingSession $tastingSession)
+    public function update(TastingSession $tastingSession): RedirectResponse
     {
         $this->authorize('edit-tastingsession', $tastingSession);
         $this->checkCompetitionState($tastingSession->competition);
         $this->checkTastingSessionLocked($tastingSession);
 
-        $data = \Illuminate\Support\Facades\Request::all();
+        $data = Request::all();
         try {
             $this->tastingHandler->updateTastingSession($tastingSession, $data);
         } catch (ValidationException $ve) {
@@ -309,15 +316,16 @@ class TastingSessionController extends BaseController
      * Lock tastingstation.
      *
      * @param TastingSession $tastingSession
-     * @return Response
+     *
+     * @return RedirectResponse
      */
-    public function lock(TastingSession $tastingSession)
+    public function lock(TastingSession $tastingSession): RedirectResponse
     {
         $this->authorize('lock-tastingsession', $tastingSession);
         $this->checkCompetitionState($tastingSession->competition);
         $this->checkTastingSessionLocked($tastingSession);
 
-        if (\Illuminate\Support\Facades\Request::has('del') && \Illuminate\Support\Facades\Request::input('del') == 'Ja') {
+        if (Request::has('del') && Request::input('del') == 'Ja') {
             $this->tastingHandler->lockTastingSession($tastingSession);
         }
 
@@ -347,16 +355,17 @@ class TastingSessionController extends BaseController
      * Destroy database entry.
      *
      * @param TastingSession $tastingSession
-     * @return Response
+     *
+     * @return RedirectResponse
      */
-    public function destroy(TastingSession $tastingSession)
+    public function destroy(TastingSession $tastingSession): RedirectResponse
     {
         $this->authorize('delete-tastingsession', $tastingSession);
         $this->checkCompetitionState($tastingSession->competition);
         $this->checkTastingSessionLocked($tastingSession);
 
         $competition = $tastingSession->competition;
-        if (\Illuminate\Support\Facades\Request::input('del') == 'Ja') {
+        if (Request::input('del') == 'Ja') {
             $this->tastingHandler->deleteTastingSession($tastingSession);
         }
 

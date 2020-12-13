@@ -25,6 +25,7 @@ use App\MasterData\Applicant;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Mail;
@@ -60,9 +61,9 @@ class AnnouncementsController extends BaseController
     }
 
     /**
-     * @return Response
+     * @return RedirectResponse
      */
-    public function send(Request $request)
+    public function send(Request $request): RedirectResponse
     {
         $this->authorize('send-announcements');
 

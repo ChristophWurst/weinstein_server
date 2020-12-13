@@ -26,6 +26,7 @@ use App\Tasting\Commission;
 use App\Tasting\TastingNumber;
 use App\Tasting\TastingSession;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -55,9 +56,10 @@ class TastingController extends BaseController
      * Add tasting results.
      *
      * @param TastingSession $tastingSession
-     * @return Response
+     *
+     * @return View
      */
-    public function add(TastingSession $tastingSession)
+    public function add(TastingSession $tastingSession): View
     {
         $this->authorize('create-tasting', $tastingSession);
 
@@ -73,9 +75,10 @@ class TastingController extends BaseController
      *
      * @param TastingSession $tastingSession
      * @param Request $request
-     * @return Response
+     *
+     * @return RedirectResponse
      */
-    public function store(TastingSession $tastingSession, Request $request)
+    public function store(TastingSession $tastingSession, Request $request): RedirectResponse
     {
         $this->authorize('create-tasting', $tastingSession);
 
@@ -97,9 +100,10 @@ class TastingController extends BaseController
      * @param TastingSession $tastingSession
      * @param TastingNumber $tastingNumber
      * @param Commission $commission
-     * @return Response
+     *
+     * @return View
      */
-    public function edit(TastingSession $tastingSession, TastingNumber $tastingNumber, Commission $commission)
+    public function edit(TastingSession $tastingSession, TastingNumber $tastingNumber, Commission $commission): View
     {
         $this->authorize('edit-tasting', [$tastingSession, $commission, $tastingNumber]);
 

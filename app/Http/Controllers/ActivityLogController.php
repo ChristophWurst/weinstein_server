@@ -22,6 +22,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\ActivityLogger;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Response;
 
 class ActivityLogController extends BaseController
@@ -41,9 +42,9 @@ class ActivityLogController extends BaseController
     /**
      * Show all logs.
      *
-     * @return Response
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         $this->authorize('view-activitylog');
 

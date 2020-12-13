@@ -24,8 +24,9 @@ use App\Contracts\MasterDataStore;
 use App\Exceptions\ValidationException;
 use App\MasterData\WineSort;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 class WineSortController extends BaseController
@@ -49,9 +50,9 @@ class WineSortController extends BaseController
     /**
      * Display a listing of all sorts.
      *
-     * @return Response
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         $this->authorize('list-winesorts');
 
@@ -63,9 +64,9 @@ class WineSortController extends BaseController
     /**
      * Show the form for creating a new sort.
      *
-     * @return Response
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         $this->authorize('create-winesort');
 
@@ -75,14 +76,14 @@ class WineSortController extends BaseController
     /**
      * Store a newly created sort in storage.
      *
-     * @return Response
+     * @return RedirectResponse
      */
-    public function store()
+    public function store(Request $request): RedirectResponse
     {
         $this->authorize('create-winesort');
 
         try {
-            $data = \Illuminate\Support\Facades\Request::all();
+            $data = $request->all();
             $this->masterDataStore->createWineSort($data);
         } catch (ValidationException $ve) {
             return Redirect::route('settings.winesorts/create')
@@ -97,9 +98,10 @@ class WineSortController extends BaseController
      * Show the form for editing the specified sort.
      *
      * @param WineSort $wineSort
-     * @return Response
+     *
+     * @return View
      */
-    public function edit(WineSort $wineSort)
+    public function edit(WineSort $wineSort): View
     {
         $this->authorize('update-winesort', $wineSort);
 
@@ -112,9 +114,10 @@ class WineSortController extends BaseController
      * Update the specified sort in storage.
      *
      * @param WineSort $wineSort
-     * @return Response
+     *
+     * @return RedirectResponse
      */
-    public function update(WineSort $wineSort)
+    public function update(WineSort $wineSort): RedirectResponse
     {
         $this->authorize('update-winesort', $wineSort);
 

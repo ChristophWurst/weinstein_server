@@ -29,6 +29,7 @@ use App\Tasting\TastingNumber;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -200,9 +201,10 @@ class TastingNumberController extends BaseController
      * Check users choice and eventually delete specified tasting number.
      *
      * @param TastingNumber $tastingNumber
-     * @return Response
+     *
+     * @return RedirectResponse
      */
-    public function delete(TastingNumber $tastingNumber)
+    public function delete(TastingNumber $tastingNumber): RedirectResponse
     {
         $this->authorize('unassign-tastingnumber');
 
@@ -255,10 +257,11 @@ class TastingNumberController extends BaseController
 
     /**
      * @param Competition $competition
-     * @param wine nr $id
-     * @return Response
+     * @param int $id
+     *
+     * @return JsonResponse
      */
-    public function translate(Competition $competition, $id)
+    public function translate(Competition $competition, $id): JsonResponse
     {
         $this->authorize('translate-tastingnumber', $competition);
 
