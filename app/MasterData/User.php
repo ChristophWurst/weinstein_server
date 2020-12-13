@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\Hash;
  * @property string $password
  * @property bool $admin
  * @property string $remember_token
+ * @property string $email
  */
 class User extends Authenticatable
 {
