@@ -244,7 +244,7 @@ class Handler implements TastingHandler
     public function deleteTastingNumber(TastingNumber $tastingNumber)
     {
         // TODO: check competition state
-        return $this->tastingNumberRepository->delete($tastingNumber);
+        $this->tastingNumberRepository->delete($tastingNumber);
     }
 
     /**
