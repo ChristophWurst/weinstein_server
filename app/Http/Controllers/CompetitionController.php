@@ -157,7 +157,7 @@ class CompetitionController extends BaseController
             throw new InvalidArgumentException();
         }
         if ($request->has('del') && $request->get('del') === 'Ja') {
-            $this->tastingHandler->lockTasting($competition, $tasting);
+            $this->tastingHandler->lockTasting($competition);
         }
 
         return Redirect::route('competition/show', [
@@ -261,7 +261,7 @@ class CompetitionController extends BaseController
         if ($user->isAdmin()) {
             $associations = Association::all();
         } else {
-            $associations = Auth::user()->associations;
+            $associations = $user->associations;
         }
 
         return $this->view->make('competition/sign-chosen', [

@@ -190,6 +190,7 @@ class WineController extends BaseController
     {
         $this->authorize('create-wine', $competition);
 
+        /** @var User $user */
         $user = Auth::user();
         $applicants = $competition->administrates($user) ? Applicant::all() : $user->applicants;
 
@@ -201,7 +202,7 @@ class WineController extends BaseController
                 'applicants' => $applicants->pluck('select_label', 'id')->all(),
                 'winesorts' => WineSort::all()->pluck('select_label', 'id')->all(),
                 'winequalities' => ['none' => '0 - keine'] + WineQuality::get()->pluck('select_label', 'id')->all(),
-                'show_nr' => $competition->administrates(Auth::user()),
+                'show_nr' => $competition->administrates($user),
                 'success' => $request->session()->has('wine_added_successfully'),
         ]);
     }
@@ -292,6 +293,7 @@ class WineController extends BaseController
     {
         $this->authorize('update-wine', $wine);
 
+        /** @var User $user */
         $user = Auth::user();
         $applicants = $wine->competition->administrates($user) ? Applicant::all() : $user->applicants;
 
@@ -302,7 +304,7 @@ class WineController extends BaseController
                 'applicants' => $applicants->pluck('select_label', 'id')->all(),
                 'winesorts' => WineSort::all()->pluck('select_label', 'id')->all(),
                 'winequalities' => ['none' => '0 - keine'] + WineQuality::get()->pluck('select_label', 'id')->all(),
-                'show_nr' => $wine->competition->administrates(Auth::user()),
+                'show_nr' => $wine->competition->administrates($user),
         ]);
     }
 
