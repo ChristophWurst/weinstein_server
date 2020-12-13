@@ -7,40 +7,39 @@ use Illuminate\Console\Command;
 
 class AddMissingApplicantUsers extends Command
 {
+    protected $signature = 'applicant:users-fix';
 
-	protected $signature = 'applicant:users-fix';
+    protected $description = 'Add missing applicant users';
+    /**
+     * @var MasterDataStore
+     */
+    private $store;
 
-	protected $description = 'Add missing applicant users';
-	/**
-	 * @var MasterDataStore
-	 */
-	private $store;
+    /**
+     * @return void
+     */
+    public function __construct(MasterDataStore $store)
+    {
+        parent::__construct();
 
-	/**
-	 * @return void
-	 */
-	public function __construct(MasterDataStore $store)
-	{
-		parent::__construct();
+        $this->store = $store;
+    }
 
-		$this->store = $store;
-	}
+    /**
+     * @return mixed
+     */
+    public function handle()
+    {
+        foreach ($this->store->getApplicants() as $applicant) {
+            if ($applicant->wuser_username) {
+                continue;
+            }
 
-	/**
-	 * @return mixed
-	 */
-	public function handle()
-	{
-		foreach ($this->store->getApplicants() as $applicant) {
-			if ($applicant->wuser_username) {
-				continue;
-			}
+            list($user, $password) = $this->store->createApplicantUser($applicant);
 
-			list ($user, $password) = $this->store->createApplicantUser($applicant);
+            $this->info('User created for applicant '.$applicant->id.': '.$password);
 
-			$this->info("User created for applicant " . $applicant->id . ": " . $password);
-
-			return 0;
-		}
-	}
+            return 0;
+        }
+    }
 }

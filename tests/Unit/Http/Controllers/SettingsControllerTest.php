@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Unit\Http\Controllers;
@@ -28,31 +27,32 @@ use Mockery;
 use Mockery\MockInterface;
 use Test\BrowserKitTestCase;
 
-class SettingsControllerTest extends BrowserKitTestCase {
+class SettingsControllerTest extends BrowserKitTestCase
+{
+    /** @var Factory|MockInterface */
+    private $view;
 
-	/** @var Factory|MockInterface */
-	private $view;
-	
-	/** @var SettingsController */
-	private $controller;
-	
-	protected function setUp(): void {
-		parent::setUp();
+    /** @var SettingsController */
+    private $controller;
 
-		$this->view = Mockery::mock(Factory::class);
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-		$this->controller = new SettingsController($this->view);
-	}
+        $this->view = Mockery::mock(Factory::class);
 
-	public function testIndex() {
-		$view = Mockery::mock(View::class);
+        $this->controller = new SettingsController($this->view);
+    }
 
-		$this->view->shouldReceive('make')
-			->once()
-			->with('settings/index')
-			->andReturn($view);
+    public function testIndex()
+    {
+        $view = Mockery::mock(View::class);
 
-		$this->assertSame($view, $this->controller->index());
-	}
+        $this->view->shouldReceive('make')
+            ->once()
+            ->with('settings/index')
+            ->andReturn($view);
 
+        $this->assertSame($view, $this->controller->index());
+    }
 }

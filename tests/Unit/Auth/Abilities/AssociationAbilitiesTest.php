@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Unit\Auth\Abilities;
@@ -27,36 +26,38 @@ use Mockery;
 use Mockery\MockInterface;
 use Test\TestCase;
 
-class AssociationAbilitiesTest extends TestCase {
+class AssociationAbilitiesTest extends TestCase
+{
+    use AbilitiesMock;
 
-	use AbilitiesMock;
+    /** @var AssociationAbilities|MockInterface */
+    private $abilities;
 
-	/** @var AssociationAbilities|MockInterface */
-	private $abilities;
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-	protected function setUp(): void {
-		parent::setUp();
+        $this->abilities = new AssociationAbilities();
+    }
 
-		$this->abilities = new AssociationAbilities();
-	}
+    public function testShowEditAssociationAdmin()
+    {
+        $user = $this->getUserMock();
+        $association = Mockery::mock(Association::class);
 
-	public function testShowEditAssociationAdmin() {
-		$user = $this->getUserMock();
-		$association = Mockery::mock(Association::class);
+        $association->shouldReceive('getAttribute')
+            ->with('user')
+            ->andReturn($user);
+        $user->shouldReceive('getAttribute')
+            ->with('username')
+            ->andReturn('gerda');
 
-		$association->shouldReceive('getAttribute')
-			->with('user')
-			->andReturn($user);
-		$user->shouldReceive('getAttribute')
-			->with('username')
-			->andReturn('gerda');
+        $this->assertTrue($this->abilities->show($user, $association));
+        $this->assertTrue($this->abilities->edit($user, $association));
+    }
 
-		$this->assertTrue($this->abilities->show($user, $association));
-		$this->assertTrue($this->abilities->edit($user, $association));
-	}
-
-	public function testCreate() {
-		$this->assertFalse($this->abilities->create($this->getUserMock()));
-	}
-
+    public function testCreate()
+    {
+        $this->assertFalse($this->abilities->create($this->getUserMock()));
+    }
 }

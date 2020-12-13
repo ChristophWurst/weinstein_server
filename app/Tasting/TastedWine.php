@@ -16,30 +16,29 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Tasting;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TastedWine extends Model {
+class TastedWine extends Model
+{
+    /**
+     * Table (view) name.
+     *
+     * @var string
+     */
+    protected $table = 'tasted_wine';
 
-	/**
-	 * Table (view) name
-	 * 
-	 * @var string
-	 */
-	protected $table = 'tasted_wine';
-
-	/**
-	 * round db value because of rounding noise
-	 * floor decimal values
-	 * 
-	 * @return float
-	 */
-	public function getResultAttribute() {
-		return floor(round($this->attributes['result'], 6) * 1000) / 1000;
-	}
-
+    /**
+     * round db value because of rounding noise
+     * floor decimal values.
+     *
+     * @return float
+     */
+    public function getResultAttribute()
+    {
+        return floor(round($this->attributes['result'], 6) * 1000) / 1000;
+    }
 }

@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Unit\Http\Controllers;
@@ -29,42 +28,43 @@ use Mockery;
 use Mockery\MockInterface;
 use Test\BrowserKitTestCase;
 
-class ActivityLogControllerTest extends BrowserKitTestCase {
+class ActivityLogControllerTest extends BrowserKitTestCase
+{
+    use AuthorizationHelper;
 
-	use AuthorizationHelper;
+    /** @var ActivityLogger|MockInterface */
+    private $activityLogger;
 
-	/** @var ActivityLogger|MockInterface */
-	private $activityLogger;
+    /** @var Factory|MockInterface */
+    private $viewFactory;
 
-	/** @var Factory|MockInterface */
-	private $viewFactory;
+    /** @var ActivityLogController */
+    private $controller;
 
-	/** @var ActivityLogController */
-	private $controller;
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-	protected function setUp(): void {
-		parent::setUp();
+        $this->activityLogger = Mockery::mock(ActivityLogger::class);
+        $this->viewFactory = Mockery::mock(Factory::class);
+        $this->controller = new ActivityLogController($this->activityLogger, $this->viewFactory);
+    }
 
-		$this->activityLogger = Mockery::mock(ActivityLogger::class);
-		$this->viewFactory = Mockery::mock(Factory::class);
-		$this->controller = new ActivityLogController($this->activityLogger, $this->viewFactory);
-	}
+    public function testIndex()
+    {
+        $data = new Collection();
 
-	public function testIndex() {
-		$data = new Collection();
+        $this->be($this->getAdminMock());
+        $this->activityLogger->shouldReceive('getMostRecentLogs')
+            ->once()
+            ->andReturn($data);
+        $this->viewFactory->shouldReceive('make')
+            ->once()
+            ->with('settings/activitylog/index', [
+                'logs' => $data,
+            ])
+            ->andReturn('view');
 
-		$this->be($this->getAdminMock());
-		$this->activityLogger->shouldReceive('getMostRecentLogs')
-			->once()
-			->andReturn($data);
-		$this->viewFactory->shouldReceive('make')
-			->once()
-			->with('settings/activitylog/index', [
-				'logs' => $data,
-			])
-			->andReturn('view');
-
-		$this->assertEquals('view', $this->controller->index());
-	}
-
+        $this->assertEquals('view', $this->controller->index());
+    }
 }

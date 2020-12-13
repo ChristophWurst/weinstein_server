@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Contracts;
@@ -29,63 +28,63 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Validation\ValidationException;
 
-interface WineHandler {
+interface WineHandler
+{
+    /**
+     * @param array $data
+     * @param Competition $competition
+     * @return Wine
+     */
+    public function create(array $data, Competition $competition);
 
-	/**
-	 * @param array $data
-	 * @param Competition $competition
-	 * @return Wine
-	 */
-	public function create(array $data, Competition $competition);
+    /**
+     * @param Wine $wine
+     * @param array $data
+     * @throws ValidationException
+     * @throws InvalidCompetitionStateException if the user (non admin) is not allowed to edit wines in that state
+     * @return Wine
+     */
+    public function update(Wine $wine, array $data);
 
-	/**
-	 * @param Wine $wine
-	 * @param array $data
-	 * @throws ValidationException
-	 * @throws InvalidCompetitionStateException if the user (non admin) is not allowed to edit wines in that state
-	 * @return Wine
-	 */
-	public function update(Wine $wine, array $data);
+    /**
+     * @param Wine $wine
+     * @param array $data
+     * @throws ValidationException
+     */
+    public function updateKdb(Wine $wine, array $data);
 
-	/**
-	 * @param Wine $wine
-	 * @param array $data
-	 * @throws ValidationException
-	 */
-	public function updateKdb(Wine $wine, array $data);
+    /**
+     * @param UploadedFile $file
+     * @param Competition $competition
+     */
+    public function importKdb(UploadedFile $file, Competition $competition);
 
-	/**
-	 * @param UploadedFile $file
-	 * @param Competition $competition
-	 */
-	public function importKdb(UploadedFile $file, Competition $competition);
+    /**
+     * @param UploadedFile $file
+     * @param Competition $competition
+     */
+    public function importExcluded(UploadedFile $file, Competition $competition);
 
-	/**
-	 * @param UploadedFile $file
-	 * @param Competition $competition
-	 */
-	public function importExcluded(UploadedFile $file, Competition $competition);
+    /**
+    public function updateSosi(Wine $wine, array $data);
 
-	/**
-	public function updateSosi(Wine $wine, array $data);
+    /**
+     * @param UploadedFile $file
+     * @param Competition $competition
+     */
+    public function importSosi(UploadedFile $file, Competition $competition);
 
-	/**
-	 * @param UploadedFile $file
-	 * @param Competition $competition
-	 */
-	public function importSosi(UploadedFile $file, Competition $competition);
+    /**
+     * @param Wine $wine
+     */
+    public function delete(Wine $wine);
 
-	/**
-	 * @param Wine $wine
-	 */
-	public function delete(Wine $wine);
-
-	/**
-	 * Get all wines of given competition for given user
-	 *
-	 * @param User $user
-	 * @param Competition $competition
-	 * @return Paginator
-	 */
-	public function getUsersWines(User $user, Competition $competition);
+    /**
+     * Get all wines of given competition for given user.
+     *
+     * @param User $user
+     * @param Competition $competition
+     * @return Paginator
+     */
+    public function getUsersWines(User $user, Competition $competition);
 }

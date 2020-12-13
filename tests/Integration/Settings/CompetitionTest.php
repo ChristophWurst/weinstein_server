@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Integration\Settings;
@@ -27,47 +26,48 @@ use App\MasterData\User;
 use function factory;
 use Test\BrowserKitTestCase;
 
-class CompetitionTest extends BrowserKitTestCase {
+class CompetitionTest extends BrowserKitTestCase
+{
+    use \Illuminate\Foundation\Testing\DatabaseTransactions;
 
-	use \Illuminate\Foundation\Testing\DatabaseTransactions;
+    public function testShowCompetitions()
+    {
+        $admin = factory(User::class)->states('admin')->make();
 
-	public function testShowCompetitions() {
-		$admin = factory(User::class)->states('admin')->make();
+        $this->be($admin);
 
-		$this->be($admin);
+        $this->get('settings/competitions');
+        $this->assertResponseOk();
+        $this->see('Bewerb');
+    }
 
-		$this->get('settings/competitions');
-		$this->assertResponseOk();
-		$this->see('Bewerb');
-	}
+    public function testResetCompetition()
+    {
+        $admin = factory(User::class)->states('admin')->make();
 
-	public function testResetCompetition() {
-		$admin = factory(User::class)->states('admin')->make();
+        $competition = factory(Competition::class)->create([
+            'competition_state_id' => CompetitionState::STATE_EXCLUDE,
+        ]);
 
-		$competition = factory(Competition::class)->create([
-			'competition_state_id' => CompetitionState::STATE_EXCLUDE,
-		]);
+        $this->be($admin);
+        $this->get('competition/'.$competition->id.'/reset');
+        $this->assertResponseOk();
+        $this->post('competition/'.$competition->id.'/reset', [
+            'reset' => 'Nein',
+        ]);
+        $this->assertRedirectedTo('settings/competitions');
 
-		$this->be($admin);
-		$this->get('competition/' . $competition->id . '/reset');
-		$this->assertResponseOk();
-		$this->post('competition/' . $competition->id . '/reset', [
-			'reset' => 'Nein',
-		]);
-		$this->assertRedirectedTo('settings/competitions');
+        $this->get('competition/'.$competition->id.'/reset');
+        $this->assertResponseOk();
+        $this->post('competition/'.$competition->id.'/reset', [
+            'reset' => 'Ja',
+        ]);
+        $this->assertRedirectedTo('settings/competitions');
 
-		$this->get('competition/' . $competition->id . '/reset');
-		$this->assertResponseOk();
-		$this->post('competition/' . $competition->id . '/reset', [
-			'reset' => 'Ja',
-		]);
-		$this->assertRedirectedTo('settings/competitions');
-
-		$this->seeInDatabase('competition',
-			[
-			'id' => $competition->id,
-			'competition_state_id' => CompetitionState::STATE_ENROLLMENT,
-		]);
-	}
-
+        $this->seeInDatabase('competition',
+            [
+            'id' => $competition->id,
+            'competition_state_id' => CompetitionState::STATE_ENROLLMENT,
+        ]);
+    }
 }

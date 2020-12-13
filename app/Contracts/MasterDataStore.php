@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Contracts;
@@ -29,117 +28,117 @@ use App\MasterData\WineSort;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 
-interface MasterDataStore {
+interface MasterDataStore
+{
+    /**
+     * @return Collection
+     */
+    public function getAssociations(User $user = null);
 
-	/**
-	 * @return Collection
-	 */
-	public function getAssociations(User $user = null);
+    /**
+     * @param array $data
+     * @return Association
+     */
+    public function createAssociation(array $data);
 
-	/**
-	 * @param array $data
-	 * @return Association
-	 */
-	public function createAssociation(array $data);
+    /**
+     * @param Association $association
+     * @param array $data
+     */
+    public function updateAssociation(Association $association, array $data);
 
-	/**
-	 * @param Association $association
-	 * @param array $data
-	 */
-	public function updateAssociation(Association $association, array $data);
+    /**
+     * @param Association $association
+     */
+    public function deleteAssociation(Association $association);
 
-	/**
-	 * @param Association $association
-	 */
-	public function deleteAssociation(Association $association);
+    /**
+     * @param User $user
+     */
+    public function getCompetitions(User $user = null);
 
-	/**
-	 * @param User $user
-	 */
-	public function getCompetitions(User $user = null);
+    /**
+     * @param Competition $competition
+     */
+    public function resetCompetition(Competition $competition);
 
-	/**
-	 * @param Competition $competition
-	 */
-	public function resetCompetition(Competition $competition);
+    /**
+     * @param string $username
+     * @return User|null
+     */
+    public function getUser(string $username);
 
-	/**
-	 * @param string $username
-	 * @return User|null
-	 */
-	public function getUser(string $username);
+    /**
+     * @return Collection
+     */
+    public function getUsers(User $user = null);
 
-	/**
-	 * @return Collection
-	 */
-	public function getUsers(User $user = null);
+    /**
+     * @param array $data
+     * @return User
+     */
+    public function createUser(array $data);
 
-	/**
-	 * @param array $data
-	 * @return User
-	 */
-	public function createUser(array $data);
+    /**
+     * @param User $user
+     * @param array $data
+     */
+    public function updateUser(User $user, $data);
 
-	/**
-	 * @param User $user
-	 * @param array $data
-	 */
-	public function updateUser(User $user, $data);
+    /**
+     * @param User $user
+     */
+    public function deleteUser(User $user);
 
-	/**
-	 * @param User $user
-	 */
-	public function deleteUser(User $user);
+    /**
+     * @return Collection|Applicant[]
+     */
+    public function getApplicants(User $user = null);
 
-	/**
-	 * @return Collection|Applicant[]
-	 */
-	public function getApplicants(User $user = null);
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function createApplicant(array $data);
 
-	/**
-	 * @param array $data
-	 * @return array
-	 */
-	public function createApplicant(array $data);
+    /**
+     * Create user for applicant it it does not exist.
+     *
+     * @param Applicant $applicant
+     */
+    public function createApplicantUser(Applicant $applicant);
 
-	/**
-	 * Create user for applicant it it does not exist
-	 *
-	 * @param Applicant $applicant
-	 */
-	public function createApplicantUser(Applicant $applicant);
+    /**
+     * @param UploadedFile $file
+     * @return int nr of rows imported
+     */
+    public function importApplicants(UploadedFile $file);
 
-	/**
-	 * @param UploadedFile $file
-	 * @return int nr of rows imported
-	 */
-	public function importApplicants(UploadedFile $file);
+    /**
+     * @param Applicant $applicant
+     * @param array $data
+     */
+    public function updateApplicant(Applicant $applicant, array $data);
 
-	/**
-	 * @param Applicant $applicant
-	 * @param array $data
-	 */
-	public function updateApplicant(Applicant $applicant, array $data);
+    /**
+     * @param Applicant $applicant
+     */
+    public function deleteApplicant(Applicant $applicant);
 
-	/**
-	 * @param Applicant $applicant
-	 */
-	public function deleteApplicant(Applicant $applicant);
+    /**
+     * @return Collection
+     */
+    public function getWineSorts();
 
-	/**
-	 * @return Collection
-	 */
-	public function getWineSorts();
+    /**
+     * @param array $data
+     * @return WineSort
+     */
+    public function createWineSort(array $data);
 
-	/**
-	 * @param array $data
-	 * @return WineSort
-	 */
-	public function createWineSort(array $data);
-
-	/**
-	 * @param WineSort $wineSort
-	 * @param array $data
-	 */
-	public function updateWineSort(WineSort $wineSort, array $data);
+    /**
+     * @param WineSort $wineSort
+     * @param array $data
+     */
+    public function updateWineSort(WineSort $wineSort, array $data);
 }

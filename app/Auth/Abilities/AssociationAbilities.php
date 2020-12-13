@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Auth\Abilities;
@@ -24,24 +23,27 @@ namespace App\Auth\Abilities;
 use App\MasterData\Association;
 use App\MasterData\User;
 
-class AssociationAbilities {
+class AssociationAbilities
+{
+    use CommonAbilities;
 
-	use CommonAbilities;
+    private function administrates(User $user, Association $association)
+    {
+        return $association->user && $association->user->username === $user->username;
+    }
 
-	private function administrates(User $user, Association $association) {
-		return $association->user && $association->user->username === $user->username;
-	}
+    public function show(User $user, Association $association)
+    {
+        return $this->administrates($user, $association);
+    }
 
-	public function show(User $user, Association $association) {
-		return $this->administrates($user, $association);
-	}
+    public function create(User $user)
+    {
+        return false;
+    }
 
-	public function create(User $user) {
-		return false;
-	}
-
-	public function edit(User $user, Association $association) {
-		return $this->administrates($user, $association);
-	}
-
+    public function edit(User $user, Association $association)
+    {
+        return $this->administrates($user, $association);
+    }
 }

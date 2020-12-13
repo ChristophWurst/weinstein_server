@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Providers;
@@ -25,18 +24,19 @@ use App\Contracts\TastingCatalogueHandler;
 use App\TastingCatalogue\CatalogueHandler;
 use Illuminate\Support\ServiceProvider;
 
-class TastingCatalogueProvider extends ServiceProvider {
+class TastingCatalogueProvider extends ServiceProvider
+{
+    protected $defer = true;
 
-	protected $defer = true;
+    public function register()
+    {
+        $this->app->bind(TastingCatalogueHandler::class, CatalogueHandler::class);
+    }
 
-	public function register() {
-		$this->app->bind(TastingCatalogueHandler::class, CatalogueHandler::class);
-	}
-
-	public function provides() {
-		return [
-			TastingCatalogueHandler::class,
-		];
-	}
-
+    public function provides()
+    {
+        return [
+            TastingCatalogueHandler::class,
+        ];
+    }
 }

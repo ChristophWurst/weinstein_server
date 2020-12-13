@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Validation;
@@ -24,12 +23,13 @@ namespace App\Validation;
 use App\MasterData\Competition;
 use App\Tasting\TastingNumberValidator;
 
-class TastingNumberValidatorFactory {
+class TastingNumberValidatorFactory
+{
+    public function newValidator(Competition $competition, array $data): TastingNumberValidator
+    {
+        $validator = new TastingNumberValidator($data);
+        $validator->setCompetition($competition);
 
-	public function newValidator(Competition $competition, array $data): TastingNumberValidator {
-		$validator = new TastingNumberValidator($data);
-		$validator->setCompetition($competition);
-		return $validator;
-	}
-
+        return $validator;
+    }
 }

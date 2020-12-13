@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Auth\Abilities;
@@ -28,85 +27,98 @@ use App\MasterData\User;
 use App\Tasting\TastingStage;
 use Illuminate\Support\Facades\Log;
 
-class CompetitionAbilities {
+class CompetitionAbilities
+{
+    use CommonAbilities;
 
-	use CommonAbilities;
+    public function show(User $user, Competition $competition): bool
+    {
+        return $competition->administrates($user);
+    }
 
-	public function show(User $user, Competition $competition): bool {
-		return $competition->administrates($user);
-	}
+    public function reset(User $user, Competition $competition): bool
+    {
+        return false; // Admin only
+    }
 
-	public function reset(User $user, Competition $competition): bool {
-		return false; // Admin only
-	}
+    public function completeTasingNumbers(User $user, Competition $competition): bool
+    {
+        // TODO: what about the competition admin???
+        if (! $competition->administrates($user)) {
+            return false;
+        }
 
-	public function completeTasingNumbers(User $user, Competition $competition): bool {
-		// TODO: what about the competition admin???
-		if (!$competition->administrates($user)) {
-			return false;
-		}
+        if ($competition->competitionState->id === CompetitionState::STATE_TASTINGNUMBERS1) {
+            $withNumber = $competition->wines()->withTastingNumber(TastingStage::find(1))->count();
+            $total = $competition->wine_details()->count();
+            if ($withNumber < $total) {
+                return false;
+            }
 
-		if ($competition->competitionState->id === CompetitionState::STATE_TASTINGNUMBERS1) {
-			$withNumber = $competition->wines()->withTastingNumber(TastingStage::find(1))->count();
-			$total = $competition->wine_details()->count();
-			if ($withNumber < $total) {
-				return false;
-			}
-			return true;
-		} else if ($competition->competitionState->id === CompetitionState::STATE_TASTINGNUMBERS2) {
-			// just allow it - there are no restrictions (for now)
-			return true;
-		} else {
-			Log::error('invalid competition state in complete-tastingnumbers-filter');
-			return false;
-		}
-	}
+            return true;
+        } elseif ($competition->competitionState->id === CompetitionState::STATE_TASTINGNUMBERS2) {
+            // just allow it - there are no restrictions (for now)
+            return true;
+        } else {
+            Log::error('invalid competition state in complete-tastingnumbers-filter');
 
-	public function completeTasting(User $user, Competition $competition): bool {
-		if (!$competition->administrates($user)) {
-			return false;
-		}
+            return false;
+        }
+    }
 
-		if ($competition->competitionState->id === CompetitionState::STATE_TASTING1) {
-			$tasted = $competition->wine_details()->whereNotNull('rating1')->count();
-			$total = $competition->wine_details()->count();
-			if ($tasted < $total) {
-				return false;
-			}
-			return true;
-		} else if ($competition->competitionState->id === CompetitionState::STATE_TASTING2) {
-			// just allow it - there are no restrictions (for now)
-			return true;
-		} else {
-			Log::error('invalid competition state in complete-tasting-filter');
-			return false;
-		}
-	}
+    public function completeTasting(User $user, Competition $competition): bool
+    {
+        if (! $competition->administrates($user)) {
+            return false;
+        }
 
-	public function completeKdb(User $user, Competition $competition): bool {
-		return $competition->administrates($user) && $competition->competitionState->id === CompetitionState::STATE_KDB;
-	}
+        if ($competition->competitionState->id === CompetitionState::STATE_TASTING1) {
+            $tasted = $competition->wine_details()->whereNotNull('rating1')->count();
+            $total = $competition->wine_details()->count();
+            if ($tasted < $total) {
+                return false;
+            }
 
-	public function completeExcluded(User $user, Competition $competition): bool {
-		return $competition->administrates($user) && $competition->competitionState->id === CompetitionState::STATE_EXCLUDE;
-	}
+            return true;
+        } elseif ($competition->competitionState->id === CompetitionState::STATE_TASTING2) {
+            // just allow it - there are no restrictions (for now)
+            return true;
+        } else {
+            Log::error('invalid competition state in complete-tasting-filter');
 
-	public function completeSosi(User $user, Competition $competition): bool {
-		return $competition->administrates($user) && $competition->competitionState->id === CompetitionState::STATE_SOSI;
-	}
+            return false;
+        }
+    }
 
-	public function signChosen(User $user, Competition $competition, Association $association = null): bool {
-		return $competition->competition_state_id === CompetitionState::STATE_CHOOSE // state
-			&& $user->associations()->exists() // is assoc admin? (for selection screen)
-			&& (is_null($association) ? true : $association->administrates($user)); // administrates?
-	}
+    public function completeKdb(User $user, Competition $competition): bool
+    {
+        return $competition->administrates($user) && $competition->competitionState->id === CompetitionState::STATE_KDB;
+    }
 
-	public function completeChoosing(User $user, Competition $competition): bool {
-		return $competition->administrates($user) && $competition->competitionState->id === CompetitionState::STATE_CHOOSE;
-	}
+    public function completeExcluded(User $user, Competition $competition): bool
+    {
+        return $competition->administrates($user) && $competition->competitionState->id === CompetitionState::STATE_EXCLUDE;
+    }
 
-	public function completeCatalogueNumbers(User $user, Competition $competition): bool {
-		return $competition->administrates($user);
-	}
+    public function completeSosi(User $user, Competition $competition): bool
+    {
+        return $competition->administrates($user) && $competition->competitionState->id === CompetitionState::STATE_SOSI;
+    }
 
+    public function signChosen(User $user, Competition $competition, Association $association = null): bool
+    {
+        return $competition->competition_state_id === CompetitionState::STATE_CHOOSE // state
+            && $user->associations()->exists() // is assoc admin? (for selection screen)
+            && (is_null($association) ? true : $association->administrates($user)); // administrates?
+    }
+
+    public function completeChoosing(User $user, Competition $competition): bool
+    {
+        return $competition->administrates($user) && $competition->competitionState->id === CompetitionState::STATE_CHOOSE;
+    }
+
+    public function completeCatalogueNumbers(User $user, Competition $competition): bool
+    {
+        return $competition->administrates($user);
+    }
 }

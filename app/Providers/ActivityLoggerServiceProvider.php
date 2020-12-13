@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Providers;
@@ -25,21 +24,22 @@ use App\Contracts\ActivityLogger;
 use App\Support\Activity\DatabaseLogger;
 use Illuminate\Support\ServiceProvider;
 
-class ActivityLoggerServiceProvider extends ServiceProvider {
+class ActivityLoggerServiceProvider extends ServiceProvider
+{
+    protected $defer = true;
 
-	protected $defer = true;
+    /**
+     * Register activity log services.
+     */
+    public function register()
+    {
+        $this->app->bind(ActivityLogger::class, DatabaseLogger::class);
+    }
 
-	/**
-	 * Register activity log services
-	 */
-	public function register() {
-		$this->app->bind(ActivityLogger::class, DatabaseLogger::class);
-	}
-
-	public function provides() {
-		return [
-			ActivityLogger::class,
-		];
-	}
-
+    public function provides()
+    {
+        return [
+            ActivityLogger::class,
+        ];
+    }
 }

@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Database\Repositories;
@@ -24,32 +23,37 @@ namespace App\Database\Repositories;
 use App\Tasting\Commission;
 use App\Tasting\Taster;
 
-class TasterRepository {
+class TasterRepository
+{
+    public function find($id)
+    {
+        return Taster::find($id);
+    }
 
-	public function find($id) {
-		return Taster::find($id);
-	}
+    public function findForCommission(Commission $commission)
+    {
+        return $commission->tasters;
+    }
 
-	public function findForCommission(Commission $commission) {
-		return $commission->tasters;
-	}
+    /**
+     * @param Commission $commission
+     */
+    public function create($data, Commission $commission)
+    {
+        $taster = new Taster($data);
+        $taster->commission()->associate($commission);
+        $taster->save();
 
-	/**
-	 * @param Commission $commission
-	 */
-	public function create($data, Commission $commission) {
-		$taster = new Taster($data);
-		$taster->commission()->associate($commission);
-		$taster->save();
-		return $taster;
-	}
+        return $taster;
+    }
 
-	public function getActive(Commission $commission) {
-		return $commission->tasters()->active()->get();
-	}
+    public function getActive(Commission $commission)
+    {
+        return $commission->tasters()->active()->get();
+    }
 
-	public function update(Taster $taster, array $data) {
-		$taster->update($data);
-	}
-
+    public function update(Taster $taster, array $data)
+    {
+        $taster->update($data);
+    }
 }

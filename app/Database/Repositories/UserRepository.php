@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Database\Repositories;
@@ -24,49 +23,54 @@ namespace App\Database\Repositories;
 use App\MasterData\User;
 use Illuminate\Database\Eloquent\Collection;
 
-class UserRepository {
+class UserRepository
+{
+    /**
+     * @return Collection
+     */
+    public function findAll()
+    {
+        return User::all();
+    }
 
-	/**
-	 * @return Collection
-	 */
-	public function findAll() {
-		return User::all();
-	}
+    /**
+     * @param string $username
+     * @return User|null
+     */
+    public function find(string $username)
+    {
+        return User::find($username);
+    }
 
-	/**
-	 * @param string $username
-	 * @return User|null
-	 */
-	public function find(string $username)
-	{
-		return User::find($username);
-	}
+    /**
+     * @param array $data
+     * @return User
+     */
+    public function create(array $data)
+    {
+        $user = new User($data);
+        $user->save();
 
-	/**
-	 * @param array $data
-	 * @return User
-	 */
-	public function create(array $data) {
-		$user = new User($data);
-		$user->save();
-		return $user;
-	}
+        return $user;
+    }
 
-	/**
-	 * @param User $user
-	 * @param array $data
-	 * @return User
-	 */
-	public function update(User $user, array $data) {
-		$user->update($data);
-		return $user;
-	}
+    /**
+     * @param User $user
+     * @param array $data
+     * @return User
+     */
+    public function update(User $user, array $data)
+    {
+        $user->update($data);
 
-	/**
-	 * @param User $user
-	 */
-	public function delete(User $user) {
-		$user->delete();
-	}
+        return $user;
+    }
 
+    /**
+     * @param User $user
+     */
+    public function delete(User $user)
+    {
+        $user->delete();
+    }
 }

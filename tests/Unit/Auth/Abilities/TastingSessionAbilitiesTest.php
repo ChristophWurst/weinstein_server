@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Unit\Auth\Abilities;
@@ -30,157 +29,163 @@ use App\Tasting\TastingSession;
 use Mockery;
 use Test\TestCase;
 
-class TastingSessionAbilitiesTest extends TestCase {
+class TastingSessionAbilitiesTest extends TestCase
+{
+    use AbilitiesMock;
 
-	use AbilitiesMock;
+    /** @var TastingSessionAbilities */
+    private $abilities;
 
-	/** @var TastingSessionAbilities */
-	private $abilities;
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-	protected function setUp(): void {
-		parent::setUp();
+        $this->abilities = new TastingSessionAbilities();
+    }
 
-		$this->abilities = new TastingSessionAbilities();
-	}
+    public function testListTastersAsTastingSessionAdmin()
+    {
+        $user = $this->getUserMock();
+        $tastingSession = Mockery::mock(TastingSession::class);
+        $competition = Mockery::mock(Competition::class);
+        $competitionState = Mockery::mock(CompetitionState::class);
+        $tastingSession->shouldReceive('administrates')
+            ->with($user)
+            ->andReturn(true);
+        $tastingSession->shouldReceive('getAttribute')
+            ->with('competition')
+            ->andReturn($competition);
+        $competition->shouldReceive('getAttribute')
+            ->with('competitionState')
+            ->andReturn($competitionState);
+        $competitionState->shouldReceive('getAttribute')
+            ->with('id')
+            ->andReturn(CompetitionState::STATE_TASTING1);
 
-	public function testListTastersAsTastingSessionAdmin() {
-		$user = $this->getUserMock();
-		$tastingSession = Mockery::mock(TastingSession::class);
-		$competition = Mockery::mock(Competition::class);
-		$competitionState = Mockery::mock(CompetitionState::class);
-		$tastingSession->shouldReceive('administrates')
-			->with($user)
-			->andReturn(true);
-		$tastingSession->shouldReceive('getAttribute')
-			->with('competition')
-			->andReturn($competition);
-		$competition->shouldReceive('getAttribute')
-			->with('competitionState')
-			->andReturn($competitionState);
-		$competitionState->shouldReceive('getAttribute')
-			->with('id')
-			->andReturn(CompetitionState::STATE_TASTING1);
+        $allowed = $this->abilities->tasters($user, $tastingSession);
 
-		$allowed = $this->abilities->tasters($user, $tastingSession);
+        $this->assertTrue($allowed);
+    }
 
-		$this->assertTrue($allowed);
-	}
+    public function testListTastersAsTastingSessionAdminButWrongComeptitionState()
+    {
+        $user = $this->getUserMock();
+        $tastingSession = Mockery::mock(TastingSession::class);
+        $competition = Mockery::mock(Competition::class);
+        $competitionState = Mockery::mock(CompetitionState::class);
+        $tastingSession->shouldReceive('administrates')
+            ->with($user)
+            ->andReturn(true);
+        $tastingSession->shouldReceive('getAttribute')
+            ->with('competition')
+            ->andReturn($competition);
+        $competition->shouldReceive('getAttribute')
+            ->with('competitionState')
+            ->andReturn($competitionState);
+        $competitionState->shouldReceive('getAttribute')
+            ->with('id')
+            ->andReturn(CompetitionState::STATE_KDB);
 
-	public function testListTastersAsTastingSessionAdminButWrongComeptitionState() {
-		$user = $this->getUserMock();
-		$tastingSession = Mockery::mock(TastingSession::class);
-		$competition = Mockery::mock(Competition::class);
-		$competitionState = Mockery::mock(CompetitionState::class);
-		$tastingSession->shouldReceive('administrates')
-			->with($user)
-			->andReturn(true);
-		$tastingSession->shouldReceive('getAttribute')
-			->with('competition')
-			->andReturn($competition);
-		$competition->shouldReceive('getAttribute')
-			->with('competitionState')
-			->andReturn($competitionState);
-		$competitionState->shouldReceive('getAttribute')
-			->with('id')
-			->andReturn(CompetitionState::STATE_KDB);
+        $allowed = $this->abilities->tasters($user, $tastingSession);
 
-		$allowed = $this->abilities->tasters($user, $tastingSession);
+        $this->assertFalse($allowed);
+    }
 
-		$this->assertFalse($allowed);
-	}
+    public function testListTastersAsNonTastingSessionAdmin()
+    {
+        $user = $this->getUserMock();
+        $tastingSession = Mockery::mock(TastingSession::class);
+        $tastingSession->shouldReceive('administrates')
+            ->with($user)
+            ->andReturn(false);
 
-	public function testListTastersAsNonTastingSessionAdmin() {
-		$user = $this->getUserMock();
-		$tastingSession = Mockery::mock(TastingSession::class);
-		$tastingSession->shouldReceive('administrates')
-			->with($user)
-			->andReturn(false);
+        $allowed = $this->abilities->tasters($user, $tastingSession);
 
-		$allowed = $this->abilities->tasters($user, $tastingSession);
+        $this->assertFalse($allowed);
+    }
 
-		$this->assertFalse($allowed);
-	}
+    public function testEditTasterAsTastingSessionAdmin()
+    {
+        $user = $this->getUserMock();
+        $taster = Mockery::mock(Taster::class);
+        $commission = Mockery::mock(Commission::class);
+        $tastingSession = Mockery::mock(TastingSession::class);
+        $competition = Mockery::mock(Competition::class);
+        $competitionState = Mockery::mock(CompetitionState::class);
+        $taster->shouldReceive('getAttribute')
+            ->with('commission')
+            ->andReturn($commission);
+        $commission->shouldReceive('getAttribute')
+            ->with('tastingSession')
+            ->andReturn($tastingSession);
+        $tastingSession->shouldReceive('administrates')
+            ->with($user)
+            ->andReturn(true);
+        $tastingSession->shouldReceive('getAttribute')
+            ->with('competition')
+            ->andReturn($competition);
+        $competition->shouldReceive('getAttribute')
+            ->with('competitionState')
+            ->andReturn($competitionState);
+        $competitionState->shouldReceive('getAttribute')
+            ->with('id')
+            ->andReturn(CompetitionState::STATE_TASTING1);
 
-	public function testEditTasterAsTastingSessionAdmin() {
-		$user = $this->getUserMock();
-		$taster = Mockery::mock(Taster::class);
-		$commission = Mockery::mock(Commission::class);
-		$tastingSession = Mockery::mock(TastingSession::class);
-		$competition = Mockery::mock(Competition::class);
-		$competitionState = Mockery::mock(CompetitionState::class);
-		$taster->shouldReceive('getAttribute')
-			->with('commission')
-			->andReturn($commission);
-		$commission->shouldReceive('getAttribute')
-			->with('tastingSession')
-			->andReturn($tastingSession);
-		$tastingSession->shouldReceive('administrates')
-			->with($user)
-			->andReturn(true);
-		$tastingSession->shouldReceive('getAttribute')
-			->with('competition')
-			->andReturn($competition);
-		$competition->shouldReceive('getAttribute')
-			->with('competitionState')
-			->andReturn($competitionState);
-		$competitionState->shouldReceive('getAttribute')
-			->with('id')
-			->andReturn(CompetitionState::STATE_TASTING1);
+        $allowed = $this->abilities->editTaster($user, $taster);
 
-		$allowed = $this->abilities->editTaster($user, $taster);
+        $this->assertTrue($allowed);
+    }
 
-		$this->assertTrue($allowed);
-	}
+    public function testEditTasterAsTastingSessionAdminButWrongCompetitionState()
+    {
+        $user = $this->getUserMock();
+        $taster = Mockery::mock(Taster::class);
+        $commission = Mockery::mock(Commission::class);
+        $tastingSession = Mockery::mock(TastingSession::class);
+        $competition = Mockery::mock(Competition::class);
+        $competitionState = Mockery::mock(CompetitionState::class);
+        $taster->shouldReceive('getAttribute')
+            ->with('commission')
+            ->andReturn($commission);
+        $commission->shouldReceive('getAttribute')
+            ->with('tastingSession')
+            ->andReturn($tastingSession);
+        $tastingSession->shouldReceive('administrates')
+            ->with($user)
+            ->andReturn(true);
+        $tastingSession->shouldReceive('getAttribute')
+            ->with('competition')
+            ->andReturn($competition);
+        $competition->shouldReceive('getAttribute')
+            ->with('competitionState')
+            ->andReturn($competitionState);
+        $competitionState->shouldReceive('getAttribute')
+            ->with('id')
+            ->andReturn(CompetitionState::STATE_CHOOSE);
 
-	public function testEditTasterAsTastingSessionAdminButWrongCompetitionState() {
-		$user = $this->getUserMock();
-		$taster = Mockery::mock(Taster::class);
-		$commission = Mockery::mock(Commission::class);
-		$tastingSession = Mockery::mock(TastingSession::class);
-		$competition = Mockery::mock(Competition::class);
-		$competitionState = Mockery::mock(CompetitionState::class);
-		$taster->shouldReceive('getAttribute')
-			->with('commission')
-			->andReturn($commission);
-		$commission->shouldReceive('getAttribute')
-			->with('tastingSession')
-			->andReturn($tastingSession);
-		$tastingSession->shouldReceive('administrates')
-			->with($user)
-			->andReturn(true);
-		$tastingSession->shouldReceive('getAttribute')
-			->with('competition')
-			->andReturn($competition);
-		$competition->shouldReceive('getAttribute')
-			->with('competitionState')
-			->andReturn($competitionState);
-		$competitionState->shouldReceive('getAttribute')
-			->with('id')
-			->andReturn(CompetitionState::STATE_CHOOSE);
+        $allowed = $this->abilities->editTaster($user, $taster);
 
-		$allowed = $this->abilities->editTaster($user, $taster);
+        $this->assertFalse($allowed);
+    }
 
-		$this->assertFalse($allowed);
-	}
+    public function testEditTasterAsNonTastingSessionAdmin()
+    {
+        $user = $this->getUserMock();
+        $taster = Mockery::mock(Taster::class);
+        $commission = Mockery::mock(Commission::class);
+        $tastingSession = Mockery::mock(TastingSession::class);
+        $taster->shouldReceive('getAttribute')
+            ->with('commission')
+            ->andReturn($commission);
+        $commission->shouldReceive('getAttribute')
+            ->with('tastingSession')
+            ->andReturn($tastingSession);
+        $tastingSession->shouldReceive('administrates')
+            ->with($user)
+            ->andReturn(false);
 
-	public function testEditTasterAsNonTastingSessionAdmin() {
-		$user = $this->getUserMock();
-		$taster = Mockery::mock(Taster::class);
-		$commission = Mockery::mock(Commission::class);
-		$tastingSession = Mockery::mock(TastingSession::class);
-		$taster->shouldReceive('getAttribute')
-			->with('commission')
-			->andReturn($commission);
-		$commission->shouldReceive('getAttribute')
-			->with('tastingSession')
-			->andReturn($tastingSession);
-		$tastingSession->shouldReceive('administrates')
-			->with($user)
-			->andReturn(false);
+        $allowed = $this->abilities->editTaster($user, $taster);
 
-		$allowed = $this->abilities->editTaster($user, $taster);
-
-		$this->assertFalse($allowed);
-	}
-
+        $this->assertFalse($allowed);
+    }
 }

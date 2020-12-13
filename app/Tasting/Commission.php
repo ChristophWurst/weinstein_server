@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Tasting;
@@ -30,50 +29,52 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @property int $tastingsession_id
  * @property TastingSession $tastingSession
  */
-class Commission extends Model {
+class Commission extends Model
+{
+    /**
+     * Table name.
+     *
+     * @var string
+     */
+    protected $table = 'commission';
 
-	/**
-	 * Table name
-	 * 
-	 * @var string
-	 */
-	protected $table = 'commission';
+    /**
+     * Attributes for mass assignment.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'side',
+        'tastingsession_id',
+    ];
 
-	/**
-	 * Attributes for mass assignment
-	 * 
-	 * @var array
-	 */
-	protected $fillable = [
-		'side',
-		'tastingsession_id',
-	];
+    /**
+     * 1 commission : 1 statistic.
+     *
+     * @return Relation
+     */
+    public function statistic()
+    {
+        return $this->hasOne(CommissionStatistic::class);
+    }
 
-	/**
-	 * 1 commission : 1 statistic
-	 * 
-	 * @return Relation
-	 */
-	public function statistic() {
-		return $this->hasOne(CommissionStatistic::class);
-	}
+    /**
+     * 1 commission : n Taster.
+     *
+     * @return Relation
+     */
+    public function tasters()
+    {
+        return $this->hasMany(Taster::class, 'commission_id', 'id');
+    }
 
-	/**
-	 * 1 commission : n Taster
-	 * 
-	 * @return Relation
-	 */
-	public function tasters() {
-		return $this->hasMany(Taster::class, 'commission_id', 'id');
-	}
-
-	/**
-	 * 1..2 commissions : 1 tasting session
-	 * 
-	 * @return Relation
-	 */
-	public function tastingSession() {
-		return $this->belongsTo(TastingSession::class, 'tastingsession_id');
-	}
-
+    /**
+     * 1..2 commissions : 1 tasting session.
+     *
+     * @return Relation
+     */
+    public function tastingSession()
+    {
+        return $this->belongsTo(TastingSession::class, 'tastingsession_id');
+    }
 }

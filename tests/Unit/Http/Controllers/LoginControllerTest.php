@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Unit\Http\Controllers;
@@ -34,134 +33,139 @@ use Mockery;
 use Mockery\MockInterface;
 use Test\BrowserKitTestCase;
 
-class LoginControllerTest extends BrowserKitTestCase {
+class LoginControllerTest extends BrowserKitTestCase
+{
+    /** @var AuthManager|MockInterface */
+    private $auth;
 
-	/** @var AuthManager|MockInterface */
-	private $auth;
+    /** @var ActivityLogger|MockInterface */
+    private $activityLogger;
 
-	/** @var ActivityLogger|MockInterface */
-	private $activityLogger;
+    /** @var Factory|MockInterface */
+    private $view;
 
-	/** @var Factory|MockInterface */
-	private $view;
+    /** @var AuthenticationController */
+    private $controller;
 
-	/** @var AuthenticationController */
-	private $controller;
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-	protected function setUp(): void {
-		parent::setUp();
+        $this->auth = Mockery::mock(AuthManager::class);
+        $this->activityLogger = Mockery::mock(ActivityLogger::class);
+        $this->view = Mockery::mock(Factory::class);
 
-		$this->auth = Mockery::mock(AuthManager::class);
-		$this->activityLogger = Mockery::mock(ActivityLogger::class);
-		$this->view = Mockery::mock(Factory::class);
+        $this->controller = new LoginController($this->auth, $this->activityLogger, $this->view);
+    }
 
-		$this->controller = new LoginController($this->auth, $this->activityLogger, $this->view);
-	}
+    public function testAccount()
+    {
+        $view = Mockery::mock(View::class);
 
-	public function testAccount() {
-		$view = Mockery::mock(View::class);
+        $this->view->shouldReceive('make')
+            ->with('account/account')
+            ->once()
+            ->andReturn($view);
 
-		$this->view->shouldReceive('make')
-			->with('account/account')
-			->once()
-			->andReturn($view);
+        $this->assertEquals($view, $this->controller->account());
+    }
 
-		$this->assertEquals($view, $this->controller->account());
-	}
+    public function testLogin()
+    {
+        $view = Mockery::mock(View::class);
 
-	public function testLogin() {
-		$view = Mockery::mock(View::class);
+        $this->view->shouldReceive('make')
+            ->with('account/login')
+            ->once()
+            ->andReturn($view);
 
-		$this->view->shouldReceive('make')
-			->with('account/login')
-			->once()
-			->andReturn($view);
+        $this->assertEquals($view, $this->controller->login());
+    }
 
-		$this->assertEquals($view, $this->controller->login());
-	}
+    public function testAuthFailedLogin()
+    {
+        $request = Mockery::mock(Request::class);
 
-	public function testAuthFailedLogin() {
-		$request = Mockery::mock(Request::class);
+        $request->shouldReceive('input')
+            ->once()
+            ->with('username')
+            ->andReturn('jane');
+        $request->shouldReceive('input')
+            ->once()
+            ->with('password')
+            ->andReturn('passme');
+        $this->auth->shouldReceive('attempt')
+            ->once()
+            ->with([
+                'username' => 'jane',
+                'password' => 'passme',
+                ], true)
+            ->andReturn(false);
 
-		$request->shouldReceive('input')
-			->once()
-			->with('username')
-			->andReturn('jane');
-		$request->shouldReceive('input')
-			->once()
-			->with('password')
-			->andReturn('passme');
-		$this->auth->shouldReceive('attempt')
-			->once()
-			->with([
-				'username' => 'jane',
-				'password' => 'passme',
-				], true)
-			->andReturn(false);
+        $this->response = TestResponse::fromBaseResponse($this->controller->auth($request));
 
-		$this->response = TestResponse::fromBaseResponse($this->controller->auth($request));
+        $this->assertRedirectedToRoute('login', [], [
+            '_old_input',
+        ]);
+    }
 
-		$this->assertRedirectedToRoute('login', [], [
-			'_old_input'
-		]);
-	}
+    public function testAuth()
+    {
+        $request = Mockery::mock(Request::class);
+        $user = Mockery::mock(User::class);
 
-	public function testAuth() {
-		$request = Mockery::mock(Request::class);
-		$user = Mockery::mock(User::class);
+        $request->shouldReceive('input')
+            ->once()
+            ->with('username')
+            ->andReturn('jane');
+        $request->shouldReceive('input')
+            ->once()
+            ->with('password')
+            ->andReturn('passme');
+        $this->auth->shouldReceive('attempt')
+            ->once()
+            ->with([
+                'username' => 'jane',
+                'password' => 'passme',
+                ], true)
+            ->andReturn(true);
+        $this->auth->shouldReceive('user')
+            ->once()
+            ->andReturn($user);
+        $user->shouldReceive('getAttribute')
+            ->with('first_login')
+            ->once()
+            ->andReturn(true);
+        $user->shouldReceive('setAttribute')
+            ->with('first_login', false)
+            ->once();
+        $user->shouldReceive('save')
+            ->once();
+        $this->activityLogger->shouldReceive('logUserAction')
+            ->once();
 
-		$request->shouldReceive('input')
-			->once()
-			->with('username')
-			->andReturn('jane');
-		$request->shouldReceive('input')
-			->once()
-			->with('password')
-			->andReturn('passme');
-		$this->auth->shouldReceive('attempt')
-			->once()
-			->with([
-				'username' => 'jane',
-				'password' => 'passme',
-				], true)
-			->andReturn(true);
-		$this->auth->shouldReceive('user')
-			->once()
-			->andReturn($user);
-		$user->shouldReceive('getAttribute')
-			->with('first_login')
-			->once()
-			->andReturn(true);
-		$user->shouldReceive('setAttribute')
-			->with('first_login', false)
-			->once();
-		$user->shouldReceive('save')
-			->once();
-		$this->activityLogger->shouldReceive('logUserAction')
-			->once();
+        $this->response = TestResponse::fromBaseResponse($this->controller->auth($request));
 
-		$this->response = TestResponse::fromBaseResponse($this->controller->auth($request));
+        $this->assertRedirectedToRoute('account');
+    }
 
-		$this->assertRedirectedToRoute('account');
-	}
+    public function testLogout()
+    {
+        $user = Mockery::mock(User::class);
 
-	public function testLogout() {
-		$user = Mockery::mock(User::class);
+        $this->auth->shouldReceive('check')
+            ->once()
+            ->andReturn(true);
+        $this->auth->shouldReceive('user')
+            ->once()
+            ->andReturn($user);
+        $this->auth->shouldReceive('logout')
+            ->once();
+        $this->activityLogger->shouldReceive('logUserAction')
+            ->once();
 
-		$this->auth->shouldReceive('check')
-			->once()
-			->andReturn(true);
-		$this->auth->shouldReceive('user')
-			->once()
-			->andReturn($user);
-		$this->auth->shouldReceive('logout')
-			->once();
-		$this->activityLogger->shouldReceive('logUserAction')
-			->once();
+        $this->response = TestResponse::fromBaseResponse($this->controller->logout());
 
-		$this->response = TestResponse::fromBaseResponse($this->controller->logout());
-
-		$this->assertRedirectedToRoute('start');
-	}
-
+        $this->assertRedirectedToRoute('start');
+    }
 }

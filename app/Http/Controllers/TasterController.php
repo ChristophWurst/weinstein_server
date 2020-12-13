@@ -9,82 +9,87 @@ use App\Tasting\Taster;
 use Illuminate\Http\Request;
 use function response;
 
-class TasterController extends BaseController {
+class TasterController extends BaseController
+{
+    /** @var TastingHandler */
+    private $handler;
 
-	/** @var TastingHandler */
-	private $handler;
+    /**
+     * @param TastingHandler $handler
+     */
+    public function __construct(TastingHandler $handler)
+    {
+        $this->handler = $handler;
+    }
 
-	/**
-	 * @param TastingHandler $handler
-	 */
-	public function __construct(TastingHandler $handler) {
-		$this->handler = $handler;
-	}
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index(Request $request)
+    {
+        $commission_id = $request->get('commission_id');
+        $commission = Commission::find($commission_id);
+        if (is_null($commission)) {
+            return response()->json([], 400);
+        }
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public function index(Request $request) {
-		$commission_id = $request->get('commission_id');
-		$commission = Commission::find($commission_id);
-		if (is_null($commission)) {
-			return response()->json([], 400);
-		}
+        $tastingSession = $commission->tastingSession;
+        $this->authorize('list-tastingsession-tasters', $tastingSession);
 
-		$tastingSession = $commission->tastingSession;
-		$this->authorize('list-tastingsession-tasters', $tastingSession);
+        return response()->json($commission->tasters);
+    }
 
-		return response()->json($commission->tasters);
-	}
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(Request $request)
+    {
+        $commission_id = $request->get('commission_id');
+        $commission = Commission::find($commission_id);
+        if (is_null($commission)) {
+            return response()->json([], 400);
+        }
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  Request  $request
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public function store(Request $request) {
-		$commission_id = $request->get('commission_id');
-		$commission = Commission::find($commission_id);
-		if (is_null($commission)) {
-			return response()->json([], 400);
-		}
+        $tastingSession = $commission->tastingSession;
+        $this->authorize('add-tastingsession-taster', $tastingSession);
 
-		$tastingSession = $commission->tastingSession;
-		$this->authorize('add-tastingsession-taster', $tastingSession);
+        $data = $request->only(['name', 'commission_id']);
 
-		$data = $request->only(['name', 'commission_id']);
+        try {
+            $taster = $this->handler->createTaster($data);
+        } catch (ValidationException $ve) {
+            return response()->json([
+                    'errors' => $ve->getErrors(),
+                    ], 422);
+        }
 
-		try {
-			$taster = $this->handler->createTaster($data);
-		} catch (ValidationException $ve) {
-			return response()->json([
-					'errors' => $ve->getErrors(),
-					], 422);
-		}
-		return response()->json($taster);
-	}
+        return response()->json($taster);
+    }
 
-	/**
-	 * @param Request $request
-	 * @param Taster $taster
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public function update(Request $request, Taster $taster) {
-		$this->authorize('edit-tastingsession-taster', $taster);
+    /**
+     * @param Request $request
+     * @param Taster $taster
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, Taster $taster)
+    {
+        $this->authorize('edit-tastingsession-taster', $taster);
 
-		$data = $request->only(['active', 'name']);
+        $data = $request->only(['active', 'name']);
 
-		try {
-			$taster = $this->handler->updateTaster($taster, $data);
-		} catch (ValidationException $ve) {
-			return response()->json([
-					'errors' => $ve->getErrors(),
-					], 422);
-		}
-		return response()->json($taster);
-	}
+        try {
+            $taster = $this->handler->updateTaster($taster, $data);
+        } catch (ValidationException $ve) {
+            return response()->json([
+                    'errors' => $ve->getErrors(),
+                    ], 422);
+        }
 
+        return response()->json($taster);
+    }
 }

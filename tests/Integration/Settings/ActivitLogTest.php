@@ -16,25 +16,24 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Integration\Settings;
 
 use App\MasterData\User;
-use Test\BrowserKitTestCase;
 use function factory;
+use Test\BrowserKitTestCase;
 
-class ActivitLogTest extends BrowserKitTestCase {
+class ActivitLogTest extends BrowserKitTestCase
+{
+    use \Illuminate\Foundation\Testing\DatabaseTransactions;
 
-	use \Illuminate\Foundation\Testing\DatabaseTransactions;
+    public function testShowLogs()
+    {
+        $admin = factory(User::class)->states('admin')->make();
 
-	public function testShowLogs() {
-		$admin = factory(User::class)->states('admin')->make();
-
-		$this->be($admin);
-		$this->get('settings/activitylog');
-		$this->assertResponseOk();
-	}
-
+        $this->be($admin);
+        $this->get('settings/activitylog');
+        $this->assertResponseOk();
+    }
 }

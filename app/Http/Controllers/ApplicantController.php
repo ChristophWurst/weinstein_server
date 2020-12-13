@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Http\Controllers;
@@ -35,210 +34,225 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
-class ApplicantController extends BaseController {
+class ApplicantController extends BaseController
+{
+    /** @var MasterDataStore */
+    private $masterDataStore;
 
-	/** @var MasterDataStore */
-	private $masterDataStore;
+    /** @var AuthManager */
+    private $auth;
 
-	/** @var AuthManager */
-	private $auth;
+    /** @var Factory */
+    private $viewFactory;
 
-	/** @var Factory */
-	private $viewFactory;
+    /**
+     * @param MasterDataStore $masterDataStore
+     * @param AuthManager $auth
+     * @param Factory $viewFactory
+     */
+    public function __construct(MasterDataStore $masterDataStore, AuthManager $auth, Factory $viewFactory)
+    {
+        $this->masterDataStore = $masterDataStore;
+        $this->auth = $auth;
+        $this->viewFactory = $viewFactory;
+    }
 
-	/**
-	 * @param MasterDataStore $masterDataStore
-	 * @param AuthManager $auth
-	 * @param Factory $viewFactory
-	 */
-	public function __construct(MasterDataStore $masterDataStore, AuthManager $auth, Factory $viewFactory) {
-		$this->masterDataStore = $masterDataStore;
-		$this->auth = $auth;
-		$this->viewFactory = $viewFactory;
-	}
+    /**
+     * Display a listing of all applicants the user is permitted to see.
+     *
+     * @return View
+     */
+    public function index()
+    {
+        /** @var User $user */
+        $user = $this->auth->user();
+        $applicants = $this->masterDataStore->getApplicants($user);
 
-	/**
-	 * Display a listing of all applicants the user is permitted to see
-	 *
-	 * @return View
-	 */
-	public function index() {
-		/** @var User $user */
-		$user = $this->auth->user();
-		$applicants = $this->masterDataStore->getApplicants($user);
-		return $this->viewFactory->make('settings/applicant/index', [
-				'applicants' => $applicants,
-				'canAdd' => $user->associations()->exists(),
-		]);
-	}
+        return $this->viewFactory->make('settings/applicant/index', [
+                'applicants' => $applicants,
+                'canAdd' => $user->associations()->exists(),
+        ]);
+    }
 
-	/**
-	 * Show the form for creating a new applicant
-	 *
-	 * @return View
-	 */
-	public function create() {
-		$this->authorize('create-applicant');
+    /**
+     * Show the form for creating a new applicant.
+     *
+     * @return View
+     */
+    public function create()
+    {
+        $this->authorize('create-applicant');
 
-		$associations = $this->masterDataStore->getAssociations($this->auth->user())->pluck('select_label', 'id')->all();
-		$users = $this->selectNone + $this->masterDataStore->getUsers()->pluck('username', 'username')->all();
+        $associations = $this->masterDataStore->getAssociations($this->auth->user())->pluck('select_label', 'id')->all();
+        $users = $this->selectNone + $this->masterDataStore->getUsers()->pluck('username', 'username')->all();
 
-		return $this->viewFactory->make('settings/applicant/form', [
-				'create' => true,
-				'associations' => $associations,
-				'users' => $users,
-		]);
-	}
+        return $this->viewFactory->make('settings/applicant/form', [
+                'create' => true,
+                'associations' => $associations,
+                'users' => $users,
+        ]);
+    }
 
-	/**
-	 * Store a newly created applicant in storage
-	 * 
-	 * @return Response
-	 */
-	public function store(Request $request) {
-		$this->authorize('create-applicant');
+    /**
+     * Store a newly created applicant in storage.
+     *
+     * @return Response
+     */
+    public function store(Request $request)
+    {
+        $this->authorize('create-applicant');
 
-		$data = $request->all();
-		//remove default user of form's select
-		if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
-			unset($data['wuser_username']);
-		}
-		try {
-			list ($applicant, $user, $password) = $this->masterDataStore->createApplicant($data);
-		} catch (ValidationException $ve) {
-			return Redirect::route('settings.applicants/create')
-					->withErrors($ve->getErrors())
-					->withInput();
-		}
-		$request->session()->flash('applicant_created', [$user->username, $password]);
-		return Redirect::route('settings.applicants');
-	}
+        $data = $request->all();
+        //remove default user of form's select
+        if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
+            unset($data['wuser_username']);
+        }
+        try {
+            list($applicant, $user, $password) = $this->masterDataStore->createApplicant($data);
+        } catch (ValidationException $ve) {
+            return Redirect::route('settings.applicants/create')
+                    ->withErrors($ve->getErrors())
+                    ->withInput();
+        }
+        $request->session()->flash('applicant_created', [$user->username, $password]);
 
-	/**
-	 * Display the specified applicant
-	 *
-	 * @param Applicant $applicant        	
-	 * @return View
-	 */
-	public function show(Applicant $applicant) {
-		$this->authorize('show-applicant', $applicant);
+        return Redirect::route('settings.applicants');
+    }
 
-		return $this->viewFactory->make('settings/applicant/show', [
-				'data' => $applicant
-		]);
-	}
+    /**
+     * Display the specified applicant.
+     *
+     * @param Applicant $applicant
+     * @return View
+     */
+    public function show(Applicant $applicant)
+    {
+        $this->authorize('show-applicant', $applicant);
 
-	/**
-	 * Show the form for importing applicants
-	 *
-	 * @return View
-	 */
-	public function getImport() {
-		$this->authorize('import-applicant');
+        return $this->viewFactory->make('settings/applicant/show', [
+                'data' => $applicant,
+        ]);
+    }
 
-		return $this->viewFactory->make('settings/applicant/import');
-	}
+    /**
+     * Show the form for importing applicants.
+     *
+     * @return View
+     */
+    public function getImport()
+    {
+        $this->authorize('import-applicant');
 
-	/**
-	 * Read uploaded .csv file, parse, validate and save its content
-	 *
-	 * @return Response
-	 */
-	public function postImport(Request $request) {
-		$this->authorize('import-applicant');
+        return $this->viewFactory->make('settings/applicant/import');
+    }
 
-		//check for file existense
-		if (!$request->hasFile('xlsfile')) {
-			return Redirect::route('settings.applicants/import');
-		}
+    /**
+     * Read uploaded .csv file, parse, validate and save its content.
+     *
+     * @return Response
+     */
+    public function postImport(Request $request)
+    {
+        $this->authorize('import-applicant');
 
-		try {
-			$file = $request->file('xlsfile');
-			if (is_null($file) || !$file instanceof UploadedFile) {
-				throw new ValidationException();
-			}
-			$rowsImported = $this->masterDataStore->importApplicants($file);
-		} catch (ValidationException $ve) {
-			return Redirect::route('settings.applicants/import')->withErrors($ve->getErrors());
-		}
-		Session::flash('rowsImported', $rowsImported);
-		return Redirect::route('settings.applicants');
-	}
+        //check for file existense
+        if (! $request->hasFile('xlsfile')) {
+            return Redirect::route('settings.applicants/import');
+        }
 
-	/**
-	 * Show the form for editing the specified applicant
-	 *
-	 * @param Applicant $applicant        	
-	 * @return View
-	 */
-	public function edit(Applicant $applicant) {
-		$this->authorize('edit-applicant', $applicant);
+        try {
+            $file = $request->file('xlsfile');
+            if (is_null($file) || ! $file instanceof UploadedFile) {
+                throw new ValidationException();
+            }
+            $rowsImported = $this->masterDataStore->importApplicants($file);
+        } catch (ValidationException $ve) {
+            return Redirect::route('settings.applicants/import')->withErrors($ve->getErrors());
+        }
+        Session::flash('rowsImported', $rowsImported);
 
-		$editId = $applicant->association->administrates($this->auth->user());
-		$associations = $this->masterDataStore->getAssociations()->pluck('select_label', 'id')->all();
-		$users = $this->selectNone + $this->masterDataStore->getUsers()->pluck('username', 'username')->all();
-		return $this->viewFactory->make('settings/applicant/form',
-				[
-				'create' => false,
-				'applicant' => $applicant,
-				'editId' => $editId,
-				'associations' => $associations,
-				'users' => $users,
-		]);
-	}
+        return Redirect::route('settings.applicants');
+    }
 
-	/**
-	 * Update the specified applicant in storage
-	 *
-	 * @param Applicant $applicant        	
-	 * @return Response
-	 */
-	public function update(Applicant $applicant) {
-		$this->authorize('edit-applicant', $applicant);
+    /**
+     * Show the form for editing the specified applicant.
+     *
+     * @param Applicant $applicant
+     * @return View
+     */
+    public function edit(Applicant $applicant)
+    {
+        $this->authorize('edit-applicant', $applicant);
 
-		$data = \Illuminate\Support\Facades\Request::all();
-		//remove default user of form's select
-		if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
-			unset($data['wuser_username']);
-		}
+        $editId = $applicant->association->administrates($this->auth->user());
+        $associations = $this->masterDataStore->getAssociations()->pluck('select_label', 'id')->all();
+        $users = $this->selectNone + $this->masterDataStore->getUsers()->pluck('username', 'username')->all();
 
-		// Ignore id if user isn't the association admin
-		if (!$applicant->association->administrates($this->auth->user())) {
-			$data['id'] = $applicant->id;
-		}
-		if (!$this->auth->user()->isAdmin()) {
-			unset($data['wuser_username']);
-		} else if (isset($data['wuser_username']) && $data['wuser_username'] === '') {
-			$data['wuser_username'] = null;
-		}
+        return $this->viewFactory->make('settings/applicant/form',
+                [
+                'create' => false,
+                'applicant' => $applicant,
+                'editId' => $editId,
+                'associations' => $associations,
+                'users' => $users,
+        ]);
+    }
 
+    /**
+     * Update the specified applicant in storage.
+     *
+     * @param Applicant $applicant
+     * @return Response
+     */
+    public function update(Applicant $applicant)
+    {
+        $this->authorize('edit-applicant', $applicant);
 
-		try {
-			$this->masterDataStore->updateApplicant($applicant, $data);
-		} catch (ValidationException $ve) {
-			return Redirect::route('settings.applicants/edit', ['applicant' => $applicant->id])
-					->withErrors($ve->getErrors())
-					->withInput();
-		}
-		return Redirect::route('settings.applicants');
-	}
+        $data = \Illuminate\Support\Facades\Request::all();
+        //remove default user of form's select
+        if (isset($data['wuser_username']) && $data['wuser_username'] === 'none') {
+            unset($data['wuser_username']);
+        }
 
-	public function delete(Applicant $applicant) {
-		$this->authorize('delete-applicant', $applicant);
+        // Ignore id if user isn't the association admin
+        if (! $applicant->association->administrates($this->auth->user())) {
+            $data['id'] = $applicant->id;
+        }
+        if (! $this->auth->user()->isAdmin()) {
+            unset($data['wuser_username']);
+        } elseif (isset($data['wuser_username']) && $data['wuser_username'] === '') {
+            $data['wuser_username'] = null;
+        }
 
-		return $this->viewFactory->make('settings/applicant/delete',
-			[
-				'applicant' => $applicant,
-			]);
-	}
+        try {
+            $this->masterDataStore->updateApplicant($applicant, $data);
+        } catch (ValidationException $ve) {
+            return Redirect::route('settings.applicants/edit', ['applicant' => $applicant->id])
+                    ->withErrors($ve->getErrors())
+                    ->withInput();
+        }
 
-	public function destroy(Applicant $applicant, Request $request) {
-		$this->authorize('delete-applicant', $applicant);
+        return Redirect::route('settings.applicants');
+    }
 
-		if ($request->get('del') === 'Ja') {
-			$this->masterDataStore->deleteApplicant($applicant);
-		}
-		return Redirect::route('settings.applicants');
-	}
+    public function delete(Applicant $applicant)
+    {
+        $this->authorize('delete-applicant', $applicant);
 
+        return $this->viewFactory->make('settings/applicant/delete',
+            [
+                'applicant' => $applicant,
+            ]);
+    }
+
+    public function destroy(Applicant $applicant, Request $request)
+    {
+        $this->authorize('delete-applicant', $applicant);
+
+        if ($request->get('del') === 'Ja') {
+            $this->masterDataStore->deleteApplicant($applicant);
+        }
+
+        return Redirect::route('settings.applicants');
+    }
 }

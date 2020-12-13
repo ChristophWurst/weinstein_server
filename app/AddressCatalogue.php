@@ -16,20 +16,18 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AddressCatalogue extends Model {
-
-	/**
-	 * DB table name
-	 *
-	 * @var string
-	 */
-	protected $table = 'cat_address';
-
+class AddressCatalogue extends Model
+{
+    /**
+     * DB table name.
+     *
+     * @var string
+     */
+    protected $table = 'cat_address';
 }

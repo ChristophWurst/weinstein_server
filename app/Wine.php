@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App;
@@ -55,206 +54,222 @@ use Illuminate\Support\Facades\DB;
  * @property bool $excluded
  * @property string $comment
  */
-class Wine extends Model implements AdministrateModel {
+class Wine extends Model implements AdministrateModel
+{
+    /**
+     * Table name.
+     *
+     * @var string
+     */
+    protected $table = 'wine';
 
-	/**
-	 * Table name
-	 * 
-	 * @var string
-	 */
-	protected $table = 'wine';
+    /**
+     * Attributes for mass assignment.
+     *
+     * @var array of string
+     */
+    protected $fillable = [
+        'nr',
+        'competition_id',
+        'applicant_id',
+        'association_id',
+        'label',
+        'winesort_id',
+        'winequality_id',
+        'vintage',
+        'alcohol',
+        'alcoholtot',
+        'sugar',
+        'kdb',
+        'sosi',
+        'chosen',
+        'excluded',
+        'catalogue_number',
+    ];
 
-	/**
-	 * Attributes for mass assignment
-	 * 
-	 * @var array of string
-	 */
-	protected $fillable = [
-		'nr',
-		'competition_id',
-		'applicant_id',
-		'association_id',
-		'label',
-		'winesort_id',
-		'winequality_id',
-		'vintage',
-		'alcohol',
-		'alcoholtot',
-		'sugar',
-		'kdb',
-		'sosi',
-		'chosen',
-		'excluded',
-		'catalogue_number',
-	];
+    /**
+     * The attributes that should be hidden for arrays/json.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 
-	/**
-	 * The attributes that should be hidden for arrays/json.
-	 *
-	 * @var array
-	 */
-	protected $hidden = [
-		'created_at',
-		'updated_at',
-	];
+    /**
+     * Get next possible id for insert.
+     *
+     * @param Competition $competition
+     * @return int
+     */
+    public static function maxId(Competition $competition)
+    {
+        if ($competition->wines->count() === 0) {
+            return 0;
+        }
 
-	/**
-	 * Get next possible id for insert
-	 * 
-	 * @param Competition $competition
-	 * @return int
-	 */
-	public static function maxId(Competition $competition) {
-		if ($competition->wines->count() === 0) {
-			return 0;
-		}
-		return $competition->wines->max('nr');
-	}
+        return $competition->wines->max('nr');
+    }
 
-	/**
-	 * Check if the given user is authorized to administrate
-	 * 
-	 * @param User $user
-	 * @return boolean
-	 */
-	public function administrates(User $user) {
-		if ($user->isAdmin()) {
-			// Sys admin
-			return true;
-		}
-		if ($this->competition->administrates($user)) {
-			// Competition admin
-			return true;
-		}
-		if ($this->applicant->administrates($user)) {
-			// Applicant admin
-			return true;
-		}
-		return false;
-	}
+    /**
+     * Check if the given user is authorized to administrate.
+     *
+     * @param User $user
+     * @return bool
+     */
+    public function administrates(User $user)
+    {
+        if ($user->isAdmin()) {
+            // Sys admin
+            return true;
+        }
+        if ($this->competition->administrates($user)) {
+            // Competition admin
+            return true;
+        }
+        if ($this->applicant->administrates($user)) {
+            // Applicant admin
+            return true;
+        }
 
-	/**
-	 * n wines : 1 applicant
-	 * 
-	 * @return Relation
-	 */
-	public function applicant() {
-		return $this->belongsTo(Applicant::class);
-	}
+        return false;
+    }
 
-	/**
-	 * n wines : 1 competition
-	 * 
-	 * @return Relation
-	 */
-	public function competition() {
-		return $this->belongsTo(Competition::class);
-	}
+    /**
+     * n wines : 1 applicant.
+     *
+     * @return Relation
+     */
+    public function applicant()
+    {
+        return $this->belongsTo(Applicant::class);
+    }
 
-	/**
-	 * 1 wine : n tasting numbers
-	 * 
-	 * @return Relation
-	 */
-	public function tastingnumbers() {
-		return $this->hasMany(TastingNumber::class);
-	}
+    /**
+     * n wines : 1 competition.
+     *
+     * @return Relation
+     */
+    public function competition()
+    {
+        return $this->belongsTo(Competition::class);
+    }
 
-	/**
-	 * n wines : 1 winesort
-	 * 
-	 * @return Relation
-	 */
-	public function winesort() {
-		return $this->belongsTo(WineSort::class);
-	}
+    /**
+     * 1 wine : n tasting numbers.
+     *
+     * @return Relation
+     */
+    public function tastingnumbers()
+    {
+        return $this->hasMany(TastingNumber::class);
+    }
 
-	/**
-	 * n wines : 1 winequality
-	 * 
-	 * @return Relation
-	 */
-	public function winequality() {
-		return $this->belongsTo(WineQuality::class);
-	}
+    /**
+     * n wines : 1 winesort.
+     *
+     * @return Relation
+     */
+    public function winesort()
+    {
+        return $this->belongsTo(WineSort::class);
+    }
 
-	/**
-	 * Scope kdb wines
-	 * 
-	 * @param Builder $query
-	 * @return Builder
-	 */
-	public function scopeKdb($query) {
-		return $query->whereKdb(true);
-	}
+    /**
+     * n wines : 1 winequality.
+     *
+     * @return Relation
+     */
+    public function winequality()
+    {
+        return $this->belongsTo(WineQuality::class);
+    }
 
-	/**
-	 * Scope excluded wines
-	 * 
-	 * @param Builder $query
-	 * @return Builder
-	 */
-	public function scopeExcluded($query) {
-		return $query->whereExcluded(true);
-	}
+    /**
+     * Scope kdb wines.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeKdb($query)
+    {
+        return $query->whereKdb(true);
+    }
 
-	/**
-	 * Scope sosi wines
-	 * 
-	 * @param Builder $query
-	 * @return Builder
-	 */
-	public function scopeSosi($query) {
-		return $query->whereSosi(true);
-	}
+    /**
+     * Scope excluded wines.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeExcluded($query)
+    {
+        return $query->whereExcluded(true);
+    }
 
-	/**
-	 * Scope chosen wines
-	 * 
-	 * @param Builder $query
-	 * @return Builder
-	 */
-	public function scopeChosen($query) {
-		return $query->whereChosen(true);
-	}
+    /**
+     * Scope sosi wines.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeSosi($query)
+    {
+        return $query->whereSosi(true);
+    }
 
-	/**
-	 * @param Builder $query
-	 * @param User $user
-	 * @return Builder
-	 */
-	public function scopeAdmin($query, User $user) {
-		if ($user->isAdmin()) {
-			return $query;
-		}
-		$applicants = $user->applicants()->pluck('id');
-		$associations = $user->associations()->pluck('id');
-		return $query->whereIn('applicant_id', $applicants)
-				->OrWhereIn('association_id', $associations);
-	}
+    /**
+     * Scope chosen wines.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeChosen($query)
+    {
+        return $query->whereChosen(true);
+    }
 
-	/**
-	 * @param Builder $query
-	 * @return Builder
-	 */
-	public function scopeWithFlaws($query) {
-		return $query->whereNotNull('comment');
-	}
+    /**
+     * @param Builder $query
+     * @param User $user
+     * @return Builder
+     */
+    public function scopeAdmin($query, User $user)
+    {
+        if ($user->isAdmin()) {
+            return $query;
+        }
+        $applicants = $user->applicants()->pluck('id');
+        $associations = $user->associations()->pluck('id');
 
-	/**
-	 * scope wines with tasting number of specified tasting stage
-	 * 
-	 * @param Builder $query
-	 * @param TastingStage $ts
-	 * @return Builder
-	 */
-	public function scopeWithTastingNumber($query, TastingStage $ts) {
-		return $query->whereExists(function($query) use($ts) {
-				$query->select(DB::raw(1))
-					->from('tastingnumber')
-					->where('wine_id', '=', DB::raw($this->table . '.id'))
-					->where('tastingstage_id', '=', $ts->id);
-			});
-	}
+        return $query->whereIn('applicant_id', $applicants)
+                ->OrWhereIn('association_id', $associations);
+    }
 
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeWithFlaws($query)
+    {
+        return $query->whereNotNull('comment');
+    }
+
+    /**
+     * scope wines with tasting number of specified tasting stage.
+     *
+     * @param Builder $query
+     * @param TastingStage $ts
+     * @return Builder
+     */
+    public function scopeWithTastingNumber($query, TastingStage $ts)
+    {
+        return $query->whereExists(function ($query) use ($ts) {
+            $query->select(DB::raw(1))
+                    ->from('tastingnumber')
+                    ->where('wine_id', '=', DB::raw($this->table.'.id'))
+                    ->where('tastingstage_id', '=', $ts->id);
+        });
+    }
 }

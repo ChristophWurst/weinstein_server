@@ -22,33 +22,33 @@ use Illuminate\Support\Facades\DB;
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
-class CompetitionTableSeeder extends Seeder {
-    
-	/**
-	 * Insert new competition into database
-	 * 
-	 * @param string $label
-	 * @param int $competitionState
-	 * @param string|null $username
-	 * @return Competition
-	 */
-	public static function createCompetition($label, $competitionState, $username) {
-		return Competition::create(array(
-			'label' => $label,
-			'competition_state_id' => $competitionState,
-			'wuser_username' => $username,
-		));
-	}
-    
-	/**
-	 * Run competition seeder
-	 */
-	public function run() {
-		DB::table('competition')->delete();
-        
-		$this->createCompetition('comp1', 1, 'user1');
-	}
-    
+class CompetitionTableSeeder extends Seeder
+{
+    /**
+     * Insert new competition into database.
+     *
+     * @param string $label
+     * @param int $competitionState
+     * @param string|null $username
+     * @return Competition
+     */
+    public static function createCompetition($label, $competitionState, $username)
+    {
+        return Competition::create([
+            'label' => $label,
+            'competition_state_id' => $competitionState,
+            'wuser_username' => $username,
+        ]);
+    }
+
+    /**
+     * Run competition seeder.
+     */
+    public function run()
+    {
+        DB::table('competition')->delete();
+
+        $this->createCompetition('comp1', 1, 'user1');
+    }
 }

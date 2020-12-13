@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Http\Controllers;
@@ -24,19 +23,20 @@ namespace App\Http\Controllers;
 use App\MasterData\Download;
 use Illuminate\Contracts\View\Factory;
 
-class DownloadsController extends BaseController {
+class DownloadsController extends BaseController
+{
+    /** @var Factory */
+    private $viewFactory;
 
-	/** @var Factory */
-	private $viewFactory;
+    public function __construct(Factory $viewFactory)
+    {
+        $this->viewFactory = $viewFactory;
+    }
 
-	public function __construct(Factory $viewFactory) {
-		$this->viewFactory = $viewFactory;
-	}
-
-	public function index() {
-		return $this->viewFactory->make('download/index', [
-				'downloads' => Download::all(),
-		]);
-	}
-
+    public function index()
+    {
+        return $this->viewFactory->make('download/index', [
+                'downloads' => Download::all(),
+        ]);
+    }
 }

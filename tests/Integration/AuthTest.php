@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Integration;
@@ -24,51 +23,55 @@ namespace Test\Integration;
 use App\MasterData\User;
 use Test\BrowserKitTestCase;
 
-class AuthTest extends BrowserKitTestCase {
+class AuthTest extends BrowserKitTestCase
+{
+    use \Illuminate\Foundation\Testing\DatabaseTransactions;
 
-	use \Illuminate\Foundation\Testing\DatabaseTransactions;
+    public function testLoginWrongCredentials()
+    {
+        $this->post('login', [
+            'username' => 'user1',
+            'password' => 'donotpassme',
+        ]);
 
-	public function testLoginWrongCredentials() {
-		$this->post('login', [
-			'username' => 'user1',
-			'password' => 'donotpassme',
-		]);
+        $this->assertRedirectedTo('login');
+    }
 
-		$this->assertRedirectedTo('login');
-	}
+    public function testLogin()
+    {
+        $user = factory(User::class)->create([
+            'password' => 'passme', // The mutator will hash it for us
+        ]);
 
-	public function testLogin() {
-		$user = factory(User::class)->create([
-			'password' => 'passme', // The mutator will hash it for us
-		]);
+        $this->post('login', [
+            'username' => $user->username,
+            'password' => 'passme',
+        ]);
 
-		$this->post('login', [
-			'username' => $user->username,
-			'password' => 'passme',
-		]);
+        $this->assertRedirectedTo('account');
+    }
 
-		$this->assertRedirectedTo('account');
-	}
+    public function testLogoutAnonymously()
+    {
+        $this->get('logout');
 
-	public function testLogoutAnonymously() {
-		$this->get('logout');
+        $this->assertRedirectedTo('login');
+    }
 
-		$this->assertRedirectedTo('login');
-	}
+    public function testLogout()
+    {
+        $user = factory(User::class)->make();
+        $this->be($user);
 
-	public function testLogout() {
-		$user = factory(User::class)->make();
-		$this->be($user);
+        $this->get('logout');
 
-		$this->get('logout');
+        $this->assertRedirectedTo('');
+    }
 
-		$this->assertRedirectedTo('');
-	}
+    public function testAccountPageAnonymously()
+    {
+        $this->get('account');
 
-	public function testAccountPageAnonymously() {
-		$this->get('account');
-
-		$this->assertRedirectedTo('login');
-	}
-
+        $this->assertRedirectedTo('login');
+    }
 }

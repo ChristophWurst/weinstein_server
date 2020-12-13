@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Database\Repositories;
@@ -24,27 +23,31 @@ namespace App\Database\Repositories;
 use App\MasterData\Association;
 use App\MasterData\User;
 
-class AssociationRepository {
+class AssociationRepository
+{
+    public function findAll()
+    {
+        return Association::orderBy('id')->get();
+    }
 
-	public function findAll() {
-		return Association::orderBy('id')->get();
-	}
+    public function findForUser(User $user)
+    {
+        return $user->associations()->orderBy('id')->get();
+    }
 
-	public function findForUser(User $user) {
-		return $user->associations()->orderBy('id')->get();
-	}
+    public function create(array $data)
+    {
+        return Association::create($data);
+    }
 
-	public function create(array $data) {
-		return Association::create($data);
-	}
+    public function update(Association $association, array $data)
+    {
+        $association->update($data);
+        $association->save();
+    }
 
-	public function update(Association $association, array $data) {
-		$association->update($data);
-		$association->save();
-	}
-
-	public function delete(Association $association) {
-		$association->delete();
-	}
-
+    public function delete(Association $association)
+    {
+        $association->delete();
+    }
 }

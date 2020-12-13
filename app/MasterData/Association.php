@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\MasterData;
@@ -34,74 +33,77 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @property string $wuser_username
  * @property User $user
  */
-class Association extends Model implements AdministrateModel {
+class Association extends Model implements AdministrateModel
+{
+    /**
+     * table name.
+     *
+     * @var string
+     */
+    protected $table = 'association';
 
-	/**
-	 * table name
-	 * 
-	 * @var string
-	 */
-	protected $table = 'association';
+    /**
+     * attributs for mass assigment.
+     *
+     * @var array of string
+     */
+    protected $fillable = [
+        'id',
+        'name',
+        'email',
+        'wuser_username',
+    ];
 
-	/**
-	 * attributs for mass assigment
-	 * 
-	 * @var array of string
-	 */
-	protected $fillable = [
-		'id',
-		'name',
-		'email',
-		'wuser_username'
-	];
+    /**
+     * The attributes that should be hidden for arrays/json.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 
-	/**
-	 * The attributes that should be hidden for arrays/json.
-	 *
-	 * @var array
-	 */
-	protected $hidden = [
-		'created_at',
-		'updated_at',
-	];
+    /**
+     * Check if the given user is authorized to administrate.
+     *
+     * @param User $user
+     * @return bool
+     */
+    public function administrates(User $user)
+    {
+        if ($user->isAdmin()) {
+            return true;
+        }
 
-	/**
-	 * Check if the given user is authorized to administrate
-	 * 
-	 * @param User $user
-	 * @return bool
-	 */
-	public function administrates(User $user) {
-		if ($user->isAdmin()) {
-			return true;
-		}
-		return $this->wuser_username === $user->username;
-	}
+        return $this->wuser_username === $user->username;
+    }
 
-	/**
-	 * 
-	 * @return string
-	 */
-	public function getSelectLabelAttribute() {
-		return $this->id . ' - ' . $this->name;
-	}
+    /**
+     * @return string
+     */
+    public function getSelectLabelAttribute()
+    {
+        return $this->id.' - '.$this->name;
+    }
 
-	/**
-	 * 1 association : n applicants
-	 * 
-	 * @return Relation
-	 */
-	public function applicants() {
-		return $this->hasMany(Applicant::class);
-	}
+    /**
+     * 1 association : n applicants.
+     *
+     * @return Relation
+     */
+    public function applicants()
+    {
+        return $this->hasMany(Applicant::class);
+    }
 
-	/**
-	 * n associations : 1 user
-	 * 
-	 * @return Relation
-	 */
-	public function user() {
-		return $this->belongsTo(User::class, 'wuser_username', 'username');
-	}
-
+    /**
+     * n associations : 1 user.
+     *
+     * @return Relation
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'wuser_username', 'username');
+    }
 }

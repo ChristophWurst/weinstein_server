@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Tasting;
@@ -24,22 +23,22 @@ namespace App\Tasting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-class CommissionStatistic extends Model {
+class CommissionStatistic extends Model
+{
+    /**
+     * DB table name.
+     *
+     * @var string
+     */
+    protected $table = 'stat_commission';
 
-	/**
-	 * DB table name
-	 * 
-	 * @var string
-	 */
-	protected $table = 'stat_commission';
-
-	/**
-	 * 1 statistic : 1 commission
-	 * 
-	 * @return Relation
-	 */
-	public function commission() {
-		return $this->belongsTo(Commission::class);
-	}
-
+    /**
+     * 1 statistic : 1 commission.
+     *
+     * @return Relation
+     */
+    public function commission()
+    {
+        return $this->belongsTo(Commission::class);
+    }
 }

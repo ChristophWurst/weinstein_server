@@ -3,23 +3,25 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class CreateViews extends Migration {
+class CreateViews extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        $this->createTastedWinesView();
+        $this->createStatTasterView();
+        $this->createStatCommissionView();
+        $this->createCatAddressView();
+        $this->createWineDetailsView();
+    }
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up() {
-		$this->createTastedWinesView();
-		$this->createStatTasterView();
-		$this->createStatCommissionView();
-		$this->createCatAddressView();
-		$this->createWineDetailsView();
-	}
-
-	private function createTastedWinesView() {
-		$sql = <<<SQL
+    private function createTastedWinesView()
+    {
+        $sql = <<<'SQL'
 CREATE  OR REPLACE VIEW `TastedWine` AS
     SELECT 
         wine.id AS wine_id,
@@ -45,11 +47,12 @@ CREATE  OR REPLACE VIEW `TastedWine` AS
         tastingsession ON commission.tastingsession_id = tastingsession.id
     GROUP BY tastingnumber_id, wine.id, wine.nr, commission.id;
 SQL;
-		DB::unprepared($sql);
-	}
+        DB::unprepared($sql);
+    }
 
-	private function createStatTasterView() {
-		$sql = <<<SQL
+    private function createStatTasterView()
+    {
+        $sql = <<<'SQL'
 CREATE  OR REPLACE VIEW `stat_taster` AS
 SELECT t.id AS taster_id, taster_variance(t.id) AS variance, sqrt(taster_variance(t.id)) AS deviation, AVG(rating) AS avg
 FROM taster t
@@ -57,11 +60,12 @@ LEFT OUTER JOIN tasting ta
 ON ta.taster_id = t.id
 GROUP BY t.id
 SQL;
-		DB::unprepared($sql);
-	}
+        DB::unprepared($sql);
+    }
 
-	private function createStatCommissionView() {
-		$sql = <<<SQL
+    private function createStatCommissionView()
+    {
+        $sql = <<<'SQL'
 CREATE  OR REPLACE VIEW `stat_commission` AS
 SELECT c.id AS commission_id, commission_variance(c.id) AS variance, sqrt(commission_variance(c.id)) AS deviation, AVG(rating) AS avg
 FROM tasting ta
@@ -71,11 +75,12 @@ RIGHT OUTER JOIN commission c
 ON c.id = t.commission_id
 GROUP BY c.id
 SQL;
-		DB::unprepared($sql);
-	}
+        DB::unprepared($sql);
+    }
 
-	private function createCatAddressView() {
-		$sql = <<<SQL
+    private function createCatAddressView()
+    {
+        $sql = <<<'SQL'
 CREATE  OR REPLACE VIEW `cat_address` AS
 SELECT DISTINCT c.id AS competition_id, ass.id AS association_id, CONCAT(IF(app.label IS NULL OR app.label = "", "", CONCAT(app.label, " ")),
 		IF(app.title IS NULL, "", CONCAT(app.title, " ")), app.lastname, " ", app.firstname, ", ", ad.street, " ",
@@ -96,11 +101,12 @@ WHERE app.id IN (SELECT DISTINCT applicant_id
 				 AND competition_id = c.id)
 ORDER BY ass.id
 SQL;
-		DB::unprepared($sql);
-	}
+        DB::unprepared($sql);
+    }
 
-	private function createWineDetailsView() {
-		$sql = <<<SQL
+    private function createWineDetailsView()
+    {
+        $sql = <<<'SQL'
 CREATE  OR REPLACE VIEW `wine_details` AS
 SELECT w.*, ws.`order` AS winesort_order, ws.name AS winesort_name, wq.id AS quality_id, wq.label AS quality_label, uapp.username AS applicant_username, uass.username AS association_username, harm_mean(tn1.id) AS rating1, harm_mean(tn2.id) AS rating2
 FROM wine w
@@ -123,20 +129,20 @@ LEFT OUTER JOIN tastingnumber AS tn2
 ON w.id = tn2.wine_id
 AND tn2.tastingstage_id IN (2, NULL)
 SQL;
-		DB::unprepared($sql);
-	}
+        DB::unprepared($sql);
+    }
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down() {
-		DB::unprepared('DROP VIEW IF EXISTS `TastedWine`');
-		DB::unprepared('DROP VIEW IF EXISTS `stat_taster`');
-		DB::unprepared('DROP VIEW IF EXISTS `stat_commission`');
-		DB::unprepared('DROP VIEW IF EXISTS `cat_address`');
-		DB::unprepared('DROP VIEW IF EXISTS `wine_details`');
-	}
-
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        DB::unprepared('DROP VIEW IF EXISTS `TastedWine`');
+        DB::unprepared('DROP VIEW IF EXISTS `stat_taster`');
+        DB::unprepared('DROP VIEW IF EXISTS `stat_commission`');
+        DB::unprepared('DROP VIEW IF EXISTS `cat_address`');
+        DB::unprepared('DROP VIEW IF EXISTS `wine_details`');
+    }
 }

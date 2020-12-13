@@ -1,14 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class WinedetailsAssociationId extends Migration
 {
-	public function up()
-	{
-		$sql = <<<SQL
+    public function up()
+    {
+        $sql = <<<'SQL'
 CREATE  OR REPLACE VIEW `wine_details` AS
 SELECT 1 as x, w.*, ass.id as association_id, ws.`order` AS winesort_order, ws.name AS winesort_name, wq.id AS quality_id, wq.label AS quality_label, uapp.username AS applicant_username, uass.username AS association_username, harm_mean(tn1.id) AS rating1, harm_mean(tn2.id) AS rating2
 FROM wine w
@@ -31,11 +31,11 @@ LEFT OUTER JOIN tastingnumber AS tn2
 ON w.id = tn2.wine_id
 AND tn2.tastingstage_id IN (2, NULL);
 SQL;
-		DB::unprepared($sql);
-	}
+        DB::unprepared($sql);
+    }
 
-	public function down()
-	{
-		$this->up();
-	}
+    public function down()
+    {
+        $this->up();
+    }
 }

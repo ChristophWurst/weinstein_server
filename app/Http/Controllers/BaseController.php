@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Http\Controllers;
@@ -26,23 +25,23 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
-class BaseController extends Controller {
+class BaseController extends Controller
+{
+    use AuthorizesRequests;
 
-	use AuthorizesRequests;
+    /** @var array */
+    protected $selectNone = [
+        'none' => 'kein',
+    ];
 
-	/** @var array */
-	protected $selectNone = [
-		'none' => 'kein',
-	];
-
-	/**
-	 * Abort app because user has no access
-	 * 
-	 * @param Route $route
-	 * @param Request $request
-	 */
-	protected function abortNoAccess($route, $request) {
-		App::abort(403);
-	}
-
+    /**
+     * Abort app because user has no access.
+     *
+     * @param Route $route
+     * @param Request $request
+     */
+    protected function abortNoAccess($route, $request)
+    {
+        App::abort(403);
+    }
 }

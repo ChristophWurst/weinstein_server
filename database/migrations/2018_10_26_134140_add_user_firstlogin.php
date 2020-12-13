@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddUserFirstlogin extends Migration
 {
@@ -13,9 +13,9 @@ class AddUserFirstlogin extends Migration
      */
     public function up()
     {
-		Schema::table('wuser', function (Blueprint $table) {
-			$table->boolean('first_login')->default(true);
-		});
+        Schema::table('wuser', function (Blueprint $table) {
+            $table->boolean('first_login')->default(true);
+        });
     }
 
     /**
@@ -25,8 +25,8 @@ class AddUserFirstlogin extends Migration
      */
     public function down()
     {
-		Schema::table('wuser', function (Blueprint $table) {
-			$table->dropColumn('first_login');
-		});
+        Schema::table('wuser', function (Blueprint $table) {
+            $table->dropColumn('first_login');
+        });
     }
 }

@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\MasterData;
@@ -31,34 +30,34 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @property int $street
  * @property string $nr
  */
-class Address extends Model {
+class Address extends Model
+{
+    /**
+     * table name.
+     *
+     * @var string
+     */
+    protected $table = 'address';
 
-	/**
-	 * table name
-	 * 
-	 * @var string
-	 */
-	protected $table = 'address';
+    /**
+     * attributs for mass assignment.
+     *
+     * @var array of string
+     */
+    protected $fillable = [
+        'street',
+        'nr',
+        'zipcode',
+        'city',
+    ];
 
-	/**
-	 * attributs for mass assignment
-	 * 
-	 * @var array of string
-	 */
-	protected $fillable = [
-		'street',
-		'nr',
-		'zipcode',
-		'city'
-	];
-
-	/**
-	 * 1 address : 1 applicant
-	 * 
-	 * @return Relation
-	 */
-	public function Applicant() {
-		return $this->hasOne(Applicant::class);
-	}
-
+    /**
+     * 1 address : 1 applicant.
+     *
+     * @return Relation
+     */
+    public function Applicant()
+    {
+        return $this->hasOne(Applicant::class);
+    }
 }

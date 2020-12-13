@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\MasterData;
@@ -46,124 +45,129 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @property string $email
  * @property string $web
  */
-class Applicant extends Model implements AdministrateModel {
+class Applicant extends Model implements AdministrateModel
+{
+    /**
+     * table name.
+     *
+     * @var string
+     */
+    protected $table = 'applicant';
 
-	/**
-	 * table name
-	 * 
-	 * @var string
-	 */
-	protected $table = 'applicant';
+    /**
+     * attributes for mass assignment.
+     *
+     * @var array of string
+     */
+    protected $fillable = [
+        'id',
+        'association_id',
+        'wuser_username',
+        'label',
+        'title',
+        'firstname',
+        'lastname',
+        'address_id',
+        'phone',
+        'fax',
+        'mobile',
+        'email',
+        'web',
+    ];
 
-	/**
-	 * attributes for mass assignment
-	 * 
-	 * @var array of string
-	 */
-	protected $fillable = [
-		'id',
-		'association_id',
-		'wuser_username',
-		'label',
-		'title',
-		'firstname',
-		'lastname',
-		'address_id',
-		'phone',
-		'fax',
-		'mobile',
-		'email',
-		'web'
-	];
+    /**
+     * The attributes that should be hidden for arrays/json.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 
-	/**
-	 * The attributes that should be hidden for arrays/json.
-	 *
-	 * @var array
-	 */
-	protected $hidden = [
-		'created_at',
-		'updated_at',
-	];
+    /**
+     * primary key must not be incremented.
+     *
+     * @var bool
+     */
+    protected $incremented = false;
 
-	/**
-	 * primary key must not be incremented
-	 * 
-	 * @var boolean
-	 */
-	protected $incremented = false;
+    /**
+     * Check if the given user is authorized to administrate.
+     *
+     * @param User $user
+     * @return bool
+     */
+    public function administrates(User $user)
+    {
+        if ($user->isAdmin()) {
+            return true;
+        }
+        if ($this->wuser_username === $user->username) {
+            return true;
+        }
+        $association = $this->association;
+        if ($association && $association->administrates($user)) {
+            return true;
+        }
 
-	/**
-	 * Check if the given user is authorized to administrate
-	 * 
-	 * @param User $user
-	 * @return bool
-	 */
-	public function administrates(User $user) {
-		if ($user->isAdmin()) {
-			return true;
-		}
-		if ($this->wuser_username === $user->username) {
-			return true;
-		}
-		$association = $this->association;
-		if ($association && $association->administrates($user)) {
-			return true;
-		}
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * 
-	 * @return string
-	 */
-	public function getSelectLabelAttribute() {
-		return htmlentities($this->attributes['id']
-			. ' - '
-			. $this->attributes['lastname']
-			. ' '
-			. $this->attributes['firstname']
-			. ' - '
-			. $this->address->city
-			. ' ('
-			. $this->association->name
-			. ')');
-	}
+    /**
+     * @return string
+     */
+    public function getSelectLabelAttribute()
+    {
+        return htmlentities($this->attributes['id']
+            .' - '
+            .$this->attributes['lastname']
+            .' '
+            .$this->attributes['firstname']
+            .' - '
+            .$this->address->city
+            .' ('
+            .$this->association->name
+            .')');
+    }
 
-	/**
-	 * 1 applicant : 1 address
-	 * 
-	 * @return BelongsTo
-	 */
-	public function address() {
-		return $this->belongsTo(Address::class);
-	}
+    /**
+     * 1 applicant : 1 address.
+     *
+     * @return BelongsTo
+     */
+    public function address()
+    {
+        return $this->belongsTo(Address::class);
+    }
 
-	/**
-	 * n applicants : 1 association
-	 * 
-	 * @return BelongsTo
-	 */
-	public function association() {
-		return $this->belongsTo(Association::class);
-	}
+    /**
+     * n applicants : 1 association.
+     *
+     * @return BelongsTo
+     */
+    public function association()
+    {
+        return $this->belongsTo(Association::class);
+    }
 
-	/**
-	 * n applicants : 1 user
-	 * 
-	 * @return BelongsTo
-	 */
-	public function user() {
-		return $this->belongsTo(User::class, 'wuser_username', 'username');
-	}
+    /**
+     * n applicants : 1 user.
+     *
+     * @return BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'wuser_username', 'username');
+    }
 
-	/**
-	 * 1 applicant : n wines
-	 * 
-	 * @return Relation
-	 */
-	public function wines() {
-		return $this->hasMany(Wine::class);
-	}
-
+    /**
+     * 1 applicant : n wines.
+     *
+     * @return Relation
+     */
+    public function wines()
+    {
+        return $this->hasMany(Wine::class);
+    }
 }

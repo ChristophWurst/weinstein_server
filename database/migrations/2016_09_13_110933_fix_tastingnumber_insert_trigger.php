@@ -3,17 +3,18 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class FixTastingnumberInsertTrigger extends Migration {
+class FixTastingnumberInsertTrigger extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        DB::unprepared('DROP TRIGGER IF EXISTS `tastingnumber_AFTER_INSERT`');
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up() {
-		DB::unprepared('DROP TRIGGER IF EXISTS `tastingnumber_AFTER_INSERT`');
-
-		$sql = <<<SQL
+        $sql = <<<'SQL'
 CREATE DEFINER = CURRENT_USER TRIGGER `tastingnumber_AFTER_INSERT`
 AFTER INSERT
 ON `tastingnumber` FOR EACH ROW
@@ -35,16 +36,16 @@ BEGIN
 	END IF;
 END
 SQL;
-		DB::unprepared($sql);
-	}
+        DB::unprepared($sql);
+    }
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down() {
-		DB::unprepared('DROP TRIGGER IF EXISTS `tastingnumber_AFTER_INSERT`');
-	}
-
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        DB::unprepared('DROP TRIGGER IF EXISTS `tastingnumber_AFTER_INSERT`');
+    }
 }

@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Unit\Http\Controllers;
@@ -27,26 +26,27 @@ use Mockery;
 use Mockery\MockInterface;
 use Test\BrowserKitTestCase;
 
-class EvaluationControllerTest extends BrowserKitTestCase {
+class EvaluationControllerTest extends BrowserKitTestCase
+{
+    /** @var Factory|MockInterface */
+    private $view;
 
-	/** @var Factory|MockInterface */
-	private $view;
+    /** @var EvaluationController|MockInterface */
+    private $controller;
 
-	/** @var EvaluationController|MockInterface */
-	private $controller;
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-	protected function setUp(): void {
-		parent::setUp();
+        $this->view = Mockery::mock(Factory::class);
 
-		$this->view = Mockery::mock(Factory::class);
+        $this->controller = Mockery::mock(EvaluationController::class, [
+                $this->view,
+            ])->makePartial();
+    }
 
-		$this->controller = Mockery::mock(EvaluationController::class, [
-				$this->view,
-			])->makePartial();
-	}
-
-	public function testProtocols() {
-		$this->markTestSkipped('not mockable yet');
-	}
-
+    public function testProtocols()
+    {
+        $this->markTestSkipped('not mockable yet');
+    }
 }

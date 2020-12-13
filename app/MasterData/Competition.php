@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\MasterData;
@@ -45,131 +44,144 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @property Collection $wines
  * @property Collection $winesorts
  */
-class Competition extends Model implements AdministrateModel {
+class Competition extends Model implements AdministrateModel
+{
+    /**
+     * Table name.
+     *
+     * @var string
+     */
+    protected $table = 'competition';
 
-	/**
-	 * Table name
-	 * 
-	 * @var string
-	 */
-	protected $table = 'competition';
+    /**
+     * Attributes allowed for mass assignment.
+     *
+     * @var array of string
+     */
+    protected $fillable = [
+        'label',
+        'wuser_username',
+        'tastingstage_id',
+    ];
 
-	/**
-	 * Attributes allowed for mass assignment
-	 * 
-	 * @var array of string
-	 */
-	protected $fillable = [
-		'label',
-		'wuser_username',
-		'tastingstage_id',
-	];
+    /**
+     * Check if the user is authorized to administrate.
+     *
+     * @param User $user
+     * @return bool
+     */
+    public function administrates(User $user)
+    {
+        if ($user->isAdmin()) {
+            return true;
+        }
+        if ($user->username === $this->wuser_username) {
+            return true;
+        }
 
-	/**
-	 * Check if the user is authorized to administrate
-	 * 
-	 * @param User $user
-	 * @return boolean
-	 */
-	public function administrates(User $user) {
-		if ($user->isAdmin()) {
-			return true;
-		}
-		if ($user->username === $this->wuser_username) {
-			return true;
-		}
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Get current tasting stage
-	 * 
-	 * @return TastingStage|null
-	 */
-	public function getTastingStage() {
-		if (in_array($this->competitionState->description, ['ENROLLMENT', 'TASTINGNUMBERS1', 'TASTING1'])) {
-			return TastingStage::find(1);
-		}
-		if (in_array($this->competitionState->description, ['TASTINGNUMBERS2', 'TASTING2'])) {
-			return TastingStage::find(2);
-		}
-		return null;
-	}
+    /**
+     * Get current tasting stage.
+     *
+     * @return TastingStage|null
+     */
+    public function getTastingStage()
+    {
+        if (in_array($this->competitionState->description, ['ENROLLMENT', 'TASTINGNUMBERS1', 'TASTING1'])) {
+            return TastingStage::find(1);
+        }
+        if (in_array($this->competitionState->description, ['TASTINGNUMBERS2', 'TASTING2'])) {
+            return TastingStage::find(2);
+        }
 
-	public function enrollmentFinished() {
-		$wines = $this->wines()->count();
-		$winesWithNr = $this->wines()->whereNotNull('nr')->count();
-		return $wines > 0 && $winesWithNr === $wines;
-	}
+        return null;
+    }
 
-	/**
-	 * 1 competition : n applicant catalog entries
-	 * 
-	 * @return Relation
-	 */
-	public function addressCatalogue() {
-		return $this->hasMany(AddressCatalogue::class, 'competition_id', 'id');
-	}
+    public function enrollmentFinished()
+    {
+        $wines = $this->wines()->count();
+        $winesWithNr = $this->wines()->whereNotNull('nr')->count();
 
-	/**
-	 * n competitions : 1 competition state
-	 * 
-	 * @return Relation
-	 */
-	public function competitionState() {
-		return $this->belongsTo(CompetitionState::class);
-	}
+        return $wines > 0 && $winesWithNr === $wines;
+    }
 
-	/**
-	 * 1 competition : n tasting numbers
-	 * 
-	 * @return Relation
-	 */
-	public function tastingnumbers() {
-		return $this->hasManyThrough(TastingNumber::class, Wine::class);
-	}
+    /**
+     * 1 competition : n applicant catalog entries.
+     *
+     * @return Relation
+     */
+    public function addressCatalogue()
+    {
+        return $this->hasMany(AddressCatalogue::class, 'competition_id', 'id');
+    }
 
-	/**
-	 * 1 competition : n tasting sessions
-	 * 
-	 * @return HasMany
-	 */
-	public function tastingsessions() {
-		return $this->hasMany(TastingSession::class);
-	}
+    /**
+     * n competitions : 1 competition state.
+     *
+     * @return Relation
+     */
+    public function competitionState()
+    {
+        return $this->belongsTo(CompetitionState::class);
+    }
 
-	/**
-	 * n competitions : 1 user
-	 * 
-	 * @return Relation
-	 */
-	public function user() {
-		return $this->belongsTo(User::class, 'wuser_username', 'username');
-	}
+    /**
+     * 1 competition : n tasting numbers.
+     *
+     * @return Relation
+     */
+    public function tastingnumbers()
+    {
+        return $this->hasManyThrough(TastingNumber::class, Wine::class);
+    }
 
-	/**
-	 * 1 competition : n wines
-	 * 
-	 * @return Relation
-	 */
-	public function wines() {
-		return $this->hasMany(Wine::class);
-	}
+    /**
+     * 1 competition : n tasting sessions.
+     *
+     * @return HasMany
+     */
+    public function tastingsessions()
+    {
+        return $this->hasMany(TastingSession::class);
+    }
 
-	/**
-	 * 1 competition : n wines
-	 * 
-	 * @return Relation
-	 */
-	public function wine_details() {
-		return $this->hasMany(WineDetails::class);
-	}
+    /**
+     * n competitions : 1 user.
+     *
+     * @return Relation
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'wuser_username', 'username');
+    }
 
-	/**
-	 * @return HasMany
-	 */
-	public function wines_chosen_signed_off() {
-		return $this->hasMany(WinesChosenSignedOff::class);
-	}
+    /**
+     * 1 competition : n wines.
+     *
+     * @return Relation
+     */
+    public function wines()
+    {
+        return $this->hasMany(Wine::class);
+    }
 
+    /**
+     * 1 competition : n wines.
+     *
+     * @return Relation
+     */
+    public function wine_details()
+    {
+        return $this->hasMany(WineDetails::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function wines_chosen_signed_off()
+    {
+        return $this->hasMany(WinesChosenSignedOff::class);
+    }
 }

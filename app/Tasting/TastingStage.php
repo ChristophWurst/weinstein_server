@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Tasting;
@@ -27,31 +26,32 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 /**
  * @property int $id
  */
-class TastingStage extends Model {
+class TastingStage extends Model
+{
+    /**
+     * Table name.
+     *
+     * @var string
+     */
+    protected $table = 'tastingstage';
 
-	/**
-	 * Table name
-	 * 
-	 * @var string 
-	 */
-	protected $table = 'tastingstage';
+    /**
+     * 1 tasting stage : n tasting numbers.
+     *
+     * @return Relation
+     */
+    public function tastingnumbers()
+    {
+        return $this->hasMany(TastingNumber::class);
+    }
 
-	/**
-	 * 1 tasting stage : n tasting numbers
-	 * 
-	 * @return Relation
-	 */
-	public function tastingnumbers() {
-		return $this->hasMany(TastingNumber::class);
-	}
-
-	/**
-	 * 1 tasting stage : n tasting sessions
-	 * 
-	 * @return Relation
-	 */
-	public function tastingsessions() {
-		return $this->hasMany(TastingSession::class);
-	}
-
+    /**
+     * 1 tasting stage : n tasting sessions.
+     *
+     * @return Relation
+     */
+    public function tastingsessions()
+    {
+        return $this->hasMany(TastingSession::class);
+    }
 }

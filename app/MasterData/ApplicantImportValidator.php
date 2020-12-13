@@ -16,27 +16,25 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\MasterData;
 
 use App\Validation\FileValidator;
 
-class ApplicantImportValidator extends FileValidator {
+class ApplicantImportValidator extends FileValidator
+{
+    /**
+     * Files title for validation error messages.
+     *
+     * @var string
+     */
+    protected $fileTitle = 'Excel Datei';
 
-	/**
-	 * Files title for validation error messages
-	 * 
-	 * @var string 
-	 */
-	protected $fileTitle = 'Excel Datei';
-
-	/**
-	 * Allowed mime types
-	 * 
-	 * @var string
-	 */
-	protected $mimeTypes = 'xls,xlsx';
-
+    /**
+     * Allowed mime types.
+     *
+     * @var string
+     */
+    protected $mimeTypes = 'xls,xlsx';
 }

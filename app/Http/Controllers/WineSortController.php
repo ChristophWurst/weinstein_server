@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Http\Controllers;
@@ -29,98 +28,105 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 
-class WineSortController extends BaseController {
+class WineSortController extends BaseController
+{
+    /** @var MasterDataStore */
+    private $masterDataStore;
 
-	/** @var MasterDataStore */
-	private $masterDataStore;
+    /** @var Factory */
+    private $viewFactory;
 
-	/** @var Factory */
-	private $viewFactory;
+    /**
+     * @param MasterDataStore $masterDataStore
+     * @param Factory $viewFactory
+     */
+    public function __construct(MasterDataStore $masterDataStore, Factory $viewFactory)
+    {
+        $this->masterDataStore = $masterDataStore;
+        $this->viewFactory = $viewFactory;
+    }
 
-	/**
-	 * @param MasterDataStore $masterDataStore
-	 * @param Factory $viewFactory
-	 */
-	public function __construct(MasterDataStore $masterDataStore, Factory $viewFactory) {
-		$this->masterDataStore = $masterDataStore;
-		$this->viewFactory = $viewFactory;
-	}
+    /**
+     * Display a listing of all sorts.
+     *
+     * @return Response
+     */
+    public function index()
+    {
+        $this->authorize('list-winesorts');
 
-	/**
-	 * Display a listing of all sorts
-	 *
-	 * @return Response
-	 */
-	public function index() {
-		$this->authorize('list-winesorts');
+        return $this->viewFactory->make('settings/winesorts/index', [
+                'sorts' => $this->masterDataStore->getWineSorts(),
+        ]);
+    }
 
-		return $this->viewFactory->make('settings/winesorts/index', [
-				'sorts' => $this->masterDataStore->getWineSorts(),
-		]);
-	}
+    /**
+     * Show the form for creating a new sort.
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        $this->authorize('create-winesort');
 
-	/**
-	 * Show the form for creating a new sort
-	 *
-	 * @return Response
-	 */
-	public function create() {
-		$this->authorize('create-winesort');
+        return $this->viewFactory->make('settings/winesorts/form');
+    }
 
-		return $this->viewFactory->make('settings/winesorts/form');
-	}
+    /**
+     * Store a newly created sort in storage.
+     *
+     * @return Response
+     */
+    public function store()
+    {
+        $this->authorize('create-winesort');
 
-	/**
-	 * Store a newly created sort in storage.
-	 *
-	 * @return Response
-	 */
-	public function store() {
-		$this->authorize('create-winesort');
+        try {
+            $data = \Illuminate\Support\Facades\Request::all();
+            $this->masterDataStore->createWineSort($data);
+        } catch (ValidationException $ve) {
+            return Redirect::route('settings.winesorts/create')
+                    ->withErrors($ve->getErrors())
+                    ->withInput();
+        }
 
-		try {
-			$data = \Illuminate\Support\Facades\Request::all();
-			$this->masterDataStore->createWineSort($data);
-		} catch (ValidationException $ve) {
-			return Redirect::route('settings.winesorts/create')
-					->withErrors($ve->getErrors())
-					->withInput();
-		}
-		return Redirect::route('settings.winesorts');
-	}
+        return Redirect::route('settings.winesorts');
+    }
 
-	/**
-	 * Show the form for editing the specified sort
-	 *
-	 * @param WineSort $wineSort
-	 * @return Response
-	 */
-	public function edit(WineSort $wineSort) {
-		$this->authorize('update-winesort', $wineSort);
+    /**
+     * Show the form for editing the specified sort.
+     *
+     * @param WineSort $wineSort
+     * @return Response
+     */
+    public function edit(WineSort $wineSort)
+    {
+        $this->authorize('update-winesort', $wineSort);
 
-		return $this->viewFactory->make('settings/winesorts/form', [
-				'data' => $wineSort,
-		]);
-	}
+        return $this->viewFactory->make('settings/winesorts/form', [
+                'data' => $wineSort,
+        ]);
+    }
 
-	/**
-	 * Update the specified sort in storage
-	 *
-	 * @param WineSort $wineSort
-	 * @return Response
-	 */
-	public function update(WineSort $wineSort) {
-		$this->authorize('update-winesort', $wineSort);
+    /**
+     * Update the specified sort in storage.
+     *
+     * @param WineSort $wineSort
+     * @return Response
+     */
+    public function update(WineSort $wineSort)
+    {
+        $this->authorize('update-winesort', $wineSort);
 
-		try {
-			$data = \Illuminate\Support\Facades\Request::all();
-			$this->masterDataStore->updateWineSort($wineSort, $data);
-		} catch (ValidationException $ve) {
-			return Redirect::route('settings.winesorts/edit', ['winesort' => $wineSort->id])
-					->withErrors($ve->getErrors())
-					->withInput();
-		}
-		return Redirect::route('settings.winesorts');
-	}
+        try {
+            $data = \Illuminate\Support\Facades\Request::all();
+            $this->masterDataStore->updateWineSort($wineSort, $data);
+        } catch (ValidationException $ve) {
+            return Redirect::route('settings.winesorts/edit', ['winesort' => $wineSort->id])
+                    ->withErrors($ve->getErrors())
+                    ->withInput();
+        }
 
+        return Redirect::route('settings.winesorts');
+    }
 }

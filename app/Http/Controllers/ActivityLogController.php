@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Http\Controllers;
@@ -25,30 +24,31 @@ use App\Contracts\ActivityLogger;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Response;
 
-class ActivityLogController extends BaseController {
+class ActivityLogController extends BaseController
+{
+    /** @var Factory */
+    private $viewFactory;
 
-	/** @var Factory */
-	private $viewFactory;
+    /** @var ActivityLogger */
+    private $activityLogger;
 
-	/** @var ActivityLogger */
-	private $activityLogger;
+    public function __construct(ActivityLogger $activityLogger, Factory $viewFactory)
+    {
+        $this->activityLogger = $activityLogger;
+        $this->viewFactory = $viewFactory;
+    }
 
-	public function __construct(ActivityLogger $activityLogger, Factory $viewFactory) {
-		$this->activityLogger = $activityLogger;
-		$this->viewFactory = $viewFactory;
-	}
+    /**
+     * Show all logs.
+     *
+     * @return Response
+     */
+    public function index()
+    {
+        $this->authorize('view-activitylog');
 
-	/**
-	 * Show all logs
-	 * 
-	 * @return Response
-	 */
-	public function index() {
-		$this->authorize('view-activitylog');
-
-		return $this->viewFactory->make('settings/activitylog/index', [
-			'logs' => $this->activityLogger->getMostRecentLogs(),
-		]);
-	}
-
+        return $this->viewFactory->make('settings/activitylog/index', [
+            'logs' => $this->activityLogger->getMostRecentLogs(),
+        ]);
+    }
 }

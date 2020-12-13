@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Unit\MasterData;
@@ -25,61 +24,66 @@ use App\MasterData\User;
 use Illuminate\Support\Facades\Hash;
 use Test\TestCase;
 
-class UserTest extends TestCase {
+class UserTest extends TestCase
+{
+    public function testNoAdmin()
+    {
+        $user1 = new User([
+            'username' => 'user1',
+            'admin' => false,
+        ]);
+        $user2 = new User([
+            'username' => 'user2',
+        ]);
 
-	public function testNoAdmin() {
-		$user1 = new User(array(
-			'username' => 'user1',
-			'admin' => false,
-		));
-		$user2 = new User(array(
-			'username' => 'user2',
-		));
+        $this->assertFalse($user2->administrates($user1));
+    }
 
-		$this->assertFalse($user2->administrates($user1));
-	}
+    public function testSameUserAdmin()
+    {
+        $user = new User([
+            'username' => 'user123',
+            'admin' => false,
+        ]);
+        $this->assertTrue($user->administrates($user));
+    }
 
-	public function testSameUserAdmin() {
-		$user = new User(array(
-			'username' => 'user123',
-			'admin' => false,
-		));
-		$this->assertTrue($user->administrates($user));
-	}
+    public function testAdmin()
+    {
+        $admin = new User([
+            'username' => 'admin123',
+            'admin' => true,
+        ]);
+        $user = new User([
+            'username' => 'user123',
+        ]);
 
-	public function testAdmin() {
-		$admin = new User(array(
-			'username' => 'admin123',
-			'admin' => true,
-		));
-		$user = new User(array(
-			'username' => 'user123',
-		));
+        $this->assertTrue($user->administrates($admin));
+    }
 
-		$this->assertTrue($user->administrates($admin));
-	}
+    public function testSetHashedPassword()
+    {
+        Hash::shouldReceive('make')
+            ->once()
+            ->andReturn('hashedpwd');
 
-	public function testSetHashedPassword() {
-		Hash::shouldReceive('make')
-			->once()
-			->andReturn('hashedpwd');
+        $testUser = new User();
+        $testUser->password = 'test';
 
-		$testUser = new User();
-		$testUser->password = 'test';
+        $this->assertSame('hashedpwd', $testUser->password);
+    }
 
-		$this->assertSame('hashedpwd', $testUser->password);
-	}
+    public function testRememberSedAndGetRememberToken()
+    {
+        $user = new User();
+        $this->assertSame(null, $user->getRememberToken());
+        $user->setRememberToken('test1234');
+        $this->assertSame('test1234', $user->getRememberToken());
+    }
 
-	public function testRememberSedAndGetRememberToken() {
-		$user = new User();
-		$this->assertSame(null, $user->getRememberToken());
-		$user->setRememberToken('test1234');
-		$this->assertSame('test1234', $user->getRememberToken());
-	}
-
-	public function testGetRememberTokenName() {
-		$user = new User();
-		$this->assertSame('remember_token', $user->getRememberTokenName());
-	}
-
+    public function testGetRememberTokenName()
+    {
+        $user = new User();
+        $this->assertSame('remember_token', $user->getRememberTokenName());
+    }
 }

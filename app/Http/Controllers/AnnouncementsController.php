@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Http\Controllers;
@@ -34,57 +33,56 @@ use function pathinfo;
 
 class AnnouncementsController extends BaseController
 {
+    /** @var AuthManager */
+    private $auth;
 
-	/** @var AuthManager */
-	private $auth;
+    /** @var Factory */
+    private $viewFactory;
 
-	/** @var Factory */
-	private $viewFactory;
+    /**
+     * @param AuthManager $auth
+     * @param Factory $viewFactory
+     */
+    public function __construct(AuthManager $auth, Factory $viewFactory)
+    {
+        $this->auth = $auth;
+        $this->viewFactory = $viewFactory;
+    }
 
-	/**
-	 * @param AuthManager $auth
-	 * @param Factory $viewFactory
-	 */
-	public function __construct(AuthManager $auth, Factory $viewFactory)
-	{
-		$this->auth = $auth;
-		$this->viewFactory = $viewFactory;
-	}
+    /**
+     * @return View
+     */
+    public function index()
+    {
+        $this->authorize('send-announcements');
 
-	/**
-	 * @return View
-	 */
-	public function index()
-	{
-		$this->authorize('send-announcements');
+        return $this->viewFactory->make('settings/announcements/form');
+    }
 
-		return $this->viewFactory->make('settings/announcements/form');
-	}
+    /**
+     * @return Response
+     */
+    public function send(Request $request)
+    {
+        $this->authorize('send-announcements');
 
-	/**
-	 * @return Response
-	 */
-	public function send(Request $request)
-	{
-		$this->authorize('send-announcements');
+        $subject = $request->get('subject');
+        $text = $request->get('text');
 
-		$subject = $request->get('subject');
-		$text = $request->get('text');
+        if (empty($subject) || empty($text)) {
+            return Redirect::route('settings.announcements')
+                ->withInput();
+        }
 
-		if (empty($subject) || empty($text)) {
-			return Redirect::route('settings.announcements')
-				->withInput();
-		}
+        $emails = Applicant::select('email')
+            ->whereNotNull('email')
+            ->get();
+        foreach ($emails->pluck('email') as $recipient) {
+            Mail::to($recipient)->send(new Announcement($subject, $text));
+        }
 
-		$emails = Applicant::select('email')
-			->whereNotNull('email')
-			->get();
-		foreach ($emails->pluck('email') as $recipient) {
-			Mail::to($recipient)->send(new Announcement($subject, $text));
-		}
+        $request->session()->flash('announcement_sent', [$emails->count()]);
 
-		$request->session()->flash('announcement_sent', [$emails->count()]);
-		return Redirect::route('settings.announcements');
-	}
-
+        return Redirect::route('settings.announcements');
+    }
 }

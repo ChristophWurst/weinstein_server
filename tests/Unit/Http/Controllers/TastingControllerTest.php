@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Unit\Http\Controllers;
@@ -37,170 +36,175 @@ use Mockery;
 use Mockery\MockInterface;
 use Test\BrowserKitTestCase;
 
-class TastingControllerTest extends BrowserKitTestCase {
+class TastingControllerTest extends BrowserKitTestCase
+{
+    /** @var TastingHandler|MockInterface */
+    private $tastingHandler;
 
-	/** @var TastingHandler|MockInterface */
-	private $tastingHandler;
+    /** @var Factory|MockInterface */
+    private $view;
 
-	/** @var Factory|MockInterface */
-	private $view;
+    /** @var TastingController|MockInterface */
+    private $controller;
 
-	/** @var TastingController|MockInterface */
-	private $controller;
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-	protected function setUp(): void {
-		parent::setUp();
+        $this->tastingHandler = Mockery::mock(TastingHandler::class);
+        $this->view = Mockery::mock(Factory::class);
 
-		$this->tastingHandler = Mockery::mock(TastingHandler::class);
-		$this->view = Mockery::mock(Factory::class);
+        $this->controller = Mockery::mock(TastingController::class, [
+                $this->tastingHandler,
+                $this->view,
+            ])->makePartial();
+        $this->controller->shouldReceive('authorize');
+    }
 
-		$this->controller = Mockery::mock(TastingController::class, [
-				$this->tastingHandler,
-				$this->view,
-			])->makePartial();
-		$this->controller->shouldReceive('authorize');
-	}
+    public function testAdd()
+    {
+        $tastingSession = Mockery::mock(TastingSession::class);
+        $competition = Mockery::mock(Competition::class);
+        $tastingNumbers = new Collection();
+        $view = Mockery::mock(View::class);
 
-	public function testAdd() {
-		$tastingSession = Mockery::mock(TastingSession::class);
-		$competition = Mockery::mock(Competition::class);
-		$tastingNumbers = new Collection();
-		$view = Mockery::mock(View::class);
+        $tastingSession->shouldReceive('getAttribute')
+            ->with('competition')
+            ->andReturn($competition);
+        $this->tastingHandler->shouldReceive('getNextTastingNumbers')
+            ->once()
+            ->with($tastingSession)
+            ->andReturn($tastingNumbers);
+        $this->view->shouldReceive('make')
+            ->once()
+            ->with('competition/tasting/tasting-session/tasting/form',
+                [
+                'competition' => $competition,
+                'tastingSession' => $tastingSession,
+                'tastingNumbers' => $tastingNumbers,
+            ])
+            ->andReturn($view);
 
-		$tastingSession->shouldReceive('getAttribute')
-			->with('competition')
-			->andReturn($competition);
-		$this->tastingHandler->shouldReceive('getNextTastingNumbers')
-			->once()
-			->with($tastingSession)
-			->andReturn($tastingNumbers);
-		$this->view->shouldReceive('make')
-			->once()
-			->with('competition/tasting/tasting-session/tasting/form',
-				[
-				'competition' => $competition,
-				'tastingSession' => $tastingSession,
-				'tastingNumbers' => $tastingNumbers,
-			])
-			->andReturn($view);
+        $this->assertSame($view, $this->controller->add($tastingSession));
+    }
 
-		$this->assertSame($view, $this->controller->add($tastingSession));
-	}
+    public function testStoreWithValidationException()
+    {
+        $tastingSession = Mockery::mock(TastingSession::class);
+        $request = Mockery::mock(Request::class);
+        $data = [
+            'tastingnumber_id1' => '12',
+            'a1' => '12',
+            'a2' => '14',
+        ];
 
-	public function testStoreWithValidationException() {
-		$tastingSession = Mockery::mock(TastingSession::class);
-		$request = Mockery::mock(Request::class);
-		$data = [
-			'tastingnumber_id1' => '12',
-			'a1' => '12',
-			'a2' => '14',
-		];
+        $request->shouldReceive('all')
+            ->once()
+            ->andReturn($data);
+        $this->tastingHandler->shouldReceive('createTasting')
+            ->once()
+            ->with($data, $tastingSession)
+            ->andThrow(new ValidationException());
+        $tastingSession->shouldReceive('getAttribute')
+            ->once()
+            ->with('id')
+            ->andReturn(33);
 
-		$request->shouldReceive('all')
-			->once()
-			->andReturn($data);
-		$this->tastingHandler->shouldReceive('createTasting')
-			->once()
-			->with($data, $tastingSession)
-			->andThrow(new ValidationException());
-		$tastingSession->shouldReceive('getAttribute')
-			->once()
-			->with('id')
-			->andReturn(33);
+        $this->response = TestResponse::fromBaseResponse($this->controller->store($tastingSession, $request));
 
-		$this->response = TestResponse::fromBaseResponse($this->controller->store($tastingSession, $request));
+        $this->assertRedirectedToRoute('tasting.session/taste', [
+            'tastingsession' => 33,
+            ], [
+            'errors',
+            '_old_input',
+        ]);
+    }
 
-		$this->assertRedirectedToRoute('tasting.session/taste', [
-			'tastingsession' => 33,
-			], [
-			'errors',
-			'_old_input',
-		]);
-	}
+    public function testStore()
+    {
+        $tastingSession = Mockery::mock(TastingSession::class);
+        $request = Mockery::mock(Request::class);
+        $data = [
+            'tastingnumber_id1' => '12',
+            'a1' => '12',
+            'a2' => '14',
+        ];
 
-	public function testStore() {
-		$tastingSession = Mockery::mock(TastingSession::class);
-		$request = Mockery::mock(Request::class);
-		$data = [
-			'tastingnumber_id1' => '12',
-			'a1' => '12',
-			'a2' => '14',
-		];
+        $request->shouldReceive('all')
+            ->once()
+            ->andReturn($data);
+        $this->tastingHandler->shouldReceive('createTasting')
+            ->once()
+            ->with($data, $tastingSession);
+        $tastingSession->shouldReceive('getAttribute')
+            ->once()
+            ->with('id')
+            ->andReturn(33);
 
-		$request->shouldReceive('all')
-			->once()
-			->andReturn($data);
-		$this->tastingHandler->shouldReceive('createTasting')
-			->once()
-			->with($data, $tastingSession);
-		$tastingSession->shouldReceive('getAttribute')
-			->once()
-			->with('id')
-			->andReturn(33);
+        $this->response = TestResponse::fromBaseResponse($this->controller->store($tastingSession, $request));
 
-		$this->response = TestResponse::fromBaseResponse($this->controller->store($tastingSession, $request));
+        $this->assertRedirectedToRoute('tasting.session/show', [
+            'tastingsession' => 33,
+        ]);
+    }
 
-		$this->assertRedirectedToRoute('tasting.session/show', [
-			'tastingsession' => 33,
-		]);
-	}
+    public function testEdit()
+    {
+        $tastingSession = Mockery::mock(TastingSession::class);
+        $competition = Mockery::mock(Competition::class);
+        $tastingNumber = Mockery::mock(TastingNumber::class);
+        $commission = Mockery::mock(Commission::class);
+        $view = Mockery::mock(View::class);
 
-	public function testEdit() {
-		$tastingSession = Mockery::mock(TastingSession::class);
-		$competition = Mockery::mock(Competition::class);
-		$tastingNumber = Mockery::mock(TastingNumber::class);
-		$commission = Mockery::mock(Commission::class);
-		$view = Mockery::mock(View::class);
+        $this->tastingHandler->shouldReceive('isTastingNumberTasted')
+            ->once()
+            ->with($tastingNumber)
+            ->andReturn(true);
+        $tastingSession->shouldReceive('getAttribute')
+            ->once()
+            ->andReturn($competition);
+        $this->view->shouldReceive('make')
+            ->once()
+            ->with('competition/tasting/tasting-session/tasting/form',
+                [
+                'edit' => true,
+                'competition' => $competition,
+                'commission' => $commission,
+                'tastingnumber' => $tastingNumber,
+            ])
+            ->andReturn($view);
 
-		$this->tastingHandler->shouldReceive('isTastingNumberTasted')
-			->once()
-			->with($tastingNumber)
-			->andReturn(true);
-		$tastingSession->shouldReceive('getAttribute')
-			->once()
-			->andReturn($competition);
-		$this->view->shouldReceive('make')
-			->once()
-			->with('competition/tasting/tasting-session/tasting/form',
-				[
-				'edit' => true,
-				'competition' => $competition,
-				'commission' => $commission,
-				'tastingnumber' => $tastingNumber,
-			])
-			->andReturn($view);
+        $this->assertEquals($view, $this->controller->edit($tastingSession, $tastingNumber, $commission));
+    }
 
-		$this->assertEquals($view, $this->controller->edit($tastingSession, $tastingNumber, $commission));
-	}
+    public function testUpdate()
+    {
+        $tastingSession = Mockery::mock(TastingSession::class);
+        $tastingNumber = Mockery::mock(TastingNumber::class);
+        $commission = Mockery::mock(Commission::class);
+        $request = Mockery::mock(Request::class);
+        $data = [
+            'tastingnumber_id1' => '145',
+            'a1' => '33',
+            'a2' => '25',
+            'b1' => '13',
+        ];
 
-	public function testUpdate() {
-		$tastingSession = Mockery::mock(TastingSession::class);
-		$tastingNumber = Mockery::mock(TastingNumber::class);
-		$commission = Mockery::mock(Commission::class);
-		$request = Mockery::mock(Request::class);
-		$data = [
-			'tastingnumber_id1' => '145',
-			'a1' => '33',
-			'a2' => '25',
-			'b1' => '13',
-		];
+        $request->shouldReceive('all')
+            ->once()
+            ->andReturn($data);
+        $this->tastingHandler->shouldReceive('updateTasting')
+            ->once()
+            ->with($data, $tastingNumber, $tastingSession, $commission);
+        $tastingSession->shouldReceive('getAttribute')
+            ->once()
+            ->with('id')
+            ->andReturn(7);
 
-		$request->shouldReceive('all')
-			->once()
-			->andReturn($data);
-		$this->tastingHandler->shouldReceive('updateTasting')
-			->once()
-			->with($data, $tastingNumber, $tastingSession, $commission);
-		$tastingSession->shouldReceive('getAttribute')
-			->once()
-			->with('id')
-			->andReturn(7);
+        $this->response = TestResponse::fromBaseResponse($this->controller->update($tastingSession, $tastingNumber, $commission, $request));
 
-		$this->response = TestResponse::fromBaseResponse($this->controller->update($tastingSession, $tastingNumber, $commission, $request));
-
-		$this->assertRedirectedToRoute('tasting.session/show', [
-			'tastingsession' => 7,
-		]);
-	}
-
+        $this->assertRedirectedToRoute('tasting.session/show', [
+            'tastingsession' => 7,
+        ]);
+    }
 }

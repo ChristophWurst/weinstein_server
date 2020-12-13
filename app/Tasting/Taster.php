@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Tasting;
@@ -33,63 +32,66 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @property string $name
  * @property bool $active
  */
-class Taster extends Model {
+class Taster extends Model
+{
+    /**
+     * Table name.
+     *
+     * @var string
+     */
+    protected $table = 'taster';
 
-	/**
-	 * Table name
-	 * 
-	 * @var string 
-	 */
-	protected $table = 'taster';
+    /**
+     * Attributes for mass assignment.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'nr',
+        'tasterside_id',
+        'commission_id',
+        'active',
+        'name',
+    ];
 
-	/**
-	 * Attributes for mass assignment
-	 * 
-	 * @var array 
-	 */
-	protected $fillable = [
-		'nr',
-		'tasterside_id',
-		'commission_id',
-		'active',
-		'name',
-	];
+    /**
+     * n tasters : 1 commision.
+     *
+     * @return Relation
+     */
+    public function commission()
+    {
+        return $this->belongsTo(Commission::class);
+    }
 
-	/**
-	 * n tasters : 1 commision
-	 * 
-	 * @return Relation
-	 */
-	public function commission() {
-		return $this->belongsTo(Commission::class);
-	}
+    /**
+     * Scope only active tasters.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeActive($query): Builder
+    {
+        return $query->where('active', '=', true);
+    }
 
-	/**
-	 * Scope only active tasters
-	 * 
-	 * @param Builder $query
-	 * @return Builder
-	 */
-	public function scopeActive($query): Builder {
-		return $query->where('active', '=', true);
-	}
+    /**
+     * 1 taster : 1 statistic.
+     *
+     * @return Relation
+     */
+    public function statistic()
+    {
+        return $this->hasOne(TasterStatistic::class);
+    }
 
-	/**
-	 * 1 taster : 1 statistic
-	 * 
-	 * @return Relation
-	 */
-	public function statistic() {
-		return $this->hasOne(TasterStatistic::class);
-	}
-
-	/**
-	 * 1 taster : n tastings
-	 * 
-	 * @return Relation
-	 */
-	public function tastings() {
-		return $this->hasMany(Tasting::class);
-	}
-
+    /**
+     * 1 taster : n tastings.
+     *
+     * @return Relation
+     */
+    public function tastings()
+    {
+        return $this->hasMany(Tasting::class);
+    }
 }

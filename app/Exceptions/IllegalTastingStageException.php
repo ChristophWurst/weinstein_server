@@ -16,21 +16,20 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Exceptions;
 
 use Exception;
 
-class IllegalTastingStageException extends Exception {
-
-	public function __construct($tastingStage = null) {
-		if (is_null($tastingStage)) {
-			parent::__construct();
-		} else {
-			parent::__construct("invalid tasting stage <$tastingStage>");
-		}
-	}
-
+class IllegalTastingStageException extends Exception
+{
+    public function __construct($tastingStage = null)
+    {
+        if (is_null($tastingStage)) {
+            parent::__construct();
+        } else {
+            parent::__construct("invalid tasting stage <$tastingStage>");
+        }
+    }
 }

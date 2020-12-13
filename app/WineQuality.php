@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App;
@@ -29,32 +28,32 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @property string $label
  * @property string $abbr
  */
-class WineQuality extends Model {
+class WineQuality extends Model
+{
+    public $timestamps = false;
 
-	public $timestamps = false;
+    /**
+     * Table name.
+     *
+     * @var string
+     */
+    protected $table = 'winequality';
 
-	/**
-	 * Table name
-	 * 
-	 * @var string 
-	 */
-	protected $table = 'winequality';
+    /**
+     * @return string
+     */
+    public function getSelectLabelAttribute()
+    {
+        return $this->id.' - '.$this->label;
+    }
 
-	/**
-	 * 
-	 * @return string
-	 */
-	public function getSelectLabelAttribute() {
-		return $this->id . ' - ' . $this->label;
-	}
-
-	/**
-	 * 1 wine quality : n wines
-	 * 
-	 * @return Relation
-	 */
-	public function wines() {
-		return $this->hasMany(Wine::class);
-	}
-
+    /**
+     * 1 wine quality : n wines.
+     *
+     * @return Relation
+     */
+    public function wines()
+    {
+        return $this->hasMany(Wine::class);
+    }
 }

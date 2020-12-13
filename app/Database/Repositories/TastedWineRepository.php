@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Database\Repositories;
@@ -24,10 +23,10 @@ namespace App\Database\Repositories;
 use App\Tasting\TastedWine;
 use App\Tasting\TastingNumber;
 
-class TastedWineRepository {
-
-	public function isTasted(TastingNumber $tastingNumber) {
-		return TastedWine::where('tastingnumber_id', $tastingNumber->id)->count() > 0;
-	}
-
+class TastedWineRepository
+{
+    public function isTasted(TastingNumber $tastingNumber)
+    {
+        return TastedWine::where('tastingnumber_id', $tastingNumber->id)->count() > 0;
+    }
 }

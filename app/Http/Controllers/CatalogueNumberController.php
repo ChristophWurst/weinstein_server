@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace App\Http\Controllers;
@@ -32,63 +31,67 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Session;
 
-class CatalogueNumberController extends BaseController {
+class CatalogueNumberController extends BaseController
+{
+    /** @var ViewFactory */
+    private $viewFactory;
 
-	/** @var ViewFactory */
-	private $viewFactory;
+    /** @var Redirector */
+    private $redirector;
 
-	/** @var Redirector */
-	private $redirector;
+    /** @var TastingCatalogueHandler */
+    private $catalogueHandler;
 
-	/** @var TastingCatalogueHandler */
-	private $catalogueHandler;
+    /**
+     * @param ViewFactory $viewFactory
+     * @param Redirector $redirector
+     * @param TastingCatalogueHandler $catalogueHandler
+     */
+    public function __construct(ViewFactory $viewFactory, Redirector $redirector, TastingCatalogueHandler $catalogueHandler)
+    {
+        $this->viewFactory = $viewFactory;
+        $this->catalogueHandler = $catalogueHandler;
+        $this->redirector = $redirector;
+    }
 
-	/**
-	 * @param ViewFactory $viewFactory
-	 * @param Redirector $redirector
-	 * @param TastingCatalogueHandler $catalogueHandler
-	 */
-	public function __construct(ViewFactory $viewFactory, Redirector $redirector, TastingCatalogueHandler $catalogueHandler) {
-		$this->viewFactory = $viewFactory;
-		$this->catalogueHandler = $catalogueHandler;
-		$this->redirector = $redirector;
-	}
+    /**
+     * @param Competition $competition
+     * @return View
+     */
+    public function import(Competition $competition): View
+    {
+        $this->authorize('import-catalogue-numbers', $competition);
 
-	/**
-	 * @param Competition $competition
-	 * @return View
-	 */
-	public function import(Competition $competition): View {
-		$this->authorize('import-catalogue-numbers', $competition);
-		return $this->viewFactory->make('competition/cataloguenumbers/import');
-	}
+        return $this->viewFactory->make('competition/cataloguenumbers/import');
+    }
 
-	/**
-	 * @param Request $request
-	 * @param Competition $competition
-	 * @return RedirectResponse
-	 */
-	public function store(Request $request, Competition $competition): RedirectResponse {
-		$this->authorize('import-catalogue-numbers', $competition);
-		$file = $request->file('xlsfile');
+    /**
+     * @param Request $request
+     * @param Competition $competition
+     * @return RedirectResponse
+     */
+    public function store(Request $request, Competition $competition): RedirectResponse
+    {
+        $this->authorize('import-catalogue-numbers', $competition);
+        $file = $request->file('xlsfile');
 
-		if (is_null($file) || !$file instanceof UploadedFile) {
-			return $this->redirector->route('cataloguenumbers.import', [
-					'competition' => $competition,
-			]);
-		}
+        if (is_null($file) || ! $file instanceof UploadedFile) {
+            return $this->redirector->route('cataloguenumbers.import', [
+                    'competition' => $competition,
+            ]);
+        }
 
-		try {
-			$importedRows = $this->catalogueHandler->importCatalogueNumbers($file, $competition);
-		} catch (ValidationException $ex) {
-			return $this->redirector->route('cataloguenumbers.import', [
-					'competition' => $competition,
-				])->withErrors($ex->getErrors());
-		}
-		Session::flash('rowsImported', $importedRows);
-		return $this->redirector->route('enrollment.wines', [
-				'competition' => $competition,
-		]);
-	}
+        try {
+            $importedRows = $this->catalogueHandler->importCatalogueNumbers($file, $competition);
+        } catch (ValidationException $ex) {
+            return $this->redirector->route('cataloguenumbers.import', [
+                    'competition' => $competition,
+                ])->withErrors($ex->getErrors());
+        }
+        Session::flash('rowsImported', $importedRows);
 
+        return $this->redirector->route('enrollment.wines', [
+                'competition' => $competition,
+        ]);
+    }
 }

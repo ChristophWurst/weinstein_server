@@ -16,7 +16,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License,version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
  */
 
 namespace Test\Unit\Auth\Abilities;
@@ -27,59 +26,62 @@ use App\MasterData\CompetitionState;
 use Mockery;
 use Test\TestCase;
 
-class CatalogueAbilitiesTest extends TestCase {
+class CatalogueAbilitiesTest extends TestCase
+{
+    use AbilitiesMock;
 
-	use AbilitiesMock;
+    /** @var CatalogueAbilities */
+    private $abilities;
 
-	/** @var CatalogueAbilities */
-	private $abilities;
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-	protected function setUp(): void {
-		parent::setUp();
+        $this->abilities = new CatalogueAbilities();
+    }
 
-		$this->abilities = new CatalogueAbilities();
-	}
+    public function testCreateNotACompetitionAdmin()
+    {
+        $user = $this->getUserMock();
+        $competition = Mockery::mock(Competition::class);
 
-	public function testCreateNotACompetitionAdmin() {
-		$user = $this->getUserMock();
-		$competition = Mockery::mock(Competition::class);
+        $competition->shouldReceive('administrates')
+            ->with($user)
+            ->once()
+            ->andReturn(false);
 
-		$competition->shouldReceive('administrates')
-			->with($user)
-			->once()
-			->andReturn(false);
+        $this->assertFalse($this->abilities->create($user, $competition));
+    }
 
-		$this->assertFalse($this->abilities->create($user, $competition));
-	}
+    public function testCreateAsCompetitionAdminButWrongState()
+    {
+        $user = $this->getUserMock();
+        $competition = Mockery::mock(Competition::class);
 
-	public function testCreateAsCompetitionAdminButWrongState() {
-		$user = $this->getUserMock();
-		$competition = Mockery::mock(Competition::class);
+        $competition->shouldReceive('administrates')
+            ->with($user)
+            ->once()
+            ->andReturn(true);
+        $competition->shouldReceive('getAttribute')
+            ->with('competition_state_id')
+            ->andReturn(CompetitionState::STATE_EXCLUDE);
 
-		$competition->shouldReceive('administrates')
-			->with($user)
-			->once()
-			->andReturn(true);
-		$competition->shouldReceive('getAttribute')
-			->with('competition_state_id')
-			->andReturn(CompetitionState::STATE_EXCLUDE);
+        $this->assertFalse($this->abilities->create($user, $competition));
+    }
 
-		$this->assertFalse($this->abilities->create($user, $competition));
-	}
+    public function testCreateAsCompetitionAdmin()
+    {
+        $user = $this->getUserMock();
+        $competition = Mockery::mock(Competition::class);
 
-	public function testCreateAsCompetitionAdmin() {
-		$user = $this->getUserMock();
-		$competition = Mockery::mock(Competition::class);
+        $competition->shouldReceive('administrates')
+            ->with($user)
+            ->once()
+            ->andReturn(true);
+        $competition->shouldReceive('getAttribute')
+            ->with('competition_state_id')
+            ->andReturn(CompetitionState::STATE_FINISHED);
 
-		$competition->shouldReceive('administrates')
-			->with($user)
-			->once()
-			->andReturn(true);
-		$competition->shouldReceive('getAttribute')
-			->with('competition_state_id')
-			->andReturn(CompetitionState::STATE_FINISHED);
-
-		$this->assertTrue($this->abilities->create($user, $competition));
-	}
-
+        $this->assertTrue($this->abilities->create($user, $competition));
+    }
 }
