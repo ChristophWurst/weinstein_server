@@ -31,11 +31,6 @@ class TastingSessionValidator extends Validator
      */
     private $competition = null;
 
-    /**
-     * Models class name.
-     *
-     * @var string
-     */
     protected $modelClass = TastingSession::class;
 
     /**

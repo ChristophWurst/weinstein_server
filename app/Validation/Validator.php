@@ -31,6 +31,7 @@ class Validator
      * Models class name.
      *
      * @var string
+     * @psalm-var class-string
      */
     protected $modelClass = null;
 

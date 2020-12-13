@@ -25,11 +25,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class ApplicantValidator extends Validator
 {
-    /**
-     * Models class name.
-     *
-     * @var string
-     */
     protected $modelClass = Applicant::class;
 
     /**

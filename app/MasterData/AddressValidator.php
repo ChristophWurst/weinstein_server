@@ -25,11 +25,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class AddressValidator extends Validator
 {
-    /**
-     * Models class name.
-     *
-     * @var string
-     */
     protected $modelClass = Address::class;
 
     /**
