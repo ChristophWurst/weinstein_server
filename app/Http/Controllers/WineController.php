@@ -27,6 +27,7 @@ use App\FlawExport;
 use App\MasterData\Applicant;
 use App\MasterData\Competition;
 use App\MasterData\CompetitionState;
+use App\MasterData\User;
 use App\MasterData\WineSort;
 use App\Wine;
 use App\Wine\EnrollmentForm;
@@ -236,6 +237,7 @@ class WineController extends BaseController
                 unset($data['winequality_id']);
             }
 
+            /** @var User $user */
             $user = Auth::user();
             if (! $competition->administrates($user)) {
                 //TODO: move to validation
@@ -335,6 +337,7 @@ class WineController extends BaseController
                 $data['winequality_id'] = null;
             }
 
+            /** @var User $user */
             $user = Auth::user();
             if (! $wine->competition->administrates($user)) {
                 // TODO: move to validation
@@ -364,13 +367,15 @@ class WineController extends BaseController
      * Show confirmation dialog for deleting the wine.
      *
      * @param Wine $wine
-     * @return Resp
+     * @return View
      */
     public function delete(Wine $wine)
     {
         $this->authorize('delete-wine', $wine);
 
-        return $this->viewFactory->make('competition/wines/delete')->withWine($wine);
+        return $this->viewFactory
+            ->make('competition/wines/delete')
+            ->with('wine', $wine);
     }
 
     /**

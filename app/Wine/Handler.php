@@ -73,7 +73,9 @@ class Handler implements WineHandler
 
         $validator = new WineValidator($data);
         $validator->setCompetition($competition);
-        $validator->setUser(Auth::user());
+        /** @var User $user */
+        $user = Auth::user();
+        $validator->setUser($user);
         $validator->validateCreate();
         $wine = new Wine($data);
 
@@ -117,7 +119,9 @@ class Handler implements WineHandler
 
         $validator = $this->validatorFactory->newWineValidator($wine, $data);
         $validator->setCompetition($wine->competition);
-        $validator->setUser(Auth::user());
+        /** @var User $user */
+        $user = Auth::user();
+        $validator->setUser($user);
         $validator->validateUpdate();
 
         if (isset($data['kdb']) && $wine->kdb !== $data['kdb'] && $competitionState->id !== CompetitionState::STATE_KDB) {
@@ -142,10 +146,10 @@ class Handler implements WineHandler
         ]);
         if ($wine->isDirty($enrollmentAttributes)) {
             // These attributes may only be changed via enrollment while 'nr' is not set or by an admin
-            if ($competitionState->id !== CompetitionState::STATE_ENROLLMENT && ! Auth::user()->isAdmin()) {
+            if ($competitionState->id !== CompetitionState::STATE_ENROLLMENT && ! $user->isAdmin()) {
                 throw new WineLockedException();
             }
-            if ($competitionState->id === CompetitionState::STATE_ENROLLMENT && ! is_null($wine->nr) && ! Auth::user()->isAdmin()) {
+            if ($competitionState->id === CompetitionState::STATE_ENROLLMENT && ! is_null($wine->nr) && ! $user->isAdmin()) {
                 throw new WineLockedException();
             }
         }
@@ -186,7 +190,7 @@ class Handler implements WineHandler
     {
         $validator = Validator::make($data, ['value' => 'required|boolean']);
         if ($validator->fails()) {
-            throw new ValidationException($validator->messages());
+            throw new ValidationException($validator->errors());
         }
 
         $this->wineRepository->update($wine, [
@@ -314,7 +318,7 @@ class Handler implements WineHandler
     {
         $validator = \Validator::make($data, ['value' => 'required|boolean']);
         if ($validator->fails()) {
-            throw new ValidationException($validator->messages());
+            throw new ValidationException($validator->errors());
         }
 
         $this->wineRepository->update($wine, [
