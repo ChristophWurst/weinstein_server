@@ -46,11 +46,6 @@ class TastingValidator extends Validator
      */
     private $nrOfCommissions = null;
 
-    /**
-     * Models class name.
-     *
-     * @var string
-     */
     protected $modelClass = TastingNumber::class;
 
     /**

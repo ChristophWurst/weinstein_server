@@ -41,11 +41,6 @@ class WineValidator extends Validator
      */
     private $user = null;
 
-    /**
-     * Models class name.
-     *
-     * @var string
-     */
     protected $modelClass = Wine::class;
 
     /**

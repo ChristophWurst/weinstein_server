@@ -25,11 +25,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class WineSortValidator extends Validator
 {
-    /**
-     * Models class name.
-     *
-     * @var string
-     */
     protected $modelClass = WineSort::class;
 
     /**

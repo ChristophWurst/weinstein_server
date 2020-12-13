@@ -25,11 +25,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class TasterValidator extends Validator
 {
-    /**
-     * Models class name.
-     *
-     * @var array
-     */
     protected $modelClass = Taster::class;
 
     /**
