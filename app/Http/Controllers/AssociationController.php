@@ -26,6 +26,7 @@ use App\MasterData\Association;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redirect;
@@ -92,9 +93,9 @@ class AssociationController extends BaseController
      *
      * @param Request $request
      *
-     * @return Response
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $this->authorize('create-association');
 
@@ -159,9 +160,10 @@ class AssociationController extends BaseController
      *
      * @param Association $association
      * @param Request $request
-     * @return Response
+     *
+     * @return RedirectResponse
      */
-    public function update(Association $association, Request $request)
+    public function update(Association $association, Request $request): RedirectResponse
     {
         $this->authorize('edit-association', $association);
 

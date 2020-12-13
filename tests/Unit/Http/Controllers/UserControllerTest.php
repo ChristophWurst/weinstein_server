@@ -28,6 +28,7 @@ use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Laravel\BrowserKitTesting\TestResponse;
 use Mockery;
 use Mockery\MockInterface;
@@ -80,24 +81,26 @@ class UserControllerTest extends BrowserKitTestCase
         $viewData = [
             'users' => $users,
         ];
+        $view = $this->createMock(View::class);
         $this->viewFactory->shouldReceive('make')
             ->with('settings/user/index', $viewData)
             ->once()
-            ->andReturn('view');
+            ->andReturn($view);
 
-        $this->assertEquals('view', $this->controller->index());
+        $this->assertSame($view, $this->controller->index());
     }
 
     public function testCreate()
     {
         $user = $this->getAdminMock();
         $this->be($user);
+        $view = $this->createMock(View::class);
 
         $this->viewFactory->shouldReceive('make')
             ->with('settings/user/form')
-            ->andReturn('view');
+            ->andReturn($view);
 
-        $this->assertEquals('view', $this->controller->create());
+        $this->assertSame($view, $this->controller->create());
     }
 
     public function testStoreValidationException()
@@ -157,6 +160,7 @@ class UserControllerTest extends BrowserKitTestCase
     {
         $user = $this->getAdminMock();
         $userToShow = Mockery::mock(User::class);
+        $view = $this->createMock(View::class);
 
         $this->be($user);
         $this->viewFactory->shouldReceive('make')
@@ -164,15 +168,16 @@ class UserControllerTest extends BrowserKitTestCase
             ->with('settings/user/show', [
                 'data' => $userToShow,
             ])
-            ->andReturn('view');
+            ->andReturn($view);
 
-        $this->assertEquals('view', $this->controller->show($userToShow));
+        $this->assertSame($view, $this->controller->show($userToShow));
     }
 
     public function testEdit()
     {
         $user = $this->getAdminMock();
         $userToEdit = Mockery::mock(User::class);
+        $view = $this->createMock(View::class);
 
         $this->be($user);
         $this->viewFactory->shouldReceive('make')
@@ -180,9 +185,9 @@ class UserControllerTest extends BrowserKitTestCase
             ->with('settings/user/form', [
                 'data' => $userToEdit,
             ])
-            ->andReturn('view');
+            ->andReturn($view);
 
-        $this->assertEquals('view', $this->controller->edit($userToEdit));
+        $this->assertSame($view, $this->controller->edit($userToEdit));
     }
 
     public function testUpdateValidationException()
@@ -262,6 +267,7 @@ class UserControllerTest extends BrowserKitTestCase
     {
         $user = $this->getAdminMock();
         $userToDelete = Mockery::mock(User::class);
+        $view = $this->createMock(View::class);
 
         $this->be($user);
         $this->viewFactory->shouldReceive('make')
@@ -269,9 +275,9 @@ class UserControllerTest extends BrowserKitTestCase
             ->with('settings/user/delete', [
                 'user' => $userToDelete,
             ])
-            ->andReturn('view');
+            ->andReturn($view);
 
-        $this->assertEquals('view', $this->controller->delete($userToDelete));
+        $this->assertEquals($view, $this->controller->delete($userToDelete));
     }
 
     public function testDestroyDoNotDelete()

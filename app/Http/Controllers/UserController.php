@@ -26,6 +26,8 @@ use App\MasterData\User;
 use Exception;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redirect;
@@ -54,9 +56,10 @@ class UserController extends BaseController
      * - Standard user sees only him/herself.
      *
      * @todo list linked applicant/associations
-     * @return Response
+     *
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         $user = $this->auth->user();
         $users = $this->masterDataStore->getUsers($user);
@@ -68,9 +71,10 @@ class UserController extends BaseController
 
     /**
      * Show form for creating a new user.
-     * @return Response
+     *
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         $this->authorize('create-user');
 
@@ -81,9 +85,10 @@ class UserController extends BaseController
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return Response
+     *
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $this->authorize('create-user');
 
@@ -109,9 +114,10 @@ class UserController extends BaseController
      * Display the specified resource.
      *
      * @param User $user
-     * @return Response
+     *
+     * @return View
      */
-    public function show(User $user)
+    public function show(User $user): View
     {
         $this->authorize('show-user', $user);
 
@@ -127,9 +133,10 @@ class UserController extends BaseController
      *  or if not admin and not same user
      *
      * @param User $user
-     * @return Response
+     *
+     * @return View
      */
-    public function edit(User $user)
+    public function edit(User $user): View
     {
         $this->authorize('edit-user', $user);
 
@@ -146,9 +153,10 @@ class UserController extends BaseController
      *  or if not admin and not same user
      *
      * @param User $user
-     * @return Response
+     *
+     * @return RedirectResponse
      */
-    public function update(User $user, Request $request)
+    public function update(User $user, Request $request): RedirectResponse
     {
         $this->authorize('edit-user', $user);
 
@@ -187,9 +195,10 @@ class UserController extends BaseController
      *  - user tries to delete himself
      *
      * @param User $user
-     * @return Response
+     *
+     * @return View
      */
-    public function delete(User $user)
+    public function delete(User $user): View
     {
         $this->authorize('delete-user', $user);
 
@@ -202,15 +211,16 @@ class UserController extends BaseController
      * Remove the specified user from storage.
      *
      * @param User $user
-     * @return Response
+     *
+     * @return RedirectResponse
      */
-    public function destroy(User $user, Request $request)
+    public function destroy(User $user, Request $request): RedirectResponse
     {
         $this->authorize('delete-user', $user);
 
         //prevent user from deleting her/his own account
         if ($user->is($this->auth->user())) {
-            new Exception('users must not delete themselves');
+            throw new Exception('users must not delete themselves');
         }
 
         if ($request->get('del') === 'Ja') {

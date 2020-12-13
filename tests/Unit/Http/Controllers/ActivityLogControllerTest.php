@@ -24,6 +24,7 @@ use App\Contracts\ActivityLogger;
 use App\Http\Controllers\ActivityLogController;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\View\View;
 use Mockery;
 use Mockery\MockInterface;
 use Test\BrowserKitTestCase;
@@ -58,13 +59,14 @@ class ActivityLogControllerTest extends BrowserKitTestCase
         $this->activityLogger->shouldReceive('getMostRecentLogs')
             ->once()
             ->andReturn($data);
+        $view = $this->createMock(View::class);
         $this->viewFactory->shouldReceive('make')
             ->once()
             ->with('settings/activitylog/index', [
                 'logs' => $data,
             ])
-            ->andReturn('view');
+            ->andReturn($view);
 
-        $this->assertEquals('view', $this->controller->index());
+        $this->assertSame($view, $this->controller->index());
     }
 }

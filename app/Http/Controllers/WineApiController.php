@@ -8,8 +8,10 @@ use App\Exceptions\ValidationException;
 use App\MasterData\Competition;
 use App\Wine;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use function response;
 use function route;
@@ -25,7 +27,7 @@ class WineApiController extends BaseController
     }
 
     /**
-     * @return Response
+     * @return JsonResponse|Paginator
      */
     public function index(Request $request)
     {

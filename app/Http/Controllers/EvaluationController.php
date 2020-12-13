@@ -22,6 +22,7 @@ namespace App\Http\Controllers;
 
 use App\MasterData\Competition;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Response;
 
 class EvaluationController extends BaseController
@@ -37,11 +38,7 @@ class EvaluationController extends BaseController
         $this->view = $view;
     }
 
-    /**
-     * @param Competition $competition
-     * @return Response
-     */
-    public function protocols(Competition $competition)
+    public function protocols(Competition $competition): View
     {
         $this->authorize('show-evaluations');
 

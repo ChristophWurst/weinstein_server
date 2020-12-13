@@ -27,6 +27,7 @@ use App\MasterData\User;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
@@ -96,9 +97,9 @@ class ApplicantController extends BaseController
     /**
      * Store a newly created applicant in storage.
      *
-     * @return Response
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $this->authorize('create-applicant');
 
@@ -149,9 +150,9 @@ class ApplicantController extends BaseController
     /**
      * Read uploaded .csv file, parse, validate and save its content.
      *
-     * @return Response
+     * @return RedirectResponse
      */
-    public function postImport(Request $request)
+    public function postImport(Request $request): RedirectResponse
     {
         $this->authorize('import-applicant');
 
@@ -202,9 +203,10 @@ class ApplicantController extends BaseController
      * Update the specified applicant in storage.
      *
      * @param Applicant $applicant
-     * @return Response
+     *
+     * @return RedirectResponse
      */
-    public function update(Applicant $applicant)
+    public function update(Applicant $applicant): RedirectResponse
     {
         $this->authorize('edit-applicant', $applicant);
 
