@@ -3,7 +3,7 @@
 <?php $edit = isset($wine); ?>
 
 @section('content')
-<h1>Wein {{ $edit ? '&auml;ndern' : 'hinzuf&uuml;gen' }}</h1>
+<h1>Wein {{ $edit ? '&auml;ndern' : 'hinzufügen' }}</h1>
 @if($success)
     <div class="alert alert-success">
         <strong>Wein gespeichert.</strong> Der Wein wurde erfolgreich gespeichert. Sie können nun weitere Weine anlegen.
