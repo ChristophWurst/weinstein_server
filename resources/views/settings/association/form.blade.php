@@ -3,7 +3,7 @@
 <?php $edit = isset($data); ?>
 
 @section('settings_content')
-<h1>Verein {{ $edit ? '&auml;ndern' : 'hinzuf&uuml;gen' }}</h1>
+<h1>Verein {{ $edit ? '&auml;ndern' : 'hinzufügen' }}</h1>
 @if(count($errors->all()) > 0)
     <div class="alert alert-danger">
         <strong>Fehler!</strong> Bitte korrigieren Sie folgende Eingaben:

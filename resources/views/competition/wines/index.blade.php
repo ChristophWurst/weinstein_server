@@ -147,7 +147,7 @@
 
 $(function() {
     var url = '{!! route('enrollment.wines', array('competition' => $competition->id)) !!}/redirect/';
-    
+
     var input = $('#search-wine input');
     input.val(null); // empty input
     var button = $('#search-wine button');
