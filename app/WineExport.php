@@ -63,8 +63,8 @@ class WineExport
         'Adresse',
         'WeinstandNr',
         'Weinstand',
-        'Alkohol',
-        'Alkohol ges.',
+        'Vorhandener Alkohol',
+        'Säure',
         'Zucker',
         '1. Bewertung',
         '2. Bewertung',
@@ -125,6 +125,7 @@ class WineExport
         //data
         $row = 2;
         foreach ($this->wines as $w) {
+            /* @var WineDetails $w */
             $sheet->setCellValue("A$row", $w->nr);
             $sheet->setCellValue("B$row", $w->winesort_order);
             $sheet->setCellValue("C$row", $w->winesort_name);
@@ -150,7 +151,7 @@ class WineExport
             $sheet->setCellValue("Q$row", $w->applicant->association->id);
             $sheet->setCellValue("R$row", $w->applicant->association->name);
             $sheet->setCellValue("S$row", $w->alcohol);
-            $sheet->setCellValue("T$row", $w->alcoholtot);
+            $sheet->setCellValue("T$row", $w->acidity);
             $sheet->setCellValue("U$row", $w->sugar);
             if ($w->rating1) {
                 $sheet->setCellValue("V$row", $w->rating1);

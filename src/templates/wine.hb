@@ -17,7 +17,7 @@
     {{#if winequality}}{{ winequality.abbr }}{{else}}-{{/if}}
 </td>
 <td class="text-center">{{l10nFloat alcohol }}</td>
-<td class="text-center">{{#if alcoholtot}}{{ l10nFloat alcoholtot }}{{else}}-{{/if}}</td>
+<td class="text-center">{{l10nFloat acidity }}</td>
 <td class="text-center">{{l10nFloat sugar }}</td>
 {{#if show_rating1 }}
     <td class="text-center">{{#if rating1}}{{l10nFloat rating1 }}{{else}}-{{/if}}</td>{{/if}}

@@ -81,18 +81,14 @@
                 </div>
 
                 <div class="col-md-6">
-                    Alkohol
+                    Säure
                 </div>
                 <div class="col-md-6">
-                    @if (!is_null($wine->alcoholtot))
-                    {{ str_replace(".", ",", $wine->alcoholtot) }}
-                    @else
-                    -
-                    @endif
+                    {{ str_replace(".", ",", $wine->acidity) }}
                 </div>
 
                 <div class="col-md-6">
-                    Alkohol gesamt
+                    Vorhandener Alkohol
                 </div>
                 <div class="col-md-6">
                     {{ str_replace(".", ",", $wine->alcohol) }}
