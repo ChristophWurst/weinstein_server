@@ -53,6 +53,7 @@ use Illuminate\Support\Facades\DB;
  * @property bool $chosen
  * @property bool $excluded
  * @property string $comment
+ * @property bool $kdb_certificate
  */
 class Wine extends Model implements AdministrateModel
 {
@@ -85,6 +86,7 @@ class Wine extends Model implements AdministrateModel
         'chosen',
         'excluded',
         'catalogue_number',
+        'kdb_certificate',
     ];
 
     /**

@@ -61,6 +61,7 @@ class WineValidator extends Validator
             'alcoholtot' => 'Alkohol gesamt',
             'sugar' => 'Zucker',
             'approvalnr' => 'Pr&uuml;fnummer',
+            'kdb_certificate' => 'KdB-Urkunde',
         ];
     }
 
@@ -104,6 +105,7 @@ class WineValidator extends Validator
             'alcoholtot' => 'numeric|between:0.1,99.9',
             'sugar' => 'required|numeric|between:0.1,300.0',
             'approvalnr' => 'sometimes|alpha_num|max:20',
+            'kdb_certificate' => 'sometimes|boolean',
         ];
     }
 
@@ -132,6 +134,7 @@ class WineValidator extends Validator
             'alcoholtot' => 'numeric|between:0.1,99.9',
             'sugar' => 'required|numeric|between:0.1,300.0',
             'approvalnr' => 'sometimes|alpha_num|max:20',
+            'kdb_certificate' => 'sometimes|boolean',
         ];
     }
 

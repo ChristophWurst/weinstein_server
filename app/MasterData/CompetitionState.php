@@ -87,6 +87,7 @@ class CompetitionState extends Model
             default:
                 Log::error('unknown competition state '.$this->description);
                 App::abort(500);
+
                 return 'IMPOSSIBLE';
         }
     }

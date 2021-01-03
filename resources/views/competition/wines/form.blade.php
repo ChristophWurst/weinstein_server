@@ -95,6 +95,12 @@
         </div>
     </div>
     <div class="form-group">
+        {!! Form::Label('approvalnr', 'Urkunde für KdB erwünscht', array('class' => 'col-sm-2 col-md-2 control-label')) !!}
+        <div class="col-sm-10 col-md-1">
+            {!! Form::checkbox('kdb_certificate', 'true', false, array('class' => 'custom-control-input')) !!}
+        </div>
+    </div>
+    <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10 col-md-offset-2">
             {!! Form::submit('Speichern', array('class' => 'btn btn-default')) !!}
         </div>
