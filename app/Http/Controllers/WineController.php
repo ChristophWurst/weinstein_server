@@ -45,8 +45,8 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use function route;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class WineController extends BaseController
 {
@@ -236,6 +236,11 @@ class WineController extends BaseController
             }
             if (isset($data['winequality_id']) && $data['winequality_id'] === 'none') {
                 unset($data['winequality_id']);
+            }
+            if (! isset($data['kdb_certificate'])) {
+                $data['kdb_certificate'] = false;
+            } else {
+                $data['kdb_certificate'] = $data['kdb_certificate'] === 'true';
             }
 
             /** @var User $user */

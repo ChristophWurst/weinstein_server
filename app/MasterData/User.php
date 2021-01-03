@@ -239,7 +239,7 @@ class User extends Authenticatable
             // User is assoc admin -> only check assocs
             $first = $this->associations()->whereNotNull('email')->first();
             if (is_null($first)) {
-                throw new \Exception("No email set for association");
+                throw new \Exception('No email set for association');
             }
 
             return $first->email;
@@ -247,7 +247,7 @@ class User extends Authenticatable
             // User might be applicant admin -> check those
             $first = $this->applicants()->whereNotNull('email')->first();
             if (is_null($first)) {
-                throw new \Exception("No email set for applicant");
+                throw new \Exception('No email set for applicant');
             }
 
             return $first->email;
