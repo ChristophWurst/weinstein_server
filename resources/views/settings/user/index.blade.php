@@ -33,8 +33,8 @@
                     @endif
                 </td>
                 <td>
-                    {!! link_to_route('settings.users/edit', 'bearbeiten', 
-                                array('username' => $u->username)) !!}
+                    {!! link_to_route('settings.users/edit', 'bearbeiten',
+                                array('user' => $u)) !!}
                     @if($u->username != Auth::user()->username)
                         | {!! link_to_route('settings.users/delete', 'l&ouml;schen', array('user' => $u->username)) !!}
                     @endif
