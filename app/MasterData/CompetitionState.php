@@ -63,7 +63,7 @@ class CompetitionState extends Model
     {
         switch ($this->description) {
             case 'ENROLLMENT':
-                return '&Uuml;bernahme';
+                return 'Übernahme';
             case 'TASTINGNUMBERS1':
                 return 'Kostnummern 1';
             case 'TASTING1':
