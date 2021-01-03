@@ -224,12 +224,8 @@ class WineController extends BaseController
             if (isset($data['alcohol'])) {
                 $data['alcohol'] = $this->commaToDot($data['alcohol']);
             }
-            if (isset($data['alcoholtot'])) {
-                if (! empty($data['alcoholtot'])) {
-                    $data['alcoholtot'] = $this->commaToDot($data['alcoholtot']);
-                } else {
-                    unset($data['alcoholtot']);
-                }
+            if (isset($data['acidity'])) {
+                $data['acidity'] = $this->commaToDot($data['acidity']);
             }
             if (isset($data['sugar'])) {
                 $data['sugar'] = $this->commaToDot($data['sugar']);
@@ -332,10 +328,8 @@ class WineController extends BaseController
             if (isset($data['alcohol'])) {
                 $data['alcohol'] = $this->commaToDot($data['alcohol']);
             }
-            if (isset($data['alcoholtot']) && $data['alcoholtot'] !== '') {
-                $data['alcoholtot'] = $this->commaToDot($data['alcoholtot']);
-            } else {
-                $data['alcoholtot'] = null;
+            if (isset($data['acidity'])) {
+                $data['acidity'] = $this->commaToDot($data['acidity']);
             }
             if (isset($data['sugar'])) {
                 $data['sugar'] = $this->commaToDot($data['sugar']);

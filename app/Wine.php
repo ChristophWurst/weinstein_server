@@ -45,7 +45,7 @@ use Illuminate\Support\Facades\DB;
  * @property string $label
  * @property int $vintage
  * @property float $alcohol
- * @property float $alcoholtot
+ * @property float $acidity
  * @property float $sugar
  * @property string $approvalnr
  * @property bool $kdb
@@ -79,7 +79,7 @@ class Wine extends Model implements AdministrateModel
         'winequality_id',
         'vintage',
         'alcohol',
-        'alcoholtot',
+        'acidity',
         'sugar',
         'kdb',
         'sosi',

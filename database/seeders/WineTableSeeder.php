@@ -49,7 +49,7 @@ class WineTableSeeder extends Seeder
      * @param string $label
      * @param int $vintage
      * @param float $alcohol
-     * @param float $alcoholtot
+     * @param float $acidity
      * @param float $sugar
      * @param int $competition
      * @param int $applicant
@@ -58,14 +58,14 @@ class WineTableSeeder extends Seeder
      * @param int $winequality
      * @return Wine
      */
-    public static function createWine($nr, $label, $vintage, $alcohol, $alcoholtot, $sugar, $competition, $applicant, $association, $winesort, $winequality)
+    public static function createWine($nr, $label, $vintage, $alcohol, $acidity, $sugar, $competition, $applicant, $association, $winesort, $winequality)
     {
         return Wine::create([
                     'nr' => $nr,
                     'label' => $label,
                     'vintage' => $vintage,
                     'alcohol' => $alcohol,
-                    'alcoholtot' => $alcoholtot,
+                    'acidity' => $acidity,
                     'sugar' => $sugar,
                     'competition_id' => $competition,
                     'association_id' => $association,

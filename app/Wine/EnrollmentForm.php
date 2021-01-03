@@ -147,8 +147,8 @@ class EnrollmentForm
         };
 
         $pdf->Ln(10);
-        $pdf->Cell(70, 10, 'vorhandener Alkohol: '.$commaToDot($this->wine->alcohol).'%vol');
-        $pdf->Cell(85, 10, 'Gesamtalkohol (berechnet): '.$commaToDot($this->wine->alcoholtot).'%vol');
+        $pdf->Cell(70, 10, 'Vorhandener Alkohol: '.$commaToDot($this->wine->alcohol).'%vol');
+        $pdf->Cell(85, 10, 'Säure: '.$commaToDot($this->wine->acidity).'g/l');
         $pdf->Cell(70, 10, 'Zucker: '.$commaToDot($this->wine->sugar).'g/l');
 
         $pdf->Ln(20);

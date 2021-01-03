@@ -11,7 +11,7 @@
         <th>Jahr</th>
         <th class="text-center">Qualit&auml;t</th>
         <th class="text-center">Alk.</th>
-        <th class="text-center">Alk. ges.</th>
+        <th class="text-center">Säure</th>
         <th class="text-center">Zucker</th>
         {{#if show_rating1 }}
             <th class="text-center">1. Bewertung</th>{{/if}}

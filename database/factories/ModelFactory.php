@@ -90,7 +90,7 @@ $factory->define(Wine::class,
         'label' => str_random(10),
         'vintage' => rand(2005, 2020),
         'alcohol' => rand(1, 200) / 10,
-        'alcoholtot' => rand(1, 200) / 10,
+        'acidity' => rand(1, 200) / 10,
         'sugar' => rand(1, 300) / 10,
         'approvalnr' => str_random(15),
         'winesort_id' => function () {

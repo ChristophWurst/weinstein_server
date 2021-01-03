@@ -71,19 +71,19 @@
         </div>
     </div>
     <div class="form-group">
-        {!! Form::Label('alcohol', 'Alkohol', array('class' => 'col-sm-2 col-md-2 control-label')) !!}
+        {!! Form::Label('alcohol', 'Vorhandener Alkohol [%]', array('class' => 'col-sm-2 col-md-2 control-label')) !!}
         <div class="col-sm-10 col-md-1">
             {!! Form::text('alcohol', ($edit ? str_replace(".", ",", $wine['alcohol']) : ''), array('class' => 'form-control')) !!}
         </div>
     </div>
     <div class="form-group">
-        {!! Form::Label('alcoholtot', 'Alkohol gesamt', array('class' => 'col-sm-2 col-md-2 control-label')) !!}
+        {!! Form::Label('acidity', 'Säure [g/l]', array('class' => 'col-sm-2 col-md-2 control-label')) !!}
         <div class="col-sm-10 col-md-1">
-            {!! Form::text('alcoholtot', ($edit ? str_replace(".", ",", $wine['alcoholtot']) : ''), array('class' => 'form-control')) !!}
+            {!! Form::text('acidity', ($edit ? str_replace(".", ",", $wine['acidity']) : ''), array('class' => 'form-control')) !!}
         </div>
     </div>
     <div class="form-group">
-        {!! Form::Label('sugar', 'Zucker', array('class' => 'col-sm-2 col-md-2 control-label')) !!}
+        {!! Form::Label('sugar', 'Zucker [g/l]', array('class' => 'col-sm-2 col-md-2 control-label')) !!}
         <div class="col-sm-10 col-md-1">
             {!! Form::text('sugar', ($edit ? str_replace(".", ",", $wine['sugar']) : ''), array('class' => 'form-control')) !!}
         </div>
