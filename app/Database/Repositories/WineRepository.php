@@ -23,7 +23,7 @@ namespace App\Database\Repositories;
 use App\MasterData\Competition;
 use App\MasterData\User;
 use App\Wine;
-use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Support\Collection;
 
 class WineRepository
 {
@@ -56,13 +56,13 @@ class WineRepository
      * Get competitions wines.
      *
      * @param Competition $competition
-     * @return Paginator
+     * @return Collection
      */
     public function findAll(Competition $competition)
     {
         return $competition->wine_details()
                 ->with('applicant', 'applicant.association', 'winesort', 'winequality')
-                ->paginate(200);
+                ->get();
     }
 
     /**
@@ -70,7 +70,7 @@ class WineRepository
      *
      * @param User $user
      * @param Competition $competition
-     * @return Paginator
+     * @return Collection
      */
     public function findUsersWines(User $user, Competition $competition)
     {
@@ -78,7 +78,7 @@ class WineRepository
                 ->where('applicant_username', $user->username)
                 ->orWhere('association_username', $user->username)
                 ->with('applicant', 'applicant.association', 'winesort', 'winequality')
-                ->paginate(200);
+                ->get();
     }
 
     /**

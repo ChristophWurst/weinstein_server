@@ -1,9 +1,11 @@
 const path = require('path');
+const { VueLoaderPlugin } = require('vue-loader');
 const webpack = require('webpack');
 
 module.exports = {
     entry: {
-        weinstein: path.join(__dirname, 'src/weinstein.js')
+        weinstein: path.join(__dirname, 'src/weinstein.js'),
+        'weinstein-wines': path.join(__dirname, 'src/weinstein-wines')
     },
     output: {
         filename: '[name].js',
@@ -46,7 +48,11 @@ module.exports = {
                         loader: 'url-loader'
                     }
                 ]
-            }
+            },
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader'
+            },
         ]
     },
     plugins: [
@@ -54,7 +60,8 @@ module.exports = {
             '_': "underscore",
             $: "jquery",
             jQuery: "jquery"
-        })
+        }),
+        new VueLoaderPlugin()
     ],
     resolve: {
         extensions: ['*', '.js', '.json'],

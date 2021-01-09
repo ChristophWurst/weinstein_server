@@ -4,6 +4,7 @@
 	"type": "project",
 	"require": {
 		"php": ">=7.4",
+		"ext-json": "*",
 		"ext-redis": "*",
 		"ext-zip": "1.*",
 		"ext-zlib": "*",
@@ -16,7 +17,7 @@
 		"phpoffice/phpspreadsheet": "^1.15",
 		"sentry/sentry-laravel": "*",
 		"setasign/fpdf": "^1.8"
-	},
+    },
 	"require-dev": {
 		"filp/whoops": "~2.0",
 		"mockery/mockery": "1.4.2",

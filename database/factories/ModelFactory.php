@@ -120,6 +120,7 @@ $factory->define(WineSort::class, function () {
         'order' => rand(1, 50000),
         'name' => str_random(10),
         'quality_allowed' => '[]',
+        'synonyms' => null,
     ];
 });
 

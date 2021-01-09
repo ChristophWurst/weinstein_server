@@ -28,6 +28,8 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @property int $id
  * @property int $order
  * @property string $name
+ * @property string $quality_allowed
+ * @property string $synonyms
  */
 class WineSort extends Model
 {

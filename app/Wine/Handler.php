@@ -80,10 +80,16 @@ class Handler implements WineHandler
         $wine = new Wine($data);
 
         $sort = $wine->winesort;
-        $qualitiesAllowed = json_decode($sort->quality_allowed, false);
+        $qualitiesAllowed = $sort->quality_allowed === null ? [] : json_decode($sort->quality_allowed, true, 512, JSON_THROW_ON_ERROR);
         if (is_array($qualitiesAllowed) && ! empty($qualitiesAllowed) && ! in_array($wine->winequality_id, $qualitiesAllowed)) {
             throw new ValidationException(new MessageBag([
-                'Ungültige Kombination von Sorte und Qualitätsstufe. Zulässige Qualitätsstufe(n) ist/sind: '.implode(',', $qualitiesAllowed),
+                'Ungültige Kombination von Sorte und Qualitätsstufe. Zulässige Qualitätsstufe(n) ist/sind: '.implode(', ', $qualitiesAllowed),
+            ]));
+        }
+        $synonymsAllowed = $sort->synonyms === null ? [] : json_decode($sort->synonyms, true, 512, JSON_THROW_ON_ERROR);
+        if (is_array($synonymsAllowed) && ! empty($synonymsAllowed) && ! in_array($wine->winesort_synonym, $synonymsAllowed)) {
+            throw new ValidationException(new MessageBag([
+                'Ungültiges Synonym. Zulässige Synonyme für '.$sort->name.' sind: '.implode(', ', $synonymsAllowed),
             ]));
         }
 
@@ -413,8 +419,8 @@ class Handler implements WineHandler
     {
         if ($user->isAdmin()) {
             return $this->wineRepository->findAll($competition);
-        } else {
-            return $this->wineRepository->findUsersWines($user, $competition);
         }
-    }
+
+		return $this->wineRepository->findUsersWines($user, $competition);
+	}
 }

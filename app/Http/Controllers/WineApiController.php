@@ -27,7 +27,7 @@ class WineApiController extends BaseController
     }
 
     /**
-     * @return JsonResponse|Paginator
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -37,12 +37,9 @@ class WineApiController extends BaseController
             return response()->json([], 404);
         }
 
-        $wines = $this->wineHandler->getUsersWines(Auth::user(), $competition);
-        $wines->setPath(route('wines.index', [
-            'competition_id' => $competitionId,
-        ]));
-
-        return $wines;
+		return response()->json(
+			$this->wineHandler->getUsersWines(Auth::user(), $competition)
+		);
     }
 
     public function update(Wine $wines, Request $request)

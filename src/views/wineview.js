@@ -23,8 +23,6 @@ import {CompositeView, CollectionView, View} from 'backbone.marionette';
 import {getCurrentCompetition} from '../competition';
 import {getCurrentUser} from '../user'
 import {showError} from './errormodalview'
-import WineTemplate from '../templates/wine.hb';
-import WineTableTemplate from '../templates/wine_table.hb';
 
 function handleAPIErrors(e) {
     console.error(e);
@@ -39,7 +37,6 @@ function handleAPIErrors(e) {
 
 const WineView = View.extend({
     tagName: 'tr',
-    template: WineTemplate,
     _tableOptions: {},
     ui: {
         editKdb: '.edit-kdb',
@@ -149,7 +146,6 @@ export const WineListView = CollectionView.extend({
 });
 
 export const WinesView = CompositeView.extend({
-    template: WineTableTemplate,
     _wines: null,
     _tableOptions: {},
     ui: {

@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\DB;
  * @property int $applicant_id
  * @property Applicant $applicant
  * @property int $winesort_id
+ * @property string|null $winesort_synonym
  * @property WineSort $winesort
  * @property int $winequality_id
  * @property WineQuality $winequality
@@ -76,6 +77,7 @@ class Wine extends Model implements AdministrateModel
         'association_id',
         'label',
         'winesort_id',
+        'winesort_synonym',
         'winequality_id',
         'vintage',
         'alcohol',

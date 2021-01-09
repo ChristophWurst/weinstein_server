@@ -1,5 +1,9 @@
 @extends('default')
 
+@section('head')
+<script src="{!! asset('js/weinstein-wines.js') !!}"></script>
+@endsection
+
 @section('content')
 <h1>Weine</h1>
 @if (Session::has('rowsImported'))
@@ -131,7 +135,7 @@
     </div>
 	@endif
 </div>
-<div id="wines-container" class="table-responsive">
+<div id="wines-table" class="table-responsive">
 </div>
 <!-- /.table-responsive -->
 
@@ -165,33 +169,10 @@ $(function() {
         submit();
     });
 
-	var wines = new WineCollection();
-	wines.url = '{{ $wine_url }}';
-	var wineList = new WinesView({
-		el: $('#wines-container'),
-		wines: wines,
-		tableOptions: {
-			show_rating1: {{ $show_rating1 ? 'true' : 'false' }},
-			show_rating2: {{ $show_rating2 ? 'true' : 'false' }},
-			show_kdb: {{ $show_kdb ? 'true' : 'false' }},
-			edit_kdb: {{ $edit_kdb ? 'true' : 'false' }},
-			show_excluded: {{ $show_excluded ? 'true' : 'false' }},
-			edit_excluded: {{ $edit_excluded ? 'true' : 'false' }},
-			show_sosi: {{ $show_sosi ? 'true' : 'false' }},
-			edit_sosi: {{ $edit_sosi ? 'true' : 'false' }},
-			show_chosen: {{ $show_chosen ? 'true' : 'false' }},
-			edit_chosen: {{ $edit_chosen ? 'true' : 'false' }},
-			show_edit_wine: {{ $show_edit_wine ? 'true' : 'false' }},
-			show_catalogue_number: {{ $show_catalogue_number ? 'true' : 'false' }}
-		}
-	});
-	wineList.render();
-	wines.fetch({
-		data: {
-			'competition_id': {{ $competition->id }}
-		}
-	});
-	window.wineList = wineList;
+    renderWineTable(
+        '{{ $wine_url }}',
+        {{ $competition->id }}
+    );
 });
 
 @stop

@@ -27,6 +27,7 @@ use App\MasterData\User;
 use App\Wine;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 
 interface WineHandler
 {
@@ -88,7 +89,7 @@ interface WineHandler
      *
      * @param User $user
      * @param Competition $competition
-     * @return Paginator
+     * @return Collection
      */
     public function getUsersWines(User $user, Competition $competition);
 }

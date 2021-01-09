@@ -68,7 +68,6 @@ class WineTableSeeder extends Seeder
                     'acidity' => $acidity,
                     'sugar' => $sugar,
                     'competition_id' => $competition,
-                    'association_id' => $association,
                     'applicant_id' => $applicant,
                     'winesort_id' => $winesort,
                     'winequality_id' => $winequality,
