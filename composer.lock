@@ -9000,16 +9000,16 @@
         },
         {
             "name": "psalm/plugin-laravel",
-            "version": "v1.4.3",
+            "version": "v1.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-laravel.git",
-                "reference": "d00e50e15fa1ef85a55400084f679cc3eb70bd5d"
+                "reference": "e6e34b75cc1f0cacd82bedfc68627d95e5d11f3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-laravel/zipball/d00e50e15fa1ef85a55400084f679cc3eb70bd5d",
-                "reference": "d00e50e15fa1ef85a55400084f679cc3eb70bd5d",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-laravel/zipball/e6e34b75cc1f0cacd82bedfc68627d95e5d11f3a",
+                "reference": "e6e34b75cc1f0cacd82bedfc68627d95e5d11f3a",
                 "shasum": ""
             },
             "require": {
@@ -9057,7 +9057,7 @@
                 }
             ],
             "description": "A Laravel plugin for Psalm",
-            "time": "2021-04-07T17:38:56+00:00"
+            "time": "2021-04-17T20:19:18+00:00"
         },
         {
             "name": "react/promise",
