@@ -8,6 +8,7 @@ use function back;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use function is_null;
 
 class ForgotPasswordController extends Controller
 {
@@ -44,6 +45,9 @@ class ForgotPasswordController extends Controller
         $this->validateUsername($request);
 
         $user = User::find($request->get('username'));
+        if (is_null($user)) {
+            return back()->with('status', 'Benutzer existiert nicht');
+        }
         $email = $user->getEmailForPasswordReset();
         if (is_null($email)) {
             return back()->with('status', 'Keine E-Mail-Adresse hinterlegt');
