@@ -235,24 +235,20 @@ class User extends Authenticatable
 
     public function getEmailForPasswordReset()
     {
-        if ($this->associations()->exists()) {
-            // User is assoc admin -> only check assocs
-            $first = $this->associations()->whereNotNull('email')->first();
-            if (is_null($first)) {
-                throw new \Exception('No email set for association');
-            }
-
-            return $first->email;
-        } else {
-            // User might be applicant admin -> check those
-            $first = $this->applicants()->whereNotNull('email')->first();
-            if (is_null($first)) {
-                throw new \Exception('No email set for applicant');
-            }
-
-            return $first->email;
+        // User is assoc admin -> only check assocs
+        $associationWithEmail = $this->associations()->whereNotNull('email')->first();
+        if ($associationWithEmail !== null) {
+            return $associationWithEmail->email;
         }
-    }
+
+        // User might be applicant admin -> check those
+        $applicantWithEmail = $this->applicants()->whereNotNull('email')->first();
+        if ($applicantWithEmail !== null) {
+            return $applicantWithEmail->email;
+        }
+
+        throw new \Exception('User has no email addresses');
+	}
 
     public function sendPasswordResetNotification($token)
     {

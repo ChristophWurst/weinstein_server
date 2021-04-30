@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\MasterData\User;
+use Exception;
 use function back;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
@@ -44,12 +45,15 @@ class ForgotPasswordController extends Controller
     {
         $this->validateUsername($request);
 
+        /** @var User $user */
         $user = User::find($request->get('username'));
         if (is_null($user)) {
             return back()->with('status', 'Benutzer existiert nicht');
         }
-        $email = $user->getEmailForPasswordReset();
-        if (is_null($email)) {
+        try {
+            // See if we can retrieve an email without an error
+            $user->getEmailForPasswordReset();
+        } catch (Exception $e) {
             return back()->with('status', 'Keine E-Mail-Adresse hinterlegt');
         }
 
