@@ -240,7 +240,7 @@ class TastingNumberController extends BaseController
         $this->authorize('import-tastingnumbers');
 
         try {
-            $file = \Illuminate\Support\Facades\Request::fil('xlsfile');
+            $file = \Illuminate\Support\Facades\Request::file('xlsfile');
             if ($file === null) {
                 return Redirect::route('tasting.numbers', ['competition' => $competition->id]);
             }
