@@ -441,7 +441,7 @@ class WineController extends BaseController
         $this->authorize('import-kdb-wines', $competition);
 
         try {
-            $file = $request->fil('xlsfile');
+            $file = $request->file('xlsfile');
             if ($file === null) {
                 return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
             }
@@ -480,7 +480,7 @@ class WineController extends BaseController
         $this->authorize('import-excluded-wines', $competition);
 
         try {
-            $file = $request->fil('xlsfile');
+            $file = $request->file('xlsfile');
             if ($file === null) {
                 return Redirect::route('enrollment.wines', ['competition' => $competition->id]);
             }
