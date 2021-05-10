@@ -6,8 +6,12 @@
     <strong>Betrieb angelegt</strong><br>
     <?php
     list ($user, $password) = Session::get('applicant_created');
+    if (isset($user, $password)):
     ?>
     Der Betrieb kann sich mit dem Benutzernamen <strong>{{ $user }}</strong> und Passwort <strong>{{ $password }}</strong> anmelden.
+    <?php
+    endif;
+    ?>
 </div>
 @endif
 <h1>Betriebe</h1>

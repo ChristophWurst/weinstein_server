@@ -37,7 +37,11 @@ class AddMissingApplicantUsers extends Command
 
             list($user, $password) = $this->store->createApplicantUser($applicant);
 
-            $this->info('User created for applicant '.$applicant->id.': '.$password);
+            if ($user !== null && $password !== null) {
+                $this->info('User created for applicant '.$user.': '.$password);
+            } else {
+                $this->info('No user created for ' . $applicant->id);
+            }
 
             return 0;
         }
