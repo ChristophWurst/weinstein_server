@@ -357,8 +357,9 @@ class Store implements MasterDataStore
             ]);
             $applicant->user()->associate($user);
             $applicant->save();
+            return [$user, $password];
         }
         //ActivityLogger::log('Benutzer [' . $user->username . '] erstellt (zum Betrieb)');
-        return [$user, $password];
+        return [null, null];
     }
 }
