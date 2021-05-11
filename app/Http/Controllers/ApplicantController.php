@@ -115,7 +115,11 @@ class ApplicantController extends BaseController
                     ->withErrors($ve->getErrors())
                     ->withInput();
         }
-        $request->session()->flash('applicant_created', [$user->username, $password]);
+        if (isset($user, $password)) {
+            $request->session()->flash('applicant_created', [$user->username, $password]);
+        } else {
+            $request->session()->flash('applicant_created', [null, null]);
+        }
 
         return Redirect::route('settings.applicants');
     }
