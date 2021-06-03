@@ -224,8 +224,8 @@ class Handler implements WineHandler
 
             foreach ($sheet->toArray() as $row) {
                 if (! isset($row[0])) {
-                    Log::error('invalid tasting number import format');
-                    throw new ValidationException(new MessageBag(['Fehler beim Lesen der Datei']));
+                    Log::warning('skipping emtpy row');
+                    continue;
                 }
                 $wine = $competition->wines()->where('nr', '=', $row[0])->first();
                 if (is_null($wine)) {
