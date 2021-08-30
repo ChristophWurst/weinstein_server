@@ -8,7 +8,7 @@
 		"ext-zip": "1.*",
 		"ext-zlib": "*",
 		"fzaninotto/faker": "~1.4",
-		"laravel/framework": "8.56.*",
+		"laravel/framework": "8.57.*",
 		"laravel/helpers": "^1.3",
 		"laravel/ui": "^3.1",
 		"laravel/legacy-factories": "^1.1",
