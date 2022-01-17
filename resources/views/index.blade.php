@@ -17,7 +17,7 @@
 				</p>
 				@else
 				Version <?php echo config('app.version'); ?><br>
-				Entwickelt von Christoph Wurst, 2013 - 2021
+				Entwickelt von Christoph Wurst, 2013 - 2022
 				@endif
 		</div>
 </div>
