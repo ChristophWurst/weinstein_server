@@ -3,7 +3,7 @@
 	"description": "Weinstein",
 	"type": "project",
 	"require": {
-		"php": ">=7.4",
+		"php": "~8.0",
 		"ext-redis": "*",
 		"ext-zip": "1.*",
 		"ext-zlib": "*",
