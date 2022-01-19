@@ -12,7 +12,6 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
           php-version: ${{ matrix.php-version }}
-          tools: composer:v1
           extensions: ctype,curl,dom,gd,iconv,intl,json,mbstring,openssl,posix,xml,zip
           coverage: none
       - name: Checkout
