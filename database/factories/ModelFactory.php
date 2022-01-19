@@ -13,7 +13,6 @@ use App\Tasting\TastingNumber;
 use App\Tasting\TastingSession;
 use App\Wine;
 use App\WineQuality;
-use Faker\Generator as FakeData;
 
 $factory->define(User::class,
     function () {
@@ -35,16 +34,16 @@ $factory->state(User::class, 'admin',
 $factory->define(Association::class,
     function () {
         return [
-        'id' => rand(10000, 99000),
+        'id' => random_int(10000, 99000),
         'name' => str_random(10),
         'wuser_username' => null,
     ];
     });
 
 $factory->define(Applicant::class,
-    function (FakeData $faker) {
+    function () {
         return [
-        'id' => rand(10000, 999999),
+        'id' => random_int(10000, 999999),
         'association_id' => function () {
             return factory(Association::class)->create()->id;
         },
@@ -54,23 +53,23 @@ $factory->define(Applicant::class,
         },
         'label' => str_random(10),
         'title' => 'Dr.',
-        'firstname' => $faker->firstName,
-        'lastname' => $faker->lastName,
-        'phone' => substr($faker->phoneNumber, 0, 20),
-        'fax' => substr($faker->phoneNumber, 0, 20),
-        'mobile' => substr($faker->phoneNumber, 0, 20),
-        'email' => $faker->email,
-        'web' => substr($faker->url, 0, 50),
+        'firstname' => str_random(20),
+        'lastname' => str_random(20),
+        'phone' => random_int(10000, 100000000),
+        'fax' => random_int(10000, 100000000),
+        'mobile' => random_int(10000, 100000000),
+        'email' => str_random(8) . '@' . str_random(5) . '.com',
+        'web' => str_random(10) . '.com',
     ];
     });
 
 $factory->define(Address::class,
-    function (FakeData $faker) {
+    function () {
         return [
-        'street' => $faker->streetAddress,
-        'nr' => $faker->numberBetween(1, 300),
-        'zipcode' => $faker->numberBetween(1000, 9999),
-        'city' => $faker->city,
+        'street' => str_random(20),
+        'nr' => random_int(1, 300),
+        'zipcode' => random_int(1000, 9999),
+        'city' => str_random(10),
     ];
     });
 
@@ -86,12 +85,12 @@ $factory->define(Competition::class,
 $factory->define(Wine::class,
     function () {
         return [
-        'nr' => rand(1, 1000),
+        'nr' => random_int(1, 1000),
         'label' => str_random(10),
-        'vintage' => rand(2005, 2020),
-        'alcohol' => rand(1, 200) / 10,
-        'acidity' => rand(1, 200) / 10,
-        'sugar' => rand(1, 300) / 10,
+        'vintage' => random_int(2005, 2020),
+        'alcohol' => random_int(1, 200) / 10,
+        'acidity' => random_int(1, 200) / 10,
+        'sugar' => random_int(1, 300) / 10,
         'approvalnr' => str_random(15),
         'winesort_id' => function () {
             return factory(WineSort::class)->create()->id;
@@ -102,14 +101,14 @@ $factory->define(Wine::class,
         'applicant_id' => function () {
             return factory(Applicant::class)->create()->id;
         },
-        'winequality_id' => rand(1, 10), // Hard-coded, but should exist in DB
+        'winequality_id' => random_int(1, 10), // Hard-coded, but should exist in DB
     ];
     });
 
 $factory->define(WineQuality::class,
     function () {
         return [
-        'id' => rand(100, 1000),
+        'id' => random_int(100, 1000),
         'label' => str_random(10),
         'abbr' => strtoupper(str_random(3)),
     ];
@@ -117,7 +116,7 @@ $factory->define(WineQuality::class,
 
 $factory->define(WineSort::class, function () {
     return [
-        'order' => rand(1, 50000),
+        'order' => random_int(1, 50000),
         'name' => str_random(10),
         'quality_allowed' => '[]',
     ];
@@ -126,11 +125,11 @@ $factory->define(WineSort::class, function () {
 $factory->define(TastingNumber::class,
     function () {
         return [
-        'tastingstage_id' => rand(1, 2),
+        'tastingstage_id' => random_int(1, 2),
         'wine_id' => function () {
             return factory(Wine::class)->create()->id;
         },
-        'nr' => rand(1, 5000),
+        'nr' => random_int(1, 5000),
     ];
     });
 
@@ -139,8 +138,8 @@ $factory->define(TastingSession::class, function () {
         'competition_id' => function () {
             return factory(Competition::class)->create()->id;
         },
-        'tastingstage_id' => rand(1, 2),
-        'nr' => rand(1, 100),
+        'tastingstage_id' => random_int(1, 2),
+        'nr' => random_int(1, 100),
         'locked' => false,
     ];
 });
@@ -159,7 +158,7 @@ $factory->define(Taster::class, function () {
         'commission_id' => function () {
             return factory(Commission::class)->create()->id;
         },
-        'nr' => rand(1, 1000),
+        'nr' => random_int(1, 1000),
         'name' => str_random(10),
         'active' => true,
     ];
