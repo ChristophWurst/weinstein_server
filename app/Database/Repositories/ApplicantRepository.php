@@ -44,7 +44,7 @@ class ApplicantRepository
         $direct = $user->applicants()->get();
         $indirect = $user->associationApplicants()->get();
 
-        $all = $direct->merge($indirect);
+        $all = $direct->merge($indirect->all());
         $all->sortBy('id');
 
         return $all;

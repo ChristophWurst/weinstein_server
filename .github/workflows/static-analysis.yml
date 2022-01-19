@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: [7.4]
+        php-version: ['8.0']
     name: php${{ matrix.php-version }} unit tests
     steps:
       - name: Set up php${{ matrix.php-version }}

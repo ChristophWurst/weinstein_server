@@ -24,7 +24,7 @@ use App\MasterData\Applicant;
 use App\MasterData\Association;
 use App\MasterData\User;
 use function factory;
-use Faker\Factory;
+use function random_int;
 use function str_random;
 use Test\BrowserKitTestCase;
 
@@ -34,7 +34,6 @@ class ApplicantsTest extends BrowserKitTestCase
 
     public function createApplicant()
     {
-        $faker = Factory::create();
         $admin = factory(User::class)->states('admin')->create();
         $association = factory(Association::class)->create();
 
@@ -49,7 +48,7 @@ class ApplicantsTest extends BrowserKitTestCase
         $this->assertRedirectedTo('settings/applicants/create');
 
         // But this time for real
-        $id = random(10000, 99999);
+        $id = random_int(10000, 99999);
         $this->post('settings/applicants/create',
             [
             'id' => $id,
@@ -57,17 +56,17 @@ class ApplicantsTest extends BrowserKitTestCase
             'wuser_username' => 'none',
             'label' => str_random(10),
             'title' => 'Dr.',
-            'firstname' => $faker->firstName,
-            'lastname' => $faker->lastName,
-            'phone' => $faker->phoneNumber,
-            'fax' => $faker->phoneNumber,
-            'mobile' => $faker->phoneNumber,
-            'email' => $faker->email,
-            'web' => $faker->url,
-            'street' => $faker->streetAddress,
-            'nr' => $faker->numberBetween(1, 300),
-            'zipcode' => $faker->numberBetween(1000, 9999),
-            'city' => $faker->city,
+            'firstname' => str_random(10),
+            'lastname' => str_random(10),
+            'phone' => random_int(10000, 100000000),
+            'fax' => random_int(10000, 100000000),
+            'mobile' => random_int(10000, 100000000),
+            'email' => str_random(8) . '@' . str_random(5) . '.com',
+            'web' => str_random(10) . '.com',
+            'street' => str_random(20),
+            'nr' => random_int(1, 300),
+            'zipcode' => random_int(1000, 9999),
+            'city' => str_random(10),
         ]);
         $this->assertRedirectedTo('settings/applicants');
 
