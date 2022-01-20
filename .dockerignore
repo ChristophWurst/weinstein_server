@@ -2,6 +2,7 @@
 
 *.git/*
 .env
+/bootstrap/cache/*
 coverage
 Makefile
 nbproject
