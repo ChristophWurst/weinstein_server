@@ -20,7 +20,7 @@
 		"filp/whoops": "~2.0",
 		"mockery/mockery": "1.5.0",
 		"phpspec/phpspec": "^7.0",
-		"phpunit/phpunit": "9.5.16",
+		"phpunit/phpunit": "9.5.19",
 		"symfony/css-selector": "5.*",
 		"symfony/dom-crawler": "5.*",
 		"laravel/browser-kit-testing": "^6",
