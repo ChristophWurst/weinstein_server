@@ -24,7 +24,7 @@
 		"symfony/css-selector": "5.*",
 		"symfony/dom-crawler": "5.*",
 		"laravel/browser-kit-testing": "^6",
-		"psalm/plugin-laravel": "^1.4",
+		"psalm/plugin-laravel": "^2.0",
 		"vimeo/psalm": "^4.3",
 		"friendsofphp/php-cs-fixer": "^2.17"
 	},
