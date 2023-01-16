@@ -39,14 +39,6 @@ module.exports = {
                     name: '[name].[ext]?[hash]'
                 }
             },
-            {
-                test: /\.(svg|woff|woff2|ttf|eot)$/i,
-                use: [
-                    {
-                        loader: 'url-loader'
-                    }
-                ]
-            }
         ]
     },
     plugins: [
