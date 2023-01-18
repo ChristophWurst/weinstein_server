@@ -18,7 +18,7 @@
 	},
 	"require-dev": {
 		"filp/whoops": "~2.0",
-		"mockery/mockery": "1.5.0",
+		"mockery/mockery": "1.5.1",
 		"phpspec/phpspec": "^7.0",
 		"phpunit/phpunit": "9.5.19",
 		"symfony/css-selector": "5.*",
