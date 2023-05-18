@@ -84,7 +84,7 @@ SQL;
 CREATE  OR REPLACE VIEW `cat_address` AS
 SELECT DISTINCT c.id AS competition_id, ass.id AS association_id, CONCAT(IF(app.label IS NULL OR app.label = "", "", CONCAT(app.label, " ")),
 		IF(app.title IS NULL, "", CONCAT(app.title, " ")), app.lastname, " ", app.firstname, ", ", ad.street, " ",
-		IF(ad.nr IS NULL, "", ad.nr), ", ", ad.zipcode, " ", ad.city, "$", IF(app.phone IS NULL, "", CONCAT("Tel.:", app.mobile)),
+		IF(ad.nr IS NULL, "", ad.nr), ", ", ad.zipcode, " ", ad.city, "$", IF(app.phone IS NULL, "", CONCAT("Tel.:", app.phone)),
 		IF(app.mobile IS NULL, "", CONCAT(", Mobil:", app.mobile)), IF(app.web IS NULL, "", CONCAT(", ", app.web))) AS `data`
 FROM competition c
 LEFT OUTER JOIN wine w
