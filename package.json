@@ -9,7 +9,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@sentry/browser": "^6.16.1",
-    "backbone": "^1.4.1",
+    "backbone": "^1.5.0",
     "backbone.marionette": "^3.5.1",
     "bootstrap": "3.4.1",
     "handlebars": "^4.7.7",
